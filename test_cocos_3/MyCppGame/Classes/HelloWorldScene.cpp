@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "LoginScene.h"
 
 USING_NS_CC;
 
@@ -29,28 +30,11 @@ bool HelloWorld::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-//    // add a "close" icon to exit the progress. it's an autorelease object
-//    auto closeItem = MenuItemImage::create(
-//                                           "CloseNormal.png",
-//                                           "CloseSelected.png",
-//                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-//    
-//    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-//                                origin.y + closeItem->getContentSize().height/2));
-//
-//    // create menu, it's an autorelease object
-//    auto menu = Menu::create(closeItem, NULL);
-//    menu->setPosition(Vec2::ZERO);
-//    this->addChild(menu, 1);
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
     auto label = Label::createWithTTF("九点半", "fonts/STKaiti.ttf", 36);
 //    createWithSystemFont("九点半", "Arial", 24);
-    label->setTextColor(Color4B(0x00, 0x00, 0xff, 0xff));
-    label->enableShadow(Color4B::YELLOW, Size(2, -2)); //阴影
-    label->enableOutline(Color4B::RED, 3);             //轮廓
+    label->setTextColor(Color4B(0x00, 0x00, 0x00, 0xff));
+//    label->enableShadow(Color4B::YELLOW, Size(2, -2)); //阴影
+    label->enableOutline(Color4B::YELLOW, 3);             //轮廓
     
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
@@ -60,25 +44,77 @@ bool HelloWorld::init()
     this->addChild(label, 1);
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("images/Background_Loading.jpg");
+    auto sprite = Sprite::create("images/fullScreen_homePage.jpg");
 
     // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     
     
     float spx = sprite->getTextureRect().getMaxX();
     float spy = sprite->getTextureRect().getMaxY();
     
-    sprite->setScaleX(visibleSize.width/spx); //设置精灵宽度缩放比例
-    sprite->setScaleY(visibleSize.height/spy);
-    
+    sprite->setScaleX(visibleSize.width / spx); //设置精灵宽度缩放比例
+    sprite->setScaleY(visibleSize.height / spy);
     
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
     
+    
+    auto login_WechatItem = MenuItemImage::create(
+                                           "images/login_wechat.png",
+                                           "images/login_wechat.png",
+                                           CC_CALLBACK_1(HelloWorld::loginCallback, this, 0));
+    
+    login_WechatItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                origin.y + visibleSize.height / 2 - login_WechatItem->getContentSize().height));
+    
+    
+    auto login_QQItem = MenuItemImage::create(
+                                              "images/login_qq.png",
+                                              "images/login_qq.png",
+                                              CC_CALLBACK_1(HelloWorld::loginCallback, this, 1));
+    
+    login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2, login_WechatItem->getPositionY() - 5 - login_QQItem->getContentSize().height));
+    
+    auto login_SystemItem = MenuItemImage::create(
+                                              "images/login_system.png",
+                                              "images/login_system.png",
+                                              CC_CALLBACK_1(HelloWorld::loginCallback, this, 2));
+    
+    login_SystemItem->setPosition(Vec2(origin.x + visibleSize.width / 2, login_QQItem->getPositionY() - 5 - login_SystemItem->getContentSize().height));
+    
+    
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(login_WechatItem, login_QQItem, login_SystemItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
+    
     return true;
 }
 
+void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
+    switch (index) {
+        case 0:{
+            
+        }
+            break;
+            
+        case 1:{
+            
+        }
+            break;
+            
+        case 2:{
+            auto scene = LoginScene::createScene();
+            
+            Director::getInstance()->pushScene(scene);
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
