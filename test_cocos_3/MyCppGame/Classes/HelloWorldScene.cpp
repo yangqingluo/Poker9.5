@@ -32,12 +32,12 @@ bool HelloWorld::init()
 
     auto label = Label::createWithTTF("九点半", "fonts/STKaiti.ttf", 36);
 //    createWithSystemFont("九点半", "Arial", 24);
-    label->setTextColor(Color4B(0x00, 0x00, 0x00, 0xff));
+    label->setTextColor(Color4B(0xff, 0xff, 0xff, 0xff));
 //    label->enableShadow(Color4B::YELLOW, Size(2, -2)); //阴影
-    label->enableOutline(Color4B::YELLOW, 3);             //轮廓
+    label->enableOutline(Color4B::BLACK, 1);             //轮廓
     
     // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
+    label->setPosition(Vec2(origin.x + visibleSize.width / 2,
                             origin.y + visibleSize.height - label->getContentSize().height));
 
     // add the label as a child to this layer
@@ -65,8 +65,8 @@ bool HelloWorld::init()
                                            "images/login_wechat.png",
                                            CC_CALLBACK_1(HelloWorld::loginCallback, this, 0));
     
-    login_WechatItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                origin.y + visibleSize.height / 2 - login_WechatItem->getContentSize().height));
+    login_WechatItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 1.5 * login_WechatItem->getContentSize().width,
+                                origin.y + 0.1 * visibleSize.height));
     
     
     auto login_QQItem = MenuItemImage::create(
@@ -74,14 +74,14 @@ bool HelloWorld::init()
                                               "images/login_qq.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 1));
     
-    login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2, login_WechatItem->getPositionY() - 5 - login_QQItem->getContentSize().height));
+    login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.1 * visibleSize.height));
     
     auto login_SystemItem = MenuItemImage::create(
                                               "images/login_system.png",
                                               "images/login_system.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 2));
     
-    login_SystemItem->setPosition(Vec2(origin.x + visibleSize.width / 2, login_QQItem->getPositionY() - 5 - login_SystemItem->getContentSize().height));
+    login_SystemItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1.5 * login_SystemItem->getContentSize().width, origin.y + 0.1 * visibleSize.height));
     
     
     // create menu, it's an autorelease object
