@@ -18,6 +18,8 @@ public:
     
     virtual bool init();
     
+    void buttonCallback(cocos2d::Ref* pSender, int index);
+    
     // implement the "static create()" method manually
     CREATE_FUNC(LoginScene);
 };
