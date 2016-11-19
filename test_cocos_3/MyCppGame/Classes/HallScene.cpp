@@ -42,16 +42,18 @@ bool Hall::init()
     sprite->setScale(visibleSize.width / spx, visibleSize.height / spy);
     this->addChild(sprite, 0);
     
-    auto userInfoBG = Sprite::create("images/userinfo_bg.png");
-    userInfoBG->setScale(0.7 * visibleSize.height / userInfoBG->getContentSize().height);
-    auto userInfoSize = userInfoBG->getBoundingBox().size;
-    userInfoBG->setPosition(Vec2(0.5 * userInfoSize.width, userInfoSize.height / 2));
     
     auto userInfoSprite = Sprite::create();
-    userInfoSprite->setContentSize(userInfoBG->getBoundingBox().size);
+    userInfoSprite->setContentSize(Size((193.0 / 504.0) * 0.7 * visibleSize.height, 0.7 * visibleSize.height));
     userInfoSprite->setPosition(Vec2(origin.x + edge + 0.5 * userInfoSprite->getContentSize().width, visibleSize.height + origin.y - 0.5 * userInfoSprite->getContentSize().height));
     this->addChild(userInfoSprite, 1);
+    
+    auto userInfoSize = userInfoSprite->getContentSize();
+    auto userInfoBG = Sprite::create("images/userinfo_bg.png");
+    userInfoBG->setScale(userInfoSize.height / userInfoBG->getContentSize().height);
+    userInfoBG->setPosition(Vec2(0.5 * userInfoSize.width, 0.5 * userInfoSize.height));
     userInfoSprite->addChild(userInfoBG);
+    
     
     auto label = Label::createWithTTF("阿罗", "fonts/STKaiti.ttf", 12);
     label->setTextColor(Color4B::WHITE);
@@ -59,25 +61,48 @@ bool Hall::init()
     label->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.5));
     userInfoSprite->addChild(label);
     
-    auto roomListSprite = Sprite::create("images/room_list_bg.png");
-    roomListSprite->setScale((visibleSize.width - userInfoSize.width - 3 * edge) / roomListSprite->getContentSize().width, (465.0 / 504.0) * userInfoSize.height / roomListSprite->getContentSize().height);
-    roomListSprite->setPosition(Vec2(userInfoSprite->getBoundingBox().getMaxX() + edge + roomListSprite->getBoundingBox().size.width / 2, userInfoSprite->getBoundingBox().getMinY() + roomListSprite->getBoundingBox().size.height / 2));
-    
+    auto roomListSprite = Sprite::create();
+    roomListSprite->setContentSize(Size(visibleSize.width - userInfoSize.width - 3 * edge, userInfoSize.height));
+    roomListSprite->setPosition(Vec2(userInfoSprite->getBoundingBox().getMaxX() + edge + roomListSprite->getContentSize().width / 2, userInfoSprite->getBoundingBox().getMinY() + roomListSprite->getContentSize().height / 2));
     this->addChild(roomListSprite, 1);
     
     
-    roomListCellHeight = roomListSprite->getContentSize().height * 0.65;
-    roomListTableView = TableView::create(this, Size(roomListSprite->getContentSize().width * 0.96,  roomListCellHeight));
-    roomListTableView->setPosition(roomListSprite->getContentSize().width * 0.02, roomListSprite->getContentSize().height * 0.22);
+    auto roomListBG = Sprite::create("images/room_list_bg.png");
+    roomListBG->setScale(roomListSprite->getContentSize().width / roomListBG->getContentSize().width, (465.0 / 504.0) * roomListSprite->getContentSize().height / roomListBG->getContentSize().height);
+    roomListBG->setPosition(Vec2(roomListBG->getBoundingBox().size.width / 2, roomListBG->getBoundingBox().size.height / 2));
+    roomListSprite->addChild(roomListBG);
+    
+    
+    roomListCellHeight = roomListBG->getBoundingBox().size.height * 0.65;
+    roomListTableView = TableView::create(this, Size(roomListBG->getBoundingBox().size.width * 0.96,  roomListCellHeight));
+//    roomListTableView->autorelease();
+    roomListTableView->setPosition(roomListBG->getBoundingBox().size.width * 0.02, roomListBG->getBoundingBox().size.height * 0.22);
     roomListTableView->setDirection(TableView::Direction::HORIZONTAL);
     //    roomListTableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
     roomListTableView->setDelegate(this);
-    //    roomListTableView->setIgnoreAnchorPointForPosition(false);
     roomListSprite->addChild(roomListTableView);
     
     roomListTableView->reloadData();
     
+    
+    auto room_TianItem = MenuItemImage::create(
+                                               "images/btn_noselect.png",
+                                               "images/btn_select.png",
+                                               CC_CALLBACK_1(Hall::roomTypeCallback, this, 0));
+    
+    room_TianItem->setPosition(roomListTableView->getBoundingBox().getMinX() + 0.5 * room_TianItem->getContentSize().width, roomListBG->getBoundingBox().getMaxY());
+    
+    
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(room_TianItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    roomListSprite->addChild(menu, 1);
+    
     return true;
+}
+
+void Hall::roomTypeCallback(cocos2d::Ref* pSender, int index){
+    
 }
 
 #pragma tableview
