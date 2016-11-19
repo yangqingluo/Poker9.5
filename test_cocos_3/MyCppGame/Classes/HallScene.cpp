@@ -33,7 +33,7 @@ bool Hall::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Size winSize = Director::getInstance()->getWinSize();
+    float edge = 10;
     
     auto sprite = Sprite::create("images/new_bg.jpg");
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
@@ -45,12 +45,24 @@ bool Hall::init()
     this->addChild(sprite, 0);
     
     auto userInfoSprite = Sprite::create("images/userinfo_bg.png");
-    float w_h_scale_userInfo = userInfoSprite->getContentSize().width / userInfoSprite->getContentSize().height;
-    userInfoSprite->setContentSize(Size(w_h_scale_userInfo * 0.5 * winSize.height, 0.5 * winSize.height));
-    userInfoSprite->setPosition(Vec2(origin.x + userInfoSprite->getContentSize().width, visibleSize.height + origin.y - userInfoSprite->getContentSize().height));
+    userInfoSprite->setScale(0.7 * visibleSize.height / userInfoSprite->getContentSize().height);
+    auto userInfoSize = userInfoSprite->getBoundingBox().size;
+    userInfoSprite->setPosition(Vec2(origin.x + 0.5 * userInfoSize.width + edge, visibleSize.height + origin.y - userInfoSize.height / 2));
     
     this->addChild(userInfoSprite, 1);
     
+    auto label = Label::createWithTTF("阿罗", "fonts/STKaiti.ttf", 10);
+    label->setTextColor(Color4B::WHITE);
+    
+    label->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.5));
+    userInfoSprite->addChild(label);
+    
+    
+    auto roomListSprite = Sprite::create("images/room_list_bg.png");
+    roomListSprite->setScale((visibleSize.width - userInfoSize.width - 3 * edge) / roomListSprite->getContentSize().width, (465.0 / 504.0) * userInfoSize.height / roomListSprite->getContentSize().height);
+    roomListSprite->setPosition(Vec2(userInfoSprite->getBoundingBox().getMaxX() + edge + roomListSprite->getBoundingBox().size.width / 2, userInfoSprite->getBoundingBox().getMinY() + roomListSprite->getBoundingBox().size.height / 2));
+    
+    this->addChild(roomListSprite, 1);
     
     return true;
 }
