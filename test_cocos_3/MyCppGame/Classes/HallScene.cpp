@@ -33,23 +33,23 @@ bool Hall::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Size winSize = Director::getInstance()->getWinSize();
     
     auto sprite = Sprite::create("images/new_bg.jpg");
-    
-    // position the sprite on the center of the screen
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    
-    
     float spx = sprite->getTextureRect().getMaxX();
     float spy = sprite->getTextureRect().getMaxY();
-    
-    sprite->setScaleX(visibleSize.width / spx); //设置精灵宽度缩放比例
+    sprite->setScaleX(visibleSize.width / spx);
     sprite->setScaleY(visibleSize.height / spy);
     
-    // add the sprite as a child to this layer
     this->addChild(sprite, 0);
     
+    auto userInfoSprite = Sprite::create("images/userinfo_bg.png");
+    float w_h_scale_userInfo = userInfoSprite->getContentSize().width / userInfoSprite->getContentSize().height;
+    userInfoSprite->setContentSize(Size(w_h_scale_userInfo * 0.5 * winSize.height, 0.5 * winSize.height));
+    userInfoSprite->setPosition(Vec2(origin.x + userInfoSprite->getContentSize().width, visibleSize.height + origin.y - userInfoSprite->getContentSize().height));
     
+    this->addChild(userInfoSprite, 1);
     
     
     return true;
@@ -61,10 +61,6 @@ Size Hall::tableCellSizeForIndex(TableView *table, ssize_t idx)
     return Size::ZERO;
 }
 
-Size Hall::cellSizeForTable(TableView *table)
-{
-    return Size::ZERO;
-};
 
 //定制每个cell的内容
 TableViewCell* Hall::tableCellAtIndex(TableView *table, ssize_t idx)
@@ -78,12 +74,24 @@ ssize_t Hall::numberOfCellsInTableView(TableView *table)
     return 0;
 }
 
-#pragma scrollview delegate
-//由于CCTableView是继承CCScrollView，所以要继承这两个方法
-void scrollViewDidScroll(ScrollView* view) {
+void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
     
 }
-void scrollViewDidZoom(ScrollView* view) {
-    
-}
+//void Hall::tableCellHighlight(TableView* table, TableViewCell* cell){
+//    
+//}
+//void Hall::tableCellUnhighlight(TableView* table, TableViewCell* cell){
+//    
+//}
+//void Hall::tableCellWillRecycle(TableView* table, TableViewCell* cell){
+//    
+//}
+//#pragma scrollview
+////由于CCTableView是继承CCScrollView，所以要继承这两个方法
+//void scrollViewDidScroll(ScrollView* view) {
+//    
+//}
+//void scrollViewDidZoom(ScrollView* view) {
+//    
+//}
 

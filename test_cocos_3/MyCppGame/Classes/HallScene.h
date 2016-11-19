@@ -15,7 +15,7 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
-class Hall : public cocos2d::Layer, public TableViewDataSource
+class Hall : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
     static cocos2d::Scene* createScene();
@@ -23,9 +23,16 @@ public:
     CREATE_FUNC(Hall);
     
     Size tableCellSizeForIndex(TableView *table, ssize_t idx);
-    Size cellSizeForTable(TableView *table);
     TableViewCell* tableCellAtIndex(TableView *table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView *table);
+    
+    void tableCellTouched(TableView* table, TableViewCell* cell);
+//    void tableCellHighlight(TableView* table, TableViewCell* cell);
+//    void tableCellUnhighlight(TableView* table, TableViewCell* cell);
+//    void tableCellWillRecycle(TableView* table, TableViewCell* cell);
+    
+//    void scrollViewDidScroll(ScrollView* view) {};
+//    void scrollViewDidZoom(ScrollView* view) {};
 };
 
 #endif /* HallScene_h */

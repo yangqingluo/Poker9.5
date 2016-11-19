@@ -2,6 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include "LoginScene.h"
 #include "HallScene.h"
+#include "HelloWorld2Scene.h"
 
 USING_NS_CC;
 
@@ -96,13 +97,14 @@ bool HelloWorld::init()
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            auto scene = Hall ::createScene();
+            auto scene = Hall::createScene();
             Director::getInstance()->pushScene(scene);
         }
             break;
             
         case 1:{
-            
+            auto scene = HelloWorld2::scene();
+            Director::getInstance()->pushScene(scene);
         }
             break;
             
