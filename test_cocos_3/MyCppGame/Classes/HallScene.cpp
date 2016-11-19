@@ -64,26 +64,71 @@ bool Hall::init()
     
     this->addChild(roomListSprite, 1);
     
+    
+    roomListTableView = TableView::create(this, Size(roomListSprite->getContentSize().width * 0.96,  roomListSprite->getContentSize().height * 0.65));
+    roomListTableView->setPosition(roomListSprite->getContentSize().width * 0.02, roomListSprite->getContentSize().height * 0.22);
+    roomListTableView->setDirection(TableView::Direction::HORIZONTAL);
+//    roomListTableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
+    roomListTableView->setDelegate(this);
+//    roomListTableView->setIgnoreAnchorPointForPosition(false);
+    roomListSprite->addChild(roomListTableView);
+    roomListTableView->reloadData();
+    
+    
+    
     return true;
 }
 
 #pragma tableview
 Size Hall::tableCellSizeForIndex(TableView *table, ssize_t idx)
 {
-    return Size::ZERO;
+    return Size(20, table->getContentSize().height);
 }
 
 
 //定制每个cell的内容
 TableViewCell* Hall::tableCellAtIndex(TableView *table, ssize_t idx)
 {
-    return TableViewCell::create();
+    char Icon[20];   //∏˘æ›idx—°÷–œ‘ æµƒÕº∆¨
+    char number[10]; //œ‘ ælabel±Í«©µƒ ˝◊÷
+    sprintf(Icon, "sp%ld.png", idx % 3 + 1);
+    sprintf(number, "%02d", (int)idx);
+
+    TableViewCell* cell = table->dequeueCell();
+    
+    if(!cell)
+    {
+        cell = new TableViewCell();
+        cell->autorelease(); //◊‘∂Ø Õ∑≈◊ ‘¥
+        
+        //ÃÌº”“ª∏ˆæ´¡ÈÕº∆¨
+        Sprite* sprite = Sprite::create(Icon);
+        sprite->setAnchorPoint(Point::ZERO);
+        sprite->setPosition(0, 0);
+        cell->addChild(sprite, 0, 1);
+        
+        //ÃÌº”“ª∏ˆlabel±Í«©
+        Label* label = Label::createWithTTF(number, "fonts/arial.ttf", 8);
+        label->setPosition(Point::ZERO);
+        cell->addChild(label, 0, 2);
+    }
+    
+    Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
+    Sprite* sprite = (Sprite*)cell->getChildByTag(1);
+    sprite->setTexture(texture);
+    sprite->setScale(1, table->getContentSize().height / sprite->getTextureRect().getMaxY());
+    
+    //∏¸∏ƒÕº∆¨±‡∫≈
+    Label* label = (Label *)cell->getChildByTag(2);
+    label->setString(number);
+    
+    return cell;
 }
 
 //确定这个tableview的cell行数
 ssize_t Hall::numberOfCellsInTableView(TableView *table)
 {
-    return 0;
+    return 20;
 }
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){

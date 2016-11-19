@@ -22,6 +22,8 @@ public:
     virtual bool init();
     CREATE_FUNC(Hall);
     
+    TableView *roomListTableView;
+    
     Size tableCellSizeForIndex(TableView *table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView *table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView *table);
