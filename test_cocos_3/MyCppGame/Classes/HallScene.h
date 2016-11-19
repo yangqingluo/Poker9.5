@@ -22,7 +22,12 @@ public:
     virtual bool init();
     CREATE_FUNC(Hall);
     
+    int roomTypeSelected;
+    MenuItem* room_TianItem;
+    MenuItem* room_DiItem;
+    MenuItem* room_XuanItem;
     void roomTypeCallback(cocos2d::Ref* pSender, int index);
+    void roomTypeSelectedAction(int type);
     
     float roomListCellHeight = 0;
     float roomListCellScale = 0.66;

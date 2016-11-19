@@ -82,27 +82,75 @@ bool Hall::init()
     roomListTableView->setDelegate(this);
     roomListSprite->addChild(roomListTableView);
     
-    roomListTableView->reloadData();
     
     
-    auto room_TianItem = MenuItemImage::create(
+    room_TianItem = MenuItemImage::create(
                                                "images/btn_noselect.png",
                                                "images/btn_select.png",
                                                CC_CALLBACK_1(Hall::roomTypeCallback, this, 0));
     
-    room_TianItem->setPosition(roomListTableView->getBoundingBox().getMinX() + 0.5 * room_TianItem->getContentSize().width, roomListBG->getBoundingBox().getMaxY());
+    room_TianItem->setScale(roomListBG->getBoundingBox().size.height * 0.12 / room_TianItem->getContentSize().height);
+    room_TianItem->setPosition(roomListTableView->getBoundingBox().getMinX() + 0.6 * room_TianItem->getBoundingBox().size.width, roomListBG->getBoundingBox().getMaxY() - 0.4 * room_TianItem->getBoundingBox().size.height);
     
+    room_DiItem = MenuItemImage::create(
+                                          "images/btn_noselect.png",
+                                          "images/btn_select.png",
+                                          CC_CALLBACK_1(Hall::roomTypeCallback, this, 1));
+    
+    room_DiItem->setScale(room_TianItem->getScale());
+    room_DiItem->setPosition(room_TianItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
+    
+    room_XuanItem = MenuItemImage::create(
+                                        "images/btn_noselect.png",
+                                        "images/btn_select.png",
+                                        CC_CALLBACK_1(Hall::roomTypeCallback, this, 2));
+    
+    room_XuanItem->setScale(room_TianItem->getScale());
+    room_XuanItem->setPosition(room_DiItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
     
     // create menu, it's an autorelease object
-    auto menu = Menu::create(room_TianItem, NULL);
+    auto menu = Menu::create(room_TianItem, room_DiItem, room_XuanItem, NULL);
     menu->setPosition(Vec2::ZERO);
-    roomListSprite->addChild(menu, 1);
+    roomListSprite->addChild(menu);
+    
+    //默认房间类型0
+    this->roomTypeSelectedAction(0);
     
     return true;
 }
 
 void Hall::roomTypeCallback(cocos2d::Ref* pSender, int index){
-    
+    this->roomTypeSelectedAction(index);
+}
+
+void Hall::roomTypeSelectedAction(int type){
+    roomTypeSelected = type;
+    switch (type) {
+        case 0:{
+            room_TianItem->selected();
+            room_DiItem->unselected();
+            room_XuanItem->unselected();
+        }
+            break;
+            
+        case 1:{
+            room_TianItem->unselected();
+            room_DiItem->selected();
+            room_XuanItem->unselected();
+        }
+            break;
+            
+        case 2:{
+            room_TianItem->unselected();
+            room_DiItem->unselected();
+            room_XuanItem->selected();
+        }
+            break;
+            
+        default:
+            break;
+    }
+    roomListTableView->reloadData();
 }
 
 #pragma tableview
