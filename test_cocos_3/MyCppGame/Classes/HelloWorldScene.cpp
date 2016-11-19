@@ -50,13 +50,9 @@ bool HelloWorld::init()
 
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    
-    
     float spx = sprite->getTextureRect().getMaxX();
     float spy = sprite->getTextureRect().getMaxY();
-    
-    sprite->setScaleX(visibleSize.width / spx); //设置精灵宽度缩放比例
-    sprite->setScaleY(visibleSize.height / spy);
+    sprite->setScale(visibleSize.width / spx, visibleSize.height / spy);
     
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
