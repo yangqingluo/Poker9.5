@@ -69,6 +69,8 @@
 		FCC2D04C1DDF20DE00E8353D /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC2D0491DDF20DE00E8353D /* LoginScene.cpp */; };
 		FCC2D0511DDF23A600E8353D /* images in Resources */ = {isa = PBXBuildFile; fileRef = FCC2D0501DDF23A600E8353D /* images */; };
 		FCC2D0521DDF23A600E8353D /* images in Resources */ = {isa = PBXBuildFile; fileRef = FCC2D0501DDF23A600E8353D /* images */; };
+		FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC339CF1DDFB45E00E71685 /* HallScene.cpp */; };
+		FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC339CF1DDFB45E00E71685 /* HallScene.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,6 +174,8 @@
 		FCC2D0491DDF20DE00E8353D /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
 		FCC2D04A1DDF20DE00E8353D /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScene.h; sourceTree = "<group>"; };
 		FCC2D0501DDF23A600E8353D /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		FCC339CF1DDFB45E00E71685 /* HallScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HallScene.cpp; sourceTree = "<group>"; };
+		FCC339D01DDFB45E00E71685 /* HallScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HallScene.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,6 +317,8 @@
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
 				FCC2D0491DDF20DE00E8353D /* LoginScene.cpp */,
 				FCC2D04A1DDF20DE00E8353D /* LoginScene.h */,
+				FCC339CF1DDFB45E00E71685 /* HallScene.cpp */,
+				FCC339D01DDFB45E00E71685 /* HallScene.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -522,6 +528,7 @@
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,6 +537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				FCC2D04C1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
