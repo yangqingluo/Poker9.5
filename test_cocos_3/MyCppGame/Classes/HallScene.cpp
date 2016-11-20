@@ -7,6 +7,8 @@
 //
 
 #include "HallScene.h"
+#include "InviteScene.h"
+#include "ShopScene.h"
 
 Scene* Hall::createScene()
 {
@@ -443,7 +445,29 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
 }
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
-    
+    if (table == roomListTableView) {
+        
+    }
+    else if (table == noteListTableView){
+        switch (cell->getIdx()) {
+            case 0:{
+                auto scene = ShopScene::createScene();
+                
+                Director::getInstance()->pushScene(scene);
+            }
+                break;
+                
+            case 2:{
+                auto scene = InviteScene::createScene();
+                
+                Director::getInstance()->pushScene(scene);
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
 }
 //void Hall::tableCellHighlight(TableView* table, TableViewCell* cell){
 //
