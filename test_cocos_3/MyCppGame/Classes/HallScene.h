@@ -51,6 +51,9 @@ public:
     void roomTypeCallback(cocos2d::Ref* pSender, int index);
     void roomTypeSelectedAction(int type);
     
+    Label* userinfoLabel;
+    void buttonCallback(cocos2d::Ref* pSender, int index);
+    
     float roomListCellHeight = 0;
     float roomListCellScale = 0.66;
     TableView* roomListTableView;

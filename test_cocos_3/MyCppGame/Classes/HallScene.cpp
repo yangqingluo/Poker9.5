@@ -38,7 +38,7 @@ bool Hall::init()
         item->perMin = chip[1][i];
         item->type = 0;
         item->status = i % 3;
-        sprintf(item->content, "≥%d金币\n底注%d金币", item->chipMin, item->perMin);
+        sprintf(item->content, "≥%d\n底注%d", item->chipMin, item->perMin);
         switch (i) {
             case 0:{
                 sprintf(item->title, "新手房");
@@ -149,11 +149,28 @@ bool Hall::init()
     userInfoSprite->addChild(userInfoBG);
     
     
-    auto label = Label::createWithTTF("阿罗", "fonts/STKaiti.ttf", 12);
+    auto label = Label::createWithTTF("阿罗", "fonts/STKaiti.ttf", 14);
     label->setTextColor(Color4B::WHITE);
-    
-    label->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.5));
+    label->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.6));
     userInfoSprite->addChild(label);
+    
+    userinfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 10);
+    userinfoLabel->setTextColor(Color4B(0xe0, 0xe0, 0xe0, 0xff));
+    userinfoLabel->setPosition(userInfoSprite->getContentSize().width / 2, 0.3 * userInfoSprite->getContentSize().height);
+    userInfoSprite->addChild(userinfoLabel);
+    
+    char userInfoString[300];
+    sprintf(userInfoString, "ID:20161010\nVIP:无\n金币:10000\n银币:500\n战斗次数:9527\n胜率:80%%");
+    userinfoLabel->setString(userInfoString);
+    
+    auto refresh_UserInfoItem = MenuItemImage::create(
+                                                  "images/btn_fresh.png",
+                                                  "images/btn_fresh.png",
+                                                  CC_CALLBACK_1(Hall::buttonCallback, this, 0));
+    refresh_UserInfoItem->setScale(0.3 * userInfoSprite->getContentSize().width / refresh_UserInfoItem->getContentSize().width);
+    refresh_UserInfoItem->setPosition(0.85 * userInfoSprite->getContentSize().width, refresh_UserInfoItem->getBoundingBox().size.height * 0.6);
+    userInfoSprite->addChild(refresh_UserInfoItem);
+    
     
     auto roomListSprite = Sprite::create();
     roomListSprite->setContentSize(Size(visibleSize.width - userInfoSize.width - 3 * edge, userInfoSize.height));
@@ -264,6 +281,10 @@ void Hall::roomTypeSelectedAction(int type){
             break;
     }
     roomListTableView->reloadData();
+}
+
+void Hall::buttonCallback(cocos2d::Ref* pSender, int index){
+    
 }
 
 #pragma tableview
