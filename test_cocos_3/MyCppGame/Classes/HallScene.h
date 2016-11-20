@@ -15,6 +15,17 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+class RoomItem : public Ref{
+public:
+    char title[20];
+    char content[100];
+    int type;
+    int status;
+    int chipMin;//带入筹码最小值
+    int perMin;//单注下注最小值
+};
+
+
 class Hall : public Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
@@ -26,6 +37,9 @@ public:
     MenuItem* room_TianItem;
     MenuItem* room_DiItem;
     MenuItem* room_XuanItem;
+    Vector<RoomItem *> tianItems;
+    Vector<RoomItem *> diItems;
+    Vector<RoomItem *> xuanItems;
     void roomTypeCallback(cocos2d::Ref* pSender, int index);
     void roomTypeSelectedAction(int type);
     
@@ -54,6 +68,8 @@ public:
 //    CREATE_FUNC(RoomListCell);
     
     Sprite* bg_sprite;
+    Label* titleLabel;
+    Label* contentLabel;
 };
 
 #endif /* HallScene_h */
