@@ -151,10 +151,10 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
         Label* label = (Label* )cell->getChildByTag(1);
         char content[100];
         if (idx%2 == 0) {
-            sprintf(content, "2016-10-%d\t-1000金币\t兑换AAAA",(int)idx);
+            sprintf(content, "2016-10-%d\t-1000金币\t兑换AAAA 订单号:201610%02d%06d",(int)idx,(int)idx,(int)idx);
         }
         else{
-            sprintf(content, "2016-10-%d\t-2000金币\t兑换BBBB",(int)idx);
+            sprintf(content, "2016-10-%d\t-2000金币\t兑换BBBB 订单号:201610%02d%06d",(int)idx,(int)idx,(int)idx);
         }
         
         label->setString(content);
