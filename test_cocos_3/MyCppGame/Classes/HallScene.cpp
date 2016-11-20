@@ -37,6 +37,7 @@ bool Hall::init()
         item->chipMin = chip[0][i];
         item->perMin = chip[1][i];
         item->type = 0;
+        item->status = i % 3;
         sprintf(item->content, "≥%d金币\n底注%d金币", item->chipMin, item->perMin);
         switch (i) {
             case 0:{
@@ -75,7 +76,7 @@ bool Hall::init()
         RoomItem* item = new RoomItem();
         item->chipMin = -1;
         item->perMin = -1;
-        item->type = 0;
+        item->type = 1;
         
         switch (i) {
             case 0:{
@@ -101,7 +102,7 @@ bool Hall::init()
         RoomItem* item = new RoomItem();
         item->chipMin = -1;
         item->perMin = -1;
-        item->type = 0;
+        item->type = 2;
         
         switch (i) {
             case 0:{
@@ -273,11 +274,16 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
         cell->bg_sprite->addChild(cell->contentLabel);
         
         cell->titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 20);
-        cell->titleLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, ((100.0 / 2 + 114) / 268.0) * cell->bg_sprite->getContentSize().height);
+        cell->titleLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, ((100.0 / 2 + 114.0) / 268.0) * cell->bg_sprite->getContentSize().height);
         cell->titleLabel->setDimensions(cell->bg_sprite->getContentSize().width, (100.0 / 268.0) * cell->bg_sprite->getContentSize().height);
         cell->titleLabel->setHorizontalAlignment(TextHAlignment::CENTER);
         cell->titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
         cell->bg_sprite->addChild(cell->titleLabel);
+        
+        cell->stateImage = Sprite::create("images/roomstate0.png");
+        cell->stateImage->setScale((54.0 / 2.0 / 268.0) * cell->bg_sprite->getContentSize().height / cell->stateImage->getContentSize().height);
+        cell->stateImage->setPosition(cell->bg_sprite->getContentSize().width * 0.8, ((54.0 / 2.0 + 214.0) / 268.0) * cell->bg_sprite->getContentSize().height);
+        cell->bg_sprite->addChild(cell->stateImage);
     }
     
     RoomItem* room;
@@ -307,6 +313,11 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
     if (room != NULL) {
         cell->contentLabel->setString(room->content);
         cell->titleLabel->setString(room->title);
+        
+        char Icon[30];
+        sprintf(Icon, "images/roomstate%d.png", room->status);
+        Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
+        cell->stateImage->setTexture(texture);
     }
     
     return cell;

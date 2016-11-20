@@ -70,6 +70,7 @@ public:
     Sprite* bg_sprite;
     Label* titleLabel;
     Label* contentLabel;
+    Sprite* stateImage;
 };
 
 #endif /* HallScene_h */
