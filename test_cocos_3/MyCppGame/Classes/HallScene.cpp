@@ -118,6 +118,13 @@ bool Hall::init()
         xuanItems.pushBack(item);
     }
     
+    for (int i = 0; i < 5; i++) {
+        NoteItem* item = new NoteItem();
+        sprintf(item->image, "images/server_btn_%d.png", i);
+        
+        noteItems.pushBack(item);
+    }
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float edge = 10;
@@ -203,6 +210,25 @@ bool Hall::init()
     //默认房间类型0
     this->roomTypeSelectedAction(0);
     
+    auto noteListSprite = Sprite::create();
+    noteListSprite->setContentSize(Size(visibleSize.width, visibleSize.height - userInfoSize.height));
+    noteListSprite->setPosition(origin.x + noteListSprite->getContentSize().width / 2, origin.y + noteListSprite->getContentSize().height / 2);
+    this->addChild(noteListSprite, 1);
+    
+    auto noteListBG = Sprite::create("images/note_list_bg.png");
+    noteListBG->setScale(noteListSprite->getContentSize().width / noteListBG->getContentSize().width, noteListSprite->getContentSize().height / noteListBG->getContentSize().height);
+    noteListBG->setPosition(Vec2(noteListBG->getBoundingBox().size.width / 2, noteListBG->getBoundingBox().size.height / 2));
+    noteListSprite->addChild(noteListBG);
+    
+    noteListCellHeight = noteListBG->getBoundingBox().size.height * 0.5;
+    noteListTableView = TableView::create(this, Size(noteListBG->getBoundingBox().size.width * 0.96,  noteListCellHeight));
+    noteListTableView->setPosition(noteListBG->getBoundingBox().size.width * 0.02, noteListBG->getBoundingBox().size.height * 0.25);
+    noteListTableView->setDirection(TableView::Direction::HORIZONTAL);
+    noteListTableView->setDelegate(this);
+    noteListSprite->addChild(noteListTableView);
+    
+    noteListTableView->reloadData();
+    
     return true;
 }
 
@@ -243,111 +269,156 @@ void Hall::roomTypeSelectedAction(int type){
 #pragma tableview
 Size Hall::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
-    return Size(roomListCellScale * roomListCellHeight, roomListCellHeight);
+    if (table == roomListTableView) {
+        return Size(roomListCellScale * roomListCellHeight, roomListCellHeight);
+    }
+    else if (table == noteListTableView){
+        return Size(noteListCellHeight, noteListCellHeight);
+    }
+    
+    return Size::ZERO;
 }
 
 //定制每个cell的内容
 TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
 {
-    RoomListCell* cell = (RoomListCell *)table->dequeueCell();
-    
-    if(!cell)
-    {
-        cell = new RoomListCell();
-        cell->autorelease();
+    if (table == roomListTableView) {
+        RoomListCell* cell = (RoomListCell *)table->dequeueCell();
         
-        cell->bg_sprite = Sprite::create();
-        cell->bg_sprite->setPosition(0.5 * roomListCellScale * roomListCellHeight, 0.5 * roomListCellHeight);
-        cell->bg_sprite->setContentSize(Size(0.9 * roomListCellScale * roomListCellHeight, 0.9 * roomListCellHeight));
-        cell->addChild(cell->bg_sprite);
+        if(!cell)
+        {
+            cell = new RoomListCell();
+            cell->autorelease();
+            
+            cell->bg_sprite = Sprite::create();
+            cell->bg_sprite->setPosition(0.5 * roomListCellScale * roomListCellHeight, 0.5 * roomListCellHeight);
+            cell->bg_sprite->setContentSize(Size(0.9 * roomListCellScale * roomListCellHeight, 0.9 * roomListCellHeight));
+            cell->addChild(cell->bg_sprite);
+            
+            auto cellBG = Sprite::create("images/room_bg2.png");
+            cellBG->setScale(cell->bg_sprite->getContentSize().height / cellBG->getContentSize().height);
+            cellBG->setPosition(cell->bg_sprite->getContentSize().width / 2, cell->bg_sprite->getContentSize().height / 2);
+            cell->bg_sprite->addChild(cellBG);
+            
+            cell->contentLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 14);
+            cell->contentLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, (114.0 / 2 / 268.0) * cell->bg_sprite->getContentSize().height);
+            cell->contentLabel->setDimensions(cell->bg_sprite->getContentSize().width, (114.0 / 268.0) * cell->bg_sprite->getContentSize().height);
+            cell->contentLabel->setHorizontalAlignment(TextHAlignment::CENTER);
+            cell->contentLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            cell->bg_sprite->addChild(cell->contentLabel);
+            
+            cell->titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 20);
+            cell->titleLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, ((100.0 / 2 + 114.0) / 268.0) * cell->bg_sprite->getContentSize().height);
+            cell->titleLabel->setDimensions(cell->bg_sprite->getContentSize().width, (100.0 / 268.0) * cell->bg_sprite->getContentSize().height);
+            cell->titleLabel->setHorizontalAlignment(TextHAlignment::CENTER);
+            cell->titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            cell->bg_sprite->addChild(cell->titleLabel);
+            
+            cell->stateImage = Sprite::create("images/roomstate0.png");
+            cell->stateImage->setScale((54.0 / 2.0 / 268.0) * cell->bg_sprite->getContentSize().height / cell->stateImage->getContentSize().height);
+            cell->stateImage->setPosition(cell->bg_sprite->getContentSize().width * 0.8, ((54.0 / 2.0 + 214.0) / 268.0) * cell->bg_sprite->getContentSize().height);
+            cell->bg_sprite->addChild(cell->stateImage);
+        }
         
-        auto cellBG = Sprite::create("images/room_bg2.png");
-        cellBG->setScale(cell->bg_sprite->getContentSize().height / cellBG->getContentSize().height);
-        cellBG->setPosition(cell->bg_sprite->getContentSize().width / 2, cell->bg_sprite->getContentSize().height / 2);
-        cell->bg_sprite->addChild(cellBG);
+        RoomItem* room;
         
-        cell->contentLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 14);
-        cell->contentLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, (114.0 / 2 / 268.0) * cell->bg_sprite->getContentSize().height);
-        cell->contentLabel->setDimensions(cell->bg_sprite->getContentSize().width, (114.0 / 268.0) * cell->bg_sprite->getContentSize().height);
-        cell->contentLabel->setHorizontalAlignment(TextHAlignment::CENTER);
-        cell->contentLabel->setVerticalAlignment(TextVAlignment::CENTER);
-        cell->bg_sprite->addChild(cell->contentLabel);
+        switch (roomTypeSelected) {
+            case 0:{
+                room = tianItems.at(idx);
+            }
+                break;
+                
+            case 1:{
+                room = diItems.at(idx);
+            }
+                break;
+                
+            case 2:{
+                room = xuanItems.at(idx);
+            }
+                break;
+                
+            default:{
+                
+            }
+                break;
+        }
         
-        cell->titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 20);
-        cell->titleLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, ((100.0 / 2 + 114.0) / 268.0) * cell->bg_sprite->getContentSize().height);
-        cell->titleLabel->setDimensions(cell->bg_sprite->getContentSize().width, (100.0 / 268.0) * cell->bg_sprite->getContentSize().height);
-        cell->titleLabel->setHorizontalAlignment(TextHAlignment::CENTER);
-        cell->titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
-        cell->bg_sprite->addChild(cell->titleLabel);
+        if (room != NULL) {
+            cell->contentLabel->setString(room->content);
+            cell->titleLabel->setString(room->title);
+            
+            char Icon[30];
+            sprintf(Icon, "images/roomstate%d.png", room->status);
+            Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
+            cell->stateImage->setTexture(texture);
+        }
         
-        cell->stateImage = Sprite::create("images/roomstate0.png");
-        cell->stateImage->setScale((54.0 / 2.0 / 268.0) * cell->bg_sprite->getContentSize().height / cell->stateImage->getContentSize().height);
-        cell->stateImage->setPosition(cell->bg_sprite->getContentSize().width * 0.8, ((54.0 / 2.0 + 214.0) / 268.0) * cell->bg_sprite->getContentSize().height);
-        cell->bg_sprite->addChild(cell->stateImage);
+        return cell;
+    }
+    else if (table == noteListTableView){
+        NoteListCell* cell = (NoteListCell *)table->dequeueCell();
+        
+        if(!cell)
+        {
+            cell = new NoteListCell();
+            cell->autorelease();
+            
+            cell->bg_sprite = Sprite::create();
+            cell->bg_sprite->setPosition(0.5 * noteListCellHeight, 0.5 * noteListCellHeight);
+            cell->bg_sprite->setContentSize(Size(0.9 * noteListCellHeight, 0.9 * noteListCellHeight));
+            cell->addChild(cell->bg_sprite);
+            
+            auto cellBG = Sprite::create("images/server_btn_0.png");
+            cellBG->setScale(cell->bg_sprite->getContentSize().height / cellBG->getContentSize().height);
+            cellBG->setPosition(cell->bg_sprite->getContentSize().width / 2, cell->bg_sprite->getContentSize().height / 2);
+            cell->bg_sprite->addChild(cellBG, 0 , 1);
+        }
+        
+        NoteItem* item = noteItems.at((int)idx);
+        if (item != NULL) {
+            Sprite* sprite = (Sprite *)cell->bg_sprite->getChildByTag(1);
+            Texture2D* texture = TextureCache::sharedTextureCache()->addImage(item->image);
+            sprite->setTexture(texture);
+        }
+        
+        return cell;
     }
     
-    RoomItem* room;
-
-    switch (roomTypeSelected) {
-        case 0:{
-            room = tianItems.at(idx);
-        }
-            break;
-            
-        case 1:{
-            room = diItems.at(idx);
-        }
-            break;
-            
-        case 2:{
-            room = xuanItems.at(idx);
-        }
-            break;
-            
-        default:{
-            
-        }
-            break;
-    }
-    
-    if (room != NULL) {
-        cell->contentLabel->setString(room->content);
-        cell->titleLabel->setString(room->title);
-        
-        char Icon[30];
-        sprintf(Icon, "images/roomstate%d.png", room->status);
-        Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
-        cell->stateImage->setTexture(texture);
-    }
-    
-    return cell;
+    return NULL;
 }
 
 //确定这个tableview的cell行数
 ssize_t Hall::numberOfCellsInTableView(TableView* table)
 {
-    switch (roomTypeSelected) {
-        case 0:{
-            return tianItems.size();
+    if (table == roomListTableView) {
+        switch (roomTypeSelected) {
+            case 0:{
+                return tianItems.size();
+            }
+                break;
+                
+            case 1:{
+                return diItems.size();
+            }
+                break;
+                
+            case 2:{
+                return xuanItems.size();
+            }
+                break;
+                
+            default:{
+                return 0;
+            }
+                break;
         }
-            break;
-            
-        case 1:{
-            return diItems.size();
-        }
-            break;
-            
-        case 2:{
-            return xuanItems.size();
-        }
-            break;
-            
-        default:{
-            return 0;
-        }
-            break;
+    }
+    else if (table == noteListTableView){
+        return 5;
     }
     
+    return 0;
 }
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){

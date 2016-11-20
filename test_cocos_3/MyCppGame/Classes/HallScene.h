@@ -25,6 +25,13 @@ public:
     int perMin;//单注下注最小值
 };
 
+class NoteItem : public Ref{
+public:
+    char title[20];
+    char content[100];
+    char image[40];
+    int type;
+};
 
 class Hall : public Layer, public TableViewDataSource, public TableViewDelegate
 {
@@ -40,12 +47,16 @@ public:
     Vector<RoomItem *> tianItems;
     Vector<RoomItem *> diItems;
     Vector<RoomItem *> xuanItems;
+    Vector<NoteItem *> noteItems;
     void roomTypeCallback(cocos2d::Ref* pSender, int index);
     void roomTypeSelectedAction(int type);
     
     float roomListCellHeight = 0;
     float roomListCellScale = 0.66;
     TableView* roomListTableView;
+    
+    float noteListCellHeight = 0;
+    TableView* noteListTableView;
     
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
@@ -71,6 +82,12 @@ public:
     Label* titleLabel;
     Label* contentLabel;
     Sprite* stateImage;
+};
+
+class NoteListCell : public TableViewCell
+{
+public:
+    Sprite* bg_sprite;
 };
 
 #endif /* HallScene_h */
