@@ -1,13 +1,13 @@
 //
-//  ShopScene.h
+//  ExchangeScene.h
 //  MyCppGame
 //
 //  Created by yangqingluo on 2016/11/20.
 //
 //
 
-#ifndef ShopScene_h
-#define ShopScene_h
+#ifndef ExchangeScene_h
+#define ExchangeScene_h
 
 #include "cocos2d.h"
 USING_NS_CC;
@@ -15,15 +15,14 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
-class ShopScene : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
+class ExchangeScene : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
     static cocos2d::Scene* createScene();
     
     virtual bool init();
     void buttonCallback(cocos2d::Ref* pSender, int index);
-
-    CREATE_FUNC(ShopScene);
+    CREATE_FUNC(ExchangeScene);
     
     float recordListCellWidth = 0;
     TableView* recordListTableView;
@@ -35,4 +34,4 @@ public:
     void tableCellTouched(TableView* table, TableViewCell* cell);
 };
 
-#endif /* ShopScene_h */
+#endif /* ExchangeScene_h */

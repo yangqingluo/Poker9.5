@@ -9,6 +9,7 @@
 #include "HallScene.h"
 #include "InviteScene.h"
 #include "ShopScene.h"
+#include "ExchangeScene.h"
 
 Scene* Hall::createScene()
 {
@@ -452,6 +453,13 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
         switch (cell->getIdx()) {
             case 0:{
                 auto scene = ShopScene::createScene();
+                
+                Director::getInstance()->pushScene(scene);
+            }
+                break;
+                
+            case 1:{
+                auto scene = ExchangeScene::createScene();
                 
                 Director::getInstance()->pushScene(scene);
             }

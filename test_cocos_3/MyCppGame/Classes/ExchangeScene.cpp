@@ -1,22 +1,22 @@
 //
-//  ShopScene.cpp
+//  ExchangeScene.cpp
 //  MyCppGame
 //
 //  Created by yangqingluo on 2016/11/20.
 //
 //
 
-#include "ShopScene.h"
+#include "ExchangeScene.h"
 
 USING_NS_CC;
 
-Scene* ShopScene::createScene()
+Scene* ExchangeScene::createScene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
-    auto layer = ShopScene::create();
+    auto layer = ExchangeScene::create();
     
     // add layer as a child to scene
     scene->addChild(layer);
@@ -25,13 +25,14 @@ Scene* ShopScene::createScene()
     return scene;
 }
 
-bool ShopScene::init()
+bool ExchangeScene::init()
 {
     // super init first
     if ( !Layer::init() )
     {
         return false;
     }
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
@@ -53,15 +54,15 @@ bool ShopScene::init()
     auto btn_BackItem = MenuItemImage::create(
                                               "images/window_close@2x.png",
                                               "images/window_close@2x.png",
-                                              CC_CALLBACK_1(ShopScene::buttonCallback, this, 0));
+                                              CC_CALLBACK_1(ExchangeScene::buttonCallback, this, 0));
     
     btn_BackItem->setScale(this->getScaleX(), this->getScaleY());
     btn_BackItem->setPosition(Vec2(origin.x + btn_BackItem->getContentSize().width, origin.y + visibleSize.height - btn_BackItem->getContentSize().height));
     
     auto btn_BuyItem = MenuItemImage::create(
-                                              "images/shop_btn_charge.png",
-                                              "images/shop_btn_select.png",
-                                              CC_CALLBACK_1(ShopScene::buttonCallback, this, 1));
+                                             "images/shop_btn_exchange.png",
+                                             "images/shop_btn_select.png",
+                                             CC_CALLBACK_1(ExchangeScene::buttonCallback, this, 1));
     
     btn_BuyItem->setScale(this->getScaleX(), this->getScaleY());
     btn_BuyItem->setPosition(Vec2(origin.x + btn_BuyItem->getContentSize().width, origin.y + 0.2 * visibleSize.height + btn_BuyItem->getContentSize().height));
@@ -71,16 +72,16 @@ bool ShopScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    auto label = Label::createWithTTF("充值记录", "fonts/STKaiti.ttf", 14);
+    auto label = Label::createWithTTF("兑换记录", "fonts/STKaiti.ttf", 14);
     label->setTextColor(Color4B::BLACK);
     label->setPosition(origin.x + (560.0 / 960.0) * visibleSize.width, origin.y + (610.0 / 640.0) * visibleSize.height);
     this->addChild(label);
-
+    
     auto recordListSprite = Sprite::create();
     recordListSprite->setContentSize(Size((680.0 / 960.0) * visibleSize.width, (520.0 / 640.0) * visibleSize.height));
     recordListSprite->setPosition(origin.x + 0.95 * visibleSize.width - recordListSprite->getContentSize().width / 2, origin.y + (40.0 / 640.0 ) * visibleSize.height + recordListSprite->getContentSize().height / 2);
     this->addChild(recordListSprite, 1);
-
+    
     recordListCellWidth = recordListSprite->getContentSize().width;
     recordListTableView = TableView::create(this, Size(recordListCellWidth,  recordListSprite->getContentSize().height));
     recordListTableView->setPosition(0 , 0);
@@ -94,7 +95,7 @@ bool ShopScene::init()
 }
 
 
-void ShopScene::buttonCallback(cocos2d::Ref* pSender, int index){
+void ExchangeScene::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
             Director::getInstance()->popScene();
@@ -118,7 +119,7 @@ void ShopScene::buttonCallback(cocos2d::Ref* pSender, int index){
 
 
 #pragma tableview
-Size ShopScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
+Size ExchangeScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
     if (table == recordListTableView) {
         return Size(recordListCellWidth, 30);
@@ -128,7 +129,7 @@ Size ShopScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
 }
 
 //定制每个cell的内容
-TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
+TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
 {
     if (table == recordListTableView) {
         TableViewCell* cell = table->dequeueCell();
@@ -150,10 +151,10 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
         Label* label = (Label* )cell->getChildByTag(1);
         char content[100];
         if (idx%2 == 0) {
-            sprintf(content, "2016-10-%d\t+25金币\tVIP奖励",(int)idx);
+            sprintf(content, "2016-10-%d\t-1000金币\t兑换AAAA",(int)idx);
         }
         else{
-            sprintf(content, "2016-10-%d\t+1000金币\t充值",(int)idx);
+            sprintf(content, "2016-10-%d\t-2000金币\t兑换BBBB",(int)idx);
         }
         
         label->setString(content);
@@ -166,7 +167,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
 }
 
 //确定这个tableview的cell行数
-ssize_t ShopScene::numberOfCellsInTableView(TableView* table)
+ssize_t ExchangeScene::numberOfCellsInTableView(TableView* table)
 {
     if (table == recordListTableView) {
         return 20;
@@ -175,6 +176,6 @@ ssize_t ShopScene::numberOfCellsInTableView(TableView* table)
     return 0;
 }
 
-void ShopScene::tableCellTouched(TableView* table, TableViewCell* cell){
+void ExchangeScene::tableCellTouched(TableView* table, TableViewCell* cell){
     
 }

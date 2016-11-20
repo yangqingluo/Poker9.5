@@ -64,6 +64,21 @@ bool InviteScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
+    
+    auto inviteSprite = Sprite::create();
+    inviteSprite->setContentSize(Size((680.0 / 960.0) * visibleSize.width, (540.0 / 640.0) * visibleSize.height));
+    inviteSprite->setPosition(origin.x + 0.95 * visibleSize.width - inviteSprite->getContentSize().width / 2, origin.y + (625.0 / 640.0 ) * visibleSize.height - inviteSprite->getContentSize().height / 2);
+    this->addChild(inviteSprite, 1);
+    
+    auto inviteBG = Sprite::create("images/share_bg_share.png");
+    inviteBG->setScale(inviteSprite->getContentSize().width / inviteBG->getContentSize().width, inviteSprite->getContentSize().height / inviteBG->getContentSize().height);
+    inviteBG->setPosition(Vec2(inviteBG->getBoundingBox().size.width / 2, inviteBG->getBoundingBox().size.height / 2));
+    inviteSprite->addChild(inviteBG);
+    
+    
+    
+    
+    
     return true;
 }
 
