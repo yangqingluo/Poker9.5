@@ -64,8 +64,8 @@ bool ExchangeScene::init()
                                              "images/shop_btn_select.png",
                                              CC_CALLBACK_1(ExchangeScene::buttonCallback, this, 1));
     
-    btn_BuyItem->setScale(this->getScaleX(), this->getScaleY());
-    btn_BuyItem->setPosition(Vec2(origin.x + btn_BuyItem->getContentSize().width, origin.y + 0.2 * visibleSize.height + btn_BuyItem->getContentSize().height));
+    btn_BuyItem->setScale((160.0 / 960.0) * visibleSize.width / btn_BuyItem->getContentSize().width);
+    btn_BuyItem->setPosition(Vec2(origin.x + (100.0 / 960.0) * visibleSize.width, origin.y + 0.2 * visibleSize.height + btn_BuyItem->getBoundingBox().size.height / 2));
     
     // create menu, it's an autorelease object
     auto menu = Menu::create(btn_BackItem, btn_BuyItem, NULL);
