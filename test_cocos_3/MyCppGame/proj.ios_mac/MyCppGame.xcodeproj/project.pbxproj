@@ -79,6 +79,8 @@
 		FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC339CF1DDFB45E00E71685 /* HallScene.cpp */; };
 		FCC33A031DDFD64000E71685 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = FCC339E51DDFD64000E71685 /* HelloWorld.png */; };
 		FCC33A041DDFD64000E71685 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = FCC339E51DDFD64000E71685 /* HelloWorld.png */; };
+		FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
+		FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +193,8 @@
 		FCC339CF1DDFB45E00E71685 /* HallScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HallScene.cpp; sourceTree = "<group>"; };
 		FCC339D01DDFB45E00E71685 /* HallScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HallScene.h; sourceTree = "<group>"; };
 		FCC339E51DDFD64000E71685 /* HelloWorld.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelloWorld.png; sourceTree = "<group>"; };
+		FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerDeskScene.cpp; sourceTree = "<group>"; };
+		FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerDeskScene.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,6 +345,8 @@
 				FC983D601DE1691C006C2616 /* ShopScene.h */,
 				FC983D631DE171F9006C2616 /* ExchangeScene.cpp */,
 				FC983D641DE171F9006C2616 /* ExchangeScene.h */,
+				FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */,
+				FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -549,6 +555,7 @@
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FCC2D04B1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
@@ -568,6 +575,7 @@
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */,
 				FCC2D04C1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,

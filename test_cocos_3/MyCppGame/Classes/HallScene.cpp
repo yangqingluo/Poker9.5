@@ -10,6 +10,7 @@
 #include "InviteScene.h"
 #include "ShopScene.h"
 #include "ExchangeScene.h"
+#include "PokerDeskScene.h"
 
 Scene* Hall::createScene()
 {
@@ -199,17 +200,17 @@ bool Hall::init()
     
     
     room_TianItem = MenuItemImage::create(
-                                               "images/btn_noselect.png",
-                                               "images/btn_select.png",
-                                               CC_CALLBACK_1(Hall::roomTypeCallback, this, 0));
+                                          "images/btn_noselect.png",
+                                          "images/btn_select.png",
+                                          CC_CALLBACK_1(Hall::roomTypeCallback, this, 0));
     
     room_TianItem->setScale(roomListBG->getBoundingBox().size.height * 0.12 / room_TianItem->getContentSize().height);
     room_TianItem->setPosition(roomListTableView->getBoundingBox().getMinX() + 0.6 * room_TianItem->getBoundingBox().size.width, roomListBG->getBoundingBox().getMaxY() - 0.4 * room_TianItem->getBoundingBox().size.height);
     
     room_DiItem = MenuItemImage::create(
-                                          "images/btn_noselect.png",
-                                          "images/btn_select.png",
-                                          CC_CALLBACK_1(Hall::roomTypeCallback, this, 1));
+                                        "images/btn_noselect.png",
+                                        "images/btn_select.png",
+                                        CC_CALLBACK_1(Hall::roomTypeCallback, this, 1));
     
     room_DiItem->setScale(room_TianItem->getScale());
     room_DiItem->setPosition(room_TianItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
@@ -447,7 +448,20 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
     if (table == roomListTableView) {
-        
+        if (roomTypeSelected == 0) {
+            auto scene = PokerDesk::createScene();
+            
+            
+            Director::getInstance()->pushScene(scene);
+            
+            
+        }
+        else if (roomTypeSelected == 1){
+            
+        }
+        else if (roomTypeSelected == 2){
+            
+        }
     }
     else if (table == noteListTableView){
         switch (cell->getIdx()) {
