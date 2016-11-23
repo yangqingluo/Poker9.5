@@ -89,3 +89,14 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
             break;
     }
 }
+
+
+
+void PokerDesk::onEnter()
+{
+    Layer::onEnter();
+    
+    log("%d",deskType);
+}
+
+

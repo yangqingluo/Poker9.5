@@ -48,11 +48,11 @@ public:
     Vector<RoomItem *> diItems;
     Vector<RoomItem *> xuanItems;
     Vector<NoteItem *> noteItems;
-    void roomTypeCallback(cocos2d::Ref* pSender, int index);
+    void roomTypeCallback(Ref* pSender, int index);
     void roomTypeSelectedAction(int type);
     
     Label* userinfoLabel;
-    void buttonCallback(cocos2d::Ref* pSender, int index);
+    void buttonCallback(Ref* pSender, int index);
     
     float roomListCellHeight = 0;
     float roomListCellScale = 0.66;
