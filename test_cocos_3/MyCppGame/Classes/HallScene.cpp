@@ -38,6 +38,7 @@ bool Hall::init()
     int chip[2][5] = {{500,1000,3000,5000,10000},{10,20,50,100,200}};
     for (int i = 0; i < 5; i++) {
         RoomItem* item = new RoomItem();
+        item->autorelease();
         item->chipMin = chip[0][i];
         item->perMin = chip[1][i];
         item->type = 0;
@@ -78,6 +79,7 @@ bool Hall::init()
     
     for (int i = 0; i < 2; i++) {
         RoomItem* item = new RoomItem();
+        item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
         item->type = 1;
@@ -104,6 +106,7 @@ bool Hall::init()
     
     for (int i = 0; i < 1; i++) {
         RoomItem* item = new RoomItem();
+        item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
         item->type = 2;
@@ -124,6 +127,7 @@ bool Hall::init()
     
     for (int i = 0; i < 5; i++) {
         NoteItem* item = new NoteItem();
+        item->autorelease();
         sprintf(item->image, "images/server_btn_%d.png", i);
         
         noteItems.pushBack(item);
