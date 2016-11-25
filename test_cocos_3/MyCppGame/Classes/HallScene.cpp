@@ -453,7 +453,8 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
             PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
             layer->deskType = 2;
             
-            Director::getInstance()->pushScene(scene);
+            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+            Director::getInstance()->pushScene(ts);
             
             
         }
