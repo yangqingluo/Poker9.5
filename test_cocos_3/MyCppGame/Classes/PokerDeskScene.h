@@ -22,6 +22,7 @@ public:
     
     int deskType;
     void buttonCallback(cocos2d::Ref* pSender, int index);
+    void popButtonCallback(Node* pNode);
 };
 
 #endif /* PokerDeskScene_h */

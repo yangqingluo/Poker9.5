@@ -168,7 +168,7 @@ bool Hall::init()
     userInfoSprite->addChild(userinfoLabel);
     
     char userInfoString[300];
-    sprintf(userInfoString, "ID:20161010\nVIP:无\n金币:10000\n银币:500\n战斗次数:952700\n胜率:80%%");
+    sprintf(userInfoString, "ID:20161010\nVIP:无\n金币:10000\n银币:500\n战斗次数:9527\n胜率:80%%");
     userinfoLabel->setString(userInfoString);
     
     auto refresh_UserInfoItem = MenuItemImage::create(

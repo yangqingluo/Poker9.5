@@ -7,6 +7,7 @@
 //
 
 #include "PokerDeskScene.h"
+#include "PopAlertDialog.h"
 
 USING_NS_CC;
 
@@ -56,7 +57,7 @@ bool PokerDesk::init()
     // create menu, it's an autorelease object
     auto menu = Menu::create(btn_BackItem, NULL);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    this->addChild(menu, 0);
     
     auto lotus = Sprite::create("images/lotus.png");
     lotus->setScale(150.0 / 640.0 * visibleSize.height / lotus->getTextureRect().getMaxY());
@@ -71,7 +72,15 @@ bool PokerDesk::init()
 void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            Director::getInstance()->popScene();
+//            Director::getInstance()->popScene();
+            PopAlertDialog* popup=PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
+            popup->setTitle("Message");
+            popup->setContentText("This is a test message!",20,50,150);
+            popup->setCallBackFunc(this,callfuncN_selector(PokerDesk::popButtonCallback));
+            popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+            popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
+            
+            this->addChild(popup);
         }
             break;
             
@@ -90,7 +99,20 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     }
 }
 
-
+void PokerDesk::popButtonCallback(Node* pNode){
+    log("[==========]button call back.tag %d",pNode->getTag());
+    
+    if (pNode->getTag()==0) {
+        
+    }
+    
+    if (pNode->getTag()==1) {
+        //pNode->getParent()->removeFromParent();
+        
+    }
+    
+    pNode->removeFromParent();
+}
 
 void PokerDesk::onEnter()
 {

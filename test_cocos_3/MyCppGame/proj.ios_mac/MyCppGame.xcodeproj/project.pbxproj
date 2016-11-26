@@ -75,6 +75,8 @@
 		FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5F1DE1691C006C2616 /* ShopScene.cpp */; };
 		FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D631DE171F9006C2616 /* ExchangeScene.cpp */; };
 		FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D631DE171F9006C2616 /* ExchangeScene.cpp */; };
+		FCBDFECF1DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
+		FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
 		FCC2D04B1DDF20DE00E8353D /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC2D0491DDF20DE00E8353D /* LoginScene.cpp */; };
 		FCC2D04C1DDF20DE00E8353D /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC2D0491DDF20DE00E8353D /* LoginScene.cpp */; };
 		FCC2D0511DDF23A600E8353D /* images in Resources */ = {isa = PBXBuildFile; fileRef = FCC2D0501DDF23A600E8353D /* images */; };
@@ -196,6 +198,8 @@
 		FC983D601DE1691C006C2616 /* ShopScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopScene.h; sourceTree = "<group>"; };
 		FC983D631DE171F9006C2616 /* ExchangeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExchangeScene.cpp; sourceTree = "<group>"; };
 		FC983D641DE171F9006C2616 /* ExchangeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangeScene.h; sourceTree = "<group>"; };
+		FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PopAlertDialog.cpp; sourceTree = "<group>"; };
+		FCBDFECE1DE9D8F4001EA2BC /* PopAlertDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopAlertDialog.h; sourceTree = "<group>"; };
 		FCC2D0491DDF20DE00E8353D /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
 		FCC2D04A1DDF20DE00E8353D /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScene.h; sourceTree = "<group>"; };
 		FCC2D0501DDF23A600E8353D /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
@@ -361,6 +365,8 @@
 				FC6DB5AD1DE8381900621B55 /* SendCardLayer.h */,
 				FC6DB5AB1DE8381900621B55 /* SendCardTest.cpp */,
 				FC6DB5AC1DE8381900621B55 /* SendCardTest.h */,
+				FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */,
+				FCBDFECE1DE9D8F4001EA2BC /* PopAlertDialog.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -580,6 +586,7 @@
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
+				FCBDFECF1DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FC6DB5AE1DE8381900621B55 /* SendCardLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -590,6 +597,7 @@
 			files = (
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
+				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
