@@ -168,7 +168,7 @@ bool Hall::init()
     userInfoSprite->addChild(userinfoLabel);
     
     char userInfoString[300];
-    sprintf(userInfoString, "ID:20161010\nVIP:无\n金币:10000\n银币:500\n战斗次数:9527\n胜率:80%%");
+    sprintf(userInfoString, "ID:20161010\nVIP:无\n金币:10000\n银币:500\n战斗次数:952700\n胜率:80%%");
     userinfoLabel->setString(userInfoString);
     
     auto refresh_UserInfoItem = MenuItemImage::create(
@@ -329,14 +329,14 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
             cellBG->setPosition(cell->bg_sprite->getContentSize().width / 2, cell->bg_sprite->getContentSize().height / 2);
             cell->bg_sprite->addChild(cellBG);
             
-            cell->contentLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 14);
+            cell->contentLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 12);
             cell->contentLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, (114.0 / 2 / 268.0) * cell->bg_sprite->getContentSize().height);
             cell->contentLabel->setDimensions(cell->bg_sprite->getContentSize().width, (114.0 / 268.0) * cell->bg_sprite->getContentSize().height);
             cell->contentLabel->setHorizontalAlignment(TextHAlignment::CENTER);
             cell->contentLabel->setVerticalAlignment(TextVAlignment::CENTER);
             cell->bg_sprite->addChild(cell->contentLabel);
             
-            cell->titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 20);
+            cell->titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 16);
             cell->titleLabel->setPosition(cell->bg_sprite->getContentSize().width / 2, ((100.0 / 2 + 114.0) / 268.0) * cell->bg_sprite->getContentSize().height);
             cell->titleLabel->setDimensions(cell->bg_sprite->getContentSize().width, (100.0 / 268.0) * cell->bg_sprite->getContentSize().height);
             cell->titleLabel->setHorizontalAlignment(TextHAlignment::CENTER);

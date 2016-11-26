@@ -35,15 +35,10 @@ bool PokerDesk::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    auto sprite = Sprite::create("images/cmdz_bank_bg.jpg");
-    
-    // position the sprite on the center of the screen
+    auto sprite = Sprite::create("images/pokerDesk_bg_medium.jpg");
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    
-    
     float spx = sprite->getTextureRect().getMaxX();
     float spy = sprite->getTextureRect().getMaxY();
-    
     sprite->setScaleX(visibleSize.width / spx); //设置精灵宽度缩放比例
     sprite->setScaleY(visibleSize.height / spy);
     
@@ -62,6 +57,11 @@ bool PokerDesk::init()
     auto menu = Menu::create(btn_BackItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
+    
+    auto lotus = Sprite::create("images/lotus.png");
+    lotus->setScale(150.0 / 640.0 * visibleSize.height / lotus->getTextureRect().getMaxY());
+    lotus->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - lotus->getBoundingBox().size.height / 2);
+    this->addChild(lotus);
     
     
     return true;
