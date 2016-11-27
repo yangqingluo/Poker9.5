@@ -220,7 +220,7 @@ void PokerDesk::waitForPrepareprepareAction(){
     
     sprintf(showTimer->prefixString,"等待准备…");
     showTimer->showTag = 1;
-    showTimer->start(30);
+    showTimer->start(3);
 }
 
 void PokerDesk::preparedAction(){
@@ -316,6 +316,8 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             break;
             
         case 2:{
+            message_sprite->setVisible(false);
+            
             sprintf(showTimer->prefixString,"开始!");
             showTimer->showTag = 0;
             showTimer->showPrefix();
@@ -327,7 +329,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             for (int i = 1; i <= 54; i++)
             {
                 auto bg_card = Sprite::create("card/card_bg.png");
-                bg_card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width, origin.y + 0.55 * visibleSize.height));
+                bg_card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width, origin.y + 0.58 * visibleSize.height));
                 this->addChild(bg_card);
                 m_cardBg.pushBack(bg_card);
             }
@@ -336,7 +338,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             {
                 auto strN = __String::createWithFormat("card/%d.jpg",i);
                 auto card = Sprite::create(strN->getCString());
-                card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width,origin.y + 0.55 * visibleSize.height));
+                card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width,origin.y + 0.58 * visibleSize.height));
                 card->setVisible(false);
                 this->addChild(card);
                 m_cardVec.pushBack(card);
