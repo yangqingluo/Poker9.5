@@ -28,6 +28,11 @@ public:
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
+    
+    Sprite* upright_sprite;
+    Sprite* message_sprite;
+    Label* countLabel;
+    Label* messageLabel;
 };
 
 #endif /* PokerDeskScene_h */

@@ -62,6 +62,41 @@ bool PokerDesk::init()
     lotus->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - lotus->getBoundingBox().size.height / 2);
     this->addChild(lotus);
     
+    upright_sprite = Sprite::create();
+    upright_sprite->setContentSize(Size(0.15 * visibleSize.width, 0.15 * visibleSize.width));
+    upright_sprite->setPosition(origin.x + visibleSize.width - upright_sprite->getContentSize().width * 0.6, origin.y + visibleSize.height - upright_sprite->getContentSize().height * 0.6);
+    this->addChild(upright_sprite);
+    
+    auto uprightBG = Sprite::create("images/window_upright_bg.png");
+    uprightBG->setScale(upright_sprite->getContentSize().width / uprightBG->getContentSize().width);
+    uprightBG->setPosition(0.5 * upright_sprite->getContentSize().width, 0.5 * upright_sprite->getContentSize().width);
+    upright_sprite->addChild(uprightBG);
+    
+    countLabel = Label::createWithTTF("当前人数：1", "fonts/STKaiti.ttf", 8);
+    countLabel->setColor(Color3B::BLACK);
+//    countLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+//    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
+    countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.2 * upright_sprite->getContentSize().height);
+    upright_sprite->addChild(countLabel);
+    
+    
+    message_sprite = Sprite::create();
+    message_sprite->setContentSize(Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
+    message_sprite->setPosition(origin.x + message_sprite->getContentSize().width * 0.52, origin.y + message_sprite->getContentSize().height * 0.55);
+    this->addChild(message_sprite);
+    
+    auto messageBG = Sprite::create("images/message_bg.png");
+    messageBG->setScale(message_sprite->getContentSize().height / messageBG->getContentSize().height);
+    messageBG->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
+    message_sprite->addChild(messageBG);
+    
+    messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 8);
+    messageLabel->setColor(Color3B::BLACK);
+    messageLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+    messageLabel->setVerticalAlignment(TextVAlignment::CENTER);
+    messageLabel->setDimensions(message_sprite->getContentSize().width, message_sprite->getContentSize().height);
+    messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
+    message_sprite->addChild(messageLabel);
     
     return true;
 }
