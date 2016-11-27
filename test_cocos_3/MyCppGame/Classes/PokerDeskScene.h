@@ -28,6 +28,7 @@ public:
     CREATE_FUNC(PokerDesk);
     
     int deskType;
+    int pokerIndex;
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
@@ -47,10 +48,19 @@ public:
     PokerChair* chair_di;
     PokerChair* chair_xuan;
     PokerChair* chair_huang;
+    PokerChair* chair_pokerStack;
     
     void goBackAction();
     void waitForPrepareprepareAction();
     void preparedAction();
+    void showJudgeAction();
+    void sendPokerAction();
+    
+    
+private:
+    Size m_winSize;
+    Vector<cocos2d::Sprite *> m_cardVec;
+    Vector<cocos2d::Sprite *> m_cardBg;
 };
 
 #endif /* PokerDeskScene_h */
