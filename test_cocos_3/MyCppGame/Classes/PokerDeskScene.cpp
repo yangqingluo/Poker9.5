@@ -8,6 +8,7 @@
 
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
+#include "GameTimer.h"
 
 Scene* PokerDesk::createScene()
 {
@@ -97,6 +98,11 @@ bool PokerDesk::init()
     messageLabel->setDimensions(message_sprite->getContentSize().width, message_sprite->getContentSize().height);
     messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
     message_sprite->addChild(messageLabel);
+    
+    
+    GameTimer* m_timer = GameTimer::createTimer(3000);
+    m_timer->setPosition(100,200);
+    this->addChild(m_timer);
     
     return true;
 }
