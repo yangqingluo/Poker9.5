@@ -10,6 +10,10 @@
 #define PokerDeskScene_h
 
 #include "cocos2d.h"
+USING_NS_CC;
+
+#include "cocos-ext.h"
+USING_NS_CC_EXT;
 
 class PokerDesk : public cocos2d::Layer
 {

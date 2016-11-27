@@ -72,17 +72,17 @@ PopAlertDialog* PopAlertDialog::create(const char* backgoundImage,Size dialogSiz
 }
 
 void PopAlertDialog::setTitle(const char* title,int fontsize /*=20*/){
-    Label* label=Label::createWithTTF(title, "fonts/arial.ttf", fontsize);
+    Label* label=Label::createWithTTF(title, "fonts/STKaiti.ttf", fontsize);
     label->setColor(Color3B::RED);
     setLabelTitle(label);
 }
 
 void PopAlertDialog::setContentText(const char* text,int fontsize,int padding,int paddingTop){
-    Label* ltf = Label::createWithTTF(text, "fonts/arial.ttf", fontsize);
-    ltf->setColor(Color3B::BLUE);
+    Label* ltf = Label::createWithTTF(text, "fonts/STKaiti.ttf", fontsize);
+    ltf->setColor(Color3B::WHITE);
     setLabelContentText(ltf);
-    m_contentPadding=padding;
-    m_contentPaddingTop=paddingTop;
+    m_contentPadding = padding;
+    m_contentPaddingTop = paddingTop;
 }
 
 void PopAlertDialog::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
@@ -112,9 +112,9 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
     
     Size menuSize=menuImage->getContentSize();
     
-    Label* Label = Label::createWithTTF(title, "fonts/arial.ttf", 15);
+    Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
     
-    Label->setColor(Color3B(Color3B::BLACK));
+    Label->setColor(Color3B(Color3B::WHITE));
     
     Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
     
@@ -189,13 +189,11 @@ void PopAlertDialog::backgroundFinish(){
     
     float btnWidth=m_dialogContentSize.width/(getMenuButton()->getChildrenCount()+1);
     
-    Vector<Node*> vector=getMenuButton()->getChildren();
-    
-    Ref* pObj=NULL;
+    Vector<Node*> vector = getMenuButton()->getChildren();
     
     int i=0;
     
-    for (Node*pObj:vector){
+    for (Node* pObj : vector){
         
         Node* node=dynamic_cast<Node*>(pObj);
         
@@ -210,17 +208,15 @@ void PopAlertDialog::backgroundFinish(){
         getLabelTitle()->setPosition(ccpAdd(pCenter, ccp(0,m_dialogContentSize.height/2-35.0f)));
         
         this->addChild(getLabelTitle());
-        
     }
     
     if (getLabelContentText()) {
         Label* ltf = getLabelContentText();
-        ltf->setPosition(ccp(winSize.width/2,winSize.height/2));
-        ltf->setDimensions(m_dialogContentSize.width-m_contentPadding * 2, m_dialogContentSize.height-m_contentPaddingTop);
-        ltf->setHorizontalAlignment(kCCTextAlignmentLeft);
+        ltf->setPosition(winSize.width/2,winSize.height/2);
+        ltf->setDimensions(m_dialogContentSize.width - m_contentPadding * 2, m_dialogContentSize.height - m_contentPaddingTop);
+        ltf->setHorizontalAlignment(TextHAlignment::LEFT);
         
         this->addChild(ltf);
-        
     }
 }
 
@@ -229,7 +225,7 @@ void PopAlertDialog::onExit(){
     
     log("PopAlertDialog onExit");
     
-    CCLayerColor::onExit();
+    LayerColor::onExit();
     
 }
 

@@ -9,8 +9,6 @@
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
 
-USING_NS_CC;
-
 Scene* PokerDesk::createScene()
 {
     // 'scene' is an autorelease object
@@ -74,13 +72,19 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
         case 0:{
 //            Director::getInstance()->popScene();
             PopAlertDialog* popup=PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
-            popup->setTitle("Message");
-            popup->setContentText("This is a test message!",20,50,150);
+            popup->setTitle("");
+            popup->setContentText("请设置带入的金币数目",12,50,150);
             popup->setCallBackFunc(this,callfuncN_selector(PokerDesk::popButtonCallback));
             popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
             popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
             
             this->addChild(popup);
+            
+            ControlSlider* myslider = ControlSlider::create("images/slider_bg.jpg","images/slider_jd.jpg","images/slider_hk.jpg");
+            myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height / 2);
+            myslider->setMaximumValue(100);
+            myslider->setMinimumValue(0);
+            popup->addChild(myslider,0,521); //这里3个参数表示：对象，层，标记
         }
             break;
             
