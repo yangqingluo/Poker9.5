@@ -70,21 +70,7 @@ bool PokerDesk::init()
 void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-//            Director::getInstance()->popScene();
-            PopAlertDialog* popup=PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
-            popup->setTitle("");
-            popup->setContentText("请设置带入的金币数目",12,50,150);
-            popup->setCallBackFunc(this,callfuncN_selector(PokerDesk::popButtonCallback));
-            popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
-            popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
-            
-            this->addChild(popup);
-            
-            ControlSlider* myslider = ControlSlider::create("images/slider_bg.jpg","images/slider_jd.jpg","images/slider_hk.jpg");
-            myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height / 2);
-            myslider->setMaximumValue(100);
-            myslider->setMinimumValue(0);
-            popup->addChild(myslider,0,521); //这里3个参数表示：对象，层，标记
+            Director::getInstance()->popScene();
         }
             break;
             
@@ -104,25 +90,36 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
 }
 
 void PokerDesk::popButtonCallback(Node* pNode){
-    log("[==========]button call back.tag %d",pNode->getTag());
-    
-    if (pNode->getTag()==0) {
+    if (pNode->getTag() == 0) {
         
     }
-    
-    if (pNode->getTag()==1) {
-        //pNode->getParent()->removeFromParent();
-        
+    else if(pNode->getTag() == 1) {
+        Director::getInstance()->popScene();
     }
-    
     pNode->removeFromParent();
 }
 
-void PokerDesk::onEnter()
-{
+void PokerDesk::onEnter(){
     Layer::onEnter();
     
     log("%d",deskType);
+    this->showSettingChip();
 }
 
+void PokerDesk::showSettingChip(){
+    PopAlertDialog* popup=PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
+    popup->setTitle("");
+    popup->setContentText("请设置带入的金币数目",12,50,150);
+    popup->setCallBackFunc(this,callfuncN_selector(PokerDesk::popButtonCallback));
+    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
+    
+    this->addChild(popup);
+    
+    ControlSlider* myslider = ControlSlider::create("images/slider_bg.png","images/slider_jd.png","images/slider_hk.png");
+    myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height * 0.45);
+    myslider->setMaximumValue(100);
+    myslider->setMinimumValue(0);
+    popup->addChild(myslider);
+}
 
