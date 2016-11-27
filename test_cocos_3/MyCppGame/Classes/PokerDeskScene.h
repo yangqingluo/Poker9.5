@@ -42,7 +42,10 @@ public:
     GameTimer* showTimer;
     void showTimerDoneCallback(Node* pNode);
     
-    void prepareAction();
+    
+    void goBackAction();
+    void waitForPrepareprepareAction();
+    void preparedAction();
 };
 
 #endif /* PokerDeskScene_h */

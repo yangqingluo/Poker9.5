@@ -129,12 +129,12 @@ bool PokerDesk::init()
 void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            Director::getInstance()->popScene();
+            this->goBackAction();
         }
             break;
             
         case 1:{
-            this->prepareAction();
+            this->preparedAction();
         }
             break;
             
@@ -150,10 +150,10 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
 
 void PokerDesk::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
-        
+        this->waitForPrepareprepareAction();
     }
     else if(pNode->getTag() == 1) {
-        Director::getInstance()->popScene();
+        this->goBackAction();
     }
     pNode->removeFromParent();
 }
@@ -182,13 +182,29 @@ void PokerDesk::showSettingChip(){
     popup->addChild(myslider);
 }
 
-void PokerDesk::prepareAction(){
+void PokerDesk::goBackAction(){
+    Director::getInstance()->popScene();
+}
+
+void PokerDesk::waitForPrepareprepareAction(){
+    btn_PrepareItem->setVisible(true);
+    btn_AnotherdeskItem->setVisible(true);
+    
+    sprintf(showTimer->prefixString,"等待准备…");
+    showTimer->showTag = 1;
+    showTimer->start(30);
+}
+
+void PokerDesk::preparedAction(){
+    char* string = new char[100];
+    sprintf(string,"桌子人数：1\n当前状态：已准备");
+    countLabel->setString(string);
+    
     btn_PrepareItem->setVisible(false);
     btn_AnotherdeskItem->setVisible(false);
     
     sprintf(showTimer->prefixString,"等待开始…");
-    showTimer->showTag = 1;
-    showTimer->start(30);
+    showTimer->showTag = 2;
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){
@@ -198,8 +214,12 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
 //            showTimer->showPrefix();
         }
             break;
-            
         case 1:{
+            this->goBackAction();
+        }
+            break;
+            
+        case 2:{
             sprintf(showTimer->prefixString,"开始!");
             showTimer->showTag = 0;
             showTimer->showPrefix();
