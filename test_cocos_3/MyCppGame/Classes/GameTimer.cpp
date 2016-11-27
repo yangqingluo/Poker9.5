@@ -1,6 +1,6 @@
 #include "GameTimer.h"
 
-GameTimer::GameTimer()
+GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL)
 {
     
 }
@@ -10,25 +10,55 @@ GameTimer::~GameTimer()
     
 }
 
-bool GameTimer::init(float time)
-{
-    pTime = time;
-    
-    label = LabelTTF::create();
+bool GameTimer::init(float time){
+    label = Label::create();
     label->setPosition(0,0);
     
     this->addChild(label);
-    
-    schedule(schedule_selector(GameTimer::update));
+    this->start(time);
     
     return true;
 }
+
+void GameTimer::start(float time){
+    pTime = time;
+    schedule(schedule_selector(GameTimer::update));
+}
+
+
 void GameTimer::update(float delta)
 {
     pTime -= delta;
-    char* mtime = new char[10];
-    //此处只是显示分钟数和秒数  自己可以定义输出时间格式
-    sprintf(mtime,"%d : %d",(int)pTime / 60,(int)pTime % 60);
+    char* mtime = new char[100];
+    if (strcmp(prefixString, "") != 0) {
+        sprintf(mtime,"%s%d",prefixString,(int)pTime % 60);
+    }
+    else{
+        sprintf(mtime,"");
+    }
+    
+    label->setString(mtime);
+    
+    if (pTime <= 1) {
+        unschedule(schedule_selector(GameTimer::update));
+        
+        if (m_callback&&m_callbackListener) {
+            (m_callbackListener->*m_callback)(this);
+        }
+    }
+    
+    
+}
+
+void GameTimer::showPrefix(){
+    char* mtime = new char[100];
+    if (strcmp(prefixString, "") != 0) {
+        sprintf(mtime,"%s",prefixString);
+    }
+    else{
+        sprintf(mtime,"");
+    }
+    
     label->setString(mtime);
 }
 
@@ -46,4 +76,9 @@ GameTimer* GameTimer::createTimer(float time)
         gametimer = NULL;
     }
     return NULL;
+}
+
+void GameTimer::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
+    m_callbackListener=target;
+    m_callback=callfun;
 }

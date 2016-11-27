@@ -15,6 +15,8 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+#include "GameTimer.h"
+
 class PokerDesk : public cocos2d::Layer
 {
 public:
@@ -33,6 +35,14 @@ public:
     Sprite* message_sprite;
     Label* countLabel;
     Label* messageLabel;
+    
+    MenuItemImage* btn_PrepareItem;
+    MenuItemImage* btn_AnotherdeskItem;
+    
+    GameTimer* showTimer;
+    void showTimerDoneCallback(Node* pNode);
+    
+    void prepareAction();
 };
 
 #endif /* PokerDeskScene_h */

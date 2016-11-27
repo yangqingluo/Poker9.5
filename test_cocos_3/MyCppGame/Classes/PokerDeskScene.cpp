@@ -8,7 +8,7 @@
 
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
-#include "GameTimer.h"
+
 
 Scene* PokerDesk::createScene()
 {
@@ -53,8 +53,24 @@ bool PokerDesk::init()
     btn_BackItem->setScale(this->getScaleX(), this->getScaleY());
     btn_BackItem->setPosition(Vec2(origin.x + btn_BackItem->getContentSize().width, origin.y + visibleSize.height - btn_BackItem->getContentSize().height));
     
+    btn_PrepareItem = MenuItemImage::create(
+                                              "images/btn_prepare.png",
+                                              "images/btn_prepare.png",
+                                              CC_CALLBACK_1(PokerDesk::buttonCallback, this, 1));
+    
+    btn_PrepareItem->setScale(this->getScaleX(), this->getScaleY());
+    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.8 * btn_PrepareItem->getContentSize().width, origin.y + 168.0 / 640.0 * visibleSize.height));
+    
+    btn_AnotherdeskItem = MenuItemImage::create(
+                                                 "images/btn_anotherdesk.png",
+                                                 "images/btn_anotherdesk.png",
+                                                 CC_CALLBACK_1(PokerDesk::buttonCallback, this, 1));
+    
+    btn_AnotherdeskItem->setScale(this->getScaleX(), this->getScaleY());
+    btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.8 * btn_AnotherdeskItem->getContentSize().width, btn_PrepareItem->getPositionY()));
+    
     // create menu, it's an autorelease object
-    auto menu = Menu::create(btn_BackItem, NULL);
+    auto menu = Menu::create(btn_BackItem, btn_PrepareItem, btn_AnotherdeskItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 0);
     
@@ -73,7 +89,7 @@ bool PokerDesk::init()
     uprightBG->setPosition(0.5 * upright_sprite->getContentSize().width, 0.5 * upright_sprite->getContentSize().width);
     upright_sprite->addChild(uprightBG);
     
-    countLabel = Label::createWithTTF("当前人数：1", "fonts/STKaiti.ttf", 8);
+    countLabel = Label::createWithTTF("桌子人数：1\n当前状态：未准备", "fonts/STKaiti.ttf", 8);
     countLabel->setColor(Color3B::BLACK);
 //    countLabel->setHorizontalAlignment(TextHAlignment::LEFT);
 //    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
@@ -100,9 +116,11 @@ bool PokerDesk::init()
     message_sprite->addChild(messageLabel);
     
     
-    GameTimer* m_timer = GameTimer::createTimer(3000);
-    m_timer->setPosition(100,200);
-    this->addChild(m_timer);
+    showTimer = GameTimer::createTimer(0);
+    showTimer->showTag = 0;
+    showTimer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+    showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
+    this->addChild(showTimer);
     
     return true;
 }
@@ -116,7 +134,7 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
             break;
             
         case 1:{
-            
+            this->prepareAction();
         }
             break;
             
@@ -162,5 +180,34 @@ void PokerDesk::showSettingChip(){
     myslider->setMaximumValue(100);
     myslider->setMinimumValue(0);
     popup->addChild(myslider);
+}
+
+void PokerDesk::prepareAction(){
+    btn_PrepareItem->setVisible(false);
+    btn_AnotherdeskItem->setVisible(false);
+    
+    sprintf(showTimer->prefixString,"等待开始…");
+    showTimer->showTag = 1;
+    showTimer->start(30);
+}
+
+void PokerDesk::showTimerDoneCallback(Node* pNode){
+    switch (showTimer->showTag) {
+        case 0:{
+//            sprintf(showTimer->prefixString,"");
+//            showTimer->showPrefix();
+        }
+            break;
+            
+        case 1:{
+            sprintf(showTimer->prefixString,"开始!");
+            showTimer->showTag = 0;
+            showTimer->showPrefix();
+        }
+            
+        default:
+            break;
+    }
+    
 }
 
