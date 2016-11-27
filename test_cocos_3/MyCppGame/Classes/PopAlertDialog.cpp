@@ -7,7 +7,6 @@
 //
 
 #include "PopAlertDialog.h"
-#include "SendCardLayer.h"
 
 PopAlertDialog::PopAlertDialog():
 m__pMenu(NULL),m_contentPadding(0),m_contentPaddingTop(0),m_callbackListener(NULL),m_callback(NULL),m__sfBackGround(NULL),m__s9BackGround(NULL),m__ltContentText(NULL),m__ltTitle(NULL){
@@ -61,8 +60,7 @@ void PopAlertDialog::onTouchEnded(Touch* touch,Event* event){
 
 PopAlertDialog* PopAlertDialog::create(const char* backgoundImage,Size dialogSize){
     //创建弹出对话框，指定背景图和大小。
-    
-    PopAlertDialog* layer=PopAlertDialog::create();
+    PopAlertDialog* layer = PopAlertDialog::create();
     
     layer->setSpriteBackGround(Sprite::create(backgoundImage));
 //    layer->setSprite9BackGround(Scale9Sprite::create(backgoundImage));

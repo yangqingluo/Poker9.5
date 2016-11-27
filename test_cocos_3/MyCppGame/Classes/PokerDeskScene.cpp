@@ -9,7 +9,6 @@
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
 
-
 Scene* PokerDesk::createScene()
 {
     // 'scene' is an autorelease object
@@ -121,6 +120,26 @@ bool PokerDesk::init()
     showTimer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
     showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
     this->addChild(showTimer);
+    
+    chair_tian = PokerChair::PokerChair::create("images/pk_table_tian@2x.png",Size(100,100));
+    chair_tian->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
+    chair_tian->setPosition(origin.x + visibleSize.width / 2 - chair_tian->getContentSize().width / 2, origin.y + 0.7 * visibleSize.height  - chair_tian->getContentSize().height / 2);
+    this->addChild(chair_tian);
+    
+    chair_di = PokerChair::PokerChair::create("images/pk_table_di@2x.png",Size(100,100));
+    chair_di->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
+    chair_di->setPosition(origin.x + 0.3 * visibleSize.width - chair_di->getContentSize().width / 2, origin.y + 0.55 * visibleSize.height  - chair_di->getContentSize().height / 2);
+    this->addChild(chair_di);
+    
+    chair_xuan = PokerChair::PokerChair::create("images/pk_table_xuan@2x.png",Size(100,100));
+    chair_xuan->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
+    chair_xuan->setPosition(origin.x + 0.5 * visibleSize.width - chair_xuan->getContentSize().width / 2, origin.y + 0.4 * visibleSize.height  - chair_xuan->getContentSize().height / 2);
+    this->addChild(chair_xuan);
+    
+    chair_huang = PokerChair::PokerChair::create("images/pk_table_huang@2x.png",Size(100,100));
+    chair_huang->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
+    chair_huang->setPosition(origin.x + 0.7 * visibleSize.width - chair_huang->getContentSize().width / 2, origin.y + 0.55 * visibleSize.height  - chair_huang->getContentSize().height / 2);
+    this->addChild(chair_huang);
     
     return true;
 }

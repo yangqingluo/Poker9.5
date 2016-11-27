@@ -65,6 +65,7 @@
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 		FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
+		FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
 		FC6DB5AE1DE8381900621B55 /* SendCardLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC6DB5AA1DE8381900621B55 /* SendCardLayer.cpp */; };
 		FC6DB5AF1DE8381900621B55 /* SendCardTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC6DB5AB1DE8381900621B55 /* SendCardTest.cpp */; };
 		FC6DB6211DE8395000621B55 /* card in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* card */; };
@@ -189,6 +190,8 @@
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		FC35C0921DEAC741009C3A83 /* GameTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameTimer.cpp; sourceTree = "<group>"; };
 		FC35C0931DEAC741009C3A83 /* GameTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTimer.h; sourceTree = "<group>"; };
+		FC35C0961DEAE239009C3A83 /* PokerChair.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerChair.cpp; sourceTree = "<group>"; };
+		FC35C0971DEAE239009C3A83 /* PokerChair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerChair.h; sourceTree = "<group>"; };
 		FC6DB5AA1DE8381900621B55 /* SendCardLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SendCardLayer.cpp; sourceTree = "<group>"; };
 		FC6DB5AB1DE8381900621B55 /* SendCardTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SendCardTest.cpp; sourceTree = "<group>"; };
 		FC6DB5AC1DE8381900621B55 /* SendCardTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendCardTest.h; sourceTree = "<group>"; };
@@ -372,6 +375,8 @@
 				FCBDFECE1DE9D8F4001EA2BC /* PopAlertDialog.h */,
 				FC35C0921DEAC741009C3A83 /* GameTimer.cpp */,
 				FC35C0931DEAC741009C3A83 /* GameTimer.h */,
+				FC35C0961DEAE239009C3A83 /* PokerChair.cpp */,
+				FC35C0971DEAE239009C3A83 /* PokerChair.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -586,6 +591,7 @@
 				FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FCC2D04B1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
+				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */,

@@ -16,6 +16,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 #include "GameTimer.h"
+#include "PokerChair.h"
 
 class PokerDesk : public cocos2d::Layer
 {
@@ -42,6 +43,10 @@ public:
     GameTimer* showTimer;
     void showTimerDoneCallback(Node* pNode);
     
+    PokerChair* chair_tian;
+    PokerChair* chair_di;
+    PokerChair* chair_xuan;
+    PokerChair* chair_huang;
     
     void goBackAction();
     void waitForPrepareprepareAction();
