@@ -254,7 +254,7 @@ void PokerDesk::showJudgeAction(){
 
 void PokerDesk::sendPokerAction(){
     float runTime = 0.15;
-    for (int i = pokerIndex + 1; i <= 8; i++){
+    for (int i = pokerIndex + 1; i <= pokerIndex + 8; i++){
         Vec2 position = Vec2::ZERO;
         switch ((i - pokerIndex - 1) % 4) {
             case 0:{
@@ -280,25 +280,25 @@ void PokerDesk::sendPokerAction(){
             default:
                 break;
         }
-        m_cardBg.at(i - 1)->runAction(Spawn::create(RotateBy::create(runTime + i / 16.0, 720),
-                                                    MoveTo::create(runTime + i / 16.0, Vec2(position.x ,position.y)), NULL));
+        m_cardBg.at(i - 1)->runAction(Spawn::create(RotateBy::create(runTime + (i - pokerIndex - 1) * 1.0, 720),
+                                                    MoveTo::create(runTime + (i - pokerIndex - 1) * 1.0, Vec2(position.x ,position.y)), NULL));
         m_cardVec.at(i - 1)->setPosition(position);
     }
     
-//    //翻牌动画一
-//    for (int j = pokerIndex + 1; j <= 8; j++) {
-//        m_cardBg.at(j - 1)->runAction(Sequence::create(DelayTime::create(1)
-//                                                       ,OrbitCamera::create(0.05 + j / 20.0, 1, 0, 0, 90, 0, 0)
-//                                                       ,Hide::create()
-//                                                       ,CallFunc::create([=]
-//                                                                         {
-//                                                                             m_cardVec.at(j - 1)->runAction(Sequence::create(
-//                                                                                                                             Show::create(),
-//                                                                                                                             OrbitCamera::create(0.05 + j / 20.0, 1, 0, 90, -90, 0, 0), NULL));
-//                                                                         }),NULL));
-//        
-//        m_cardVec.at(j - 1)->runAction(OrbitCamera::create(0.02, 1, 0, 0, 90, 0, 0));
-//    }
+    //翻牌动画一
+    for (int j = pokerIndex + 1; j <= 8; j++) {
+        m_cardBg.at(j - 1)->runAction(Sequence::create(DelayTime::create(1)
+                                                       ,OrbitCamera::create(0.05 + j / 20.0, 1, 0, 0, 90, 0, 0)
+                                                       ,Hide::create()
+                                                       ,CallFunc::create([=]
+                                                                         {
+                                                                             m_cardVec.at(j - 1)->runAction(Sequence::create(
+                                                                                                                             Show::create(),
+                                                                                                                             OrbitCamera::create(0.05 + j / 20.0, 1, 0, 90, -90, 0, 0), NULL));
+                                                                         }),NULL));
+        
+        m_cardVec.at(j - 1)->runAction(OrbitCamera::create(0.02, 1, 0, 0, 90, 0, 0));
+    }
     
     pokerIndex+=8;
 }
