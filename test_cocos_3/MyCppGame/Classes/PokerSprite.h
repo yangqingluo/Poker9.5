@@ -20,10 +20,15 @@ public:
     void showPokerAnimated(bool isBack, bool animated);//显示扑克
     void setTouchPriority(int num);
     
+    void selectedAction();
+    void deselectedAction();
+    
 private:
     CC_SYNTHESIZE(bool,p_isSelected,isSelect);//是否已选
     CC_SYNTHESIZE(bool,p_canTouch,canTouch);//是否能被点击
     CC_SYNTHESIZE(PokerColor,p_color,poker_color);//花色
     CC_SYNTHESIZE(PokerPoint,p_point,poker_point);//牌点
     EventListenerTouchOneByOne* touchListener;
+    
+    void settestInt(int var);
 };

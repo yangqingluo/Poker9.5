@@ -39,7 +39,13 @@ bool PokerSprite::onTouchBegan(Touch *pTouch, Event *pEvent){
     Point ptouch = convertTouchToNodeSpaceAR(pTouch); //由英文之意转换 触摸 到 节点空间
     if(rect.containsPoint(ptouch) && p_canTouch)
     {
-        p_isSelected = !p_isSelected;
+        if (p_isSelected) {
+            this->deselectedAction();
+        }
+        else {
+            this->selectedAction();
+        }
+        
         return true;
     }
     //如果这里返回false触摸不被吞掉
@@ -84,20 +90,19 @@ void PokerSprite::setTouchPriority(int num){
 
 
 
-//void PokerSprite::SelectPkLuTou(){
-//    //添加要出的牌
-//    this->m_isSelect = true;
-//    this->setPosition(Vec2(getPositionX(),getPositionY()+10));
-//    
-//    
-//}
-//void PokerSprite::SelectPkSuoTou(){
-//    //从出牌中移除该牌
-//    m_isSelect = false;
-//    this->setPosition(Vec2(getPositionX(),getPositionY()-10));
-//    
-//    
-//}
+void PokerSprite::selectedAction(){
+    this->p_isSelected = true;
+    this->setPosition(Vec2(getPositionX(),getPositionY() + 10));
+    
+    
+}
+
+void PokerSprite::deselectedAction(){
+    this->p_isSelected = false;
+    this->setPosition(Vec2(getPositionX(),getPositionY() - 10));
+    
+    
+}
 
 
 
