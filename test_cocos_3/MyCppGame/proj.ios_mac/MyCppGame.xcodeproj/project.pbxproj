@@ -64,12 +64,14 @@
 		D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B0611A1803AB670077942B /* CoreMotion.framework */; };
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
+		FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */; };
+		FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */; };
 		FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
 		FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
 		FC6DB5AE1DE8381900621B55 /* SendCardLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC6DB5AA1DE8381900621B55 /* SendCardLayer.cpp */; };
 		FC6DB5AF1DE8381900621B55 /* SendCardTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC6DB5AB1DE8381900621B55 /* SendCardTest.cpp */; };
-		FC6DB6211DE8395000621B55 /* card in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* card */; };
-		FC6DB6221DE8395000621B55 /* card in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* card */; };
+		FC6DB6211DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
+		FC6DB6221DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
 		FC851C741DDDAE8500732C40 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */; };
 		FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
 		FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
@@ -188,6 +190,9 @@
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerSprite.cpp; sourceTree = "<group>"; };
+		FC139FEF1DEC17AC0067383F /* PokerSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerSprite.h; sourceTree = "<group>"; };
+		FC139FF31DEC18860067383F /* PokerGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerGlobal.h; sourceTree = "<group>"; };
 		FC35C0921DEAC741009C3A83 /* GameTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameTimer.cpp; sourceTree = "<group>"; };
 		FC35C0931DEAC741009C3A83 /* GameTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTimer.h; sourceTree = "<group>"; };
 		FC35C0961DEAE239009C3A83 /* PokerChair.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerChair.cpp; sourceTree = "<group>"; };
@@ -196,7 +201,7 @@
 		FC6DB5AB1DE8381900621B55 /* SendCardTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SendCardTest.cpp; sourceTree = "<group>"; };
 		FC6DB5AC1DE8381900621B55 /* SendCardTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendCardTest.h; sourceTree = "<group>"; };
 		FC6DB5AD1DE8381900621B55 /* SendCardLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendCardLayer.h; sourceTree = "<group>"; };
-		FC6DB6201DE8395000621B55 /* card */ = {isa = PBXFileReference; lastKnownFileType = folder; path = card; sourceTree = "<group>"; };
+		FC6DB6201DE8395000621B55 /* poker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = poker; sourceTree = "<group>"; };
 		FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		FC983D5B1DE16728006C2616 /* InviteScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InviteScene.cpp; sourceTree = "<group>"; };
 		FC983D5C1DE16728006C2616 /* InviteScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteScene.h; sourceTree = "<group>"; };
@@ -338,7 +343,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FC6DB6201DE8395000621B55 /* card */,
+				FC6DB6201DE8395000621B55 /* poker */,
 				FCC339E51DDFD64000E71685 /* HelloWorld.png */,
 				FCC2D0501DDF23A600E8353D /* images */,
 				521A8EA819F11F5000D177D7 /* fonts */,
@@ -377,6 +382,9 @@
 				FC35C0931DEAC741009C3A83 /* GameTimer.h */,
 				FC35C0961DEAE239009C3A83 /* PokerChair.cpp */,
 				FC35C0971DEAE239009C3A83 /* PokerChair.h */,
+				FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */,
+				FC139FEF1DEC17AC0067383F /* PokerSprite.h */,
+				FC139FF31DEC18860067383F /* PokerGlobal.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -559,7 +567,7 @@
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
-				FC6DB6211DE8395000621B55 /* card in Resources */,
+				FC6DB6211DE8395000621B55 /* poker in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -572,7 +580,7 @@
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				3EACC99019EE6D4300EB3C5E /* res in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
-				FC6DB6221DE8395000621B55 /* card in Resources */,
+				FC6DB6221DE8395000621B55 /* poker in Resources */,
 				FCC33A041DDFD64000E71685 /* HelloWorld.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -588,6 +596,7 @@
 				FC6DB5AF1DE8381900621B55 /* SendCardTest.cpp in Sources */,
 				FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */,
 				FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FCC2D04B1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
@@ -608,6 +617,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
