@@ -14,6 +14,8 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+#include "PokerSprite.h"
+
 class PokerChair:public LayerColor{  //继承LayerColor类，方便更改layer的颜色和透明度
 public:
     PokerChair();
@@ -21,7 +23,7 @@ public:
     virtual bool init();
     CREATE_FUNC(PokerChair);
     
-    static PokerChair* create(const char* backgroudImage,Size dialogSize);
+    static PokerChair* create(const char* backgroudImage,Size size);
     
     bool onTouchBegan(Touch* touch,Event* event);
     void onTouchMoved(Touch* touch,Event* event);
@@ -33,6 +35,7 @@ private:
     Size m_dialogContentSize;
     
     CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);
+    CC_SYNTHESIZE(Vector<PokerSprite *>, poker_array, PokerArray);//拥有的扑克牌
 };
 
 #endif /* defined(__PokerChair__) */

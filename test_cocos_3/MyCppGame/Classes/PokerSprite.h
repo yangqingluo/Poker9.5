@@ -10,7 +10,8 @@ class PokerSprite : public Sprite
 public:
     PokerSprite();
     ~PokerSprite();
-    static PokerSprite* create(const char *pszFileName, const Rect& rect);
+//    static PokerSprite* create(const char *pszFileName, const Rect& rect);
+    static PokerSprite* create(PokerColor color, PokerPoint point);
     virtual void onEnter();
     virtual void onExit();
     virtual bool onTouchBegan(Touch *pTouch, Event *pEvent);
@@ -24,11 +25,9 @@ public:
     void deselectedAction();
     
 private:
-    CC_SYNTHESIZE(bool,p_isSelected,isSelect);//是否已选
-    CC_SYNTHESIZE(bool,p_canTouch,canTouch);//是否能被点击
-    CC_SYNTHESIZE(PokerColor,p_color,poker_color);//花色
-    CC_SYNTHESIZE(PokerPoint,p_point,poker_point);//牌点
+    CC_SYNTHESIZE(bool,p_isSelected,IsSelect);//是否已选
+    CC_SYNTHESIZE(bool,p_canTouch,CanTouch);//是否能被点击
+    CC_SYNTHESIZE(PokerColor,p_color,Poker_color);//花色
+    CC_SYNTHESIZE(PokerPoint,p_point,Poker_point);//牌点
     EventListenerTouchOneByOne* touchListener;
-    
-    void settestInt(int var);
 };

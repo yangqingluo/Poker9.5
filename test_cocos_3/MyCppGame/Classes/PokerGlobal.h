@@ -9,8 +9,8 @@ enum PokerColor
     PokerColor_Joker,
     PokerColor_Spade,
     PokerColor_Heart,
-    PokerColor_Diamond,
     PokerColor_Club,
+    PokerColor_Diamond,
 };
 //牌点
 enum PokerPoint

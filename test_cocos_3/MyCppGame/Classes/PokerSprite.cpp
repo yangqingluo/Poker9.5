@@ -8,16 +8,30 @@ PokerSprite::~PokerSprite(){
     
 }
 
-PokerSprite* PokerSprite::create(const char *pszFileName, const Rect& rect){
+//PokerSprite* PokerSprite::create(const char *pszFileName, const Rect& rect){
+//    PokerSprite* pk = new PokerSprite();
+//    if (pk && pk->initWithFile(pszFileName,rect))
+//    {
+//        pk->autorelease();
+//        return pk;
+//    }
+//    CC_SAFE_DELETE(pk);
+//    return pk;
+//}
+
+PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point){
     PokerSprite* pk = new PokerSprite();
-    if (pk && pk->initWithFile(pszFileName,rect))
-    {
+    if (pk){
+        pk->p_color = color;
+        pk->p_point = point;
         pk->autorelease();
         return pk;
     }
+    
     CC_SAFE_DELETE(pk);
     return pk;
 }
+
 void PokerSprite::onEnter(){
     Sprite::onEnter();
     //触摸响应注册

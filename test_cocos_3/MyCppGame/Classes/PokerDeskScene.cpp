@@ -142,15 +142,15 @@ bool PokerDesk::init()
     chair_huang->setPosition(origin.x + 0.7 * visibleSize.width - chair_huang->getContentSize().width / 2, origin.y + 0.55 * visibleSize.height  - chair_huang->getContentSize().height / 2);
     this->addChild(chair_huang);
     
-    chair_pokerStack = PokerChair::PokerChair::create();
-    chair_pokerStack->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
-    chair_pokerStack->setPosition(origin.x + 0.5 * visibleSize.width - chair_pokerStack->getContentSize().width / 2, origin.y + 0.6 * visibleSize.height  - chair_pokerStack->getContentSize().height / 2);
-    chair_pokerStack->setColor(Color3B::WHITE);
-    chair_pokerStack->setOpacity(0);
-    chair_pokerStack->setVisible(false);
-    this->addChild(chair_pokerStack);
+    bool isRet = false;
+    do{
+        srand((unsigned)time(NULL));//初始化随机种子
+        CC_BREAK_IF(!createPokers());
+        
+        isRet = true;
+    } while (0);
     
-    return true;
+    return isRet;
 }
 
 
@@ -194,7 +194,7 @@ void PokerDesk::onEnter(){
 }
 
 void PokerDesk::showSettingChip(){
-    PopAlertDialog* popup=PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
+    PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
     popup->setTitle("");
     popup->setContentText("请设置带入的金币数目",12,50,150);
     popup->setCallBackFunc(this,callfuncN_selector(PokerDesk::popButtonCallback));
@@ -322,7 +322,6 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             showTimer->showTag = 0;
             showTimer->showPrefix();
             
-            chair_pokerStack->setVisible(true);
             
             auto visibleSize = Director::getInstance()->getVisibleSize();
             Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -384,3 +383,94 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
     
 }
 
+
+#pragma poker
+PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
+    PokerSprite* pk = PokerSprite::create(color, point);
+    
+    return pk;
+}
+bool PokerDesk::createPokers(){
+    bool isRet = false;
+    
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Vec2 position = Vec2(origin.x + 0.5 * visibleSize.width, origin.y + 0.58 * visibleSize.height);
+    do{
+        //创建52个牌
+        for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
+            for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
+                PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
+                pk->setPosition(position);
+                pk->showPokerAnimated(true, false);
+                this->addChild(pk);
+                m_arrPokers.pushBack(pk);
+            }
+        }
+        //创建小鬼
+        PokerSprite* joker_junior = createPoker(PokerColor_Joker, PokerPoint_JokerJunior);
+        joker_junior->setPosition(position);
+        joker_junior->showPokerAnimated(true, false);
+        this->addChild(joker_junior);
+        m_arrPokers.pushBack(joker_junior);
+        
+        //创建大鬼
+        PokerSprite* joker_senior = createPoker(PokerColor_Joker, PokerPoint_JokerSenior);
+        joker_senior->setPosition(position);
+        joker_senior->showPokerAnimated(true, false);
+        this->addChild(joker_senior);
+        m_arrPokers.pushBack(joker_senior);
+        
+        isRet = true;
+    } while (0);
+    
+    return isRet;
+}
+
+bool PokerDesk::reindexPoker(){
+    bool isRet = false;
+    do{
+        for(int i = 0; i < m_arrPokers.size(); ++i){
+            PokerSprite* pk1 = m_arrPokers.getRandomObject();
+            PokerSprite* pk2 = m_arrPokers.getRandomObject();
+            m_arrPokers.swap(pk1, pk2);
+        }
+        
+        isRet = true;
+    } while (0);
+    
+    return isRet;
+}
+void PokerDesk::sendPoker(){
+    PokerSprite *pk;
+    if(m_IndexSend < 8 && m_isSendSingle)
+    {
+        pk = (Poker*)m_arrPokers->objectAtIndex(m_iSendPk);
+        if(m_iSendPk%3 == 0)//给玩家发牌
+            MovePk(m_player,pk);
+        else if(m_iSendPk%3 == 1)//给电脑1发牌
+            MovePk(m_npcOne,pk);
+        else if(m_iSendPk%3 == 2)//给电脑2发牌
+            MovePk(m_npcTwo,pk);
+        ++m_iSendPk;
+        m_isSendSingle = false;
+    }else if (m_iSendPk>50 && m_iSendPk<54 && m_isSendSingle)
+    {
+        pk = (Poker*)m_arrPokers->objectAtIndex(m_iSendPk);
+        MovePk(m_Three,pk);
+        pk->showFrontAnimated(true);
+        ++m_iSendPk;
+        m_isSendSingle = false;
+    }
+    else if(m_iSendPk>53)
+    {
+        FenChaiNpcPai(m_npcOne);
+        FenChaiNpcPai(m_npcTwo);
+        m_iSendPk = 0;
+        m_iState = 1;
+    }
+}
+
+void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
+    
+}

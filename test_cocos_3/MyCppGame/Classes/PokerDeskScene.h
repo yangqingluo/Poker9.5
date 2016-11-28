@@ -48,7 +48,6 @@ public:
     PokerChair* chair_di;
     PokerChair* chair_xuan;
     PokerChair* chair_huang;
-    PokerChair* chair_pokerStack;
     
     void goBackAction();
     void waitForPrepareprepareAction();
@@ -58,9 +57,15 @@ public:
     
     
 private:
-    Size m_winSize;
-    Vector<cocos2d::Sprite *> m_cardVec;
-    Vector<cocos2d::Sprite *> m_cardBg;
+    bool m_isSendSingle;//是否发完一张牌
+    int m_IndexSend;//已发出第几张牌
+    
+    Vector<PokerSprite *> m_arrPokers;//所有的牌
+    PokerSprite* createPoker(PokerColor color,PokerPoint point);//生成一个牌
+    bool createPokers();//创建一副扑克牌
+    bool reindexPoker();//洗牌
+    void sendPoker();//发牌
+    void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
 };
 
 #endif /* PokerDeskScene_h */

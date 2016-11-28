@@ -29,13 +29,11 @@ bool PokerChair::init(){
     return true;
 }
 
-PokerChair* PokerChair::create(const char* backgoundImage,Size dialogSize){
-    //创建弹出对话框，指定背景图和大小。
-    
+PokerChair* PokerChair::create(const char* backgoundImage,Size size){
     PokerChair* layer = PokerChair::create();
     
     layer->setSpriteBackGround(Sprite::create(backgoundImage));
-    layer->m_dialogContentSize = dialogSize;
+    layer->m_dialogContentSize = size;
     
     return layer;
 }
