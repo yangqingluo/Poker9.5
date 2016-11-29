@@ -138,7 +138,6 @@ void PopAlertDialog::buttonCallBack(Ref* pSender){
     }
     
     this->removeFromParentAndCleanup(true);
-    
 }
 
 

@@ -10,6 +10,14 @@
 #include "PopAlertDialog.h"
 #include "SendCardLayer.h"
 
+PokerDesk::PokerDesk():m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
+    
+}
+
+PokerDesk::~PokerDesk(){
+    
+}
+
 Scene* PokerDesk::createScene()
 {
     // 'scene' is an autorelease object
@@ -122,25 +130,12 @@ bool PokerDesk::init()
     showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
     this->addChild(showTimer, 2, 5);
     
-    chair_tian = PokerChair::PokerChair::create("images/pk_table_tian@2x.png",Size(100,100));
-    chair_tian->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
-    chair_tian->setPosition(origin.x + visibleSize.width / 2 - chair_tian->getContentSize().width / 2, origin.y + 0.7 * visibleSize.height  - chair_tian->getContentSize().height / 2);
-    this->addChild(chair_tian);
-    
-    chair_di = PokerChair::PokerChair::create("images/pk_table_di@2x.png",Size(100,100));
-    chair_di->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
-    chair_di->setPosition(origin.x + 0.3 * visibleSize.width - chair_di->getContentSize().width / 2, origin.y + 0.55 * visibleSize.height  - chair_di->getContentSize().height / 2);
-    this->addChild(chair_di);
-    
-    chair_xuan = PokerChair::PokerChair::create("images/pk_table_xuan@2x.png",Size(100,100));
-    chair_xuan->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
-    chair_xuan->setPosition(origin.x + 0.5 * visibleSize.width - chair_xuan->getContentSize().width / 2, origin.y + 0.4 * visibleSize.height  - chair_xuan->getContentSize().height / 2);
-    this->addChild(chair_xuan);
-    
-    chair_huang = PokerChair::PokerChair::create("images/pk_table_huang@2x.png",Size(100,100));
-    chair_huang->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
-    chair_huang->setPosition(origin.x + 0.7 * visibleSize.width - chair_huang->getContentSize().width / 2, origin.y + 0.55 * visibleSize.height  - chair_huang->getContentSize().height / 2);
-    this->addChild(chair_huang);
+    char imageName[4][100] = {"images/pk_table_tian@2x.png","images/pk_table_di@2x.png","images/pk_table_xuan@2x.png","images/pk_table_huang@2x.png"};
+    float scaleArray[4][2] = {{0.5,0.7},{0.3,0.55},{0.5,0.4},{0.7,0.55}};
+    for (int i = 0; i < 4; i++) {
+        PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1]);
+        m_arrChairs.pushBack(chair);
+    }
     
     bool isRet = false;
     do{
@@ -153,6 +148,16 @@ bool PokerDesk::init()
     return isRet;
 }
 
+PokerChair* PokerDesk::createChair(const char* backgroudImage, float widthScale, float heightScale){
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size(100,100));
+    chair->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
+    chair->setPosition(origin.x + widthScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + heightScale * visibleSize.height  - chair->getContentSize().height / 2);
+    chair->setPoint(Vec2(chair->getPosition().x + chair->getContentSize().width / 2, chair->getPosition().y + chair->getContentSize().height / 2));
+    return chair;
+}
 
 void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
@@ -236,71 +241,71 @@ void PokerDesk::preparedAction(){
 }
 
 void PokerDesk::showJudgeAction(){
-    for (int j = 0; j <= 0; j++) {
-        m_cardBg.at(j)->runAction(Sequence::create(DelayTime::create(1)
-                                                       ,OrbitCamera::create(0.05 + j / 20.0, 1, 0, 0, 90, 0, 0)
-                                                       ,Hide::create()
-                                                       ,CallFunc::create([=]
-                                                                         {
-                                                                             m_cardVec.at(j)->runAction(Sequence::create(
-                                                                                                                             Show::create(),
-                                                                                                                             OrbitCamera::create(0.05 + j / 20.0, 1, 0, 90, -90, 0, 0), NULL));
-                                                                         }),NULL));
-        
-        m_cardVec.at(j)->runAction(OrbitCamera::create(0.02, 1, 0, 0, 90, 0, 0));
-        pokerIndex++;
-    }
+//    for (int j = 0; j <= 0; j++) {
+//        m_cardBg.at(j)->runAction(Sequence::create(DelayTime::create(1)
+//                                                       ,OrbitCamera::create(0.05 + j / 20.0, 1, 0, 0, 90, 0, 0)
+//                                                       ,Hide::create()
+//                                                       ,CallFunc::create([=]
+//                                                                         {
+//                                                                             m_cardVec.at(j)->runAction(Sequence::create(
+//                                                                                                                             Show::create(),
+//                                                                                                                             OrbitCamera::create(0.05 + j / 20.0, 1, 0, 90, -90, 0, 0), NULL));
+//                                                                         }),NULL));
+//        
+//        m_cardVec.at(j)->runAction(OrbitCamera::create(0.02, 1, 0, 0, 90, 0, 0));
+//        pokerIndex++;
+//    }
 }
 
 void PokerDesk::sendPokerAction(){
-    float runTime = 0.15;
-    for (int i = pokerIndex + 1; i <= pokerIndex + 8; i++){
-        Vec2 position = Vec2::ZERO;
-        switch ((i - pokerIndex - 1) % 4) {
-            case 0:{
-                position = Vec2(chair_tian->getPosition().x + chair_tian->getContentSize().width / 2, chair_tian->getPosition().y + chair_tian->getContentSize().height / 2);
-            }
-                break;
-                
-            case 1:{
-                position = Vec2(chair_di->getPosition().x + chair_di->getContentSize().width / 2, chair_di->getPosition().y + chair_di->getContentSize().height / 2);
-            }
-                break;
-                
-            case 2:{
-                position = Vec2(chair_xuan->getPosition().x + chair_xuan->getContentSize().width / 2, chair_xuan->getPosition().y + chair_xuan->getContentSize().height / 2);
-            }
-                break;
-                
-            case 3:{
-                position = Vec2(chair_huang->getPosition().x + chair_huang->getContentSize().width / 2, chair_huang->getPosition().y + chair_huang->getContentSize().height / 2);
-            }
-                break;
-                
-            default:
-                break;
-        }
-        m_cardBg.at(i - 1)->runAction(Spawn::create(RotateBy::create(runTime + (i - pokerIndex - 1) * 1.0, 720),
-                                                    MoveTo::create(runTime + (i - pokerIndex - 1) * 1.0, Vec2(position.x ,position.y)), NULL));
-        m_cardVec.at(i - 1)->setPosition(position);
-    }
-    
-    //翻牌动画一
-    for (int j = pokerIndex + 1; j <= 8; j++) {
-        m_cardBg.at(j - 1)->runAction(Sequence::create(DelayTime::create(1)
-                                                       ,OrbitCamera::create(0.05 + j / 20.0, 1, 0, 0, 90, 0, 0)
-                                                       ,Hide::create()
-                                                       ,CallFunc::create([=]
-                                                                         {
-                                                                             m_cardVec.at(j - 1)->runAction(Sequence::create(
-                                                                                                                             Show::create(),
-                                                                                                                             OrbitCamera::create(0.05 + j / 20.0, 1, 0, 90, -90, 0, 0), NULL));
-                                                                         }),NULL));
-        
-        m_cardVec.at(j - 1)->runAction(OrbitCamera::create(0.02, 1, 0, 0, 90, 0, 0));
-    }
-    
-    pokerIndex+=8;
+//    float runTime = 0.15;
+//    for (int i = pokerIndex + 1; i <= pokerIndex + 8; i++){
+//        Vec2 position = Vec2::ZERO;
+//        switch ((i - pokerIndex - 1) % 4) {
+//            case 0:{
+//                position = Vec2(chair_tian->getPosition().x + chair_tian->getContentSize().width / 2, chair_tian->getPosition().y + chair_tian->getContentSize().height / 2);
+//            }
+//                break;
+//                
+//            case 1:{
+//                position = Vec2(chair_di->getPosition().x + chair_di->getContentSize().width / 2, chair_di->getPosition().y + chair_di->getContentSize().height / 2);
+//            }
+//                break;
+//                
+//            case 2:{
+//                position = Vec2(chair_xuan->getPosition().x + chair_xuan->getContentSize().width / 2, chair_xuan->getPosition().y + chair_xuan->getContentSize().height / 2);
+//            }
+//                break;
+//                
+//            case 3:{
+//                position = Vec2(chair_huang->getPosition().x + chair_huang->getContentSize().width / 2, chair_huang->getPosition().y + chair_huang->getContentSize().height / 2);
+//            }
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//        m_cardBg.at(i - 1)->runAction(Spawn::create(RotateBy::create(runTime + (i - pokerIndex - 1) * 1.0, 720),
+//                                                    MoveTo::create(runTime + (i - pokerIndex - 1) * 1.0, Vec2(position.x ,position.y)), NULL));
+//        m_cardVec.at(i - 1)->setPosition(position);
+//    }
+//    
+//    //翻牌动画一
+//    for (int j = pokerIndex + 1; j <= 8; j++) {
+//        m_cardBg.at(j - 1)->runAction(Sequence::create(DelayTime::create(1)
+//                                                       ,OrbitCamera::create(0.05 + j / 20.0, 1, 0, 0, 90, 0, 0)
+//                                                       ,Hide::create()
+//                                                       ,CallFunc::create([=]
+//                                                                         {
+//                                                                             m_cardVec.at(j - 1)->runAction(Sequence::create(
+//                                                                                                                             Show::create(),
+//                                                                                                                             OrbitCamera::create(0.05 + j / 20.0, 1, 0, 90, -90, 0, 0), NULL));
+//                                                                         }),NULL));
+//        
+//        m_cardVec.at(j - 1)->runAction(OrbitCamera::create(0.02, 1, 0, 0, 90, 0, 0));
+//    }
+//    
+//    pokerIndex+=8;
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){
@@ -323,25 +328,25 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             showTimer->showPrefix();
             
             
-            auto visibleSize = Director::getInstance()->getVisibleSize();
-            Vec2 origin = Director::getInstance()->getVisibleOrigin();
-            for (int i = 1; i <= 54; i++)
-            {
-                auto bg_card = Sprite::create("card/card_bg.png");
-                bg_card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width, origin.y + 0.58 * visibleSize.height));
-                this->addChild(bg_card);
-                m_cardBg.pushBack(bg_card);
-            }
-            
-            for (int i = 1; i <= 54; i++)
-            {
-                auto strN = __String::createWithFormat("card/%d.jpg",i);
-                auto card = Sprite::create(strN->getCString());
-                card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width,origin.y + 0.58 * visibleSize.height));
-                card->setVisible(false);
-                this->addChild(card);
-                m_cardVec.pushBack(card);
-            }
+//            auto visibleSize = Director::getInstance()->getVisibleSize();
+//            Vec2 origin = Director::getInstance()->getVisibleOrigin();
+//            for (int i = 1; i <= 54; i++)
+//            {
+//                auto bg_card = Sprite::create("card/card_bg.png");
+//                bg_card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width, origin.y + 0.58 * visibleSize.height));
+//                this->addChild(bg_card);
+//                m_cardBg.pushBack(bg_card);
+//            }
+//            
+//            for (int i = 1; i <= 54; i++)
+//            {
+//                auto strN = __String::createWithFormat("card/%d.jpg",i);
+//                auto card = Sprite::create(strN->getCString());
+//                card->setPosition(Vec2(origin.x + 0.5 * visibleSize.width,origin.y + 0.58 * visibleSize.height));
+//                card->setVisible(false);
+//                this->addChild(card);
+//                m_cardVec.pushBack(card);
+//            }
             
             sprintf(showTimer->prefixString,"发牌顺序");
             showTimer->showTag = 3;
@@ -442,35 +447,31 @@ bool PokerDesk::reindexPoker(){
     return isRet;
 }
 void PokerDesk::sendPoker(){
-    PokerSprite *pk;
-    if(m_IndexSend < 8 && m_isSendSingle)
-    {
-        pk = (Poker*)m_arrPokers->objectAtIndex(m_iSendPk);
-        if(m_iSendPk%3 == 0)//给玩家发牌
-            MovePk(m_player,pk);
-        else if(m_iSendPk%3 == 1)//给电脑1发牌
-            MovePk(m_npcOne,pk);
-        else if(m_iSendPk%3 == 2)//给电脑2发牌
-            MovePk(m_npcTwo,pk);
-        ++m_iSendPk;
-        m_isSendSingle = false;
-    }else if (m_iSendPk>50 && m_iSendPk<54 && m_isSendSingle)
-    {
-        pk = (Poker*)m_arrPokers->objectAtIndex(m_iSendPk);
-        MovePk(m_Three,pk);
-        pk->showFrontAnimated(true);
-        ++m_iSendPk;
+    if(m_IndexSend < 8 && m_isSendSingle){
+        PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+        PokerChair* chair = m_arrChairs.at((m_IndexSend % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
+        movePoker(chair, pk);
+        ++m_IndexSend;
         m_isSendSingle = false;
     }
-    else if(m_iSendPk>53)
-    {
-        FenChaiNpcPai(m_npcOne);
-        FenChaiNpcPai(m_npcTwo);
-        m_iSendPk = 0;
-        m_iState = 1;
+    else if(m_IndexSend > 8){
+        m_IndexSend = 0;
+        
     }
 }
 
 void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
-    
+    float time = 0.1;
+    chair->getPokerArray().pushBack(poker);
+    MoveTo* move = MoveTo::create(time, chair->getPoint());
+    RotateBy* rotate = RotateBy::create(time, 720);
+    CallFuncN* func = CallFuncN::create(CC_CALLBACK_1(PokerDesk::sendedSinglePoker, this, chair));
+    Sequence* sequence = Sequence::create(Spawn::create(rotate,move, NULL),func,NULL);
+    poker->runAction(sequence);
+}
+
+void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
+    PokerChair* chair = (PokerChair* )pData;
+//    chair->updatePkWeiZhi();
+    m_isSendSingle = true;
 }

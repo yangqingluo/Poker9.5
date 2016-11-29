@@ -76,11 +76,8 @@ void PokerSprite::onTouchCancelled(Touch *pTouch, Event *pEvent){
 }
 
 void PokerSprite::showPokerAnimated(bool isBack, bool animated){
-    char Icon[30];
-    if (isBack) {
-        sprintf(Icon, "poker/poker_back.png");
-    }
-    else{
+    char Icon[30] = {"poker/poker_back.png"};
+    if (!isBack) {
         sprintf(Icon, "poker/poker_%d_%d.png",p_color,p_point);
     }
     

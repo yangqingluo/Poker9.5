@@ -34,6 +34,7 @@ PokerChair* PokerChair::create(const char* backgoundImage,Size size){
     
     layer->setSpriteBackGround(Sprite::create(backgoundImage));
     layer->m_dialogContentSize = size;
+    layer->autorelease();
     
     return layer;
 }

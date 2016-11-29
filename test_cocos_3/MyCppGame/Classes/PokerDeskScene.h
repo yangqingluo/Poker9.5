@@ -21,6 +21,8 @@ USING_NS_CC_EXT;
 class PokerDesk : public cocos2d::Layer
 {
 public:
+    PokerDesk();
+    virtual ~PokerDesk();
     static cocos2d::Scene* createScene();
     
     virtual void onEnter();
@@ -28,7 +30,6 @@ public:
     CREATE_FUNC(PokerDesk);
     
     int deskType;
-    int pokerIndex;
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
@@ -44,10 +45,10 @@ public:
     GameTimer* showTimer;
     void showTimerDoneCallback(Node* pNode);
     
-    PokerChair* chair_tian;
-    PokerChair* chair_di;
-    PokerChair* chair_xuan;
-    PokerChair* chair_huang;
+//    PokerChair* chair_tian;
+//    PokerChair* chair_di;
+//    PokerChair* chair_xuan;
+//    PokerChair* chair_huang;
     
     void goBackAction();
     void waitForPrepareprepareAction();
@@ -55,12 +56,14 @@ public:
     void showJudgeAction();
     void sendPokerAction();
     
-    
+    void sendedSinglePoker(Node* pSender, void* pData);
 private:
     bool m_isSendSingle;//是否发完一张牌
     int m_IndexSend;//已发出第几张牌
-    
+    int m_IndexStart;//发牌起始顺序
+    Vector<PokerChair *> m_arrChairs;//所有的座位
     Vector<PokerSprite *> m_arrPokers;//所有的牌
+    PokerChair* createChair(const char* backgroudImage, float widthScale, float heightScale);//生成一个座位
     PokerSprite* createPoker(PokerColor color,PokerPoint point);//生成一个牌
     bool createPokers();//创建一副扑克牌
     bool reindexPoker();//洗牌
