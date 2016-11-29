@@ -455,7 +455,7 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
         if (roomTypeSelected == 0) {
             auto scene = PokerDesk::createScene();
             PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-            layer->deskType = 2;
+            layer->deskType = (int )cell->getIdx();
             
             TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
             Director::getInstance()->pushScene(ts);

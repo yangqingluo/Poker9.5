@@ -87,51 +87,51 @@ bool HelloWorld::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    //使用两张图片分别创建精灵
-    auto logo1 = Sprite::create("card/card_bg.png");
-    auto logo2 = Sprite::create("card/1.jpg");
-    //设置居中
-    logo1->setPosition(visibleSize/2);
-    logo2->setPosition(visibleSize/2);
-    //将第二张图片x轴缩放至隐藏
-    logo2->setScale(0, 1);
-    //加入图层
-    addChild(logo1);
-    addChild(logo2);
-    
-    //创建监听器
-    auto touchListener1 = EventListenerTouchOneByOne::create();
-    //设置点击事件
-    touchListener1->onTouchBegan = [logo1, logo2](Touch* touch, Event* event){
-        //判断点击位置是否在精灵显示范围内
-        if(event->getCurrentTarget()->getBoundingBox().containsPoint(
-                                                                     touch->getLocation()))
-        {
-            //执行缩放动作
-            auto move1 = ScaleTo::create(0.1, 0, 1);
-            auto move2 = ScaleTo::create(0.1, 1, 1);
-            logo1->runAction(move1);
-            logo2->runAction(move2);
-        }
-        return false;
-    };
-    //同上
-    auto touchListener2 = EventListenerTouchOneByOne::create();
-    touchListener2->onTouchBegan = [logo1, logo2](Touch* touch, Event* event){
-        if(event->getCurrentTarget()->getBoundingBox().containsPoint(
-                                                                     touch->getLocation()))
-        {
-            auto move1 = ScaleTo::create(0.1, 0, 1);
-            auto move2 = ScaleTo::create(0.1, 1, 1);
-            logo2->runAction(move1);
-            logo1->runAction(move2);
-        }
-        return false;
-    };
-    
-    //分别将两个监听器与两个精灵绑定
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener1, logo1);
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener2, logo2);
+//    //使用两张图片分别创建精灵
+//    auto logo1 = Sprite::create("card/card_bg.png");
+//    auto logo2 = Sprite::create("card/1.jpg");
+//    //设置居中
+//    logo1->setPosition(visibleSize/2);
+//    logo2->setPosition(visibleSize/2);
+//    //将第二张图片x轴缩放至隐藏
+//    logo2->setScale(0, 1);
+//    //加入图层
+//    addChild(logo1);
+//    addChild(logo2);
+//    
+//    //创建监听器
+//    auto touchListener1 = EventListenerTouchOneByOne::create();
+//    //设置点击事件
+//    touchListener1->onTouchBegan = [logo1, logo2](Touch* touch, Event* event){
+//        //判断点击位置是否在精灵显示范围内
+//        if(event->getCurrentTarget()->getBoundingBox().containsPoint(
+//                                                                     touch->getLocation()))
+//        {
+//            //执行缩放动作
+//            auto move1 = ScaleTo::create(0.1, 0, 1);
+//            auto move2 = ScaleTo::create(0.1, 1, 1);
+//            logo1->runAction(move1);
+//            logo2->runAction(move2);
+//        }
+//        return false;
+//    };
+//    //同上
+//    auto touchListener2 = EventListenerTouchOneByOne::create();
+//    touchListener2->onTouchBegan = [logo1, logo2](Touch* touch, Event* event){
+//        if(event->getCurrentTarget()->getBoundingBox().containsPoint(
+//                                                                     touch->getLocation()))
+//        {
+//            auto move1 = ScaleTo::create(0.1, 0, 1);
+//            auto move2 = ScaleTo::create(0.1, 1, 1);
+//            logo2->runAction(move1);
+//            logo1->runAction(move2);
+//        }
+//        return false;
+//    };
+//    
+//    //分别将两个监听器与两个精灵绑定
+//    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener1, logo1);
+//    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener2, logo2);
 
     
     return true;

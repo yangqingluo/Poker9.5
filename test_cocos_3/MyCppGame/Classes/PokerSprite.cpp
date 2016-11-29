@@ -1,6 +1,6 @@
 #include "PokerSprite.h"
 
-PokerSprite::PokerSprite():p_isSelected(false),p_canTouch(false){
+PokerSprite::PokerSprite():p_isSelected(false),p_canTouch(false),p_isFront(false){
     
 }
 
@@ -21,7 +21,8 @@ PokerSprite::~PokerSprite(){
 
 PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point){
     PokerSprite* pk = new PokerSprite();
-    if (pk){
+    if (pk && pk->initWithFile("poker/poker_back.png")){
+        pk->setContentSize(Size(27, 36));
         pk->p_color = color;
         pk->p_point = point;
         pk->autorelease();
@@ -75,9 +76,13 @@ void PokerSprite::onTouchCancelled(Touch *pTouch, Event *pEvent){
     
 }
 
-void PokerSprite::showPokerAnimated(bool isBack, bool animated){
+void PokerSprite::showPokerAnimated(bool showFront, bool animated){
+    if (showFront == p_isFront) {
+        return;
+    }
+    
     char Icon[30] = {"poker/poker_back.png"};
-    if (!isBack) {
+    if (showFront) {
         sprintf(Icon, "poker/poker_%d_%d.png",p_color,p_point);
     }
     
@@ -93,6 +98,7 @@ void PokerSprite::showPokerAnimated(bool isBack, bool animated){
     else{
         this->runAction(Sequence::create(func, NULL));
     }
+    p_isFront = !p_isFront;
 }
 
 void PokerSprite::setTouchPriority(int num){

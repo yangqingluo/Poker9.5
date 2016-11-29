@@ -10,7 +10,7 @@
 #include "PopAlertDialog.h"
 #include "SendCardLayer.h"
 
-PokerDesk::PokerDesk():m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
+PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
     
 }
 
@@ -141,6 +141,7 @@ bool PokerDesk::init()
     do{
         srand((unsigned)time(NULL));//初始化随机种子
         CC_BREAK_IF(!createPokers());
+        CC_BREAK_IF(!reindexPoker());
         
         isRet = true;
     } while (0);
@@ -194,7 +195,7 @@ void PokerDesk::popButtonCallback(Node* pNode){
 void PokerDesk::onEnter(){
     Layer::onEnter();
     
-    log("%d",deskType);
+    m_IndexStart = deskType % 4;
     this->showSettingChip();
 }
 
@@ -348,9 +349,10 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
 //                m_cardVec.pushBack(card);
 //            }
             
-            sprintf(showTimer->prefixString,"发牌顺序");
-            showTimer->showTag = 3;
-            showTimer->start(1);
+//            sprintf(showTimer->prefixString,"发牌顺序");
+//            showTimer->showTag = 3;
+//            showTimer->start(1);
+            scheduleUpdate();
         }
             break;
             
@@ -389,6 +391,23 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
 }
 
 
+void PokerDesk::update(float delta){
+    switch (m_deskState) {
+        case 0:{
+            sendPoker();
+        }
+            break;
+            
+        case 1:{
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
 #pragma poker
 PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
     PokerSprite* pk = PokerSprite::create(color, point);
@@ -407,7 +426,6 @@ bool PokerDesk::createPokers(){
             for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
                 PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
                 pk->setPosition(position);
-                pk->showPokerAnimated(true, false);
                 this->addChild(pk);
                 m_arrPokers.pushBack(pk);
             }
@@ -415,14 +433,12 @@ bool PokerDesk::createPokers(){
         //创建小鬼
         PokerSprite* joker_junior = createPoker(PokerColor_Joker, PokerPoint_JokerJunior);
         joker_junior->setPosition(position);
-        joker_junior->showPokerAnimated(true, false);
         this->addChild(joker_junior);
         m_arrPokers.pushBack(joker_junior);
         
         //创建大鬼
         PokerSprite* joker_senior = createPoker(PokerColor_Joker, PokerPoint_JokerSenior);
         joker_senior->setPosition(position);
-        joker_senior->showPokerAnimated(true, false);
         this->addChild(joker_senior);
         m_arrPokers.pushBack(joker_senior);
         
@@ -456,12 +472,12 @@ void PokerDesk::sendPoker(){
     }
     else if(m_IndexSend > 8){
         m_IndexSend = 0;
-        
+        m_deskState = 1;
     }
 }
 
 void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
-    float time = 0.1;
+    float time = 1.0;
     chair->getPokerArray().pushBack(poker);
     MoveTo* move = MoveTo::create(time, chair->getPoint());
     RotateBy* rotate = RotateBy::create(time, 720);

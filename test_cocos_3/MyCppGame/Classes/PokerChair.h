@@ -31,6 +31,7 @@ public:
     
     virtual void onEnter();
     virtual void onExit();
+    
 private:
     Size m_dialogContentSize;
     

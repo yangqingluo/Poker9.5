@@ -59,6 +59,7 @@ public:
     void sendedSinglePoker(Node* pSender, void* pData);
 private:
     bool m_isSendSingle;//是否发完一张牌
+    int m_deskState;//当前状态
     int m_IndexSend;//已发出第几张牌
     int m_IndexStart;//发牌起始顺序
     Vector<PokerChair *> m_arrChairs;//所有的座位
@@ -69,6 +70,7 @@ private:
     bool reindexPoker();//洗牌
     void sendPoker();//发牌
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
+    void update(float delta);//系统scheduleupdate回调函数
 };
 
 #endif /* PokerDeskScene_h */
