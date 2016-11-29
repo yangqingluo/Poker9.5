@@ -66,8 +66,10 @@ private:
     Vector<PokerSprite *> m_arrPokers;//所有的牌
     PokerChair* createChair(const char* backgroudImage, float widthScale, float heightScale);//生成一个座位
     PokerSprite* createPoker(PokerColor color,PokerPoint point);//生成一个牌
+    
     bool createPokers();//创建一副扑克牌
     bool reindexPoker();//洗牌
+    void turnTopPoker();//翻开牌堆顶的牌以决定发牌顺序
     void sendPoker();//发牌
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
     void update(float delta);//系统scheduleupdate回调函数

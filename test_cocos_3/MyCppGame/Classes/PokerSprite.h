@@ -31,4 +31,5 @@ private:
     CC_SYNTHESIZE(PokerColor,p_color,Poker_color);//花色
     CC_SYNTHESIZE(PokerPoint,p_point,Poker_point);//牌点
     EventListenerTouchOneByOne* touchListener;
+    Sprite* bgSprite;
 };

@@ -21,11 +21,18 @@ PokerSprite::~PokerSprite(){
 
 PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point){
     PokerSprite* pk = new PokerSprite();
-    if (pk && pk->initWithFile("poker/poker_back.png")){
+    if (pk && pk->init()){
         pk->setContentSize(Size(27, 36));
         pk->p_color = color;
         pk->p_point = point;
         pk->autorelease();
+        
+        Sprite* BG = Sprite::create("poker/poker_back.png");
+        BG->setScale(pk->getContentSize().width / BG->getContentSize().width);
+        BG->setPosition(pk->getContentSize().width / 2, pk->getContentSize().height / 2);
+        pk->addChild(BG);
+        pk->bgSprite = BG;
+        
         return pk;
     }
     
@@ -88,7 +95,7 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated){
     
     Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
     CallFunc* func = CallFunc::create([=]{
-                                          this->setTexture(texture);
+                                          bgSprite->setTexture(texture);
                                       });
     if (animated) {
         auto scaleSmall = ScaleTo::create(1.0, 0, 1);
@@ -104,8 +111,6 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated){
 void PokerSprite::setTouchPriority(int num){
     _eventDispatcher->setPriority(touchListener, num);
 }
-
-
 
 void PokerSprite::selectedAction(){
     this->p_isSelected = true;

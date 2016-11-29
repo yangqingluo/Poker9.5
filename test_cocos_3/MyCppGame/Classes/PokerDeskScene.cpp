@@ -194,8 +194,6 @@ void PokerDesk::popButtonCallback(Node* pNode){
 
 void PokerDesk::onEnter(){
     Layer::onEnter();
-    
-    m_IndexStart = deskType % 4;
     this->showSettingChip();
 }
 
@@ -462,11 +460,18 @@ bool PokerDesk::reindexPoker(){
     
     return isRet;
 }
+
+void PokerDesk::turnTopPoker(){
+    
+}
+
 void PokerDesk::sendPoker(){
     if(m_IndexSend < 8 && m_isSendSingle){
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         PokerChair* chair = m_arrChairs.at((m_IndexSend % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
         movePoker(chair, pk);
+        pk->showPokerAnimated(true, true);
+        
         ++m_IndexSend;
         m_isSendSingle = false;
     }
@@ -480,7 +485,7 @@ void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
     float time = 1.0;
     chair->getPokerArray().pushBack(poker);
     MoveTo* move = MoveTo::create(time, chair->getPoint());
-    RotateBy* rotate = RotateBy::create(time, 720);
+    RotateBy* rotate = RotateBy::create(time, 360);
     CallFuncN* func = CallFuncN::create(CC_CALLBACK_1(PokerDesk::sendedSinglePoker, this, chair));
     Sequence* sequence = Sequence::create(Spawn::create(rotate,move, NULL),func,NULL);
     poker->runAction(sequence);
