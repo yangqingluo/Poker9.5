@@ -56,7 +56,7 @@ void PokerChair::onEnter(){
     Sprite* background = getSpriteBackGround();
     if (background != NULL) {
         background->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
-        this->addChild(background,0,0);
+        this->addChild(background);
     }
     
 }

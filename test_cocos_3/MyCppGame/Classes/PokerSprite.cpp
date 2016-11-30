@@ -22,7 +22,7 @@ PokerSprite::~PokerSprite(){
 PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point){
     PokerSprite* pk = new PokerSprite();
     if (pk && pk->init()){
-        pk->setContentSize(Size(27, 36));
+        pk->setContentSize(Size(24, 32));
         pk->p_color = color;
         pk->p_point = point;
         pk->autorelease();
@@ -105,7 +105,7 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated){
         CallFunc* func2 = CallFunc::create([=]{
             this->showedPoker();
         });
-        MoveTo* move = MoveTo::create(0.5, Vec2(getPositionX() + getContentSize().width, getPositionY()));
+        MoveTo* move = MoveTo::create(0.5, Vec2(getPositionX() - 1.1 * getContentSize().width, getPositionY()));
 //        this->runAction(Spawn::create(move, Sequence::create(scaleSmall, func1, scaleBig, func2, NULL),NULL));
         this->runAction(Sequence::create(scaleSmall, func1, scaleBig, func2, move, NULL));
     }
@@ -137,7 +137,7 @@ void PokerSprite::showedPoker(){
         (m_callbackListener->*m_callback)(this);
     }
     
-    scheduleOnce(schedule_selector(PokerSprite::removeAction), 1);
+    scheduleOnce(schedule_selector(PokerSprite::removeAction), 4);
 }
 
 void PokerSprite::removeAction(float delta){

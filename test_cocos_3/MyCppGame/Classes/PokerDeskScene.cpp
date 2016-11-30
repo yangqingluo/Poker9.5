@@ -67,7 +67,7 @@ bool PokerDesk::init()
                                               CC_CALLBACK_1(PokerDesk::buttonCallback, this, 1));
     
     btn_PrepareItem->setScale(this->getScaleX(), this->getScaleY());
-    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.8 * btn_PrepareItem->getContentSize().width, origin.y + 168.0 / 640.0 * visibleSize.height));
+    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.8 * btn_PrepareItem->getContentSize().width, origin.y + 0.1 * visibleSize.height));
     
     btn_AnotherdeskItem = MenuItemImage::create(
                                                  "images/btn_anotherdesk.png",
@@ -126,12 +126,12 @@ bool PokerDesk::init()
     
     showTimer = GameTimer::createTimer(0);
     showTimer->showTag = 0;
-    showTimer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+    showTimer->setPosition(origin.x + visibleSize.width / 2, origin.y + 0.74 * visibleSize.height);
     showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
     this->addChild(showTimer, 2, 5);
     
     char imageName[4][100] = {"images/pk_table_tian@2x.png","images/pk_table_di@2x.png","images/pk_table_xuan@2x.png","images/pk_table_huang@2x.png"};
-    float scaleArray[4][2] = {{0.5,0.7},{0.3,0.55},{0.5,0.4},{0.7,0.55}};
+    float scaleArray[4][2] = {{0.5,0.6},{0.3,0.4},{0.5,0.3},{0.7,0.4}};
     for (int i = 0; i < 4; i++) {
         PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1]);
         m_arrChairs.pushBack(chair);
@@ -154,8 +154,8 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float widthScale,
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size(100,100));
-    chair->setContentSize(Size(0.1 * visibleSize.width, 0.1 * visibleSize.width));
+    PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size::ZERO);
+    chair->setContentSize(Size(0.14 * visibleSize.width, 0.14 * visibleSize.width));
     chair->setPosition(origin.x + widthScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + heightScale * visibleSize.height  - chair->getContentSize().height / 2);
     chair->setPoint(Vec2(chair->getPosition().x + chair->getContentSize().width / 2, chair->getPosition().y + chair->getContentSize().height / 2));
     return chair;
@@ -334,7 +334,7 @@ bool PokerDesk::createPokers(){
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Vec2 position = Vec2(origin.x + 0.5 * visibleSize.width, origin.y + 0.58 * visibleSize.height);
+    Vec2 position = Vec2(origin.x + 0.4 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
     do{
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
@@ -407,7 +407,7 @@ void PokerDesk::sendPoker(){
 }
 
 void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
-    float time = 1.0;
+    float time = 0.5;
     chair->getPokerArray().pushBack(poker);
     MoveTo* move = MoveTo::create(time, chair->getPoint());
     RotateBy* rotate = RotateBy::create(time, 360);
