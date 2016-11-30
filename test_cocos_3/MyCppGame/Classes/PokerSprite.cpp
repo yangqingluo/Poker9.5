@@ -96,8 +96,8 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated){
     Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
     
     if (animated) {
-        auto scaleSmall = ScaleTo::create(1.0, 0, 1);
-        auto scaleBig = ScaleTo::create(1.0, 1, 1);
+        auto scaleSmall = ScaleTo::create(0.2, 0, 1);
+        auto scaleBig = ScaleTo::create(0.2, 1, 1);
         CallFunc* func1 = CallFunc::create([=]{
             bgSprite->setTexture(texture);
         });
@@ -105,8 +105,9 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated){
         CallFunc* func2 = CallFunc::create([=]{
             this->showedPoker();
         });
-        
-        this->runAction(Sequence::create(scaleSmall, func1, scaleBig, func2, NULL));
+        MoveTo* move = MoveTo::create(0.5, Vec2(getPositionX() + getContentSize().width, getPositionY()));
+//        this->runAction(Spawn::create(move, Sequence::create(scaleSmall, func1, scaleBig, func2, NULL),NULL));
+        this->runAction(Sequence::create(scaleSmall, func1, scaleBig, func2, move, NULL));
     }
     else{
         bgSprite->setTexture(texture);

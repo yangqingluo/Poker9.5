@@ -466,9 +466,10 @@ void PokerDesk::turnTopPoker(){
     }
     
     m_IndexSend = 0;
+    
     PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+    this->reorderChild(pk, 0);
     pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
-    pk->setPosition(pk->getPosition().x + 50, pk->getPosition().y);
     pk->showPokerAnimated(true, true);
 }
 
