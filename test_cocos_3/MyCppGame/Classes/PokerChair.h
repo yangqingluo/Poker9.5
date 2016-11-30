@@ -32,11 +32,15 @@ public:
     virtual void onEnter();
     virtual void onExit();
     
+    void setHighlighted(bool yn);
+    void updatePokerPosition();//更新牌的位置
+    
+    Vector<PokerSprite *> pokerArray;
 private:
     Size m_dialogContentSize;
     
     CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);
-    CC_SYNTHESIZE(Vector<PokerSprite *>, poker_array, PokerArray);//拥有的扑克牌
+//    CC_SYNTHESIZE(Vector<PokerSprite *>, poker_array, PokerArray);//拥有的扑克牌
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
 };
 

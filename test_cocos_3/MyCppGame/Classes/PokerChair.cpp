@@ -24,7 +24,7 @@ bool PokerChair::init(){
     
     //设置弹出层的颜色，指定为淡灰色
     setColor(Color3B::GRAY);
-    setOpacity(128);
+    setOpacity(0x50);
     
     return true;
 }
@@ -55,7 +55,8 @@ void PokerChair::onEnter(){
     
     Sprite* background = getSpriteBackGround();
     if (background != NULL) {
-        background->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+        background->setPosition(0.1 * this->getContentSize().width, 0.1 * this->getContentSize().height);
+        background->setScale(0.1 * this->getContentSize().width / background->getContentSize().width);
         this->addChild(background);
     }
     
@@ -64,4 +65,22 @@ void PokerChair::onEnter(){
 void PokerChair::onExit(){
     LayerColor::onExit();
     
+}
+
+void PokerChair::setHighlighted(bool yn){
+    setColor(yn ? Color3B::BLACK : Color3B::GRAY);
+}
+
+void PokerChair::updatePokerPosition(){
+    if (pokerArray.size() < 2) {
+        return;
+    }
+    
+    int num = 0;
+    
+    //更新位置
+    for (PokerSprite* pk : pokerArray) {
+        pk->setPositionX(m_point.x - num * 0.4 * pk->getContentSize().width);
+        ++num;
+    }
 }
