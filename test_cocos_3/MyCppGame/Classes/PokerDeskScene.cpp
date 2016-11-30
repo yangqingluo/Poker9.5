@@ -332,29 +332,21 @@ PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
 bool PokerDesk::createPokers(){
     bool isRet = false;
     
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Vec2 position = Vec2(origin.x + 0.4 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
+    
     do{
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
             for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
                 PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
-                pk->setPosition(position);
-                this->addChild(pk);
                 m_arrPokers.pushBack(pk);
             }
         }
         //创建小鬼
         PokerSprite* joker_junior = createPoker(PokerColor_Joker, PokerPoint_JokerJunior);
-        joker_junior->setPosition(position);
-        this->addChild(joker_junior);
         m_arrPokers.pushBack(joker_junior);
         
         //创建大鬼
         PokerSprite* joker_senior = createPoker(PokerColor_Joker, PokerPoint_JokerSenior);
-        joker_senior->setPosition(position);
-        this->addChild(joker_senior);
         m_arrPokers.pushBack(joker_senior);
         
         isRet = true;
@@ -370,6 +362,15 @@ bool PokerDesk::reindexPoker(){
             PokerSprite* pk1 = m_arrPokers.getRandomObject();
             PokerSprite* pk2 = m_arrPokers.getRandomObject();
             m_arrPokers.swap(pk1, pk2);
+        }
+        
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        Vec2 position = Vec2(origin.x + 0.4 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
+        for (size_t i = m_arrPokers.size(); i > 0; --i) {
+            PokerSprite* pk = m_arrPokers.at(i - 1);
+            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
+            this->addChild(pk);
         }
         
         isRet = true;
