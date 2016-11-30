@@ -94,18 +94,24 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated){
     }
     
     Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
-    CallFunc* func = CallFunc::create([=]{
-                                          bgSprite->setTexture(texture);
-                                      });
+    
     if (animated) {
         auto scaleSmall = ScaleTo::create(1.0, 0, 1);
         auto scaleBig = ScaleTo::create(1.0, 1, 1);
-        this->runAction(Sequence::create(scaleSmall, func, scaleBig, NULL));
+        CallFunc* func1 = CallFunc::create([=]{
+            bgSprite->setTexture(texture);
+        });
+        
+        CallFunc* func2 = CallFunc::create([=]{
+            this->showedPoker();
+        });
+        
+        this->runAction(Sequence::create(scaleSmall, func1, scaleBig, func2, NULL));
     }
     else{
-        this->runAction(Sequence::create(func, NULL));
+        bgSprite->setTexture(texture);
+        this->showedPoker();
     }
-    p_isFront = !p_isFront;
 }
 
 void PokerSprite::setTouchPriority(int num){
@@ -123,9 +129,17 @@ void PokerSprite::deselectedAction(){
     this->p_isSelected = false;
     this->setPosition(Vec2(getPositionX(),getPositionY() - 10));
     
-    
 }
 
+void PokerSprite::showedPoker(){
+    p_isFront = !p_isFront;
+    if (m_callback && m_callbackListener) {
+        (m_callbackListener->*m_callback)(this);
+    }
+}
 
-
+void PokerSprite::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
+    m_callbackListener = target;
+    m_callback = callfun;
+}
 

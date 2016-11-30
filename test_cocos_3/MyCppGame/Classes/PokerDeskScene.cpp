@@ -326,7 +326,6 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             showTimer->showTag = 0;
             showTimer->showPrefix();
             
-            
 //            auto visibleSize = Director::getInstance()->getVisibleSize();
 //            Vec2 origin = Director::getInstance()->getVisibleOrigin();
 //            for (int i = 1; i <= 54; i++)
@@ -350,7 +349,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
 //            sprintf(showTimer->prefixString,"发牌顺序");
 //            showTimer->showTag = 3;
 //            showTimer->start(1);
-            scheduleUpdate();
+            turnTopPoker();
         }
             break;
             
@@ -462,7 +461,15 @@ bool PokerDesk::reindexPoker(){
 }
 
 void PokerDesk::turnTopPoker(){
+    if (m_arrPokers.size() < 9) {
+        return;
+    }
     
+    m_IndexSend = 0;
+    PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+    pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
+    pk->setPosition(pk->getPosition().x + 50, pk->getPosition().y);
+    pk->showPokerAnimated(true, true);
 }
 
 void PokerDesk::sendPoker(){
@@ -470,7 +477,6 @@ void PokerDesk::sendPoker(){
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         PokerChair* chair = m_arrChairs.at((m_IndexSend % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
         movePoker(chair, pk);
-        pk->showPokerAnimated(true, true);
         
         ++m_IndexSend;
         m_isSendSingle = false;
@@ -495,4 +501,17 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     PokerChair* chair = (PokerChair* )pData;
 //    chair->updatePkWeiZhi();
     m_isSendSingle = true;
+}
+
+void PokerDesk::turnedSinglePokerCallback(Node* pSender){
+    PokerSprite* pk = (PokerSprite* )pSender;
+    if (pk->getPoker_point() == PokerPoint_JokerJunior || pk->getPoker_point() == PokerPoint_JokerSenior) {
+        m_IndexStart = 0;
+    }
+    else{
+        m_IndexStart = pk->getPoker_point() - 1;
+    }
+    
+    m_arrPokers.erase(m_IndexSend);
+    scheduleUpdate();
 }

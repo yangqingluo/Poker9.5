@@ -56,6 +56,7 @@ public:
     void showJudgeAction();
     void sendPokerAction();
     
+    void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);
 private:
     bool m_isSendSingle;//是否发完一张牌

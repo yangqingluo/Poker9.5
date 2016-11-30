@@ -24,6 +24,9 @@ public:
     void selectedAction();
     void deselectedAction();
     
+    void showedPoker();
+    
+    void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);
 private:
     CC_SYNTHESIZE(bool,p_isSelected,IsSelect);//是否已选
     CC_SYNTHESIZE(bool,p_canTouch,CanTouch);//是否能被点击
@@ -32,4 +35,7 @@ private:
     CC_SYNTHESIZE(PokerPoint,p_point,Poker_point);//牌点
     EventListenerTouchOneByOne* touchListener;
     Sprite* bgSprite;
+    
+    Ref* m_callbackListener;
+    SEL_CallFuncN m_callback;
 };
