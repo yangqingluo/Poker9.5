@@ -123,7 +123,6 @@ void PokerSprite::selectedAction(){
     this->p_isSelected = true;
     this->setPosition(Vec2(getPositionX(),getPositionY() + 10));
     
-    
 }
 
 void PokerSprite::deselectedAction(){
@@ -137,6 +136,12 @@ void PokerSprite::showedPoker(){
     if (m_callback && m_callbackListener) {
         (m_callbackListener->*m_callback)(this);
     }
+    
+    scheduleOnce(schedule_selector(PokerSprite::removeAction), 1);
+}
+
+void PokerSprite::removeAction(float delta){
+    this->removeFromParentAndCleanup(true);
 }
 
 void PokerSprite::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){

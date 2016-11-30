@@ -25,7 +25,7 @@ public:
     void deselectedAction();
     
     void showedPoker();
-    
+    void removeAction(float delta);
     void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);
 private:
     CC_SYNTHESIZE(bool,p_isSelected,IsSelect);//是否已选
