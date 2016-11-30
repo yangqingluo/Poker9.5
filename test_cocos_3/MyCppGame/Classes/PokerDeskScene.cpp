@@ -135,6 +135,7 @@ bool PokerDesk::init()
     for (int i = 0; i < 4; i++) {
         PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1]);
         m_arrChairs.pushBack(chair);
+        this->addChild(chair);
     }
     
     bool isRet = false;
