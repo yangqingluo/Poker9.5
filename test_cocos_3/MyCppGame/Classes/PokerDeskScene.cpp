@@ -398,17 +398,30 @@ void PokerDesk::sendPoker(){
         
         ++m_IndexSend;
         m_isSendSingle = false;
+        
+        if (pk->getPoker_point() == PokerPoint_JokerJunior || pk->getPoker_point() == PokerPoint_JokerSenior) {
+            m_IndexStart = 0;
+        }
+        else{
+            m_IndexStart = pk->getPoker_point() - 1;
+        }
+        
+        for (int i = 0; i < m_arrChairs.size(); i++) {
+            PokerChair* chair = m_arrChairs.at(i);
+            chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
+        }
     }
     else if(index > 0 && index <= 8 && m_isSendSingle){
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+        this->reorderChild(pk, 0);
         PokerChair* chair = m_arrChairs.at(((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
         movePoker(chair, pk);
         
         m_isSendSingle = false;
         ++m_IndexSend;
         if (m_IndexSend % 9 == 0) {
-            m_deskState = 1;
-            unscheduleUpdate();
+//            m_deskState = 1;
+//            unscheduleUpdate();
         }
     }
 }
@@ -432,19 +445,6 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
 
 void PokerDesk::turnedSinglePokerCallback(Node* pSender){
     if (m_IndexSend % 9 == 1) {
-        PokerSprite* pk = (PokerSprite* )pSender;
-        if (pk->getPoker_point() == PokerPoint_JokerJunior || pk->getPoker_point() == PokerPoint_JokerSenior) {
-            m_IndexStart = 0;
-        }
-        else{
-            m_IndexStart = pk->getPoker_point() - 1;
-        }
-        
-        for (int i = 0; i < m_arrChairs.size(); i++) {
-            PokerChair* chair = m_arrChairs.at(i);
-            chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
-        }
-        
         m_isSendSingle = true;
     }
 }

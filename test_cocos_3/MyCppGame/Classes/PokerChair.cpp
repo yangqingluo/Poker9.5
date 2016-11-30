@@ -76,11 +76,12 @@ void PokerChair::updatePokerPosition(){
         return;
     }
     
-    int num = 0;
-    
+    int index = 0;
+    float scale = 0.7;
+    size_t count = pokerArray.size();
     //更新位置
     for (PokerSprite* pk : pokerArray) {
-        pk->setPositionX(m_point.x - num * 0.4 * pk->getContentSize().width);
-        ++num;
+        pk->setPositionX(m_point.x - 0.5 * pk->getContentSize().width * (count - (count - 1) * scale) + index * pk->getContentSize().width * (1 - scale) + 0.5 * pk->getContentSize().width);
+        ++index;
     }
 }
