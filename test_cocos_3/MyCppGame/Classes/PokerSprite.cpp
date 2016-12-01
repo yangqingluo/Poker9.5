@@ -59,14 +59,8 @@ bool PokerSprite::onTouchBegan(Touch *pTouch, Event *pEvent){
     Size size = getContentSize();
     Rect rect(-size.width/2,-size.height/2,size.width,size.height);
     Point ptouch = convertTouchToNodeSpaceAR(pTouch); //由英文之意转换 触摸 到 节点空间
-    if(rect.containsPoint(ptouch) && p_canTouch)
-    {
-        if (p_isSelected) {
-            this->deselectedAction();
-        }
-        else {
-            this->selectedAction();
-        }
+    if(rect.containsPoint(ptouch) && p_canTouch){
+        this->setSelected(!p_isSelected);
         
         return true;
     }
@@ -118,16 +112,18 @@ void PokerSprite::setTouchPriority(int num){
     _eventDispatcher->setPriority(touchListener, num);
 }
 
-void PokerSprite::selectedAction(){
-    this->p_isSelected = true;
-    this->setPosition(Vec2(getPositionX(),getPositionY() + 10));
-    
-}
+void PokerSprite::setSelected(bool select){
+    if (select == p_isSelected) {
+        return;
+    }
 
-void PokerSprite::deselectedAction(){
-    this->p_isSelected = false;
-    this->setPosition(Vec2(getPositionX(),getPositionY() - 10));
-    
+    p_isSelected = select;
+    if (select) {
+        this->setPosition(Vec2(getPositionX(),getPositionY() + 10));
+    }
+    else{
+        this->setPosition(Vec2(getPositionX(),getPositionY() - 10));
+    }
 }
 
 void PokerSprite::showedPoker(){

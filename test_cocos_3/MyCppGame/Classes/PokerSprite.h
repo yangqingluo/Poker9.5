@@ -21,14 +21,13 @@ public:
     void showPokerAnimated(bool showFront, bool animated);//显示扑克
     void setTouchPriority(int num);
     
-    void selectedAction();
-    void deselectedAction();
+    void setSelected(bool select);
     
     void showedPoker();
     void removeAction(float delta);
     void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);
 private:
-    CC_SYNTHESIZE(bool,p_isSelected,IsSelect);//是否已选
+    CC_SYNTHESIZE_READONLY(bool,p_isSelected,IsSelect);//是否已选
     CC_SYNTHESIZE(bool,p_canTouch,CanTouch);//是否能被点击
     CC_SYNTHESIZE_READONLY(bool,p_isFront,IsFront);//是否是正面
     CC_SYNTHESIZE(PokerColor,p_color,Poker_color);//花色

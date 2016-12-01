@@ -1,6 +1,6 @@
 #include "JettonSprite.h"
 
-JettonSprite::JettonSprite():m_value(10){
+JettonSprite::JettonSprite():m_value(10),m_isSelected(false){
     
 }
 
@@ -18,7 +18,7 @@ JettonSprite* JettonSprite::create(int value, Size size){
         Sprite* BG = Sprite::create("jetton/jetton_bg.png");
         BG->setScale(sp->getContentSize().width / BG->getContentSize().width);
         BG->setPosition(sp->getContentSize().width / 2, sp->getContentSize().height / 2);
-//        BG->setVisible(false);
+        BG->setVisible(false);
         sp->addChild(BG);
         sp->bgSprite = BG;
         
@@ -47,4 +47,20 @@ bool JettonSprite::isValidValue(int value){
     }
     
     return false;
+}
+
+void JettonSprite::setSelected(bool select){
+    if (select == m_isSelected) {
+        return;
+    }
+    
+    m_isSelected = select;
+    if (select) {
+        Blink* blink = Blink::create(MAX_INPUT, 2 * MAX_INPUT);
+        blink->setTag(6);
+        this->bgSprite->runAction(blink);
+    }
+    else{
+        this->bgSprite->stopActionByTag(6);
+    }
 }

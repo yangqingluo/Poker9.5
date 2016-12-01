@@ -318,6 +318,7 @@ void PokerDesk::touchedChairCallback(Node* pSender){
         
         JettonSprite* sp = this->createjetton(arr[getRandomNumberNotEqualRight(0, 12)]);
         sp->setPosition(0.1 * getRandomNumber(0, 10) * (pSender->getContentSize().width - sp->getContentSize().width) + 0.5 * sp->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (pSender->getContentSize().height - sp->getContentSize().height) + 0.5 * sp->getContentSize().height);
+        sp->setSelected(true);
         pSender->addChild(sp, 0, 99);
     }
 }
