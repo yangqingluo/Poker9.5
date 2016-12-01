@@ -1,6 +1,6 @@
 #include "PokerSprite.h"
 
-PokerSprite::PokerSprite():p_isSelected(false),p_canTouch(false),p_isFront(false){
+PokerSprite::PokerSprite():p_isSelected(false),p_canTouch(false),p_isFront(false),m_callbackListener(NULL),m_callback(NULL){
     
 }
 

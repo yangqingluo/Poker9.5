@@ -127,11 +127,11 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
 
 void PopAlertDialog::buttonCallBack(Ref* pSender){
     
-    Node* node=dynamic_cast<Node*>(pSender);
+    Node* node = dynamic_cast<Node*>(pSender);
     
     //log("[========PopAlertDialog:buttonCallBack=======]touch tag:%d",node->getTag());
     
-    if (m_callback&&m_callbackListener) {
+    if (m_callback && m_callbackListener) {
         
         (m_callbackListener->*m_callback)(node);
         

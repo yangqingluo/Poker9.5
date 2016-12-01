@@ -73,7 +73,7 @@ private:
     void turnTopPoker();//翻开牌堆顶的牌以决定发牌顺序
     void sendPoker();//发牌
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
-    void update(float delta);//系统scheduleupdate回调函数
+    virtual void update(float delta);//系统scheduleupdate回调函数
 };
 
 #endif /* PokerDeskScene_h */

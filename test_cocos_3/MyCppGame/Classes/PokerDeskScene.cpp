@@ -8,7 +8,6 @@
 
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
-#include "SendCardLayer.h"
 
 PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
     
