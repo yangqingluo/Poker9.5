@@ -65,7 +65,7 @@ private:
     int m_IndexStart;//发牌起始顺序
     Vector<PokerChair *> m_arrChairs;//所有的座位
     Vector<PokerSprite *> m_arrPokers;//所有的牌
-    PokerChair* createChair(const char* backgroudImage, float widthScale, float heightScale);//生成一个座位
+    PokerChair* createChair(const char* backgroudImage, float widthScale, float heightScale, int index);//生成一个座位
     PokerSprite* createPoker(PokerColor color,PokerPoint point);//生成一个牌
     
     bool createPokers();//创建一副扑克牌

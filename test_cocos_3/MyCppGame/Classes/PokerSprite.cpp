@@ -19,10 +19,10 @@ PokerSprite::~PokerSprite(){
 //    return pk;
 //}
 
-PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point){
+PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point, Size size){
     PokerSprite* pk = new PokerSprite();
     if (pk && pk->init()){
-        pk->setContentSize(Size(24, 32));
+        pk->setContentSize(size);
         pk->p_color = color;
         pk->p_point = point;
         pk->autorelease();

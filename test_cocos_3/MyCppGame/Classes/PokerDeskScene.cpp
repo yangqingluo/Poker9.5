@@ -130,9 +130,9 @@ bool PokerDesk::init()
     this->addChild(showTimer, 2, 5);
     
     char imageName[4][100] = {"images/pk_table_tian@2x.png","images/pk_table_di@2x.png","images/pk_table_xuan@2x.png","images/pk_table_huang@2x.png"};
-    float scaleArray[4][2] = {{0.5,0.6},{0.3,0.4},{0.5,0.3},{0.7,0.4}};
+    float scaleArray[4][2] = {{0.5,0.65},{0.3,0.4},{0.5,0.4},{0.7,0.4}};
     for (int i = 0; i < 4; i++) {
-        PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1]);
+        PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1], i);
         m_arrChairs.pushBack(chair);
         this->addChild(chair);
     }
@@ -149,13 +149,13 @@ bool PokerDesk::init()
     return isRet;
 }
 
-PokerChair* PokerDesk::createChair(const char* backgroudImage, float widthScale, float heightScale){
+PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, float yScale, int index){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size::ZERO);
-    chair->setContentSize(Size(0.14 * visibleSize.width, 0.14 * visibleSize.width));
-    chair->setPosition(origin.x + widthScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + heightScale * visibleSize.height  - chair->getContentSize().height / 2);
+    chair->setContentSize(Size(0.25 * visibleSize.height, (index == 0 ? 0.125 : 0.25) * visibleSize.height));
+    chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
     chair->setPoint(Vec2(chair->getPosition().x + chair->getContentSize().width / 2, chair->getPosition().y + chair->getContentSize().height / 2));
     return chair;
 }
@@ -324,14 +324,13 @@ void PokerDesk::update(float delta){
 
 #pragma poker
 PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
-    PokerSprite* pk = PokerSprite::create(color, point);
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    PokerSprite* pk = PokerSprite::create(color, point, Size(0.09375 * visibleSize.height, 0.125 * visibleSize.height));
     
     return pk;
 }
 bool PokerDesk::createPokers(){
     bool isRet = false;
-    
-    
     do{
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
@@ -414,8 +413,8 @@ void PokerDesk::sendPoker(){
         m_isSendSingle = false;
         ++m_IndexSend;
         if (m_IndexSend % 9 == 0) {
-//            m_deskState = 1;
-//            unscheduleUpdate();
+            m_deskState = 1;
+            unscheduleUpdate();
         }
     }
 }

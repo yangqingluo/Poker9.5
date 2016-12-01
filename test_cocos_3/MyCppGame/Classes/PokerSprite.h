@@ -11,7 +11,7 @@ public:
     PokerSprite();
     ~PokerSprite();
 //    static PokerSprite* create(const char *pszFileName, const Rect& rect);
-    static PokerSprite* create(PokerColor color, PokerPoint point);
+    static PokerSprite* create(PokerColor color, PokerPoint point, Size size);
     virtual void onEnter();
     virtual void onExit();
     virtual bool onTouchBegan(Touch *pTouch, Event *pEvent);
