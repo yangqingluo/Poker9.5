@@ -37,7 +37,7 @@ bool PopAlertDialog::init(){
     listener->onTouchBegan = CC_CALLBACK_2(PopAlertDialog::onTouchBegan, this);
     listener->onTouchMoved = CC_CALLBACK_2(PopAlertDialog::onTouchMoved, this);
     listener->onTouchEnded = CC_CALLBACK_2(PopAlertDialog::onTouchEnded, this);
-    auto dispatcher=Director::getInstance()->getEventDispatcher();
+    auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     //设置弹出层的颜色，指定为淡灰色
     setColor(Color3B::GRAY);
@@ -84,8 +84,8 @@ void PopAlertDialog::setContentText(const char* text,int fontsize,int padding,in
 }
 
 void PopAlertDialog::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
-    m_callbackListener=target;
-    m_callback=callfun;
+    m_callbackListener = target;
+    m_callback = callfun;
 }
 
 bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImage,const char* title,int tag){

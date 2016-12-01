@@ -72,6 +72,8 @@
 		FC6DB6221DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
 		FC7FC24A1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
 		FC7FC24B1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
+		FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
+		FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
 		FC851C741DDDAE8500732C40 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */; };
 		FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
 		FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
@@ -614,7 +616,9 @@
 				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
+				FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */,
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
+				FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */,
 				FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,

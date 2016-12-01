@@ -21,16 +21,14 @@ public:
     PokerChair();
     ~PokerChair();
     virtual bool init();
-    CREATE_FUNC(PokerChair);
-    
-    static PokerChair* create(const char* backgroudImage,Size size);
-    
-    bool onTouchBegan(Touch* touch,Event* event);
-    void onTouchMoved(Touch* touch,Event* event);
-    void onTouchEnded(Touch* touch,Event* event);
-    
+    virtual bool onTouchBegan(Touch* touch,Event* event);
+    virtual void onTouchMoved(Touch* touch,Event* event);
+    virtual void onTouchEnded(Touch* touch,Event* event);
     virtual void onEnter();
     virtual void onExit();
+    
+    CREATE_FUNC(PokerChair);
+    static PokerChair* create(const char* backgroudImage,Size size);
     
     void setIsBanker(bool yn);//设置是否是庄家
     void setHighlighted(bool yn);
@@ -39,10 +37,10 @@ public:
     Sprite* m_BankerSprite;
     Vector<PokerSprite *> pokerArray;
 private:
-    Size m_dialogContentSize;
-    
     CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
+    
+    Size m_dialogContentSize;
 };
 
 #endif /* defined(__PokerChair__) */

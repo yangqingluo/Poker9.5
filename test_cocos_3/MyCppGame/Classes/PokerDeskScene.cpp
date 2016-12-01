@@ -160,6 +160,24 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
     if (index == 0) {
         chair->setIsBanker(true);
     }
+    
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = [](Touch* touch, Event* event){
+        auto target = static_cast<Sprite*>(event->getCurrentTarget());//获取的当前触摸的目标
+        
+        Point locationInNode = target->convertToNodeSpace(touch->getLocation());
+        Size s = target->getContentSize();
+        Rect rect = Rect(0, 0, s.width, s.height);
+        
+        if (rect.containsPoint(locationInNode))//判断触摸点是否在目标的范围内
+            return true;
+        else  
+            return false;  
+    };
+    
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, chair);
+    
     return chair;
 }
 
