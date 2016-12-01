@@ -21,7 +21,6 @@ bool PokerChair::init(){
         return false;
     }
     
-    
     //设置弹出层的颜色，指定为淡灰色
     setColor(Color3B::GRAY);
     setOpacity(0x50);
@@ -57,14 +56,29 @@ void PokerChair::onEnter(){
     if (background != NULL) {
         background->setPosition(0.1 * this->getContentSize().width, 0.1 * this->getContentSize().height);
         background->setScale(0.1 * this->getContentSize().width / background->getContentSize().width);
-        this->addChild(background);
+//        this->addChild(background);
     }
-    
 }
 
 void PokerChair::onExit(){
     LayerColor::onExit();
     
+}
+
+void PokerChair::setIsBanker(bool yn){
+    if (yn) {
+        if (m_BankerSprite == NULL) {
+            m_BankerSprite = Sprite::create("images/banker.png");
+            m_BankerSprite->setScale(0.5 * this->getContentSize().height / m_BankerSprite->getContentSize().height);
+            m_BankerSprite->setPosition(0.6 * m_BankerSprite->getBoundingBox().size.width, this->getContentSize().height - 0.5 * m_BankerSprite->getBoundingBox().size.height);
+            this->addChild(m_BankerSprite);
+        }
+    }
+    else{
+        if (m_BankerSprite != NULL) {
+            m_BankerSprite->removeFromParentAndCleanup(true);
+        }
+    }
 }
 
 void PokerChair::setHighlighted(bool yn){

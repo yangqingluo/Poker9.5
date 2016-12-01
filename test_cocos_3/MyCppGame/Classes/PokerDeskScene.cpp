@@ -154,9 +154,12 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size::ZERO);
-    chair->setContentSize(Size(0.25 * visibleSize.height, (index == 0 ? 0.125 : 0.25) * visibleSize.height));
+    chair->setContentSize(Size(0.3 * visibleSize.height, (index == 0 ? 0.125 : 0.3) * visibleSize.height));
     chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
-    chair->setPoint(Vec2(chair->getPosition().x + chair->getContentSize().width / 2, chair->getPosition().y + chair->getContentSize().height / 2));
+    chair->setPoint(Vec2(chair->getPosition().x + chair->getContentSize().width / 2, chair->getPosition().y + 0.5 * chair->getContentSize().height));
+    if (index == 0) {
+        chair->setIsBanker(true);
+    }
     return chair;
 }
 
