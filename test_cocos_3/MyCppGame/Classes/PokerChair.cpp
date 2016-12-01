@@ -7,8 +7,9 @@
 //
 
 #include "PokerChair.h"
+#include "JettonSprite.h"
 
-PokerChair::PokerChair():m__sfBackGround(NULL){
+PokerChair::PokerChair():m__sfBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL){
     
 }
 
@@ -22,16 +23,28 @@ bool PokerChair::init(){
     }
     
     //设置弹出层的颜色，指定为淡灰色
-//    setColor(Color3B::GRAY);
-//    setOpacity(0x50);
+    setColor(Color3B::GRAY);
+    setOpacity(0x50);
     
     return true;
 }
 
 bool PokerChair::onTouchBegan(Touch* touch,Event* event){
+    auto target = static_cast<Sprite*>(event->getCurrentTarget());//获取的当前触摸的目标
     
+    Point locationInNode = target->convertToNodeSpace(touch->getLocation());
+    Size s = target->getContentSize();
+    Rect rect = Rect(0, 0, s.width, s.height);
     
-    return true;
+    if (rect.containsPoint(locationInNode)){
+        if (m_touchCallback && m_touchListener) {
+            (m_touchListener->*m_touchCallback)(this);
+        }
+        
+        return true;
+    }
+    
+    return false;
 }
 
 void PokerChair::onTouchMoved(Touch* touch,Event* event){
@@ -51,11 +64,20 @@ void PokerChair::onEnter(){
         background->setScale(0.1 * this->getContentSize().width / background->getContentSize().width);
         //        this->addChild(background);
     }
+    
+    //触摸响应注册
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
+    listener->onTouchMoved = CC_CALLBACK_2(PokerChair::onTouchMoved, this);//触摸移动
+    listener->onTouchEnded = CC_CALLBACK_2(PokerChair::onTouchEnded, this);//触摸结束
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);//注册分发器
 }
 
 void PokerChair::onExit(){
+    //移除触摸响应
+    _eventDispatcher->removeEventListenersForTarget(this);
     LayerColor::onExit();
-    
 }
 
 
@@ -88,7 +110,7 @@ void PokerChair::setIsBanker(bool yn){
 }
 
 void PokerChair::setHighlighted(bool yn){
-//    setColor(yn ? Color3B::BLACK : Color3B::GRAY);
+    setColor(yn ? Color3B::BLACK : Color3B::GRAY);
 }
 
 void PokerChair::updatePokerPosition(){
@@ -105,3 +127,18 @@ void PokerChair::updatePokerPosition(){
         ++index;
     }
 }
+
+void PokerChair::addJetton(int value){
+    
+}
+
+void PokerChair::removeAllJettons(){
+    this->removeChildByTag(99);
+}
+
+void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
+    m_touchListener = target;
+    m_touchCallback = callfun;
+}
+
+

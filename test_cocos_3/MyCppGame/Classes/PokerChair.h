@@ -15,6 +15,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 #include "PokerSprite.h"
+#include "JettonSprite.h"
 
 class PokerChair:public LayerColor{  //继承LayerColor类，方便更改layer的颜色和透明度
 public:
@@ -33,14 +34,19 @@ public:
     void setIsBanker(bool yn);//设置是否是庄家
     void setHighlighted(bool yn);
     void updatePokerPosition();//更新牌的位置
+    void addJetton(int value);//添加筹码
+    void removeAllJettons();//移除筹码
     
     Sprite* m_BankerSprite;
     Vector<PokerSprite *> pokerArray;
+    void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
 private:
     CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
     
     Size m_dialogContentSize;
+    Ref* m_touchListener;
+    SEL_CallFuncN m_touchCallback;
 };
 
 #endif /* defined(__PokerChair__) */

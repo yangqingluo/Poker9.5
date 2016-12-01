@@ -149,38 +149,6 @@ bool PokerDesk::init()
     return isRet;
 }
 
-PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, float yScale, int index){
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
-    PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size::ZERO);
-    chair->setContentSize(Size(0.3 * visibleSize.height, (index == 0 ? 0.125 : 0.3) * visibleSize.height));
-    chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
-    chair->setPoint(Vec2(chair->getPosition().x + chair->getContentSize().width / 2, chair->getPosition().y + 0.5 * chair->getContentSize().height));
-    if (index == 0) {
-        chair->setIsBanker(true);
-    }
-    
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
-    listener->onTouchBegan = [](Touch* touch, Event* event){
-        auto target = static_cast<Sprite*>(event->getCurrentTarget());//获取的当前触摸的目标
-        
-        Point locationInNode = target->convertToNodeSpace(touch->getLocation());
-        Size s = target->getContentSize();
-        Rect rect = Rect(0, 0, s.width, s.height);
-        
-        if (rect.containsPoint(locationInNode))//判断触摸点是否在目标的范围内
-            return true;
-        else  
-            return false;  
-    };
-    
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, chair);
-    
-    return chair;
-}
-
 void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
@@ -333,7 +301,7 @@ void PokerDesk::update(float delta){
         }
             break;
             
-        case 1:{
+        case DeskState_Bet:{
             
         }
             break;
@@ -341,6 +309,47 @@ void PokerDesk::update(float delta){
         default:
             break;
     }
+}
+
+#pragma chair
+void PokerDesk::touchedChairCallback(Node* pSender){
+    if (m_deskState == DeskState_Bet) {
+        int arr[12] = {10,20,50,100,200,500,1000,2000,5000,10000,20000,50000};
+        
+        JettonSprite* sp = this->createjetton(arr[getRandomNumberNotEqualRight(0, 12)]);
+        sp->setPosition(0.1 * getRandomNumberNotEqualRight(0, 10) * pSender->getContentSize().width, 0.1 * getRandomNumberNotEqualRight(0, 10) * pSender->getContentSize().height);
+        pSender->addChild(sp, 0, 99);
+    }
+}
+
+PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, float yScale, int index){
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size::ZERO);
+    chair->setContentSize(Size(0.3 * visibleSize.height, (index == 0 ? 0.125 : 0.3) * visibleSize.height));
+    chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
+    chair->setPoint(Vec2(chair->getPosition().x + chair->getContentSize().width / 2, chair->getPosition().y + 0.5 * chair->getContentSize().height));
+    if (index == 0) {
+        chair->setIsBanker(true);
+    }
+    else{
+        chair->setTouchCallBackFunc(this, callfuncN_selector(PokerDesk::touchedChairCallback));
+    }
+    
+    return chair;
+}
+
+#pragma jetton
+JettonSprite* PokerDesk::createjetton(int value){
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    JettonSprite* sp = JettonSprite::create(value, Size(0.08 * visibleSize.height, 0.08 * visibleSize.height));
+    
+    return sp;
+}
+
+void PokerDesk::addJetton(PokerChair* chair,JettonSprite* jetton){
+    
 }
 
 #pragma poker
@@ -434,7 +443,7 @@ void PokerDesk::sendPoker(){
         m_isSendSingle = false;
         ++m_IndexSend;
         if (m_IndexSend % 9 == 0) {
-            m_deskState = 1;
+            m_deskState = DeskState_Bet;
             unscheduleUpdate();
         }
     }

@@ -18,6 +18,12 @@ USING_NS_CC_EXT;
 #include "GameTimer.h"
 #include "PokerChair.h"
 
+//花色
+enum DeskState
+{
+    DeskState_Bet = 1,//下注
+};
+
 class PokerDesk : public cocos2d::Layer
 {
 public:
@@ -45,11 +51,6 @@ public:
     GameTimer* showTimer;
     void showTimerDoneCallback(Node* pNode);
     
-//    PokerChair* chair_tian;
-//    PokerChair* chair_di;
-//    PokerChair* chair_xuan;
-//    PokerChair* chair_huang;
-    
     void goBackAction();
     void waitForPrepareprepareAction();
     void preparedAction();
@@ -58,6 +59,7 @@ public:
     
     void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);
+    void touchedChairCallback(Node* pSender);
 private:
     bool m_isSendSingle;//是否发完一张牌
     int m_deskState;//当前状态
@@ -67,12 +69,14 @@ private:
     Vector<PokerSprite *> m_arrPokers;//所有的牌
     PokerChair* createChair(const char* backgroudImage, float widthScale, float heightScale, int index);//生成一个座位
     PokerSprite* createPoker(PokerColor color,PokerPoint point);//生成一个牌
+    JettonSprite* createjetton(int value);//生成一个筹码
     
     bool createPokers();//创建一副扑克牌
     bool reindexPoker();//洗牌
     void turnTopPoker();//翻开牌堆顶的牌以决定发牌顺序
     void sendPoker();//发牌
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
+    void addJetton(PokerChair* chair,JettonSprite* jetton);//添加筹码
     virtual void update(float delta);//系统scheduleupdate回调函数
 };
 
