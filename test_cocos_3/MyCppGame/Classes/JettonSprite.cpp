@@ -27,7 +27,7 @@ JettonSprite* JettonSprite::create(int value, Size size){
             sprintf(Icon, "jetton/jetton_%d.png",value);
             sp->valueSprite = Sprite::create(Icon);
             sp->valueSprite->setScale(0.9 * sp->getContentSize().width / sp->valueSprite->getContentSize().width);
-            sp->setPosition(BG->getPosition());
+            sp->valueSprite->setPosition(BG->getPosition());
             sp->addChild(sp->valueSprite);
         }
         
