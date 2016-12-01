@@ -70,6 +70,8 @@
 		FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
 		FC6DB6211DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
 		FC6DB6221DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
+		FC7FC24A1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
+		FC7FC24B1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
 		FC851C741DDDAE8500732C40 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */; };
 		FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
 		FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
@@ -196,6 +198,7 @@
 		FC35C0961DEAE239009C3A83 /* PokerChair.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerChair.cpp; sourceTree = "<group>"; };
 		FC35C0971DEAE239009C3A83 /* PokerChair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerChair.h; sourceTree = "<group>"; };
 		FC6DB6201DE8395000621B55 /* poker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = poker; sourceTree = "<group>"; };
+		FC7FC2491DF00ACD007A6D25 /* jetton */ = {isa = PBXFileReference; lastKnownFileType = folder; path = jetton; sourceTree = "<group>"; };
 		FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		FC983D5B1DE16728006C2616 /* InviteScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InviteScene.cpp; sourceTree = "<group>"; };
 		FC983D5C1DE16728006C2616 /* InviteScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteScene.h; sourceTree = "<group>"; };
@@ -337,6 +340,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FC7FC2491DF00ACD007A6D25 /* jetton */,
 				FC6DB6201DE8395000621B55 /* poker */,
 				FCC339E51DDFD64000E71685 /* HelloWorld.png */,
 				FCC2D0501DDF23A600E8353D /* images */,
@@ -540,6 +544,7 @@
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
+				FC7FC24A1DF00ACD007A6D25 /* jetton in Resources */,
 				FC851C741DDDAE8500732C40 /* Default-Landscape~ipad.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
@@ -568,6 +573,7 @@
 			files = (
 				FCC2D0521DDF23A600E8353D /* images in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
+				FC7FC24B1DF00ACD007A6D25 /* jetton in Resources */,
 				3EACC99019EE6D4300EB3C5E /* res in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
 				FC6DB6221DE8395000621B55 /* poker in Resources */,
