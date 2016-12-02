@@ -77,7 +77,7 @@ void PokerSprite::onTouchCancelled(Touch *pTouch, Event *pEvent){
     
 }
 
-void PokerSprite::showPokerAnimated(bool showFront, bool animated){
+void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDelay){
     if (showFront == p_isFront) {
         return;
     }
@@ -96,11 +96,13 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated){
             bgSprite->setTexture(texture);
         });
         
+        DelayTime* delay = DelayTime::create(doneDelay);
+        
         CallFunc* func2 = CallFunc::create([=]{
             this->showedPoker();
         });
         
-        this->runAction(Sequence::create(scaleSmall, func1, scaleBig, func2, NULL));
+        this->runAction(Sequence::create(scaleSmall, func1, scaleBig, delay, func2, NULL));
     }
     else{
         bgSprite->setTexture(texture);

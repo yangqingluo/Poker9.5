@@ -15,7 +15,6 @@ PokerChair::PokerChair():m_BankerSprite(NULL),m__sfBackGround(NULL),m_touchListe
 
 PokerChair::~PokerChair(){
     CC_SAFE_RELEASE(m__sfBackGround);
-    CC_SAFE_RELEASE(m_BankerSprite);
 }
 
 bool PokerChair::init(){

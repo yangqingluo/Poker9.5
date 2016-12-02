@@ -411,10 +411,6 @@ bool PokerDesk::reindexPoker(){
     return isRet;
 }
 
-void PokerDesk::turnTopPoker(){
-    
-}
-
 void PokerDesk::sendPoker(){
     if (m_IndexSend >= m_arrPokers.size()) {
         unscheduleUpdate();
@@ -425,7 +421,7 @@ void PokerDesk::sendPoker(){
     if (index == 0 && m_isSendSingle) {
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         this->reorderChild(pk, 0);
-        pk->showPokerAnimated(true, true);
+        pk->showPokerAnimated(true, true, 0.5);
         
         ++m_IndexSend;
         m_isSendSingle = false;
