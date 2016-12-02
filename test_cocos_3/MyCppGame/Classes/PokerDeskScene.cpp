@@ -43,7 +43,7 @@ bool PokerDesk::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    auto sprite = Sprite::create("images/pokerDesk_bg_medium.jpg");
+    auto sprite = Sprite::create("images/pokerDesk_bg.jpg");
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     float spx = sprite->getTextureRect().getMaxX();
     float spy = sprite->getTextureRect().getMaxY();
@@ -103,10 +103,10 @@ bool PokerDesk::init()
     this->addChild(bottom_sprite);
     
     message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
-    message_sprite->setPosition(origin.x + message_sprite->getContentSize().width * 0.52, origin.y + message_sprite->getContentSize().height * 0.55);
-    this->addChild(message_sprite);
+    message_sprite->setPosition(origin.x + message_sprite->getContentSize().width * 0.52, 0.5 * bottom_sprite->getContentSize().height);
+    bottom_sprite->addChild(message_sprite);
     
-    messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 8);
+    messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 10);
     messageLabel->setColor(Color3B::BLACK);
     messageLabel->setHorizontalAlignment(TextHAlignment::LEFT);
     messageLabel->setVerticalAlignment(TextVAlignment::CENTER);
