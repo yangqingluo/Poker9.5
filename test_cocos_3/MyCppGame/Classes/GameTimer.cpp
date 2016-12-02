@@ -34,7 +34,7 @@ void GameTimer::update(float delta)
         sprintf(mtime,"%s%d",prefixString,(int)pTime % 60);
     }
     else{
-        sprintf(mtime,"");
+        sprintf(mtime," ");
     }
     
     label->setString(mtime);
@@ -56,7 +56,7 @@ void GameTimer::showPrefix(){
         sprintf(mtime,"%s",prefixString);
     }
     else{
-        sprintf(mtime,"");
+        sprintf(mtime," ");
     }
     
     label->setString(mtime);

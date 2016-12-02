@@ -58,10 +58,9 @@ void PokerChair::onTouchEnded(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
-    Sprite* background = getBetZoneBackGround();
+    QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
-        background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * m_betZoneSize.height);
-        background->setScale(m_betZoneSize.width / background->getContentSize().width, m_betZoneSize.height / background->getContentSize().height);
+        background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
         this->addChild(background);
         
         //触摸响应注册
@@ -80,18 +79,11 @@ void PokerChair::onExit(){
     LayerColor::onExit();
 }
 
-
-
-
 PokerChair* PokerChair::create(const char* betZoneImage,Size size){
     PokerChair* layer = PokerChair::create();
-    
     if (betZoneImage) {
-        layer->setBetZoneBackGround(Sprite::create(betZoneImage));
+        layer->setBetZoneBackGround(QLImageSprite::create(betZoneImage, size));
     }
-    
-    layer->m_betZoneSize = size;
-    
     return layer;
 }
 
@@ -131,12 +123,13 @@ void PokerChair::updatePokerPosition(){
     }
 }
 
-void PokerChair::addJetton(int value){
-    
+void PokerChair::addJetton(JettonSprite* jetton){
+    jetton->setPosition(0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().width - jetton->getContentSize().width) + 0.5 * jetton->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().height - jetton->getContentSize().height) + 0.5 * jetton->getContentSize().height);
+    m_betZoneBackGround->addChild(jetton,0,99);
 }
 
 void PokerChair::removeAllJettons(){
-    this->removeChildByTag(99);
+    m_betZoneBackGround->removeChildByTag(99);
 }
 
 void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){

@@ -3,8 +3,6 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-#include "PokerGlobal.h"
-
 class JettonSprite : public Sprite
 {
 public:

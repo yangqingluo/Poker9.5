@@ -17,7 +17,6 @@ USING_NS_CC_EXT;
 
 #include "GameTimer.h"
 #include "PokerChair.h"
-#include "QLImageSprite.h"
 
 //花色
 enum DeskState

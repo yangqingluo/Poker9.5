@@ -89,54 +89,31 @@ void PopAlertDialog::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
 }
 
 bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImage,const char* title,int tag){
-    
     Size winSize=Director::getInstance()->getWinSize();
+    Point center_point = Point(winSize.width/2,winSize.height/2);
     
-    Point center_point=Point(winSize.width/2,winSize.height/2);
-    
-    auto menuImage=MenuItemImage::create(
-                                         
-                                         normalImage,
-                                         
+    auto menuImage = MenuItemImage::create(normalImage,
                                          selectedImage,
-                                         
-                                         CC_CALLBACK_1(PopAlertDialog::buttonCallBack,this) );
-    
+                                         CC_CALLBACK_1(PopAlertDialog::buttonCallBack,this));
     menuImage->setTag(tag);
-    
     menuImage->setPosition(center_point);
     
-    
-    
     Size menuSize=menuImage->getContentSize();
-    
     Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
-    
     Label->setColor(Color3B(Color3B::WHITE));
-    
     Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
-    
     menuImage->addChild(Label);
-    
     getMenuButton()->addChild(menuImage);
     
     return true;
-    
 }
 
 
 void PopAlertDialog::buttonCallBack(Ref* pSender){
-    
     Node* node = dynamic_cast<Node*>(pSender);
-    
-    //log("[========PopAlertDialog:buttonCallBack=======]touch tag:%d",node->getTag());
-    
     if (m_callback && m_callbackListener) {
-        
         (m_callbackListener->*m_callback)(node);
-        
     }
-    
     this->removeFromParentAndCleanup(true);
 }
 
@@ -160,50 +137,35 @@ void  PopAlertDialog::onEnter(){
     background->setScale(bg_scale_x, bg_scale_y);
     this->addChild(background,0,0);
     
-    Action* popupActions = Sequence::create(                                                                                       ScaleTo::create(0.0, 0.0),
-                                          
-                                          ScaleTo::create(0.06, 1.05 * bg_scale_x, 1.05 * bg_scale_y),
-                                          ScaleTo::create(0.08, 0.95 * bg_scale_x, 0.95 * bg_scale_y),
-                                          ScaleTo::create(0.08, 1.00 * bg_scale_x, 1.00 * bg_scale_y),
-                                          
-                                          CallFunc::create(CC_CALLBACK_0(PopAlertDialog::backgroundFinish, this))
-                                          
-                                          , NULL);
+    Action* popupActions = Sequence::create(ScaleTo::create(0.0, 0.0),
+                                            ScaleTo::create(0.06, 1.05 * bg_scale_x, 1.05 * bg_scale_y),
+                                            ScaleTo::create(0.08, 0.95 * bg_scale_x, 0.95 * bg_scale_y),
+                                            ScaleTo::create(0.08, 1.00 * bg_scale_x, 1.00 * bg_scale_y),
+                                            CallFunc::create(CC_CALLBACK_0(PopAlertDialog::backgroundFinish, this))
+                                            , NULL);
     
     background->runAction(popupActions);
-    
 }
 
-
-
 void PopAlertDialog::backgroundFinish(){
-    
-    Size winSize=Director::getInstance()->getWinSize();
-    
-    Point pCenter=Point(winSize.width/2,winSize.height/2);
+    Size winSize = Director::getInstance()->getWinSize();
+    Point pCenter = Point(winSize.width/2,winSize.height/2);
     
     this->addChild(getMenuButton());
     
-    float btnWidth=m_dialogContentSize.width/(getMenuButton()->getChildrenCount()+1);
+    float btnWidth = m_dialogContentSize.width / (getMenuButton()->getChildrenCount() + 1);
     
     Vector<Node*> vector = getMenuButton()->getChildren();
     
-    int i=0;
-    
+    int i = 0;
     for (Node* pObj : vector){
-        
         Node* node=dynamic_cast<Node*>(pObj);
-        
         node->setPosition(Point(winSize.width/2-m_dialogContentSize.width/2+btnWidth*(i+1),winSize.height/2-m_dialogContentSize.height/3));
-        
         i++;
-        
     }
     
     if (getLabelTitle()) {
-        
-        getLabelTitle()->setPosition(ccpAdd(pCenter, ccp(0,m_dialogContentSize.height/2-35.0f)));
-        
+        getLabelTitle()->setPosition(pCenter.x,pCenter.y + m_dialogContentSize.height / 2 - 35.0f);
         this->addChild(getLabelTitle());
     }
     
@@ -217,13 +179,8 @@ void PopAlertDialog::backgroundFinish(){
     }
 }
 
-
 void PopAlertDialog::onExit(){
-    
-    log("PopAlertDialog onExit");
-    
     LayerColor::onExit();
-    
 }
 
 
