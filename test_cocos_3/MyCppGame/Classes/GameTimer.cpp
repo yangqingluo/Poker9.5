@@ -1,17 +1,15 @@
 #include "GameTimer.h"
 
-GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL)
-{
+GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL){
     
 }
 
-GameTimer::~GameTimer()
-{
+GameTimer::~GameTimer(){
     
 }
 
 bool GameTimer::init(float time){
-    label = Label::create();
+    label = Label::createWithTTF(" ", "fonts/STKaiti.ttf", 12.0);
     label->setPosition(0,0);
     
     this->addChild(label);
@@ -26,8 +24,7 @@ void GameTimer::start(float time){
 }
 
 
-void GameTimer::update(float delta)
-{
+void GameTimer::update(float delta){
     pTime -= delta;
     char* mtime = new char[100];
     if (strcmp(prefixString, "") != 0) {
@@ -46,8 +43,6 @@ void GameTimer::update(float delta)
             (m_callbackListener->*m_callback)(this);
         }
     }
-    
-    
 }
 
 void GameTimer::showPrefix(){
@@ -62,8 +57,7 @@ void GameTimer::showPrefix(){
     label->setString(mtime);
 }
 
-GameTimer* GameTimer::createTimer(float time)
-{
+GameTimer* GameTimer::createTimer(float time){
     GameTimer* gametimer = new GameTimer;
     if(gametimer && gametimer->init(time))
     {

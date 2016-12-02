@@ -56,7 +56,7 @@ void JettonSprite::setSelected(bool select){
     
     m_isSelected = select;
     if (select) {
-        Blink* blink = Blink::create(MAX_INPUT, 2 * MAX_INPUT);
+        Blink* blink = Blink::create(INT_MAX, 2 * INT_MAX);
         blink->setTag(6);
         this->bgSprite->runAction(blink);
     }

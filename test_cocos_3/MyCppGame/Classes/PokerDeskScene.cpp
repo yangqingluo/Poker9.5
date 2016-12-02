@@ -91,7 +91,7 @@ bool PokerDesk::init()
     upright_sprite->setPosition(origin.x + visibleSize.width - upright_sprite->getContentSize().width * 0.6, origin.y + visibleSize.height - upright_sprite->getContentSize().height * 0.6);
     this->addChild(upright_sprite);
     
-    countLabel = Label::createWithTTF("桌子人数：1\n当前状态：未准备", "fonts/STKaiti.ttf", 8);
+    countLabel = Label::createWithTTF("桌子人数：1\n状态：未准备", "fonts/STKaiti.ttf", 10);
     countLabel->setColor(Color3B::BLACK);
 //    countLabel->setHorizontalAlignment(TextHAlignment::LEFT);
 //    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
@@ -209,7 +209,7 @@ void PokerDesk::waitForPrepareprepareAction(){
 
 void PokerDesk::preparedAction(){
     char* string = new char[100];
-    sprintf(string,"桌子人数：1\n当前状态：已准备");
+    sprintf(string,"桌子人数：1\n状态：已准备");
     countLabel->setString(string);
     
     btn_PrepareItem->setVisible(false);

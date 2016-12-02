@@ -90,7 +90,7 @@ void PopAlertDialog::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
 
 bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImage,const char* title,int tag){
     Size winSize=Director::getInstance()->getWinSize();
-    Point center_point = Point(winSize.width/2,winSize.height/2);
+    Point center_point = Point(winSize.width / 2,winSize.height / 2);
     
     auto menuImage = MenuItemImage::create(normalImage,
                                          selectedImage,
