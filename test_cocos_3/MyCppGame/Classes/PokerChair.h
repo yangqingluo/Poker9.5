@@ -37,13 +37,13 @@ public:
     void addJetton(int value);//添加筹码
     void removeAllJettons();//移除筹码
     
-    Sprite* m_BankerSprite;
     Vector<PokerSprite *> pokerArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
 private:
     CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
     
+    Sprite* m_BankerSprite;
     Size m_dialogContentSize;
     Ref* m_touchListener;
     SEL_CallFuncN m_touchCallback;

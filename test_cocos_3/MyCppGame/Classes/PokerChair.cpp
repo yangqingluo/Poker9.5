@@ -9,12 +9,13 @@
 #include "PokerChair.h"
 #include "JettonSprite.h"
 
-PokerChair::PokerChair():m__sfBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL){
+PokerChair::PokerChair():m_BankerSprite(NULL),m__sfBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL){
     
 }
 
 PokerChair::~PokerChair(){
     CC_SAFE_RELEASE(m__sfBackGround);
+    CC_SAFE_RELEASE(m_BankerSprite);
 }
 
 bool PokerChair::init(){
