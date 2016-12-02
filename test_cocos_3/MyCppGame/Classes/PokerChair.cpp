@@ -9,12 +9,12 @@
 #include "PokerChair.h"
 #include "JettonSprite.h"
 
-PokerChair::PokerChair():m_BankerSprite(NULL),m__sfBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL){
+PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL){
     
 }
 
 PokerChair::~PokerChair(){
-    CC_SAFE_RELEASE(m__sfBackGround);
+    CC_SAFE_RELEASE(m_betZoneBackGround);
 }
 
 bool PokerChair::init(){
@@ -58,7 +58,7 @@ void PokerChair::onTouchEnded(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
-    Sprite* background = getSpriteBackGround();
+    Sprite* background = getBetZoneBackGround();
     if (background != NULL) {
         background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * m_betZoneSize.height);
         background->setScale(m_betZoneSize.width / background->getContentSize().width, m_betZoneSize.height / background->getContentSize().height);
@@ -83,11 +83,11 @@ void PokerChair::onExit(){
 
 
 
-PokerChair* PokerChair::create(const char* backgoundImage,Size size){
+PokerChair* PokerChair::create(const char* betZoneImage,Size size){
     PokerChair* layer = PokerChair::create();
     
-    if (backgoundImage) {
-        layer->setSpriteBackGround(Sprite::create(backgoundImage));
+    if (betZoneImage) {
+        layer->setBetZoneBackGround(Sprite::create(betZoneImage));
     }
     
     layer->m_betZoneSize = size;

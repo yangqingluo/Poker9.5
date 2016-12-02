@@ -29,7 +29,7 @@ public:
     virtual void onExit();
     
     CREATE_FUNC(PokerChair);
-    static PokerChair* create(const char* backgroudImage,Size size);
+    static PokerChair* create(const char* betZoneImage,Size size);
     
     void setIsBanker(bool yn);//设置是否是庄家
     void setHighlighted(bool yn);
@@ -40,7 +40,7 @@ public:
     Vector<PokerSprite *> pokerArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
 private:
-    CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);
+    CC_SYNTHESIZE_RETAIN(Sprite*, m_betZoneBackGround, BetZoneBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
     
     Sprite* m_BankerSprite;
