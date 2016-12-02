@@ -23,8 +23,8 @@ bool PokerChair::init(){
     }
     
     //设置弹出层的颜色，指定为淡灰色
-    setColor(Color3B::GRAY);
-    setOpacity(0x50);
+//    setColor(Color3B::GRAY);
+//    setOpacity(0x50);
     
     return true;
 }
@@ -110,7 +110,7 @@ void PokerChair::setIsBanker(bool yn){
 }
 
 void PokerChair::setHighlighted(bool yn){
-    setColor(yn ? Color3B::BLACK : Color3B::GRAY);
+//    setColor(yn ? Color3B::BLACK : Color3B::GRAY);
 }
 
 void PokerChair::updatePokerPosition(){
