@@ -18,7 +18,7 @@ QLImageSprite* QLImageSprite::create(const char* backgroudImage, cocos2d::Size s
         
         if (backgroudImage) {
             sp->bgSprite = Sprite::create(backgroudImage);
-            sp->bgSprite->setScale(sp->getContentSize().width / sp->bgSprite->getContentSize().width);
+            sp->bgSprite->setScale(sp->getContentSize().width / sp->bgSprite->getContentSize().width, sp->getContentSize().height / sp->bgSprite->getContentSize().height);
             sp->bgSprite->setPosition(sp->getContentSize().width / 2, sp->getContentSize().height / 2);
             sp->addChild(sp->bgSprite);
         }

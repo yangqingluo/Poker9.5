@@ -43,6 +43,7 @@ public:
     
     QLImageSprite* upright_sprite;
     QLImageSprite* message_sprite;
+    QLImageSprite* bottom_sprite;
     Label* countLabel;
     Label* messageLabel;
     

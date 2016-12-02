@@ -67,12 +67,12 @@ bool PokerDesk::init()
                                               CC_CALLBACK_1(PokerDesk::buttonCallback, this, 1));
     
     btn_PrepareItem->setScale(this->getScaleX(), this->getScaleY());
-    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.8 * btn_PrepareItem->getContentSize().width, origin.y + 0.1 * visibleSize.height));
+    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.8 * btn_PrepareItem->getContentSize().width, origin.y + 0.25 * visibleSize.height));
     
     btn_AnotherdeskItem = MenuItemImage::create(
                                                  "images/btn_anotherdesk.png",
                                                  "images/btn_anotherdesk.png",
-                                                 CC_CALLBACK_1(PokerDesk::buttonCallback, this, 1));
+                                                 CC_CALLBACK_1(PokerDesk::buttonCallback, this, 2));
     
     btn_AnotherdeskItem->setScale(this->getScaleX(), this->getScaleY());
     btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.8 * btn_AnotherdeskItem->getContentSize().width, btn_PrepareItem->getPositionY()));
@@ -98,6 +98,9 @@ bool PokerDesk::init()
     countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.2 * upright_sprite->getContentSize().height);
     upright_sprite->addChild(countLabel);
     
+    bottom_sprite = QLImageSprite::create("images/desk_bottom_bg.png", Size(visibleSize.width, 0.12 * visibleSize.height));
+    bottom_sprite->setPosition(origin.x + visibleSize.width / 2, origin.y + bottom_sprite->getContentSize().height / 2);
+    this->addChild(bottom_sprite);
     
     message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
     message_sprite->setPosition(origin.x + message_sprite->getContentSize().width * 0.52, origin.y + message_sprite->getContentSize().height * 0.55);
@@ -111,12 +114,11 @@ bool PokerDesk::init()
     messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
     message_sprite->addChild(messageLabel);
     
-    
     showTimer = GameTimer::createTimer(0);
     showTimer->showTag = 0;
     showTimer->setPosition(origin.x + visibleSize.width / 2, origin.y + 0.74 * visibleSize.height);
     showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
-    this->addChild(showTimer, 2, 5);
+    this->addChild(showTimer);
     
     char imageName[4][100] = {"","images/chair_bet_bg.png","images/chair_bet_bg.png","images/chair_bet_bg.png"};
     float scaleArray[4][2] = {{0.5,0.65},{0.3,0.4},{0.5,0.4},{0.7,0.4}};
@@ -238,7 +240,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             break;
             
         case 2:{
-            message_sprite->setVisible(false);
+//            message_sprite->setVisible(false);
             
             sprintf(showTimer->prefixString,"开始!");
             showTimer->showTag = 0;
