@@ -44,7 +44,8 @@ private:
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
     
     Sprite* m_BankerSprite;
-    Size m_dialogContentSize;
+    Sprite* m_StartPointSprite;//发牌起始顺序标识的精灵
+    Size m_betZoneSize;
     Ref* m_touchListener;
     SEL_CallFuncN m_touchCallback;
 };

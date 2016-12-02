@@ -61,18 +61,18 @@ void PokerChair::onEnter(){
     
     Sprite* background = getSpriteBackGround();
     if (background != NULL) {
-        background->setPosition(0.1 * this->getContentSize().width, 0.1 * this->getContentSize().height);
-        background->setScale(0.1 * this->getContentSize().width / background->getContentSize().width);
-        //        this->addChild(background);
+        background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * m_betZoneSize.height);
+        background->setScale(m_betZoneSize.width / background->getContentSize().width, m_betZoneSize.height / background->getContentSize().height);
+        this->addChild(background);
+        
+        //触摸响应注册
+        auto listener = EventListenerTouchOneByOne::create();
+        listener->setSwallowTouches(true);
+        listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
+        listener->onTouchMoved = CC_CALLBACK_2(PokerChair::onTouchMoved, this);//触摸移动
+        listener->onTouchEnded = CC_CALLBACK_2(PokerChair::onTouchEnded, this);//触摸结束
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
     }
-    
-    //触摸响应注册
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
-    listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
-    listener->onTouchMoved = CC_CALLBACK_2(PokerChair::onTouchMoved, this);//触摸移动
-    listener->onTouchEnded = CC_CALLBACK_2(PokerChair::onTouchEnded, this);//触摸结束
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);//注册分发器
 }
 
 void PokerChair::onExit(){
@@ -87,8 +87,11 @@ void PokerChair::onExit(){
 PokerChair* PokerChair::create(const char* backgoundImage,Size size){
     PokerChair* layer = PokerChair::create();
     
-    layer->setSpriteBackGround(Sprite::create(backgoundImage));
-    layer->m_dialogContentSize = size;
+    if (backgoundImage) {
+        layer->setSpriteBackGround(Sprite::create(backgoundImage));
+    }
+    
+    layer->m_betZoneSize = size;
     
     return layer;
 }

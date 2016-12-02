@@ -129,7 +129,7 @@ bool PokerDesk::init()
     showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
     this->addChild(showTimer, 2, 5);
     
-    char imageName[4][100] = {"images/pk_table_tian@2x.png","images/pk_table_di@2x.png","images/pk_table_xuan@2x.png","images/pk_table_huang@2x.png"};
+    char imageName[4][100] = {"","images/chair_bet_bg.png","images/chair_bet_bg.png","images/chair_bet_bg.png"};
     float scaleArray[4][2] = {{0.5,0.65},{0.3,0.4},{0.5,0.4},{0.7,0.4}};
     for (int i = 0; i < 4; i++) {
         PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1], i);
@@ -314,10 +314,12 @@ void PokerDesk::update(float delta){
 #pragma chair
 void PokerDesk::touchedChairCallback(Node* pSender){
     if (m_deskState == DeskState_Bet) {
+        PokerChair* chair = (PokerChair* )pSender;
+        
         int arr[9] = {10,20,50,100,200,500,1000,2000,5000};
         
         JettonSprite* sp = this->createjetton(arr[getRandomNumberNotEqualRight(0, 9)]);
-        sp->setPosition(0.1 * getRandomNumber(0, 10) * (pSender->getContentSize().width - sp->getContentSize().width) + 0.5 * sp->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (pSender->getContentSize().height - sp->getContentSize().height) + 0.5 * sp->getContentSize().height);
+        sp->setPosition(0.1 * getRandomNumber(0, 10) * (chair->m_betZoneSize.width - sp->getContentSize().width) + 0.5 * sp->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (chair->m_betZoneSize.height - sp->getContentSize().height) + 0.5 * sp->getContentSize().height + chair->getContentSize().height - chair->m_betZoneSize.height);
         pSender->addChild(sp, 0, 99);
     }
 }
@@ -325,11 +327,12 @@ void PokerDesk::touchedChairCallback(Node* pSender){
 PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, float yScale, int index){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    float pokerScale = 0.125;
     
-    PokerChair* chair = PokerChair::PokerChair::create(backgroudImage, Size::ZERO);
-    chair->setContentSize(Size(0.3 * visibleSize.height, (index == 0 ? 0.125 : 0.3) * visibleSize.height));
+    PokerChair* chair = PokerChair::PokerChair::create(index == 0 ? NULL : backgroudImage, Size(0.3 * visibleSize.height, (0.3 - pokerScale) * visibleSize.height));
+    chair->setContentSize(Size(0.3 * visibleSize.height, (index == 0 ? pokerScale : 0.3) * visibleSize.height));
     chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
-    chair->setPoint(Vec2(chair->getPosition().x + 0.5 * chair->getContentSize().width, chair->getPosition().y + 0.5 * 0.125 * visibleSize.height));
+    chair->setPoint(Vec2(chair->getPosition().x + 0.5 * chair->getContentSize().width, chair->getPosition().y + 0.5 * pokerScale * visibleSize.height));
     if (index == 0) {
         chair->setIsBanker(true);
     }
