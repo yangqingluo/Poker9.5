@@ -39,8 +39,8 @@ JettonSprite* JettonSprite::create(int value, Size size){
 }
 
 bool JettonSprite::isValidValue(int value){
-    int arr[12] = {10,20,50,100,200,500,1000,2000,5000,10000,20000,50000};
-    for (int i = 0; i < 12; i++) {
+    int arr[9] = {10,20,50,100,200,500,1000,2000,5000};
+    for (int i = 0; i < 9; i++) {
         if (value == arr[i]) {
             return true;
         }

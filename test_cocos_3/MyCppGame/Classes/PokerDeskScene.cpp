@@ -314,11 +314,10 @@ void PokerDesk::update(float delta){
 #pragma chair
 void PokerDesk::touchedChairCallback(Node* pSender){
     if (m_deskState == DeskState_Bet) {
-        int arr[12] = {10,20,50,100,200,500,1000,2000,5000,10000,20000,50000};
+        int arr[9] = {10,20,50,100,200,500,1000,2000,5000};
         
-        JettonSprite* sp = this->createjetton(arr[getRandomNumberNotEqualRight(0, 12)]);
+        JettonSprite* sp = this->createjetton(arr[getRandomNumberNotEqualRight(0, 9)]);
         sp->setPosition(0.1 * getRandomNumber(0, 10) * (pSender->getContentSize().width - sp->getContentSize().width) + 0.5 * sp->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (pSender->getContentSize().height - sp->getContentSize().height) + 0.5 * sp->getContentSize().height);
-        sp->setSelected(true);
         pSender->addChild(sp, 0, 99);
     }
 }
