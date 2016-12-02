@@ -17,6 +17,7 @@ USING_NS_CC_EXT;
 
 #include "GameTimer.h"
 #include "PokerChair.h"
+#include "QLImageSprite.h"
 
 //花色
 enum DeskState
@@ -40,8 +41,8 @@ public:
     void popButtonCallback(Node* pNode);
     void showSettingChip();
     
-    Sprite* upright_sprite;
-    Sprite* message_sprite;
+    QLImageSprite* upright_sprite;
+    QLImageSprite* message_sprite;
     Label* countLabel;
     Label* messageLabel;
     

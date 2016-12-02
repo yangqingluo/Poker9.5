@@ -9,6 +9,7 @@
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
 
+
 PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
     
 }
@@ -86,15 +87,9 @@ bool PokerDesk::init()
     lotus->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - lotus->getBoundingBox().size.height / 2);
     this->addChild(lotus);
     
-    upright_sprite = Sprite::create();
-    upright_sprite->setContentSize(Size(0.15 * visibleSize.width, 0.15 * visibleSize.width));
+    upright_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(0.15 * visibleSize.width, 0.15 * visibleSize.width));
     upright_sprite->setPosition(origin.x + visibleSize.width - upright_sprite->getContentSize().width * 0.6, origin.y + visibleSize.height - upright_sprite->getContentSize().height * 0.6);
     this->addChild(upright_sprite);
-    
-    auto uprightBG = Sprite::create("images/window_upright_bg.png");
-    uprightBG->setScale(upright_sprite->getContentSize().width / uprightBG->getContentSize().width);
-    uprightBG->setPosition(0.5 * upright_sprite->getContentSize().width, 0.5 * upright_sprite->getContentSize().width);
-    upright_sprite->addChild(uprightBG);
     
     countLabel = Label::createWithTTF("桌子人数：1\n当前状态：未准备", "fonts/STKaiti.ttf", 8);
     countLabel->setColor(Color3B::BLACK);
@@ -104,15 +99,9 @@ bool PokerDesk::init()
     upright_sprite->addChild(countLabel);
     
     
-    message_sprite = Sprite::create();
-    message_sprite->setContentSize(Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
+    message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
     message_sprite->setPosition(origin.x + message_sprite->getContentSize().width * 0.52, origin.y + message_sprite->getContentSize().height * 0.55);
     this->addChild(message_sprite);
-    
-    auto messageBG = Sprite::create("images/message_bg.png");
-    messageBG->setScale(message_sprite->getContentSize().height / messageBG->getContentSize().height);
-    messageBG->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
-    message_sprite->addChild(messageBG);
     
     messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 8);
     messageLabel->setColor(Color3B::BLACK);
@@ -329,7 +318,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float pokerScale = 0.125;
     
-    PokerChair* chair = PokerChair::PokerChair::create(index == 0 ? NULL : backgroudImage, Size(0.3 * visibleSize.height, (0.3 - pokerScale) * visibleSize.height));
+    PokerChair* chair = PokerChair::create(index == 0 ? NULL : backgroudImage, Size(0.3 * visibleSize.height, (0.3 - pokerScale) * visibleSize.height));
     chair->setContentSize(Size(0.3 * visibleSize.height, (index == 0 ? pokerScale : 0.3) * visibleSize.height));
     chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
     chair->setPoint(Vec2(chair->getPosition().x + 0.5 * chair->getContentSize().width, chair->getPosition().y + 0.5 * pokerScale * visibleSize.height));
