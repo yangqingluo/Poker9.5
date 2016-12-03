@@ -6,8 +6,9 @@ const int pkJianJu = 20;//牌与牌之间的间距
 //花色
 enum PokerColor
 {
-    PokerColor_Joker,
-    PokerColor_Spade,
+    PokerColor_JokerJunior = 10,
+    PokerColor_JokerSenior = 20,
+    PokerColor_Spade = 1,
     PokerColor_Heart,
     PokerColor_Club,
     PokerColor_Diamond,
@@ -15,16 +16,16 @@ enum PokerColor
 //牌点
 enum PokerPoint
 {
+    PokerPoint_Joker = 0,
     PokerPoint_Ace = 1,
     PokerPoint_2,PokerPoint_3,PokerPoint_4,PokerPoint_5,PokerPoint_6,PokerPoint_7,PokerPoint_8,PokerPoint_9,PokerPoint_10,PokerPoint_Jack,PokerPoint_Queen,PokerPoint_King,
-    PokerPoint_JokerJunior = 101,
-    PokerPoint_JokerSenior = 102,
 };
 
 //牌型
 enum PokerType
 {
-    PokerType_9_Half = 1,     //9点半
+    PokerType_Default = 0,
+    PokerType_9_Half,     //9点半
     PokerType_Pair,		      //对子
     PokerType_9,
     PokerType_8_Half,

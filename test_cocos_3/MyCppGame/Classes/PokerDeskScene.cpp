@@ -211,7 +211,7 @@ void PokerDesk::waitForPrepareAction(){
         btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(30);
+        showTimer->start(3);
     }
 }
 
@@ -230,14 +230,21 @@ void PokerDesk::preparedAction(){
 void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"下注");
-        showTimer->start(30);
+        showTimer->start(3);
     }
 }
 
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->showPrefix();
+        showTimer->start(10);
+        
+        for (int i = 0; i < m_arrChairs.size(); i++) {
+            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+            for (PokerSprite* poker : chair->pokerArray) {
+                poker->showPokerAnimated(true, true, 0.1);
+            }
+        }
     }
 }
 
@@ -250,6 +257,20 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             
         case DeskState_Bet:{
             m_deskState = DeskState_Settle;
+        }
+            break;
+            
+        case DeskState_Settle:{
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+                for (PokerSprite* poker : chair->pokerArray) {
+                    poker->removeFromParent();
+                }
+                
+                chair->pokerArray.clear();
+            }
+            
+            m_deskState = DeskState_SendPoker;
         }
             break;
             
@@ -346,11 +367,11 @@ bool PokerDesk::createPokers(){
             }
         }
         //创建小鬼
-        PokerSprite* joker_junior = createPoker(PokerColor_Joker, PokerPoint_JokerJunior);
+        PokerSprite* joker_junior = createPoker(PokerColor_JokerJunior, PokerPoint_Joker);
         m_arrPokers.pushBack(joker_junior);
         
         //创建大鬼
-        PokerSprite* joker_senior = createPoker(PokerColor_Joker, PokerPoint_JokerSenior);
+        PokerSprite* joker_senior = createPoker(PokerColor_JokerSenior, PokerPoint_Joker);
         m_arrPokers.pushBack(joker_senior);
         
         isRet = true;
@@ -387,6 +408,8 @@ bool PokerDesk::reindexPoker(){
 void PokerDesk::sendPoker(){
     if (m_IndexSend >= m_arrPokers.size()) {
         unscheduleUpdate();
+        sprintf(showTimer->prefixString,"结束一局");
+        showTimer->showPrefix();
         return;
     }
     
@@ -402,7 +425,7 @@ void PokerDesk::sendPoker(){
         ++m_IndexSend;
         m_isSendSingle = false;
         
-        if (pk->getPoker_point() == PokerPoint_JokerJunior || pk->getPoker_point() == PokerPoint_JokerSenior) {
+        if (pk->getPoker_point() == PokerPoint_Joker) {
             m_IndexStart = 0;
         }
         else{
@@ -428,6 +451,7 @@ void PokerDesk::sendPoker(){
 
 void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
     float time = 0.5;
+    poker->chairIndex = m_arrChairs.getIndex(chair);
     chair->pokerArray.pushBack(poker);
     MoveTo* move = MoveTo::create(time, chair->getPoint());
     RotateBy* rotate = RotateBy::create(time, 360);
@@ -445,13 +469,23 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
 void PokerDesk::turnedSinglePokerCallback(Node* pSender){
     PokerSprite* poker = (PokerSprite* )pSender;
     
-    if (m_arrPokers.getIndex(poker) % 9 == 0) {
-        for (int i = 0; i < m_arrChairs.size(); i++) {
-            PokerChair* chair = m_arrChairs.at(i);
-            chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
+    if (m_deskState == DeskState_SendPoker) {
+        if (m_arrPokers.getIndex(poker) % 9 == 0) {
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chair = m_arrChairs.at(i);
+                chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
+            }
+            poker->removeFromParent();
+            
+            m_isSendSingle = true;
         }
-        poker->removeFromParent();
-        
-        m_isSendSingle = true;
+    }
+    else if (m_deskState == DeskState_Settle){
+        if (poker->chairIndex < m_arrChairs.size()) {
+            PokerChair* chair = m_arrChairs.at(poker->chairIndex);
+            if (chair->pokerArray.getIndex(poker) == chair->pokerArray.size() - 1) {
+                chair->calculatePokerType();
+            }
+        }
     }
 }

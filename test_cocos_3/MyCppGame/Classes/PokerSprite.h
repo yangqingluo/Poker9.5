@@ -20,9 +20,9 @@ public:
     virtual void onTouchCancelled(Touch *pTouch, Event *pEvent);
     void showPokerAnimated(bool showFront, bool animated, float doneDelay);//显示扑克
     void setTouchPriority(int num);
+    size_t chairIndex;
     
     void setSelected(bool select);
-    
     void showedPoker();
     void removeAction(float delta);
     void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);

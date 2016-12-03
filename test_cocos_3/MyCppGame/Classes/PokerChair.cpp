@@ -59,7 +59,7 @@ void PokerChair::onEnter(){
     LayerColor::onEnter();
     
     pokerTypeLabel = Label::createWithTTF("对子", "fonts/STKaiti.ttf", 14);
-    //        pokerTypeLabel->setVisible(false);
+    pokerTypeLabel->setVisible(false);
     pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.05 * this->getContentSize().height);
     this->addChild(pokerTypeLabel);
     
@@ -85,7 +85,7 @@ void PokerChair::onEnter(){
         this->addChild(betPlayerLabel);
         
         settlementLabel = Label::createWithTTF("2倍 +15000", "fonts/STKaiti.ttf", 14);
-//        settlementLabel->setVisible(false);
+        settlementLabel->setVisible(false);
         settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.2 * this->getContentSize().height);
         this->addChild(settlementLabel);
         
@@ -122,7 +122,7 @@ void PokerChair::setIsBanker(bool yn){
         if (m_BankerSprite == NULL) {
             m_BankerSprite = Sprite::create("images/banker.png");
             m_BankerSprite->setScale(0.5 * this->getContentSize().height / m_BankerSprite->getContentSize().height);
-            m_BankerSprite->setPosition(this->getContentSize().width - 0.6 * m_BankerSprite->getBoundingBox().size.width, this->getContentSize().height - 0.5 * m_BankerSprite->getBoundingBox().size.height);
+            m_BankerSprite->setPosition(this->getContentSize().width - 0.8 * m_BankerSprite->getBoundingBox().size.width, this->getContentSize().height - 0.5 * m_BankerSprite->getBoundingBox().size.height);
             this->addChild(m_BankerSprite);
         }
     }
@@ -169,6 +169,88 @@ void PokerChair::addJetton(JettonSprite* jetton){
 
 void PokerChair::removeAllJettons(){
     m_betZoneBackGround->removeChildByTag(99);
+}
+
+void PokerChair::calculatePokerType(){
+    m_PokerType = PokerType_Default;
+    if (pokerArray.size() == 2) {
+        PokerSprite* pk0 = pokerArray.at(0);
+        PokerSprite* pk1 = pokerArray.at(1);
+        
+        //计算对子
+        if (pk0->getPoker_point() == pk1->getPoker_point()) {
+            if ((pk0->getPoker_color() == PokerColor_JokerJunior || pk0->getPoker_color() == PokerColor_JokerSenior) && (pk1->getPoker_color() == PokerColor_JokerJunior || pk1->getPoker_color() == PokerColor_JokerSenior)) {
+                m_PokerType = PokerType_Pair;
+            }
+            else if ((pk0->getPoker_color() == PokerColor_Spade || pk0->getPoker_color() == PokerColor_Club) && (pk1->getPoker_color() == PokerColor_Spade || pk1->getPoker_color() == PokerColor_Club)){
+                m_PokerType = PokerType_Pair;
+            }
+            else if ((pk0->getPoker_color() == PokerColor_Heart || pk0->getPoker_color() == PokerColor_Diamond) && (pk1->getPoker_color() == PokerColor_Heart || pk1->getPoker_color() == PokerColor_Diamond)){
+                m_PokerType = PokerType_Pair;
+            }
+        }
+        
+        if (m_PokerType != PokerType_Pair) {
+            int poker_point0 = (pk0->getPoker_point() == PokerPoint_Joker) ? 5 : 10 * pk0->getPoker_point();
+            int poker_point1 = (pk1->getPoker_point() == PokerPoint_Joker) ? 5 : 10 * pk1->getPoker_point();
+            
+            int poker_point = (poker_point0 + poker_point1) % 100;
+            if (poker_point == 95) {
+                m_PokerType = PokerType_9_Half;
+            }
+            else{
+                m_PokerType = (PokerType )(PokerType_0 - (poker_point / 5));
+            }
+        }
+    }
+    
+    switch (m_PokerType) {
+        case PokerType_Pair:{
+            pokerTypeLabel->setString("对子");
+        }
+            break;
+            
+        case PokerType_9_Half:{
+            pokerTypeLabel->setString("9点半");
+        }
+            break;
+            
+        case PokerType_9:
+        case PokerType_8_Half:
+        case PokerType_8:
+        case PokerType_7_Half:
+        case PokerType_7:
+        case PokerType_6_Half:
+        case PokerType_6:
+        case PokerType_5_Half:
+        case PokerType_5:
+        case PokerType_4_Half:
+        case PokerType_4:
+        case PokerType_3_Half:
+        case PokerType_3:
+        case PokerType_2_Half:
+        case PokerType_2:
+        case PokerType_1_Half:
+        case PokerType_1:
+        case PokerType_0_Half:
+        case PokerType_0:{
+            char* mString = new char[20];
+            if ((PokerType_0 - m_PokerType) % 2 == 0) {
+                sprintf(mString,"%d点",(PokerType_0 - m_PokerType) / 2);
+            }
+            else {
+                sprintf(mString,"%d点半",(PokerType_0 - m_PokerType) / 2);
+            }
+            pokerTypeLabel->setString(mString);
+        }
+            break;
+            
+        default:{
+            pokerTypeLabel->setString("未知");
+        }
+            break;
+    }
+    pokerTypeLabel->setVisible(true);
 }
 
 void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
