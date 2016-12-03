@@ -9,6 +9,7 @@
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
 
+const float jetton_height_scale = 0.08;
 
 PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
     
@@ -103,8 +104,13 @@ bool PokerDesk::init()
     this->addChild(bottom_sprite);
     
     message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
-    message_sprite->setPosition(origin.x + message_sprite->getContentSize().width * 0.52, 0.5 * bottom_sprite->getContentSize().height);
+    message_sprite->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(message_sprite);
+    
+    int betJettonArray[3] = {10,100,1000};
+    betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width - message_sprite->getBoundingBox().getMaxX(), jetton_height_scale * visibleSize.height));
+    betLimiter->setPosition(message_sprite->getBoundingBox().getMaxX(), 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
+    bottom_sprite->addChild(betLimiter);
     
     messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 10);
     messageLabel->setColor(Color3B::BLACK);
@@ -307,8 +313,7 @@ void PokerDesk::touchedChairCallback(Node* pSender){
     if (m_deskState == DeskState_Bet) {
         PokerChair* chair = (PokerChair* )pSender;
         
-        int arr[9] = {10,20,50,100,200,500,1000,2000,5000};
-        JettonSprite* sp = this->createjetton(arr[getRandomNumberNotEqualRight(0, 9)]);
+        JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
         chair->addJetton(sp);
     }
 }
@@ -335,7 +340,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
 #pragma jetton
 JettonSprite* PokerDesk::createjetton(int value){
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    JettonSprite* sp = JettonSprite::create(value, Size(0.08 * visibleSize.height, 0.08 * visibleSize.height));
+    JettonSprite* sp = JettonSprite::create(value, Size(jetton_height_scale * visibleSize.height, jetton_height_scale * visibleSize.height));
     
     return sp;
 }

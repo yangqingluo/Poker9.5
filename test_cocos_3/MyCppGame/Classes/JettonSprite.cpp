@@ -1,11 +1,45 @@
 #include "JettonSprite.h"
 
-JettonSprite::JettonSprite():m_value(10),m_isSelected(false){
+JettonSprite::JettonSprite():m_value(10),m_isSelected(false),m_canTouch(false),m_touchListener(NULL),m_touchCallback(NULL){
     
 }
 
 JettonSprite::~JettonSprite(){
     
+}
+
+bool JettonSprite::onTouchBegan(Touch *touch, Event *event){
+    auto target = static_cast<Sprite*>(event->getCurrentTarget());//获取的当前触摸的目标
+    
+    Point locationInNode = target->convertToNodeSpace(touch->getLocation());
+    Size s = target->getContentSize();
+    Rect rect = Rect(0, 0, s.width, s.height);
+    
+    if (rect.containsPoint(locationInNode) && m_canTouch){
+        if (m_touchCallback && m_touchListener) {
+            (m_touchListener->*m_touchCallback)(this);
+        }
+        
+        return true;
+    }
+    
+    return false;
+}
+
+void JettonSprite::onEnter(){
+    Sprite::onEnter();
+    
+    //触摸响应注册
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = CC_CALLBACK_2(JettonSprite::onTouchBegan, this);//触摸开始
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);//注册分发器
+}
+
+void JettonSprite::onExit(){
+    //移除触摸响应
+    _eventDispatcher->removeEventListenersForTarget(this);
+    Sprite::onExit();
 }
 
 JettonSprite* JettonSprite::create(int value, Size size){
@@ -55,12 +89,18 @@ void JettonSprite::setSelected(bool select){
     }
     
     m_isSelected = select;
+    bgSprite->setVisible(select);
     if (select) {
-        Blink* blink = Blink::create(INT_MAX, 2 * INT_MAX);
+        Blink* blink = Blink::create(MAX_INPUT, 2 * MAX_INPUT);
         blink->setTag(6);
         this->bgSprite->runAction(blink);
     }
     else{
         this->bgSprite->stopActionByTag(6);
     }
+}
+
+void JettonSprite::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
+    m_touchListener = target;
+    m_touchCallback = callfun;
 }

@@ -17,6 +17,7 @@ USING_NS_CC_EXT;
 
 #include "GameTimer.h"
 #include "PokerChair.h"
+#include "BetLimiter.h"
 
 //花色
 enum DeskState
@@ -45,6 +46,8 @@ public:
     QLImageSprite* bottom_sprite;
     Label* countLabel;
     Label* messageLabel;
+    
+    BetLimiter* betLimiter;
     
     MenuItemImage* btn_PrepareItem;
     MenuItemImage* btn_AnotherdeskItem;
