@@ -49,6 +49,8 @@ private:
     Sprite* m_StartPointSprite;//发牌起始顺序标识的精灵
     Label* betTotalLabel;
     Label* betPlayerLabel;
+    Label* pokerTypeLabel;//牌型文本
+    Label* settlementLabel;//结算文本
     
     int betTotal;
     int betPlayer;

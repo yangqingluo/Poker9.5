@@ -58,6 +58,11 @@ void PokerChair::onTouchEnded(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
+    pokerTypeLabel = Label::createWithTTF("对子", "fonts/STKaiti.ttf", 14);
+    //        pokerTypeLabel->setVisible(false);
+    pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.05 * this->getContentSize().height);
+    this->addChild(pokerTypeLabel);
+    
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
         background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
@@ -68,7 +73,7 @@ void PokerChair::onEnter(){
         betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
         betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
         betTotalLabel->setVisible(false);
-        betTotalLabel->setPosition(background->getPositionX(), this->getContentSize().height - 0.2 * background->getContentSize().height);
+        betTotalLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.2 * background->getContentSize().height);
         this->addChild(betTotalLabel);
         
         betPlayerLabel = Label::createWithSystemFont("", "Arial", 20.0);
@@ -76,8 +81,13 @@ void PokerChair::onEnter(){
         betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
         betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
         betPlayerLabel->setVisible(false);
-        betPlayerLabel->setPosition(background->getPositionX(), this->getContentSize().height - 0.8 * background->getContentSize().height);
+        betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
         this->addChild(betPlayerLabel);
+        
+        settlementLabel = Label::createWithTTF("2倍 +15000", "fonts/STKaiti.ttf", 14);
+//        settlementLabel->setVisible(false);
+        settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.2 * this->getContentSize().height);
+        this->addChild(settlementLabel);
         
         //触摸响应注册
         auto listener = EventListenerTouchOneByOne::create();
@@ -86,6 +96,9 @@ void PokerChair::onEnter(){
         listener->onTouchMoved = CC_CALLBACK_2(PokerChair::onTouchMoved, this);//触摸移动
         listener->onTouchEnded = CC_CALLBACK_2(PokerChair::onTouchEnded, this);//触摸结束
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
+    }
+    else{
+        pokerTypeLabel->setPosition(m_BankerSprite->getPositionX(), 0.3 * this->getContentSize().height);
     }
 }
 
@@ -109,7 +122,7 @@ void PokerChair::setIsBanker(bool yn){
         if (m_BankerSprite == NULL) {
             m_BankerSprite = Sprite::create("images/banker.png");
             m_BankerSprite->setScale(0.5 * this->getContentSize().height / m_BankerSprite->getContentSize().height);
-            m_BankerSprite->setPosition(0.6 * m_BankerSprite->getBoundingBox().size.width, this->getContentSize().height - 0.5 * m_BankerSprite->getBoundingBox().size.height);
+            m_BankerSprite->setPosition(this->getContentSize().width - 0.6 * m_BankerSprite->getBoundingBox().size.width, this->getContentSize().height - 0.5 * m_BankerSprite->getBoundingBox().size.height);
             this->addChild(m_BankerSprite);
         }
     }
