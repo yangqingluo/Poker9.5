@@ -12,6 +12,7 @@ public:
     virtual void onEnter();
     virtual void onExit();
     
+    bool isPlayer;//是否当前玩家下注
     static JettonSprite* create(int value, Size size);
     void setSelected(bool select);
     bool isValidValue(int value);

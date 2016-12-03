@@ -41,7 +41,7 @@ BetLimiter* BetLimiter::create(const int* jettonValueArray, size_t count, Size s
     for (int i = 0; i < count; i++) {
         int value = jettonValueArray[i];
         JettonSprite* jetton = JettonSprite::create(value, Size(size.height, size.height));
-        jetton->setPosition((0.5 + 1.2 * i) * jetton->getContentSize().width, 0.5 * layer->getContentSize().height);
+        jetton->setPosition((0.5 + 1.1 * i) * jetton->getContentSize().width, 0.5 * layer->getContentSize().height);
         jetton->setCanTouch(true);
         jetton->setTouchCallBackFunc(layer, callfuncN_selector(BetLimiter::touchedJettonCallback));
         layer->addChild(jetton, 0, 10 + i);

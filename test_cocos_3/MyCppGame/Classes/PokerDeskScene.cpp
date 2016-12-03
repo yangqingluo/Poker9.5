@@ -105,12 +105,7 @@ bool PokerDesk::init()
     
     message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
     message_sprite->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
-    bottom_sprite->addChild(message_sprite);
-    
-    int betJettonArray[3] = {10,100,1000};
-    betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width - message_sprite->getBoundingBox().getMaxX(), jetton_height_scale * visibleSize.height));
-    betLimiter->setPosition(message_sprite->getBoundingBox().getMaxX(), 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
-    bottom_sprite->addChild(betLimiter);
+//    bottom_sprite->addChild(message_sprite);
     
     messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 10);
     messageLabel->setColor(Color3B::BLACK);
@@ -120,6 +115,11 @@ bool PokerDesk::init()
     messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
     message_sprite->addChild(messageLabel);
     
+    int betJettonArray[3] = {10,100,1000};
+    betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width - message_sprite->getBoundingBox().getMaxX(), 0.8 * bottom_sprite->getContentSize().height));
+    betLimiter->setPosition(2 * bottom_sprite->getContentSize().height, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
+    bottom_sprite->addChild(betLimiter);
+    
     showTimer = GameTimer::createTimer();
     showTimer->showTag = 0;
     showTimer->setPosition(origin.x + visibleSize.width / 2, origin.y + 0.74 * visibleSize.height);
@@ -127,7 +127,7 @@ bool PokerDesk::init()
     this->addChild(showTimer);
     
     char imageName[4][100] = {"","images/chair_bet_bg.png","images/chair_bet_bg.png","images/chair_bet_bg.png"};
-    float scaleArray[4][2] = {{0.5,0.65},{0.2,0.4},{0.5,0.4},{0.8,0.4}};
+    float scaleArray[4][2] = {{0.5,0.65},{0.24,0.4},{0.5,0.4},{0.76,0.4}};
     for (int i = 0; i < 4; i++) {
         PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1], i);
         m_arrChairs.pushBack(chair);
@@ -323,8 +323,9 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float pokerScale = 0.125;
     
-    PokerChair* chair = PokerChair::create(index == 0 ? NULL : backgroudImage, Size(0.3 * visibleSize.height, (0.3 - pokerScale) * visibleSize.height));
-    chair->setContentSize(Size(0.3 * visibleSize.height, (index == 0 ? pokerScale : 0.3) * visibleSize.height));
+    float radius = MIN(0.24 * visibleSize.width, 0.36 * visibleSize.height);
+    PokerChair* chair = PokerChair::create(index == 0 ? NULL : backgroudImage, Size(radius, radius - pokerScale * visibleSize.height));
+    chair->setContentSize(Size(radius, (index == 0 ? pokerScale * visibleSize.height : radius)));
     chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
     chair->setPoint(Vec2(chair->getPosition().x + 0.5 * chair->getContentSize().width, chair->getPosition().y + 0.5 * pokerScale * visibleSize.height));
     if (index == 0) {
@@ -341,7 +342,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
 JettonSprite* PokerDesk::createjetton(int value){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     JettonSprite* sp = JettonSprite::create(value, Size(jetton_height_scale * visibleSize.height, jetton_height_scale * visibleSize.height));
-    
+    sp->isPlayer = (value > 100);
     return sp;
 }
 

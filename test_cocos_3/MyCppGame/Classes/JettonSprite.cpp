@@ -1,6 +1,6 @@
 #include "JettonSprite.h"
 
-JettonSprite::JettonSprite():m_value(10),m_isSelected(false),m_canTouch(false),m_touchListener(NULL),m_touchCallback(NULL){
+JettonSprite::JettonSprite():m_value(10),m_isSelected(false),m_canTouch(false),m_touchListener(NULL),m_touchCallback(NULL),isPlayer(false){
     
 }
 

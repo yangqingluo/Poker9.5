@@ -9,7 +9,7 @@
 #include "PokerChair.h"
 #include "JettonSprite.h"
 
-PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL){
+PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0){
     
 }
 
@@ -62,6 +62,22 @@ void PokerChair::onEnter(){
     if (background != NULL) {
         background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
         this->addChild(background);
+        
+        betTotalLabel = Label::createWithSystemFont("", "Arial", 20.0);
+        betTotalLabel->setColor(Color3B::WHITE);
+        betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
+        betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
+        betTotalLabel->setVisible(false);
+        betTotalLabel->setPosition(background->getPositionX(), this->getContentSize().height - 0.2 * background->getContentSize().height);
+        this->addChild(betTotalLabel);
+        
+        betPlayerLabel = Label::createWithSystemFont("", "Arial", 20.0);
+        betPlayerLabel->setColor(Color3B::YELLOW);
+        betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
+        betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
+        betPlayerLabel->setVisible(false);
+        betPlayerLabel->setPosition(background->getPositionX(), this->getContentSize().height - 0.8 * background->getContentSize().height);
+        this->addChild(betPlayerLabel);
         
         //触摸响应注册
         auto listener = EventListenerTouchOneByOne::create();
@@ -124,6 +140,16 @@ void PokerChair::updatePokerPosition(){
 }
 
 void PokerChair::addJetton(JettonSprite* jetton){
+    betTotal += jetton->getJettonValue();
+    
+    betTotalLabel->setVisible(true);
+    betTotalLabel->setString(this->stringFromBetValue(betTotal));
+    if (jetton->isPlayer) {
+        betPlayer += jetton->getJettonValue();
+        betPlayerLabel->setVisible(true);
+        betPlayerLabel->setString(this->stringFromBetValue(betPlayer));
+    }
+    
     jetton->setPosition(0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().width - jetton->getContentSize().width) + 0.5 * jetton->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().height - jetton->getContentSize().height) + 0.5 * jetton->getContentSize().height);
     m_betZoneBackGround->addChild(jetton,0,99);
 }
@@ -135,6 +161,18 @@ void PokerChair::removeAllJettons(){
 void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
     m_touchListener = target;
     m_touchCallback = callfun;
+}
+
+char* PokerChair::stringFromBetValue(int betValue){
+    char* mString = new char[100];
+    if (betValue / 10000 > 0) {
+        sprintf(mString,"%.2fw",betValue / 10000.0);
+    }
+    else{
+        sprintf(mString,"%d",betValue);
+    }
+    
+    return mString;
 }
 
 
