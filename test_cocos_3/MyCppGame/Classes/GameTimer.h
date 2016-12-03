@@ -14,13 +14,13 @@ public:
     
     virtual ~GameTimer();
     
-    static GameTimer* createTimer(float time);
+    static GameTimer* createTimer();
     
     void showPrefix();
     void start(float time);
     void update(float delta);
     
-    bool init(float time);
+    virtual bool init();
     
     int showTag;
     char prefixString[100];

@@ -114,14 +114,14 @@ bool PokerDesk::init()
     messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
     message_sprite->addChild(messageLabel);
     
-    showTimer = GameTimer::createTimer(0);
+    showTimer = GameTimer::createTimer();
     showTimer->showTag = 0;
     showTimer->setPosition(origin.x + visibleSize.width / 2, origin.y + 0.74 * visibleSize.height);
     showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
     this->addChild(showTimer);
     
     char imageName[4][100] = {"","images/chair_bet_bg.png","images/chair_bet_bg.png","images/chair_bet_bg.png"};
-    float scaleArray[4][2] = {{0.5,0.65},{0.3,0.4},{0.5,0.4},{0.7,0.4}};
+    float scaleArray[4][2] = {{0.5,0.65},{0.2,0.4},{0.5,0.4},{0.8,0.4}};
     for (int i = 0; i < 4; i++) {
         PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1], i);
         m_arrChairs.pushBack(chair);
