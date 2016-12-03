@@ -21,5 +21,31 @@ enum PokerPoint
     PokerPoint_JokerSenior = 102,
 };
 
+//牌型
+enum PokerType
+{
+    PokerType_9_Half = 1,     //9点半
+    PokerType_Pair,		      //对子
+    PokerType_9,
+    PokerType_8_Half,
+    PokerType_8,
+    PokerType_7_Half,
+    PokerType_7,
+    PokerType_6_Half,
+    PokerType_6,
+    PokerType_5_Half,
+    PokerType_5,
+    PokerType_4_Half,
+    PokerType_4,
+    PokerType_3_Half,
+    PokerType_3,
+    PokerType_2_Half,
+    PokerType_2,
+    PokerType_1_Half,
+    PokerType_1,
+    PokerType_0_Half,
+    PokerType_0,
+};
+
 #define getRandomNumberNotEqualRight(from, to) ((int)(from + (arc4random() % (to - from))))//result is [from, to)
 #define getRandomNumber(from, to) ((int)(from + (arc4random() % (to - from + 1))))//result is [from to]

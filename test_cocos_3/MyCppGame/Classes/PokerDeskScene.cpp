@@ -170,7 +170,8 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
 
 void PokerDesk::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
-        this->waitForPrepareprepareAction();
+        m_deskState = DeskState_Prepare;
+        scheduleUpdate();
     }
     else if(pNode->getTag() == 1) {
         this->goBackAction();
@@ -204,13 +205,14 @@ void PokerDesk::goBackAction(){
     Director::getInstance()->popScene();
 }
 
-void PokerDesk::waitForPrepareprepareAction(){
-    btn_PrepareItem->setVisible(true);
-    btn_AnotherdeskItem->setVisible(true);
-    
-    sprintf(showTimer->prefixString,"等待准备…");
-    showTimer->showTag = 1;
-    showTimer->start(3);
+void PokerDesk::waitForPrepareAction(){
+    if (!showTimer->getIsValid()) {
+        btn_PrepareItem->setVisible(true);
+        btn_AnotherdeskItem->setVisible(true);
+        
+        sprintf(showTimer->prefixString,"等待准备…");
+        showTimer->start(30);
+    }
 }
 
 void PokerDesk::preparedAction(){
@@ -222,84 +224,60 @@ void PokerDesk::preparedAction(){
     btn_AnotherdeskItem->setVisible(false);
     
     sprintf(showTimer->prefixString,"等待开始…");
-    showTimer->showTag = 2;
+    showTimer->showPrefix();
 }
 
-void PokerDesk::showJudgeAction(){
-    
+void PokerDesk::betAction(){
+    if (!showTimer->getIsValid()) {
+        sprintf(showTimer->prefixString,"下注");
+        showTimer->start(30);
+    }
 }
 
-void PokerDesk::sendPokerAction(){
-    
+void PokerDesk::settleAction(){
+    if (!showTimer->getIsValid()) {
+        sprintf(showTimer->prefixString,"结算");
+        showTimer->showPrefix();
+    }
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){
-    switch (showTimer->showTag) {
-        case 0:{
-//            sprintf(showTimer->prefixString,"");
-//            showTimer->showPrefix();
-        }
-            break;
-        case 1:{
-            this->goBackAction();
+    switch (m_deskState) {
+        case DeskState_Prepare:{
+            m_deskState = DeskState_SendPoker;
         }
             break;
             
-        case 2:{
-//            message_sprite->setVisible(false);
-            
-            sprintf(showTimer->prefixString,"开始!");
-            showTimer->showTag = 0;
-            showTimer->showPrefix();
-            
-            scheduleUpdate();
-        }
-            break;
-            
-        case 3:{
-            this->showJudgeAction();
-            
-            sprintf(showTimer->prefixString,"准备发牌");
-            showTimer->showTag = 4;
-            showTimer->start(2);
-            
-        }
-            break;
-            
-        case 4:{
-            this->sendPokerAction();
-            
-            sprintf(showTimer->prefixString,"发牌");
-            showTimer->showTag = 5;
-            showTimer->start(2);
-            
-        }
-            break;
-            
-        case 5:{
-            sprintf(showTimer->prefixString,"下注");
-            showTimer->showTag = 6;
-            showTimer->start(30);
-            
+        case DeskState_Bet:{
+            m_deskState = DeskState_Settle;
         }
             break;
             
         default:
             break;
     }
-    
 }
 
 
 void PokerDesk::update(float delta){
     switch (m_deskState) {
-        case 0:{
+        case DeskState_Prepare:{
+            waitForPrepareAction();
+        }
+            break;
+            
+        case DeskState_SendPoker:{
             sendPoker();
         }
             break;
             
         case DeskState_Bet:{
+            betAction();
+        }
+            break;
             
+        case DeskState_Settle:{
+            settleAction();
         }
             break;
             
@@ -414,6 +392,9 @@ void PokerDesk::sendPoker(){
     
     int index = m_IndexSend % 9;
     if (index == 0 && m_isSendSingle) {
+        sprintf(showTimer->prefixString,"翻牌决定发牌顺序");
+        showTimer->showPrefix();
+        
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         this->reorderChild(pk, 0);
         pk->showPokerAnimated(true, true, 0.5);
@@ -429,6 +410,9 @@ void PokerDesk::sendPoker(){
         }
     }
     else if(index > 0 && index <= 8 && m_isSendSingle){
+        sprintf(showTimer->prefixString,"发牌");
+        showTimer->showPrefix();
+        
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         this->reorderChild(pk, 0);
         PokerChair* chair = m_arrChairs.at(((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
@@ -438,7 +422,6 @@ void PokerDesk::sendPoker(){
         ++m_IndexSend;
         if (m_IndexSend % 9 == 0) {
             m_deskState = DeskState_Bet;
-            unscheduleUpdate();
         }
     }
 }

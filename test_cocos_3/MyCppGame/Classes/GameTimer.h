@@ -28,6 +28,7 @@ public:
     void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);
     
 private:
+    CC_SYNTHESIZE_READONLY(bool,m_valid,IsValid);//是否处于倒计时状态中
     Label*               label;
     float                   pTime;
     

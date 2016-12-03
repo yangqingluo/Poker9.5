@@ -22,7 +22,10 @@ USING_NS_CC_EXT;
 //花色
 enum DeskState
 {
-    DeskState_Bet = 1,//下注
+    DeskState_Prepare = 1,//准备
+    DeskState_SendPoker,//发牌
+    DeskState_Bet,//下注
+    DeskState_Settle,//结算
 };
 
 class PokerDesk : public cocos2d::Layer
@@ -56,10 +59,10 @@ public:
     void showTimerDoneCallback(Node* pNode);
     
     void goBackAction();
-    void waitForPrepareprepareAction();
+    void waitForPrepareAction();
     void preparedAction();
-    void showJudgeAction();
-    void sendPokerAction();
+    void betAction();
+    void settleAction();
     
     void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);

@@ -1,6 +1,6 @@
 #include "GameTimer.h"
 
-GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL){
+GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL),m_valid(false){
     
 }
 
@@ -19,6 +19,7 @@ bool GameTimer::init(){
 
 void GameTimer::start(float time){
     pTime = time;
+    m_valid = true;
     schedule(schedule_selector(GameTimer::update));
 }
 
@@ -33,7 +34,7 @@ void GameTimer::update(float delta){
     
     if (pTime <= 1) {
         unschedule(schedule_selector(GameTimer::update));
-        
+        m_valid = false;
         if (m_callback&&m_callbackListener) {
             (m_callbackListener->*m_callback)(this);
         }
