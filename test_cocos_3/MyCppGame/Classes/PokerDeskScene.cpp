@@ -307,16 +307,14 @@ void PokerDesk::chooseDealerAction(){
 }
 
 void PokerDesk::showGamePlayerInfo(){
-    char* string = new char[100];
-    sprintf(string,"%s\n筹码：%d",gamePlayer->nickName, gamePlayer->getJettonCount());
-    gamePlayerInfoLabel->setString(string);
-    string = NULL;
+    char mString[100];
+    sprintf(mString,"%s\n筹码：%d",gamePlayer->nickName, gamePlayer->getJettonCount());
+    gamePlayerInfoLabel->setString(mString);
 }
 void PokerDesk::showDealerInfo(){
-    char* string = new char[100];
-    sprintf(string,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
-    countLabel->setString(string);
-    string = NULL;
+    char mString[100];
+    sprintf(mString,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
+    countLabel->setString(mString);
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){

@@ -28,7 +28,7 @@ void GameTimer::start(float time){
 
 void GameTimer::update(float delta){
     pTime -= delta;
-    char* mtime = new char[100];
+    char mtime[100];
     if (strcmp(prefixString, "") != 0) {
         sprintf(mtime,"%s%d",prefixString,(int)pTime % 60);
         label->setString(mtime);
@@ -41,16 +41,14 @@ void GameTimer::update(float delta){
             (m_callbackListener->*m_callback)(this);
         }
     }
-    mtime = NULL;
 }
 
 void GameTimer::showPrefix(){
-    char* mtime = new char[100];
+    char mtime[100];
     if (strcmp(prefixString, "") != 0) {
         sprintf(mtime,"%s",prefixString);
         label->setString(mtime);
     }
-    mtime = NULL;
 }
 
 GameTimer* GameTimer::createTimer(){

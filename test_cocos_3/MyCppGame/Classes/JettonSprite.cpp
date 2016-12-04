@@ -33,7 +33,7 @@ void JettonSprite::onEnter(){
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     listener->onTouchBegan = CC_CALLBACK_2(JettonSprite::onTouchBegan, this);//触摸开始
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);//注册分发器
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);//注册分发器
 }
 
 void JettonSprite::onExit(){

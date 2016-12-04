@@ -98,7 +98,7 @@ void PokerChair::onEnter(){
         listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
         listener->onTouchMoved = CC_CALLBACK_2(PokerChair::onTouchMoved, this);//触摸移动
         listener->onTouchEnded = CC_CALLBACK_2(PokerChair::onTouchEnded, this);//触摸结束
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
+        getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
     }
     else{
         pokerTypeLabel->setPosition(m_BankerSprite->getPositionX(), 0.3 * this->getContentSize().height);
@@ -107,7 +107,7 @@ void PokerChair::onEnter(){
 
 void PokerChair::onExit(){
     //移除触摸响应
-    _eventDispatcher->removeEventListenersForTarget(this);
+    getEventDispatcher()->removeEventListenersForTarget(this);
     LayerColor::onExit();
 }
 
@@ -162,7 +162,7 @@ void PokerChair::addJetton(JettonSprite* jetton){
         betTotalLabel->setVisible(true);
     }
     
-    char* mString = new char[100];
+    char mString[100];
     this->stringFromBetValue(mString, betTotal);
     
     betTotalLabel->setString(mString);
@@ -175,7 +175,6 @@ void PokerChair::addJetton(JettonSprite* jetton){
         this->stringFromBetValue(mString, betPlayer);
         betPlayerLabel->setString(mString);
     }
-    mString = NULL;
     
     jetton->setPosition(0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().width - jetton->getContentSize().width) + 0.5 * jetton->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().height - jetton->getContentSize().height) + 0.5 * jetton->getContentSize().height);
     m_betZoneBackGround->addChild(jetton);
@@ -255,7 +254,7 @@ void PokerChair::showPokerType(){
         case PokerType_1:
         case PokerType_0_Half:
         case PokerType_0:{
-            char* mString = new char[20];
+            char mString[20];
             if ((PokerType_0 - m_PokerType) % 2 == 0) {
                 sprintf(mString,"%d点",(PokerType_0 - m_PokerType) / 2);
             }
@@ -263,7 +262,6 @@ void PokerChair::showPokerType(){
                 sprintf(mString,"%d点半",(PokerType_0 - m_PokerType) / 2);
             }
             pokerTypeLabel->setString(mString);
-            mString = NULL;
         }
             break;
             
@@ -337,7 +335,7 @@ void PokerChair::showSettlement(){
         else{
             settlementLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
             
-            char* mString = new char[100];
+            char mString[100];
             if (m_settlement->winned) {
                 sprintf(mString,"%d倍 +%d",m_settlement->multiple, m_settlement->accounts);
             }
@@ -345,7 +343,6 @@ void PokerChair::showSettlement(){
                 sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
             }
             settlementLabel->setString(mString);
-            mString = NULL;
         }
     }
     
