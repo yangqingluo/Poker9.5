@@ -16,7 +16,7 @@ PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchL
 
 PokerChair::~PokerChair(){
     CC_SAFE_RELEASE(m_betZoneBackGround);
-    CC_SAFE_RELEASE(m_settlement);
+    
 }
 
 bool PokerChair::init(){
@@ -167,11 +167,16 @@ void PokerChair::addJetton(JettonSprite* jetton){
     }
     
     jetton->setPosition(0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().width - jetton->getContentSize().width) + 0.5 * jetton->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().height - jetton->getContentSize().height) + 0.5 * jetton->getContentSize().height);
-    m_betZoneBackGround->addChild(jetton,0,99);
+    m_betZoneBackGround->addChild(jetton);
+    jettonArray.pushBack(jetton);
 }
 
 void PokerChair::removeAllJettons(){
-    m_betZoneBackGround->removeChildByTag(99);
+    for (JettonSprite* jetton : jettonArray) {
+        jetton->removeFromParentAndCleanup(true);
+    }
+    
+    jettonArray.clear();
 }
 
 void PokerChair::calculatePokerType(){
@@ -319,6 +324,21 @@ void PokerChair::showSettlement(){
         char* mString = new char[100];
         sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
         settlementLabel->setString(mString);
+    }
+}
+
+void PokerChair::clearChair(){
+    pokerArray.clear();
+    pokerTypeLabel->setVisible(false);
+    
+    QLImageSprite* background = getBetZoneBackGround();
+    if (background != NULL) {
+        betTotalLabel->setVisible(false);
+        betPlayerLabel->setVisible(false);
+        settlementLabel->setVisible(false);
+        betTotal = 0;
+        betPlayer = 0;
+        removeAllJettons();
     }
 }
 

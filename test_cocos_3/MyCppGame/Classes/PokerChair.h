@@ -42,11 +42,13 @@ public:
     void showPokerType();//显示牌型
     void showSettlement();//显示结算
     void calculateSettlement(PokerChair* dealerChair);//结算
+    void clearChair();//清除显示
     
     int betTotal;//总下注额
     int betPlayer;//玩家下注额
     PokerType m_PokerType;//牌型
     Vector<PokerSprite *> pokerArray;
+    Vector<JettonSprite *> jettonArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
     char* stringFromBetValue(int betValue);
 private:

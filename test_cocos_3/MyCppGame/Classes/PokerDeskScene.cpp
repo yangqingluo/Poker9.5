@@ -134,16 +134,11 @@ bool PokerDesk::init()
         this->addChild(chair);
     }
     
-    bool isRet = false;
-    do{
-        srand((unsigned)time(NULL));//初始化随机种子
-        CC_BREAK_IF(!createPokers());
-        CC_BREAK_IF(!reindexPoker());
-        
-        isRet = true;
-    } while (0);
+    srand((unsigned)time(NULL));//初始化随机种子
+    createPokers();
+    reindexPoker();
     
-    return isRet;
+    return true;
 }
 
 void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
@@ -170,7 +165,7 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
 
 void PokerDesk::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
-        m_deskState = DeskState_Prepare;
+        m_deskState = DeskState_Waiting;
         scheduleUpdate();
     }
     else if(pNode->getTag() == 1) {
@@ -182,6 +177,11 @@ void PokerDesk::popButtonCallback(Node* pNode){
 void PokerDesk::onEnter(){
     Layer::onEnter();
     this->showSettingChip();
+}
+
+void PokerDesk::onExit(){
+    Layer::onExit();
+    unscheduleUpdate();
 }
 
 void PokerDesk::showSettingChip(){
@@ -216,6 +216,8 @@ void PokerDesk::waitForPrepareAction(){
 }
 
 void PokerDesk::preparedAction(){
+    m_deskState = DeskState_Prepared;
+    
     char* string = new char[100];
     sprintf(string,"桌子人数：1\n状态：已准备");
     countLabel->setString(string);
@@ -277,7 +279,11 @@ void PokerDesk::settleAction(){
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){
     switch (m_deskState) {
-        case DeskState_Prepare:{
+        case DeskState_Waiting:{
+            goBackAction();
+        }
+            break;
+        case DeskState_Prepared:{
             m_deskState = DeskState_SendPoker;
         }
             break;
@@ -294,10 +300,17 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
                     poker->removeFromParent();
                 }
                 
-                chair->pokerArray.clear();
+                chair->clearChair();
             }
             
-            m_deskState = DeskState_SendPoker;
+            if (m_IndexSend < m_arrPokers.size()) {
+                m_deskState = DeskState_SendPoker;
+            }
+            else{
+                unscheduleUpdate();
+                sprintf(showTimer->prefixString,"结束一局");
+                showTimer->showPrefix();
+            }
         }
             break;
             
@@ -309,8 +322,13 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
 
 void PokerDesk::update(float delta){
     switch (m_deskState) {
-        case DeskState_Prepare:{
+        case DeskState_Waiting:{
             waitForPrepareAction();
+        }
+            break;
+            
+        case DeskState_Prepared:{
+            
         }
             break;
             
@@ -384,59 +402,46 @@ PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
     return pk;
 }
 bool PokerDesk::createPokers(){
-    bool isRet = false;
-    do{
-        //创建52个牌
-        for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
-            for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
-                PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
-                m_arrPokers.pushBack(pk);
-            }
+    //创建52个牌
+    for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
+        for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
+            PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
+            m_arrPokers.pushBack(pk);
         }
-        //创建小鬼
-        PokerSprite* joker_junior = createPoker(PokerColor_JokerJunior, PokerPoint_Joker);
-        m_arrPokers.pushBack(joker_junior);
-        
-        //创建大鬼
-        PokerSprite* joker_senior = createPoker(PokerColor_JokerSenior, PokerPoint_Joker);
-        m_arrPokers.pushBack(joker_senior);
-        
-        isRet = true;
-    } while (0);
+    }
+    //创建小鬼
+    PokerSprite* joker_junior = createPoker(PokerColor_JokerJunior, PokerPoint_Joker);
+    m_arrPokers.pushBack(joker_junior);
     
-    return isRet;
+    //创建大鬼
+    PokerSprite* joker_senior = createPoker(PokerColor_JokerSenior, PokerPoint_Joker);
+    m_arrPokers.pushBack(joker_senior);
+    
+    return true;
 }
 
 bool PokerDesk::reindexPoker(){
-    bool isRet = false;
-    do{
-        for(int i = 0; i < m_arrPokers.size(); ++i){
-            PokerSprite* pk1 = m_arrPokers.getRandomObject();
-            PokerSprite* pk2 = m_arrPokers.getRandomObject();
-            m_arrPokers.swap(pk1, pk2);
-        }
-        
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
-        for (size_t i = m_arrPokers.size(); i > 0; --i) {
-            PokerSprite* pk = m_arrPokers.at(i - 1);
-            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
-            pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
-            this->addChild(pk);
-        }
-        
-        isRet = true;
-    } while (0);
+    for(int i = 0; i < m_arrPokers.size(); ++i){
+        PokerSprite* pk1 = m_arrPokers.getRandomObject();
+        PokerSprite* pk2 = m_arrPokers.getRandomObject();
+        m_arrPokers.swap(pk1, pk2);
+    }
     
-    return isRet;
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
+    for (size_t i = m_arrPokers.size(); i > 0; --i) {
+        PokerSprite* pk = m_arrPokers.at(i - 1);
+        pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
+        pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
+        this->addChild(pk);
+    }
+    
+    return true;
 }
 
 void PokerDesk::sendPoker(){
     if (m_IndexSend >= m_arrPokers.size()) {
-        unscheduleUpdate();
-        sprintf(showTimer->prefixString,"结束一局");
-        showTimer->showPrefix();
         return;
     }
     
