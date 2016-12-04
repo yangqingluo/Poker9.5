@@ -58,7 +58,7 @@ void PokerChair::onTouchEnded(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
-    pokerTypeLabel = Label::createWithTTF("对子", "fonts/STKaiti.ttf", 14);
+    pokerTypeLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
     pokerTypeLabel->setVisible(false);
     pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.05 * this->getContentSize().height);
     this->addChild(pokerTypeLabel);
@@ -84,7 +84,7 @@ void PokerChair::onEnter(){
         betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
         this->addChild(betPlayerLabel);
         
-        settlementLabel = Label::createWithTTF("2倍 +15000", "fonts/STKaiti.ttf", 14);
+        settlementLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
         settlementLabel->setVisible(false);
         settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.2 * this->getContentSize().height);
         this->addChild(settlementLabel);
@@ -203,7 +203,9 @@ void PokerChair::calculatePokerType(){
             }
         }
     }
-    
+}
+
+void PokerChair::showPokerType(){
     switch (m_PokerType) {
         case PokerType_Pair:{
             pokerTypeLabel->setString("对子");

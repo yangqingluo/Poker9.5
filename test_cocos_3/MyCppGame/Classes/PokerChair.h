@@ -38,6 +38,7 @@ public:
     void addJetton(JettonSprite* jetton);//添加筹码
     void removeAllJettons();//移除筹码
     void calculatePokerType();//计算牌型
+    void showPokerType();//显示牌型
     
     Vector<PokerSprite *> pokerArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);

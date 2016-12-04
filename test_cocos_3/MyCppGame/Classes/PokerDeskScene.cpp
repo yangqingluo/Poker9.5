@@ -241,6 +241,7 @@ void PokerDesk::settleAction(){
         
         for (int i = 0; i < m_arrChairs.size(); i++) {
             PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+            chair->calculatePokerType();
             for (PokerSprite* poker : chair->pokerArray) {
                 poker->showPokerAnimated(true, true, 0.1);
             }
@@ -391,7 +392,7 @@ bool PokerDesk::reindexPoker(){
         
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        Vec2 position = Vec2(origin.x + 0.4 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
+        Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
         for (size_t i = m_arrPokers.size(); i > 0; --i) {
             PokerSprite* pk = m_arrPokers.at(i - 1);
             pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
@@ -484,7 +485,7 @@ void PokerDesk::turnedSinglePokerCallback(Node* pSender){
         if (poker->chairIndex < m_arrChairs.size()) {
             PokerChair* chair = m_arrChairs.at(poker->chairIndex);
             if (chair->pokerArray.getIndex(poker) == chair->pokerArray.size() - 1) {
-                chair->calculatePokerType();
+                chair->showPokerType();
             }
         }
     }

@@ -9,7 +9,7 @@ GameTimer::~GameTimer(){
 }
 
 bool GameTimer::init(){
-    label = Label::createWithTTF("", "fonts/STKaiti.ttf", 12.0);
+    label = Label::createWithTTF("", "fonts/STKaiti.ttf", 10.0);
     label->setPosition(0,0);
     
     this->addChild(label);
