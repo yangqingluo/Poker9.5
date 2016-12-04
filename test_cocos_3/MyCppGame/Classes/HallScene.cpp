@@ -452,24 +452,32 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
     if (table == roomListTableView) {
-        if (roomTypeSelected == 0) {
-            
-            
-            
-        }
-        else if (roomTypeSelected == 1){
-            
-        }
-        else if (roomTypeSelected == 2){
-            auto scene = PokerDesk::createScene();
-            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-            sprintf(layer->gamePlayer->nickName,"阿罗");
-            sprintf(layer->gamePlayer->headImage,"p4");
-            layer->gamePlayer->setJettonCount(3000);
-            
-            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-            Director::getInstance()->pushScene(ts);
-        }
+        auto scene = PokerDesk::createScene();
+        PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+        sprintf(layer->gamePlayer->nickName,"阿罗");
+        sprintf(layer->gamePlayer->headImage,"p4");
+        layer->gamePlayer->setJettonCount(3000);
+        
+        TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+        Director::getInstance()->pushScene(ts);
+//        if (roomTypeSelected == 0) {
+//            
+//            
+//            
+//        }
+//        else if (roomTypeSelected == 1){
+//            
+//        }
+//        else if (roomTypeSelected == 2){
+//            auto scene = PokerDesk::createScene();
+//            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+//            sprintf(layer->gamePlayer->nickName,"阿罗");
+//            sprintf(layer->gamePlayer->headImage,"p4");
+//            layer->gamePlayer->setJettonCount(3000);
+//            
+//            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+//            Director::getInstance()->pushScene(ts);
+//        }
     }
     else if (table == noteListTableView){
         switch (cell->getIdx()) {

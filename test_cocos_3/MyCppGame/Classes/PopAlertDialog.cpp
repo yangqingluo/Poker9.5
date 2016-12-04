@@ -97,12 +97,13 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
                                          CC_CALLBACK_1(PopAlertDialog::buttonCallBack,this));
     menuImage->setTag(tag);
     menuImage->setPosition(center_point);
+    menuImage->setScale(0.2 * this->getContentSize().width / menuImage->getContentSize().width);
     
-    Size menuSize=menuImage->getContentSize();
-    Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
-    Label->setColor(Color3B(Color3B::WHITE));
-    Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
-    menuImage->addChild(Label);
+//    Size menuSize = menuImage->getContentSize();
+//    Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
+//    Label->setColor(Color3B(Color3B::WHITE));
+//    Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
+//    menuImage->addChild(Label);
     getMenuButton()->addChild(menuImage);
     
     return true;
