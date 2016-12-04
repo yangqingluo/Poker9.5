@@ -70,6 +70,8 @@
 		FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
 		FC47C0181DF40B9B00A22F70 /* SettlementRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C0161DF40B9B00A22F70 /* SettlementRef.cpp */; };
 		FC47C0191DF40B9B00A22F70 /* SettlementRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C0161DF40B9B00A22F70 /* SettlementRef.cpp */; };
+		FC47C01E1DF4385C00A22F70 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C01C1DF4385C00A22F70 /* Player.cpp */; };
+		FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C01C1DF4385C00A22F70 /* Player.cpp */; };
 		FC4B4B8A1DF1500200E0271B /* QLImageSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */; };
 		FC4B4B8B1DF1500200E0271B /* QLImageSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */; };
 		FC6DB6211DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
@@ -209,6 +211,8 @@
 		FC35C0971DEAE239009C3A83 /* PokerChair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerChair.h; sourceTree = "<group>"; };
 		FC47C0161DF40B9B00A22F70 /* SettlementRef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettlementRef.cpp; sourceTree = "<group>"; };
 		FC47C0171DF40B9B00A22F70 /* SettlementRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettlementRef.h; sourceTree = "<group>"; };
+		FC47C01C1DF4385C00A22F70 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		FC47C01D1DF4385C00A22F70 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QLImageSprite.cpp; sourceTree = "<group>"; };
 		FC4B4B891DF1500200E0271B /* QLImageSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QLImageSprite.h; sourceTree = "<group>"; };
 		FC6DB6201DE8395000621B55 /* poker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = poker; sourceTree = "<group>"; };
@@ -405,6 +409,8 @@
 				FCD0BD771DF2D4C800952CAD /* BetLimiter.h */,
 				FC47C0161DF40B9B00A22F70 /* SettlementRef.cpp */,
 				FC47C0171DF40B9B00A22F70 /* SettlementRef.h */,
+				FC47C01C1DF4385C00A22F70 /* Player.cpp */,
+				FC47C01D1DF4385C00A22F70 /* Player.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -618,6 +624,7 @@
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				FC47C01E1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */,
 				FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
@@ -642,6 +649,7 @@
 			files = (
 				FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,

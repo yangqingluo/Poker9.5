@@ -18,6 +18,7 @@ USING_NS_CC_EXT;
 #include "GameTimer.h"
 #include "PokerChair.h"
 #include "BetLimiter.h"
+#include "Player.h"
 
 //牌局状态
 enum DeskState
@@ -61,11 +62,15 @@ public:
     GameTimer* showTimer;
     void showTimerDoneCallback(Node* pNode);
     
+    Player* dealerPlayer;
+    Player* gamePlayer;
+    
     void goBackAction();
     void waitForPrepareAction();
     void preparedAction();
     void betAction();
     void settleAction();
+    void chooseDealerAction();//选择庄家
     
     void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);

@@ -12,11 +12,13 @@
 const float jetton_height_scale = 0.08;
 
 PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
-    
+    dealerPlayer = new Player();
+    gamePlayer = new Player();
 }
 
 PokerDesk::~PokerDesk(){
-    
+    CC_SAFE_DELETE(dealerPlayer);
+    CC_SAFE_DELETE(gamePlayer);
 }
 
 Scene* PokerDesk::createScene()
@@ -92,12 +94,13 @@ bool PokerDesk::init()
     upright_sprite->setPosition(origin.x + visibleSize.width - upright_sprite->getContentSize().width * 0.6, origin.y + visibleSize.height - upright_sprite->getContentSize().height * 0.6);
     this->addChild(upright_sprite);
     
-    countLabel = Label::createWithTTF("桌子人数：1\n状态：未准备", "fonts/STKaiti.ttf", 10);
+    countLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
     countLabel->setColor(Color3B::BLACK);
 //    countLabel->setHorizontalAlignment(TextHAlignment::LEFT);
 //    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
     countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.2 * upright_sprite->getContentSize().height);
     upright_sprite->addChild(countLabel);
+    chooseDealerAction();
     
     bottom_sprite = QLImageSprite::create("images/desk_bottom_bg.png", Size(visibleSize.width, 0.12 * visibleSize.height));
     bottom_sprite->setPosition(origin.x + visibleSize.width / 2, origin.y + bottom_sprite->getContentSize().height / 2);
@@ -218,10 +221,6 @@ void PokerDesk::waitForPrepareAction(){
 void PokerDesk::preparedAction(){
     m_deskState = DeskState_Prepared;
     
-    char* string = new char[100];
-    sprintf(string,"桌子人数：1\n状态：已准备");
-    countLabel->setString(string);
-    
     btn_PrepareItem->setVisible(false);
     btn_AnotherdeskItem->setVisible(false);
     
@@ -276,6 +275,22 @@ void PokerDesk::settleAction(){
 //            }
 //        }
     }
+}
+
+void PokerDesk::chooseDealerAction(){
+    sprintf(dealerPlayer->nickName,"电脑");
+    sprintf(dealerPlayer->headImage,"p2");
+    
+    dealerPlayer->setJettonCount(3000000);
+    
+    auto dealerHead = Sprite::create("images/p2.png");
+    dealerHead->setScale(0.4 * upright_sprite->getContentSize().width / dealerHead->getContentSize().width);
+    dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 0.95 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
+    upright_sprite->addChild(dealerHead);
+    
+    char* string = new char[100];
+    sprintf(string,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
+    countLabel->setString(string);
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){
