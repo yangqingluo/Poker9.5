@@ -281,7 +281,7 @@ void PokerChair::calculateSettlement(PokerChair* dealerChair){
             }
             
             m_settlement->winned = false;
-            m_settlement->accounts = -1 * m_settlement->multiple * betPlayer;
+            m_settlement->accounts = -m_settlement->multiple * betPlayer;
         }
         else {
             //闲家赢
@@ -303,7 +303,7 @@ void PokerChair::calculateSettlement(PokerChair* dealerChair){
             }
             
             m_settlement->winned = true;
-            m_settlement->accounts = +1 * m_settlement->multiple * betPlayer;
+            m_settlement->accounts = m_settlement->multiple * betPlayer;
         }
     }
     else{

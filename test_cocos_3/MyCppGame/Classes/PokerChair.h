@@ -47,6 +47,7 @@ public:
     int betTotal;//总下注额
     int betPlayer;//玩家下注额
     PokerType m_PokerType;//牌型
+    SettlementRef* m_settlement;//结算数据
     Vector<PokerSprite *> pokerArray;
     Vector<JettonSprite *> jettonArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
@@ -54,7 +55,6 @@ public:
 private:
     CC_SYNTHESIZE_RETAIN(QLImageSprite*, m_betZoneBackGround, BetZoneBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
-    CC_SYNTHESIZE(SettlementRef*, m_settlement, Settlement);//结算数据
     
     Sprite* m_BankerSprite;
     Sprite* m_StartPointSprite;//发牌起始顺序标识的精灵

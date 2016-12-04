@@ -13,9 +13,6 @@ USING_NS_CC;
 
 class SettlementRef : public Ref{
 public:
-    SettlementRef();
-    ~SettlementRef();
-    
     int multiple;//结算倍数
     int accounts;//结算数目
     bool winned;
