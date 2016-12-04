@@ -453,11 +453,7 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
     if (table == roomListTableView) {
         if (roomTypeSelected == 0) {
-            auto scene = PokerDesk::createScene();
-            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
             
-            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-            Director::getInstance()->pushScene(ts);
             
             
         }
@@ -465,7 +461,14 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
             
         }
         else if (roomTypeSelected == 2){
+            auto scene = PokerDesk::createScene();
+            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+            sprintf(layer->gamePlayer->nickName,"阿罗");
+            sprintf(layer->gamePlayer->headImage,"p4");
+            layer->gamePlayer->setJettonCount(3000);
             
+            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+            Director::getInstance()->pushScene(ts);
         }
     }
     else if (table == noteListTableView){

@@ -53,7 +53,7 @@ public:
     QLImageSprite* bottom_sprite;
     Label* countLabel;
     Label* messageLabel;
-    
+    Label* gamePlayerInfoLabel;
     BetLimiter* betLimiter;
     
     MenuItemImage* btn_PrepareItem;
@@ -71,6 +71,9 @@ public:
     void betAction();
     void settleAction();
     void chooseDealerAction();//选择庄家
+    
+    void showGamePlayerInfo();
+    void showDealerInfo();
     
     void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);

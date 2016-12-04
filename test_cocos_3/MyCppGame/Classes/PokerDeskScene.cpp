@@ -106,6 +106,11 @@ bool PokerDesk::init()
     bottom_sprite->setPosition(origin.x + visibleSize.width / 2, origin.y + bottom_sprite->getContentSize().height / 2);
     this->addChild(bottom_sprite);
     
+    gamePlayerInfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
+    gamePlayerInfoLabel->setColor(Color3B::WHITE);
+    gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
+    bottom_sprite->addChild(gamePlayerInfoLabel);
+    
     message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
     message_sprite->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
 //    bottom_sprite->addChild(message_sprite);
@@ -138,8 +143,6 @@ bool PokerDesk::init()
     }
     
     srand((unsigned)time(NULL));//初始化随机种子
-    createPokers();
-    reindexPoker();
     
     return true;
 }
@@ -180,6 +183,8 @@ void PokerDesk::popButtonCallback(Node* pNode){
 void PokerDesk::onEnter(){
     Layer::onEnter();
     this->showSettingChip();
+    this->showGamePlayerInfo();
+    this->showDealerInfo();
 }
 
 void PokerDesk::onExit(){
@@ -210,6 +215,8 @@ void PokerDesk::goBackAction(){
 
 void PokerDesk::waitForPrepareAction(){
     if (!showTimer->getIsValid()) {
+        m_IndexSend = 0;
+        
         btn_PrepareItem->setVisible(true);
         btn_AnotherdeskItem->setVisible(true);
         
@@ -219,6 +226,9 @@ void PokerDesk::waitForPrepareAction(){
 }
 
 void PokerDesk::preparedAction(){
+    createPokers();
+    reindexPoker();
+    
     m_deskState = DeskState_Prepared;
     
     btn_PrepareItem->setVisible(false);
@@ -241,12 +251,18 @@ void PokerDesk::settleAction(){
         showTimer->start(5);
         
         int zeroCount = 0;//牌型为0点的座位计数
+        int accountDealer = 0;
+        int accountPlayer = 0;
         PokerChair* chair0 = m_arrChairs.at(0);
         for (int i = 0; i < m_arrChairs.size(); i++) {
             PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
             chair->calculatePokerType();
             if (i > 0) {
                 chair->calculateSettlement(chair0);
+                accountDealer -= chair->m_settlement->accounts;
+                if (chair->betPlayer > 0) {
+                    accountPlayer += chair->m_settlement->accounts;
+                }
             }
             
             if (chair->m_PokerType == PokerType_0) {
@@ -260,12 +276,13 @@ void PokerDesk::settleAction(){
             }
         }
         
-        if (zeroCount >= 3) {
-            
+        if (zeroCount < 3) {
+            dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
+            gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
         }
-        else{
-            
-        }
+        
+        showDealerInfo();
+        showGamePlayerInfo();
         
 //        for (int i = 0; i < m_arrChairs.size(); i++) {
 //            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
@@ -287,7 +304,14 @@ void PokerDesk::chooseDealerAction(){
     dealerHead->setScale(0.4 * upright_sprite->getContentSize().width / dealerHead->getContentSize().width);
     dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 0.95 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
     upright_sprite->addChild(dealerHead);
-    
+}
+
+void PokerDesk::showGamePlayerInfo(){
+    char* string = new char[100];
+    sprintf(string,"%s\n筹码：%d",gamePlayer->nickName, gamePlayer->getJettonCount());
+    gamePlayerInfoLabel->setString(string);
+}
+void PokerDesk::showDealerInfo(){
     char* string = new char[100];
     sprintf(string,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
     countLabel->setString(string);
@@ -323,9 +347,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
                 m_deskState = DeskState_SendPoker;
             }
             else{
-                unscheduleUpdate();
-                sprintf(showTimer->prefixString,"结束一局");
-                showTimer->showPrefix();
+                m_deskState = DeskState_Waiting;
             }
         }
             break;
@@ -418,20 +440,23 @@ PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
     return pk;
 }
 bool PokerDesk::createPokers(){
-    //创建52个牌
-    for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
-        for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
-            PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
-            m_arrPokers.pushBack(pk);
+    m_arrPokers.clear();
+    if (m_arrPokers.size() == 0) {
+        //创建52个牌
+        for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
+            for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
+                PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
+                m_arrPokers.pushBack(pk);
+            }
         }
+        //创建小鬼
+        PokerSprite* joker_junior = createPoker(PokerColor_JokerJunior, PokerPoint_Joker);
+        m_arrPokers.pushBack(joker_junior);
+        
+        //创建大鬼
+        PokerSprite* joker_senior = createPoker(PokerColor_JokerSenior, PokerPoint_Joker);
+        m_arrPokers.pushBack(joker_senior);
     }
-    //创建小鬼
-    PokerSprite* joker_junior = createPoker(PokerColor_JokerJunior, PokerPoint_Joker);
-    m_arrPokers.pushBack(joker_junior);
-    
-    //创建大鬼
-    PokerSprite* joker_senior = createPoker(PokerColor_JokerSenior, PokerPoint_Joker);
-    m_arrPokers.pushBack(joker_senior);
     
     return true;
 }

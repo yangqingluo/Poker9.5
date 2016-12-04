@@ -63,7 +63,7 @@ void PokerChair::onEnter(){
     
     pokerTypeLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
     pokerTypeLabel->setVisible(false);
-    pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.05 * this->getContentSize().height);
+    pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.08 * this->getContentSize().height);
     this->addChild(pokerTypeLabel);
     
     QLImageSprite* background = getBetZoneBackGround();
@@ -89,7 +89,7 @@ void PokerChair::onEnter(){
         
         settlementLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
         settlementLabel->setVisible(false);
-        settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.2 * this->getContentSize().height);
+        settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.24 * this->getContentSize().height);
         this->addChild(settlementLabel);
         
         //触摸响应注册
