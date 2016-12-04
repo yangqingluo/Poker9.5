@@ -239,6 +239,32 @@ void PokerDesk::settleAction(){
         sprintf(showTimer->prefixString,"结算");
         showTimer->start(10);
         
+        int zeroCount = 0;//牌型为0点的座位计数
+        for (int i = 0; i < m_arrChairs.size(); i++) {
+            PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
+            chair->calculatePokerType();
+            if (i > 0) {
+                PokerChair* chair0 = m_arrChairs.at(0);
+                chair->calculateSettlement(chair0);
+            }
+            
+            
+            if (chair->m_PokerType == PokerType_0) {
+                zeroCount++;
+            }
+            
+            for (PokerSprite* poker : chair->pokerArray) {
+                poker->showPokerAnimated(true, true, 0.1);
+            }
+        }
+        
+        if (zeroCount >= 3) {
+            
+        }
+        else{
+            
+        }
+        
         for (int i = 0; i < m_arrChairs.size(); i++) {
             PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
             chair->calculatePokerType();
@@ -433,7 +459,7 @@ void PokerDesk::sendPoker(){
             m_IndexStart = pk->getPoker_point() - 1;
         }
     }
-    else if(index > 0 && index <= 8 && m_isSendSingle){
+    else if (index > 0 && index <= 8 && m_isSendSingle) {
         sprintf(showTimer->prefixString,"发牌");
         showTimer->showPrefix();
         
@@ -444,9 +470,6 @@ void PokerDesk::sendPoker(){
         
         m_isSendSingle = false;
         ++m_IndexSend;
-        if (m_IndexSend % 9 == 0) {
-            m_deskState = DeskState_Bet;
-        }
     }
 }
 
@@ -465,6 +488,9 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     PokerChair* chair = (PokerChair* )pData;
     chair->updatePokerPosition();
     m_isSendSingle = true;
+    if (m_IndexSend % 9 == 0) {
+        m_deskState = DeskState_Bet;
+    }
 }
 
 void PokerDesk::turnedSinglePokerCallback(Node* pSender){
@@ -486,6 +512,9 @@ void PokerDesk::turnedSinglePokerCallback(Node* pSender){
             PokerChair* chair = m_arrChairs.at(poker->chairIndex);
             if (chair->pokerArray.getIndex(poker) == chair->pokerArray.size() - 1) {
                 chair->showPokerType();
+                if (poker->chairIndex > 0) {
+                    chair->showSettlement();
+                }
             }
         }
     }

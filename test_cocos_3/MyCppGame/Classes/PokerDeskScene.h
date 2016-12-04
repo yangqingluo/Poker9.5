@@ -19,7 +19,7 @@ USING_NS_CC_EXT;
 #include "PokerChair.h"
 #include "BetLimiter.h"
 
-//花色
+//牌局状态
 enum DeskState
 {
     DeskState_Prepare = 1,//准备
