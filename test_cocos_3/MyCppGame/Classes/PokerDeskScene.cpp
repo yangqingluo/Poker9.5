@@ -242,14 +242,13 @@ void PokerDesk::settleAction(){
         showTimer->start(10);
         
         int zeroCount = 0;//牌型为0点的座位计数
+        PokerChair* chair0 = m_arrChairs.at(0);
         for (int i = 0; i < m_arrChairs.size(); i++) {
             PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
             chair->calculatePokerType();
             if (i > 0) {
-                PokerChair* chair0 = m_arrChairs.at(0);
                 chair->calculateSettlement(chair0);
             }
-            
             
             if (chair->m_PokerType == PokerType_0) {
                 zeroCount++;
@@ -267,13 +266,13 @@ void PokerDesk::settleAction(){
             
         }
         
-        for (int i = 0; i < m_arrChairs.size(); i++) {
-            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
-            chair->calculatePokerType();
-            for (PokerSprite* poker : chair->pokerArray) {
-                poker->showPokerAnimated(true, true, 0.1);
-            }
-        }
+//        for (int i = 0; i < m_arrChairs.size(); i++) {
+//            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+//            chair->calculatePokerType();
+//            for (PokerSprite* poker : chair->pokerArray) {
+//                poker->showPokerAnimated(true, true, 0.1);
+//            }
+//        }
     }
 }
 
@@ -386,7 +385,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
 JettonSprite* PokerDesk::createjetton(int value){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     JettonSprite* sp = JettonSprite::create(value, Size(jetton_height_scale * visibleSize.height, jetton_height_scale * visibleSize.height));
-    sp->isPlayer = (value > 100);
+    sp->isPlayer = (value == 100);
     return sp;
 }
 

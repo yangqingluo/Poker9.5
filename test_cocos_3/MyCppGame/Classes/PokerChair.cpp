@@ -10,8 +10,7 @@
 #include "JettonSprite.h"
 
 PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0),m_settlement(NULL){
-    m_settlement = new SettlementRef();
-    m_settlement->autorelease();
+    
 }
 
 PokerChair::~PokerChair(){
@@ -24,7 +23,8 @@ bool PokerChair::init(){
         return false;
     }
     
-    
+    m_settlement = new SettlementRef();
+    m_settlement->autorelease();
     //设置弹出层的颜色，指定为淡灰色
 //    setColor(Color3B::GRAY);
 //    setOpacity(0x50);
@@ -322,7 +322,12 @@ void PokerChair::showSettlement(){
         settlementLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
         
         char* mString = new char[100];
-        sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
+        if (m_settlement->winned) {
+            sprintf(mString,"%d倍 +%d",m_settlement->multiple, m_settlement->accounts);
+        }
+        else{
+            sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
+        }
         settlementLabel->setString(mString);
     }
 }

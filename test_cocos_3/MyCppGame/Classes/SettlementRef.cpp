@@ -8,7 +8,7 @@
 
 #include "SettlementRef.h"
 
-SettlementRef::SettlementRef():winned(false){
+SettlementRef::SettlementRef():winned(false),multiple(0),accounts(0){
     
 }
 
