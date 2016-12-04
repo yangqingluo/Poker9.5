@@ -17,6 +17,8 @@ PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSin
 }
 
 PokerDesk::~PokerDesk(){
+    m_arrPokers.clear();
+    m_arrPokers.clear();
     CC_SAFE_DELETE(dealerPlayer);
     CC_SAFE_DELETE(gamePlayer);
 }
@@ -240,8 +242,8 @@ void PokerDesk::preparedAction(){
 
 void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
-        sprintf(showTimer->prefixString,"下注");
-        showTimer->start(5);
+        sprintf(showTimer->prefixString,"选择筹码，点击框形区域下注");
+        showTimer->start(3);
     }
 }
 
@@ -424,7 +426,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
 JettonSprite* PokerDesk::createjetton(int value){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     JettonSprite* sp = JettonSprite::create(value, Size(jetton_height_scale * visibleSize.height, jetton_height_scale * visibleSize.height));
-    sp->isPlayer = (value == 100);
+    sp->isPlayer = true;
     return sp;
 }
 

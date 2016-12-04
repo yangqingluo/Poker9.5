@@ -51,7 +51,7 @@ public:
     Vector<PokerSprite *> pokerArray;
     Vector<JettonSprite *> jettonArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
-    char* stringFromBetValue(int betValue);
+    const char* stringFromBetValue(int betValue);
 private:
     CC_SYNTHESIZE_RETAIN(QLImageSprite*, m_betZoneBackGround, BetZoneBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置

@@ -158,11 +158,17 @@ void PokerChair::updatePokerPosition(){
 void PokerChair::addJetton(JettonSprite* jetton){
     betTotal += jetton->getJettonValue();
     
-    betTotalLabel->setVisible(true);
+    if (!betTotalLabel->isVisible()) {
+        betTotalLabel->setVisible(true);
+    }
+    
     betTotalLabel->setString(this->stringFromBetValue(betTotal));
     if (jetton->isPlayer) {
         betPlayer += jetton->getJettonValue();
-        betPlayerLabel->setVisible(true);
+        if (!betPlayerLabel->isVisible()) {
+            betPlayerLabel->setVisible(true);
+        }
+        
         betPlayerLabel->setString(this->stringFromBetValue(betPlayer));
     }
     
@@ -173,7 +179,7 @@ void PokerChair::addJetton(JettonSprite* jetton){
 
 void PokerChair::removeAllJettons(){
     for (JettonSprite* jetton : jettonArray) {
-        jetton->removeFromParentAndCleanup(true);
+        jetton->removeFromParent();
     }
     
     jettonArray.clear();
@@ -340,13 +346,25 @@ void PokerChair::showSettlement(){
 
 void PokerChair::clearChair(){
     pokerArray.clear();
-    pokerTypeLabel->setVisible(false);
+    
+    if (pokerTypeLabel->isVisible()) {
+        pokerTypeLabel->setVisible(false);
+    }
     
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
-        betTotalLabel->setVisible(false);
-        betPlayerLabel->setVisible(false);
-        settlementLabel->setVisible(false);
+        if (betTotalLabel->isVisible()) {
+            betTotalLabel->setVisible(false);
+        }
+        
+        if (betPlayerLabel->isVisible()) {
+            betPlayerLabel->setVisible(false);
+        }
+        
+        if (settlementLabel->isVisible()) {
+            settlementLabel->setVisible(false);
+        }
+        
         betTotal = 0;
         betPlayer = 0;
         removeAllJettons();
@@ -358,7 +376,7 @@ void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
     m_touchCallback = callfun;
 }
 
-char* PokerChair::stringFromBetValue(int betValue){
+const char* PokerChair::stringFromBetValue(int betValue){
     char* mString = new char[100];
     if (betValue / 10000 > 0) {
         sprintf(mString,"%.2fw",betValue / 10000.0);

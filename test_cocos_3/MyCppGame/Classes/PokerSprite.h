@@ -19,7 +19,6 @@ public:
     virtual void onTouchEnded(Touch *pTouch, Event *pEvent);
     virtual void onTouchCancelled(Touch *pTouch, Event *pEvent);
     void showPokerAnimated(bool showFront, bool animated, float doneDelay);//显示扑克
-    void setTouchPriority(int num);
     size_t chairIndex;
     
     void setSelected(bool select);
@@ -32,7 +31,6 @@ private:
     CC_SYNTHESIZE_READONLY(bool,p_isFront,IsFront);//是否是正面
     CC_SYNTHESIZE(PokerColor,p_color,Poker_color);//花色
     CC_SYNTHESIZE(PokerPoint,p_point,Poker_point);//牌点
-    EventListenerTouchOneByOne* touchListener;
     Sprite* bgSprite;
     
     Ref* m_callbackListener;

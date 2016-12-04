@@ -379,8 +379,7 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
             
             char Icon[30];
             sprintf(Icon, "images/roomstate%d.png", room->status);
-            Texture2D* texture = TextureCache::sharedTextureCache()->addImage(Icon);
-            cell->stateImage->setTexture(texture);
+            cell->stateImage->setTexture(Icon);
         }
         
         return cell;
@@ -407,8 +406,7 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
         NoteItem* item = noteItems.at((int)idx);
         if (item != NULL) {
             Sprite* sprite = (Sprite *)cell->bg_sprite->getChildByTag(1);
-            Texture2D* texture = TextureCache::sharedTextureCache()->addImage(item->image);
-            sprite->setTexture(texture);
+            sprite->setTexture(item->image);
         }
         
         return cell;
