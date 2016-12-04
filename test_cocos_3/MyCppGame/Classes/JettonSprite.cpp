@@ -38,7 +38,6 @@ void JettonSprite::onEnter(){
 
 void JettonSprite::onExit(){
     //移除触摸响应
-    _eventDispatcher->removeEventListenersForTarget(this);
     Sprite::onExit();
 }
 

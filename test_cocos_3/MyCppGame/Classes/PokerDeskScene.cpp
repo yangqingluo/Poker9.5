@@ -17,8 +17,6 @@ PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSin
 }
 
 PokerDesk::~PokerDesk(){
-    m_arrPokers.clear();
-    m_arrPokers.clear();
     CC_SAFE_DELETE(dealerPlayer);
     CC_SAFE_DELETE(gamePlayer);
 }
@@ -312,11 +310,13 @@ void PokerDesk::showGamePlayerInfo(){
     char* string = new char[100];
     sprintf(string,"%s\n筹码：%d",gamePlayer->nickName, gamePlayer->getJettonCount());
     gamePlayerInfoLabel->setString(string);
+    string = NULL;
 }
 void PokerDesk::showDealerInfo(){
     char* string = new char[100];
     sprintf(string,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
     countLabel->setString(string);
+    string = NULL;
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){

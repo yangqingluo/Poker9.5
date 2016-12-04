@@ -42,17 +42,17 @@ PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point, Size size){
 
 void PokerSprite::onEnter(){
     Sprite::onEnter();
-    //触摸响应注册
-    auto touchListener = EventListenerTouchOneByOne::create();//创建单点触摸事件监听器
-    touchListener->onTouchBegan = CC_CALLBACK_2(PokerSprite::onTouchBegan, this);//触摸开始
-    touchListener->onTouchMoved = CC_CALLBACK_2(PokerSprite::onTouchMoved, this);//触摸移动
-    touchListener->onTouchEnded = CC_CALLBACK_2(PokerSprite::onTouchEnded, this);//触摸结束
-    touchListener->setSwallowTouches(true);//不向下吞并触摸
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);//注册分发器
+//    //触摸响应注册
+//    auto touchListener = EventListenerTouchOneByOne::create();//创建单点触摸事件监听器
+//    touchListener->onTouchBegan = CC_CALLBACK_2(PokerSprite::onTouchBegan, this);//触摸开始
+//    touchListener->onTouchMoved = CC_CALLBACK_2(PokerSprite::onTouchMoved, this);//触摸移动
+//    touchListener->onTouchEnded = CC_CALLBACK_2(PokerSprite::onTouchEnded, this);//触摸结束
+//    touchListener->setSwallowTouches(true);//不向下吞并触摸
+//    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);//注册分发器
 }
 void PokerSprite::onExit(){
     //移除触摸响应
-    _eventDispatcher->removeEventListenersForTarget(this);
+//    _eventDispatcher->removeEventListenersForTarget(this);
     Sprite::onExit();
 }
 bool PokerSprite::onTouchBegan(Touch *pTouch, Event *pEvent){

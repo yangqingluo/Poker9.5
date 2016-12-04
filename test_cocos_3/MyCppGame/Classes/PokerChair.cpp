@@ -162,15 +162,20 @@ void PokerChair::addJetton(JettonSprite* jetton){
         betTotalLabel->setVisible(true);
     }
     
-    betTotalLabel->setString(this->stringFromBetValue(betTotal));
+    char* mString = new char[100];
+    this->stringFromBetValue(mString, betTotal);
+    
+    betTotalLabel->setString(mString);
     if (jetton->isPlayer) {
         betPlayer += jetton->getJettonValue();
         if (!betPlayerLabel->isVisible()) {
             betPlayerLabel->setVisible(true);
         }
         
-        betPlayerLabel->setString(this->stringFromBetValue(betPlayer));
+        this->stringFromBetValue(mString, betPlayer);
+        betPlayerLabel->setString(mString);
     }
+    mString = NULL;
     
     jetton->setPosition(0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().width - jetton->getContentSize().width) + 0.5 * jetton->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().height - jetton->getContentSize().height) + 0.5 * jetton->getContentSize().height);
     m_betZoneBackGround->addChild(jetton);
@@ -258,6 +263,7 @@ void PokerChair::showPokerType(){
                 sprintf(mString,"%d点半",(PokerType_0 - m_PokerType) / 2);
             }
             pokerTypeLabel->setString(mString);
+            mString = NULL;
         }
             break;
             
@@ -339,6 +345,7 @@ void PokerChair::showSettlement(){
                 sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
             }
             settlementLabel->setString(mString);
+            mString = NULL;
         }
     }
     
@@ -376,16 +383,13 @@ void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
     m_touchCallback = callfun;
 }
 
-const char* PokerChair::stringFromBetValue(int betValue){
-    char* mString = new char[100];
+void PokerChair::stringFromBetValue(char* mString, int betValue){
     if (betValue / 10000 > 0) {
         sprintf(mString,"%.2fw",betValue / 10000.0);
     }
     else{
         sprintf(mString,"%d",betValue);
     }
-    
-    return mString;
 }
 
 

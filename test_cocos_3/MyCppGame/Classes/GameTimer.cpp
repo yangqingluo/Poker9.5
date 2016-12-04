@@ -5,7 +5,9 @@ GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL),m_valid(false){
 }
 
 GameTimer::~GameTimer(){
-    
+    if (m_valid) {
+        unschedule(schedule_selector(GameTimer::update));
+    }
 }
 
 bool GameTimer::init(){
@@ -39,6 +41,7 @@ void GameTimer::update(float delta){
             (m_callbackListener->*m_callback)(this);
         }
     }
+    mtime = NULL;
 }
 
 void GameTimer::showPrefix(){
@@ -47,6 +50,7 @@ void GameTimer::showPrefix(){
         sprintf(mtime,"%s",prefixString);
         label->setString(mtime);
     }
+    mtime = NULL;
 }
 
 GameTimer* GameTimer::createTimer(){
