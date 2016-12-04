@@ -9,7 +9,7 @@
 #include "PokerChair.h"
 #include "JettonSprite.h"
 
-PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0),m_settlement(NULL){
+PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0){
     
 }
 
@@ -305,31 +305,37 @@ void PokerChair::calculateSettlement(PokerChair* dealerChair){
             m_settlement->winned = true;
             m_settlement->accounts = m_settlement->multiple * betPlayer;
         }
+        
+//        log("牌型:%d 倍数：%d 赔付额%d",this->m_PokerType ,m_settlement->multiple, m_settlement->accounts);
     }
     else{
-        
+        CCLOG("no******************");
     }
 }
 
 void PokerChair::showSettlement(){
-    settlementLabel->setVisible(true);
-    pokerTypeLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
-    if (betPlayer <= 0) {
-        settlementLabel->setColor(Color3B::WHITE);
-        settlementLabel->setString("无成绩");
-    }
-    else{
-        settlementLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
-        
-        char* mString = new char[100];
-        if (m_settlement->winned) {
-            sprintf(mString,"%d倍 +%d",m_settlement->multiple, m_settlement->accounts);
+    QLImageSprite* background = getBetZoneBackGround();
+    if (background != NULL) {
+        settlementLabel->setVisible(true);
+        pokerTypeLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
+        if (betPlayer <= 0) {
+            settlementLabel->setColor(Color3B::WHITE);
+            settlementLabel->setString("无成绩");
         }
         else{
-            sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
+            settlementLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
+            
+            char* mString = new char[100];
+            if (m_settlement->winned) {
+                sprintf(mString,"%d倍 +%d",m_settlement->multiple, m_settlement->accounts);
+            }
+            else{
+                sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
+            }
+            settlementLabel->setString(mString);
         }
-        settlementLabel->setString(mString);
     }
+    
 }
 
 void PokerChair::clearChair(){

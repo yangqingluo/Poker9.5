@@ -232,14 +232,14 @@ void PokerDesk::preparedAction(){
 void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"下注");
-        showTimer->start(3);
+        showTimer->start(5);
     }
 }
 
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(10);
+        showTimer->start(5);
         
         int zeroCount = 0;//牌型为0点的座位计数
         PokerChair* chair0 = m_arrChairs.at(0);
@@ -254,6 +254,8 @@ void PokerDesk::settleAction(){
                 zeroCount++;
             }
             
+            chair->showPokerType();
+            chair->showSettlement();
             for (PokerSprite* poker : chair->pokerArray) {
                 poker->showPokerAnimated(true, true, 0.1);
             }
@@ -512,14 +514,14 @@ void PokerDesk::turnedSinglePokerCallback(Node* pSender){
         }
     }
     else if (m_deskState == DeskState_Settle){
-        if (poker->chairIndex < m_arrChairs.size()) {
-            PokerChair* chair = m_arrChairs.at(poker->chairIndex);
-            if (chair->pokerArray.getIndex(poker) == chair->pokerArray.size() - 1) {
-                chair->showPokerType();
-                if (poker->chairIndex > 0) {
-                    chair->showSettlement();
-                }
-            }
-        }
+//        if (poker->chairIndex < m_arrChairs.size()) {
+//            PokerChair* chair = m_arrChairs.at(poker->chairIndex);
+//            if (chair->pokerArray.getIndex(poker) == chair->pokerArray.size() - 1) {
+//                chair->showPokerType();
+//                if (poker->chairIndex > 0) {
+//                    chair->showSettlement();
+//                }
+//            }
+//        }
     }
 }
