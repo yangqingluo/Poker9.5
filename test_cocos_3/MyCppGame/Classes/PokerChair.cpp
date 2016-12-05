@@ -107,7 +107,11 @@ void PokerChair::onEnter(){
 
 void PokerChair::onExit(){
     //移除触摸响应
-    getEventDispatcher()->removeEventListenersForTarget(this);
+    QLImageSprite* background = getBetZoneBackGround();
+    if (background != NULL) {
+        getEventDispatcher()->removeEventListenersForTarget(this);
+    }
+    
     LayerColor::onExit();
 }
 
@@ -141,18 +145,25 @@ void PokerChair::setHighlighted(bool yn){
 }
 
 void PokerChair::updatePokerPosition(){
-    if (pokerArray.size() < 2) {
+    if (pokerArray->size() < 2) {
         return;
     }
     
-    int index = 0;
     float scale = 0.7;
-    size_t count = pokerArray.size();
+    size_t count = pokerArray->size();
     //更新位置
-    for (PokerSprite* pk : pokerArray) {
-        pk->setPositionX(m_point.x - 0.5 * pk->getContentSize().width * (count - (count - 1) * scale) + index * pk->getContentSize().width * (1 - scale) + 0.5 * pk->getContentSize().width);
-        ++index;
+    for (int i = 0; i < pokerArray->size(); i++) {
+        PokerSprite* pk = pokerArray->at(i);
+        pk->setPositionX(m_point.x - 0.5 * pk->getContentSize().width * (count - (count - 1) * scale) + i * pk->getContentSize().width * (1 - scale) + 0.5 * pk->getContentSize().width);
     }
+}
+
+void PokerChair::removeAllPokers(){
+    for (int i = 0; i < pokerArray->size(); i++) {
+        PokerSprite* pk = pokerArray->at(i);
+        pk->removeFromParentAndCleanup(false);
+    }
+    pokerArray->clear();
 }
 
 void PokerChair::addJetton(JettonSprite* jetton){
@@ -165,7 +176,7 @@ void PokerChair::addJetton(JettonSprite* jetton){
     char mString[100];
     this->stringFromBetValue(mString, betTotal);
     
-    betTotalLabel->setString(mString);
+//    betTotalLabel->setString(mString);
     if (jetton->isPlayer) {
         betPlayer += jetton->getJettonValue();
         if (!betPlayerLabel->isVisible()) {
@@ -173,7 +184,7 @@ void PokerChair::addJetton(JettonSprite* jetton){
         }
         
         this->stringFromBetValue(mString, betPlayer);
-        betPlayerLabel->setString(mString);
+//        betPlayerLabel->setString(mString);
     }
     
     jetton->setPosition(0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().width - jetton->getContentSize().width) + 0.5 * jetton->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().height - jetton->getContentSize().height) + 0.5 * jetton->getContentSize().height);
@@ -183,7 +194,7 @@ void PokerChair::addJetton(JettonSprite* jetton){
 
 void PokerChair::removeAllJettons(){
     for (JettonSprite* jetton : jettonArray) {
-        jetton->removeFromParent();
+        jetton->removeFromParentAndCleanup(true);
     }
     
     jettonArray.clear();
@@ -191,9 +202,9 @@ void PokerChair::removeAllJettons(){
 
 void PokerChair::calculatePokerType(){
     m_PokerType = PokerType_Default;
-    if (pokerArray.size() == 2) {
-        PokerSprite* pk0 = pokerArray.at(0);
-        PokerSprite* pk1 = pokerArray.at(1);
+    if (pokerArray->size() == 2) {
+        PokerSprite* pk0 = pokerArray->at(0);
+        PokerSprite* pk1 = pokerArray->at(1);
         
         //计算对子
         if (pk0->getPoker_point() == pk1->getPoker_point()) {
@@ -224,14 +235,15 @@ void PokerChair::calculatePokerType(){
 }
 
 void PokerChair::showPokerType(){
+    char mString[20];
     switch (m_PokerType) {
         case PokerType_Pair:{
-            pokerTypeLabel->setString("对子");
+            sprintf(mString,"对子");
         }
             break;
             
         case PokerType_9_Half:{
-            pokerTypeLabel->setString("9点半");
+            sprintf(mString,"9点半");
         }
             break;
             
@@ -254,23 +266,22 @@ void PokerChair::showPokerType(){
         case PokerType_1:
         case PokerType_0_Half:
         case PokerType_0:{
-            char mString[20];
             if ((PokerType_0 - m_PokerType) % 2 == 0) {
                 sprintf(mString,"%d点",(PokerType_0 - m_PokerType) / 2);
             }
             else {
                 sprintf(mString,"%d点半",(PokerType_0 - m_PokerType) / 2);
             }
-            pokerTypeLabel->setString(mString);
         }
             break;
             
         default:{
-            pokerTypeLabel->setString("未知");
+            sprintf(mString,"未知");
         }
             break;
     }
-    pokerTypeLabel->setVisible(true);
+//    pokerTypeLabel->setString(mString);
+//    pokerTypeLabel->setVisible(true);
 }
 
 void PokerChair::calculateSettlement(PokerChair* dealerChair){
@@ -324,32 +335,32 @@ void PokerChair::calculateSettlement(PokerChair* dealerChair){
 }
 
 void PokerChair::showSettlement(){
+    char mString[100];
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
-        settlementLabel->setVisible(true);
         pokerTypeLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
         if (betPlayer <= 0) {
             settlementLabel->setColor(Color3B::WHITE);
-            settlementLabel->setString("无成绩");
+            sprintf(mString,"无成绩");
         }
         else{
             settlementLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
             
-            char mString[100];
             if (m_settlement->winned) {
                 sprintf(mString,"%d倍 +%d",m_settlement->multiple, m_settlement->accounts);
             }
             else{
                 sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
             }
-            settlementLabel->setString(mString);
         }
+//        settlementLabel->setString(mString);
+//        settlementLabel->setVisible(true);
     }
     
 }
 
 void PokerChair::clearChair(){
-    pokerArray.clear();
+    removeAllPokers();
     
     if (pokerTypeLabel->isVisible()) {
         pokerTypeLabel->setVisible(false);

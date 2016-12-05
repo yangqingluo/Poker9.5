@@ -36,6 +36,7 @@ public:
     void setIsBanker(bool yn);//设置是否是庄家
     void setHighlighted(bool yn);
     void updatePokerPosition();//更新牌的位置
+    void removeAllPokers();//移除扑克
     void addJetton(JettonSprite* jetton);//添加筹码
     void removeAllJettons();//移除筹码
     void calculatePokerType();//计算牌型
@@ -48,7 +49,7 @@ public:
     int betPlayer;//玩家下注额
     PokerType m_PokerType;//牌型
     SettlementRef* m_settlement;//结算数据
-    Vector<PokerSprite *> pokerArray;
+    Vector<PokerSprite *> pokerArray[2];
     Vector<JettonSprite *> jettonArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
     void stringFromBetValue(char* mString, int betValue);
