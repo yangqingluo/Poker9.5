@@ -16,11 +16,10 @@ PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point, Size size){
         pk->p_point = point;
         pk->autorelease();
         
-        Sprite* BG = Sprite::create("poker/poker_back.png");
-        BG->setScale(pk->getContentSize().width / BG->getContentSize().width);
-        BG->setPosition(pk->getContentSize().width / 2, pk->getContentSize().height / 2);
-        pk->addChild(BG);
-        pk->bgSprite = BG;
+        pk->bgSprite = Sprite::create("poker.png", Rect(2 * pkWidth, 4 * pkHeight, pkWidth, pkHeight));
+        pk->bgSprite->setScale(pk->getContentSize().width / pk->bgSprite->getContentSize().width);
+        pk->bgSprite->setPosition(pk->getContentSize().width / 2, pk->getContentSize().height / 2);
+        pk->addChild(pk->bgSprite);
         
         return pk;
     }
@@ -42,16 +41,16 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDel
         return;
     }
     
-    char Icon[30] = {"poker/poker_back.png"};
-    if (showFront) {
-        sprintf(Icon, "poker/poker_%d_%d.png",p_color,p_point);
+    Rect rect = Rect((p_point - 1) * pkWidth, (p_color - 1) * pkHeight, pkWidth, pkHeight);
+    if (p_point == PokerPoint_Joker) {
+        rect = Rect((p_color == PokerColor_JokerJunior ? 0 : 1) * pkWidth, 4 * pkHeight, pkWidth, pkHeight);
     }
     
     if (animated) {
         auto scaleSmall = ScaleTo::create(0.2, 0, 1);
         auto scaleBig = ScaleTo::create(0.2, 1, 1);
         CallFunc* func1 = CallFunc::create([=]{
-            bgSprite->setTexture(Icon);
+            bgSprite->setTextureRect(rect);
         });
         
         DelayTime* delay = DelayTime::create(doneDelay);
@@ -63,7 +62,7 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDel
         this->runAction(Sequence::create(scaleSmall, func1, scaleBig, delay, func2, NULL));
     }
     else{
-        bgSprite->setTexture(Icon);
+        bgSprite->setTextureRect(rect);
         this->showedPoker();
     }
 }
