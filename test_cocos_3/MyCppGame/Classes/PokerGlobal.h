@@ -1,7 +1,7 @@
 #pragma once
 
-const int pkWidth = 106;//牌的宽
-const int pkHeight = 144;//牌的高
+#define pkWidth (106.0 / Director::getInstance()->getContentScaleFactor())//牌的宽
+#define pkHeight (144.0 / Director::getInstance()->getContentScaleFactor())//牌的高
 //花色
 enum PokerColor
 {
