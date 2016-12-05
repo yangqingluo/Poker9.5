@@ -65,16 +65,16 @@ void PokerChair::onEnter(){
         
         betTotalLabel = Label::createWithSystemFont("", "Arial", 20.0);
         betTotalLabel->setColor(Color3B::WHITE);
-        betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
-        betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
+//        betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
+//        betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
         betTotalLabel->setVisible(false);
         betTotalLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.2 * background->getContentSize().height);
         this->addChild(betTotalLabel);
         
         betPlayerLabel = Label::createWithSystemFont("", "Arial", 20.0);
         betPlayerLabel->setColor(Color3B::YELLOW);
-        betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
-        betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
+//        betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
+//        betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
         betPlayerLabel->setVisible(false);
         betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
         this->addChild(betPlayerLabel);
