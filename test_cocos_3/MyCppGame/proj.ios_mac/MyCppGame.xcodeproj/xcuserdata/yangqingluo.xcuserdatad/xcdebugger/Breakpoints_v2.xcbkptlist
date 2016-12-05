@@ -2,4 +2,69 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/PokerSprite.cpp"
+            timestampString = "502609529.501905"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "8"
+            endingLineNumber = "8"
+            landmarkName = "PokerSprite::~PokerSprite()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PokerSprite::~PokerSprite()"
+                  moduleName = "MyCppGame-mobile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangqingluo/Documents/Poker9.5/test_cocos_3/MyCppGame/Classes/PokerSprite.cpp"
+                  timestampString = "502609532.418711"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PokerSprite::~PokerSprite()"
+                  moduleName = "MyCppGame-mobile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangqingluo/Documents/Poker9.5/test_cocos_3/MyCppGame/Classes/PokerSprite.cpp"
+                  timestampString = "502609532.420888"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PokerSprite::~PokerSprite()"
+                  moduleName = "MyCppGame-mobile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangqingluo/Documents/Poker9.5/test_cocos_3/MyCppGame/Classes/PokerSprite.cpp"
+                  timestampString = "502609532.423203"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

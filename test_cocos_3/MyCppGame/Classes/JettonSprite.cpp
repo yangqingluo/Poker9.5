@@ -52,19 +52,18 @@ JettonSprite* JettonSprite::create(int value, Size size){
         sp->m_value = value;
         sp->autorelease();
         
-        Sprite* BG = Sprite::create("jetton/jetton_bg.png");
-        BG->setScale(sp->getContentSize().width / BG->getContentSize().width);
-        BG->setPosition(sp->getContentSize().width / 2, sp->getContentSize().height / 2);
-        BG->setVisible(false);
-        sp->addChild(BG);
-        sp->bgSprite = BG;
+        sp->bgSprite = Sprite::create("jetton/jetton_bg.png");
+        sp->bgSprite->setScale(sp->getContentSize().width / sp->bgSprite->getContentSize().width);
+        sp->bgSprite->setPosition(sp->getContentSize().width / 2, sp->getContentSize().height / 2);
+        sp->bgSprite->setVisible(false);
+        sp->addChild(sp->bgSprite);
         
         if (sp->isValidValue(value)) {
             char Icon[30] = {0};
             sprintf(Icon, "jetton/jetton_%d.png",value);
             sp->valueSprite = Sprite::create(Icon);
             sp->valueSprite->setScale(sp->getContentSize().width / sp->valueSprite->getContentSize().width);
-            sp->valueSprite->setPosition(BG->getPosition());
+            sp->valueSprite->setPosition(sp->bgSprite->getPosition());
             sp->addChild(sp->valueSprite);
         }
         

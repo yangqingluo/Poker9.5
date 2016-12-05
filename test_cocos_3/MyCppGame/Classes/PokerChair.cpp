@@ -109,7 +109,7 @@ void PokerChair::onExit(){
     //移除触摸响应
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
-        getEventDispatcher()->removeEventListenersForTarget(this);
+        getEventDispatcher()->removeEventListenersForTarget(background);
     }
     
     LayerColor::onExit();
