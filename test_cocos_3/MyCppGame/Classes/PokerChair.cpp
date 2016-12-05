@@ -145,25 +145,25 @@ void PokerChair::setHighlighted(bool yn){
 }
 
 void PokerChair::updatePokerPosition(){
-    if (pokerArray->size() < 2) {
+    if (pokerArray.size() < 2) {
         return;
     }
     
     float scale = 0.7;
-    size_t count = pokerArray->size();
+    size_t count = pokerArray.size();
     //更新位置
-    for (int i = 0; i < pokerArray->size(); i++) {
-        PokerSprite* pk = pokerArray->at(i);
+    for (int i = 0; i < pokerArray.size(); i++) {
+        PokerSprite* pk = pokerArray.at(i);
         pk->setPositionX(m_point.x - 0.5 * pk->getContentSize().width * (count - (count - 1) * scale) + i * pk->getContentSize().width * (1 - scale) + 0.5 * pk->getContentSize().width);
     }
 }
 
 void PokerChair::removeAllPokers(){
-    for (int i = 0; i < pokerArray->size(); i++) {
-        PokerSprite* pk = pokerArray->at(i);
+    for (int i = 0; i < pokerArray.size(); i++) {
+        PokerSprite* pk = pokerArray.at(i);
         pk->removeFromParentAndCleanup(false);
     }
-    pokerArray->clear();
+    pokerArray.clear();
 }
 
 void PokerChair::addJetton(JettonSprite* jetton){
@@ -202,9 +202,9 @@ void PokerChair::removeAllJettons(){
 
 void PokerChair::calculatePokerType(){
     m_PokerType = PokerType_Default;
-    if (pokerArray->size() == 2) {
-        PokerSprite* pk0 = pokerArray->at(0);
-        PokerSprite* pk1 = pokerArray->at(1);
+    if (pokerArray.size() == 2) {
+        PokerSprite* pk0 = pokerArray.at(0);
+        PokerSprite* pk1 = pokerArray.at(1);
         
         //计算对子
         if (pk0->getPoker_point() == pk1->getPoker_point()) {

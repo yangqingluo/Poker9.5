@@ -49,7 +49,7 @@ public:
     int betPlayer;//玩家下注额
     PokerType m_PokerType;//牌型
     SettlementRef* m_settlement;//结算数据
-    Vector<PokerSprite *> pokerArray[2];
+    Vector<PokerSprite *> pokerArray;
     Vector<JettonSprite *> jettonArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
     void stringFromBetValue(char* mString, int betValue);

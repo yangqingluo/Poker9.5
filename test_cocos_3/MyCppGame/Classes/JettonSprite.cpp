@@ -29,15 +29,19 @@ bool JettonSprite::onTouchBegan(Touch *touch, Event *event){
 void JettonSprite::onEnter(){
     Sprite::onEnter();
     
-    //触摸响应注册
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
-    listener->onTouchBegan = CC_CALLBACK_2(JettonSprite::onTouchBegan, this);//触摸开始
-    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);//注册分发器
+    if (m_canTouch) {
+        //触摸响应注册
+        auto listener = EventListenerTouchOneByOne::create();
+        listener->setSwallowTouches(true);
+        listener->onTouchBegan = CC_CALLBACK_2(JettonSprite::onTouchBegan, this);//触摸开始
+        getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);//注册分发器
+    }
 }
 
 void JettonSprite::onExit(){
-    //移除触摸响应
+    if (m_canTouch) {
+        getEventDispatcher()->removeEventListenersForTarget(this);
+    }
     Sprite::onExit();
 }
 

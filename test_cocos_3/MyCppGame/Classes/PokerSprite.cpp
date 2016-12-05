@@ -1,23 +1,12 @@
 #include "PokerSprite.h"
 
-PokerSprite::PokerSprite():p_isSelected(false),p_canTouch(false),p_isFront(false),m_callbackListener(NULL),m_callback(NULL){
+PokerSprite::PokerSprite():p_isSelected(false),p_isFront(false),m_callbackListener(NULL),m_callback(NULL){
     
 }
 
 PokerSprite::~PokerSprite(){
     
 }
-
-//PokerSprite* PokerSprite::create(const char *pszFileName, const Rect& rect){
-//    PokerSprite* pk = new PokerSprite();
-//    if (pk && pk->initWithFile(pszFileName,rect))
-//    {
-//        pk->autorelease();
-//        return pk;
-//    }
-//    CC_SAFE_DELETE(pk);
-//    return pk;
-//}
 
 PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point, Size size){
     PokerSprite* pk = new PokerSprite();
@@ -42,39 +31,10 @@ PokerSprite* PokerSprite::create(PokerColor color, PokerPoint point, Size size){
 
 void PokerSprite::onEnter(){
     Sprite::onEnter();
-//    //触摸响应注册
-//    auto touchListener = EventListenerTouchOneByOne::create();//创建单点触摸事件监听器
-//    touchListener->onTouchBegan = CC_CALLBACK_2(PokerSprite::onTouchBegan, this);//触摸开始
-//    touchListener->onTouchMoved = CC_CALLBACK_2(PokerSprite::onTouchMoved, this);//触摸移动
-//    touchListener->onTouchEnded = CC_CALLBACK_2(PokerSprite::onTouchEnded, this);//触摸结束
-//    touchListener->setSwallowTouches(true);//不向下吞并触摸
-//    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);//注册分发器
+    
 }
 void PokerSprite::onExit(){
-    //移除触摸响应
-//    _eventDispatcher->removeEventListenersForTarget(this);
     Sprite::onExit();
-}
-bool PokerSprite::onTouchBegan(Touch *pTouch, Event *pEvent){
-    Size size = getContentSize();
-    Rect rect(-size.width/2,-size.height/2,size.width,size.height);
-    Point ptouch = convertTouchToNodeSpaceAR(pTouch); //由英文之意转换 触摸 到 节点空间
-    if(rect.containsPoint(ptouch) && p_canTouch){
-        this->setSelected(!p_isSelected);
-        
-        return true;
-    }
-    //如果这里返回false触摸不被吞掉
-    return false;
-}
-void PokerSprite::onTouchMoved(Touch *pTouch, Event *pEvent){
-    
-}
-void PokerSprite::onTouchEnded(Touch *pTouch, Event *pEvent){
-    
-}
-void PokerSprite::onTouchCancelled(Touch *pTouch, Event *pEvent){
-    
 }
 
 void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDelay){

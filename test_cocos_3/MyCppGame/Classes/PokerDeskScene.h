@@ -83,8 +83,8 @@ private:
     int m_deskState;//当前状态
     int m_IndexSend;//已发出第几张牌
     int m_IndexStart;//发牌起始顺序
-    Vector<PokerChair *> m_arrChairs[4];//所有的座位
-    Vector<PokerSprite *> m_arrPokers[54];//所有的牌
+    Vector<PokerChair *> m_arrChairs;//所有的座位
+    Vector<PokerSprite *> m_arrPokers;//所有的牌
     PokerChair* createChair(const char* backgroudImage, float widthScale, float heightScale, int index);//生成一个座位
     PokerSprite* createPoker(PokerColor color,PokerPoint point);//生成一个牌
     JettonSprite* createjetton(int value);//生成一个筹码
