@@ -9,7 +9,7 @@
 #include "PokerChair.h"
 #include "JettonSprite.h"
 
-PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0){
+PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0),m_canTouch(false){
     
 }
 
@@ -39,7 +39,7 @@ bool PokerChair::onTouchBegan(Touch* touch,Event* event){
     Size s = target->getContentSize();
     Rect rect = Rect(0, 0, s.width, s.height);
     
-    if (rect.containsPoint(locationInNode)){
+    if (rect.containsPoint(locationInNode) && m_canTouch){
         if (m_touchCallback && m_touchListener) {
             (m_touchListener->*m_touchCallback)(this);
         }
@@ -48,14 +48,6 @@ bool PokerChair::onTouchBegan(Touch* touch,Event* event){
     }
     
     return false;
-}
-
-void PokerChair::onTouchMoved(Touch* touch,Event* event){
-    
-}
-
-void PokerChair::onTouchEnded(Touch* touch,Event* event){
-    
 }
 
 void PokerChair::onEnter(){
@@ -96,8 +88,6 @@ void PokerChair::onEnter(){
         auto listener = EventListenerTouchOneByOne::create();
         listener->setSwallowTouches(true);
         listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
-        listener->onTouchMoved = CC_CALLBACK_2(PokerChair::onTouchMoved, this);//触摸移动
-        listener->onTouchEnded = CC_CALLBACK_2(PokerChair::onTouchEnded, this);//触摸结束
         getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
     }
     else{
@@ -176,7 +166,7 @@ void PokerChair::addJetton(JettonSprite* jetton){
     char mString[100];
     this->stringFromBetValue(mString, betTotal);
     
-//    betTotalLabel->setString(mString);
+    betTotalLabel->setString(mString);
     if (jetton->isPlayer) {
         betPlayer += jetton->getJettonValue();
         if (!betPlayerLabel->isVisible()) {
@@ -184,7 +174,7 @@ void PokerChair::addJetton(JettonSprite* jetton){
         }
         
         this->stringFromBetValue(mString, betPlayer);
-//        betPlayerLabel->setString(mString);
+        betPlayerLabel->setString(mString);
     }
     
     jetton->setPosition(0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().width - jetton->getContentSize().width) + 0.5 * jetton->getContentSize().width, 0.1 * getRandomNumber(0, 10) * (m_betZoneBackGround->getContentSize().height - jetton->getContentSize().height) + 0.5 * jetton->getContentSize().height);
@@ -280,8 +270,8 @@ void PokerChair::showPokerType(){
         }
             break;
     }
-//    pokerTypeLabel->setString(mString);
-//    pokerTypeLabel->setVisible(true);
+    pokerTypeLabel->setString(mString);
+    pokerTypeLabel->setVisible(true);
 }
 
 void PokerChair::calculateSettlement(PokerChair* dealerChair){
@@ -353,8 +343,8 @@ void PokerChair::showSettlement(){
                 sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
             }
         }
-//        settlementLabel->setString(mString);
-//        settlementLabel->setVisible(true);
+        settlementLabel->setString(mString);
+        settlementLabel->setVisible(true);
     }
     
 }

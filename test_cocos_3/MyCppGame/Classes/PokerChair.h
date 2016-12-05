@@ -25,8 +25,6 @@ public:
     ~PokerChair();
     virtual bool init();
     virtual bool onTouchBegan(Touch* touch,Event* event);
-    virtual void onTouchMoved(Touch* touch,Event* event);
-    virtual void onTouchEnded(Touch* touch,Event* event);
     virtual void onEnter();
     virtual void onExit();
     
@@ -56,6 +54,7 @@ public:
 private:
     CC_SYNTHESIZE_RETAIN(QLImageSprite*, m_betZoneBackGround, BetZoneBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
+    CC_SYNTHESIZE(bool,m_canTouch,CanTouch);//是否能被点击
     
     Sprite* m_BankerSprite;
     Sprite* m_StartPointSprite;//发牌起始顺序标识的精灵

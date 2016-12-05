@@ -412,6 +412,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
         chair->setIsBanker(true);
     }
     else{
+        chair->setCanTouch(true);
         chair->setTouchCallBackFunc(this, callfuncN_selector(PokerDesk::touchedChairCallback));
     }
     
@@ -438,14 +439,13 @@ PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
     return pk;
 }
 bool PokerDesk::createPokers(){
-//    m_arrPokers.clear();
+    m_arrPokers.clear();
     if (m_arrPokers.size() == 0) {
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
             for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
                 PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
                 m_arrPokers.pushBack(pk);
-                pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
             }
         }
         //创建小鬼
@@ -455,9 +455,6 @@ bool PokerDesk::createPokers(){
         //创建大鬼
         PokerSprite* joker_senior = createPoker(PokerColor_JokerSenior, PokerPoint_Joker);
         m_arrPokers.pushBack(joker_senior);
-        
-        joker_junior->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
-        joker_senior->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
     }
     
     return true;
@@ -476,6 +473,7 @@ bool PokerDesk::reindexPoker(){
     for (size_t i = m_arrPokers.size(); i > 0; --i) {
         PokerSprite* pk = m_arrPokers.at(i - 1);
         pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
+        pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
         this->addChild(pk);
     }
     
