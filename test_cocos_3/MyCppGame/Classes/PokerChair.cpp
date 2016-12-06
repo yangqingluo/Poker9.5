@@ -53,7 +53,7 @@ bool PokerChair::onTouchBegan(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
-    pokerTypeLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
+    pokerTypeLabel = Label::createWithBMFont("fonts/pokerType.fnt", "");
     pokerTypeLabel->setVisible(false);
     pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.08 * this->getContentSize().height);
     this->addChild(pokerTypeLabel);
@@ -79,7 +79,7 @@ void PokerChair::onEnter(){
         betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
         this->addChild(betPlayerLabel);
         
-        settlementLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
+        settlementLabel = Label::createWithBMFont("fonts/settlement.fnt", "");
         settlementLabel->setVisible(false);
         settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.24 * this->getContentSize().height);
         this->addChild(settlementLabel);
@@ -233,35 +233,84 @@ void PokerChair::showPokerType(){
             break;
             
         case PokerType_9_Half:{
-            sprintf(mString,"9点半");
+            sprintf(mString,"九点半");
         }
             break;
             
-        case PokerType_9:
-        case PokerType_8_Half:
-        case PokerType_8:
-        case PokerType_7_Half:
-        case PokerType_7:
-        case PokerType_6_Half:
-        case PokerType_6:
-        case PokerType_5_Half:
-        case PokerType_5:
-        case PokerType_4_Half:
-        case PokerType_4:
-        case PokerType_3_Half:
-        case PokerType_3:
-        case PokerType_2_Half:
-        case PokerType_2:
-        case PokerType_1_Half:
-        case PokerType_1:
-        case PokerType_0_Half:
+        case PokerType_9:{
+            sprintf(mString,"九点");
+        }
+            break;
+        case PokerType_8_Half:{
+            sprintf(mString,"八点半");
+        }
+            break;
+        case PokerType_8:{
+            sprintf(mString,"八点");
+        }
+            break;
+        case PokerType_7_Half:{
+            sprintf(mString,"七点半");
+        }
+            break;
+        case PokerType_7:{
+            sprintf(mString,"七点");
+        }
+            break;
+        case PokerType_6_Half:{
+            sprintf(mString,"六点半");
+        }
+            break;
+        case PokerType_6:{
+            sprintf(mString,"五点");
+        }
+            break;
+        case PokerType_5_Half:{
+            sprintf(mString,"五点半");
+        }
+            break;
+        case PokerType_5:{
+            sprintf(mString,"五点");
+        }
+            break;
+        case PokerType_4_Half:{
+            sprintf(mString,"四点半");
+        }
+            break;
+        case PokerType_4:{
+            sprintf(mString,"四点");
+        }
+            break;
+        case PokerType_3_Half:{
+            sprintf(mString,"三点半");
+        }
+            break;
+        case PokerType_3:{
+            sprintf(mString,"三点");
+        }
+            break;
+        case PokerType_2_Half:{
+            sprintf(mString,"两点半");
+        }
+            break;
+        case PokerType_2:{
+            sprintf(mString,"两点");
+        }
+            break;
+        case PokerType_1_Half:{
+            sprintf(mString,"一点半");
+        }
+            break;
+        case PokerType_1:{
+            sprintf(mString,"一点");
+        }
+            break;
+        case PokerType_0_Half:{
+            sprintf(mString,"半点");
+        }
+            break;
         case PokerType_0:{
-            if ((PokerType_0 - m_PokerType) % 2 == 0) {
-                sprintf(mString,"%d点",(PokerType_0 - m_PokerType) / 2);
-            }
-            else {
-                sprintf(mString,"%d点半",(PokerType_0 - m_PokerType) / 2);
-            }
+            sprintf(mString,"没点");
         }
             break;
             
@@ -270,8 +319,8 @@ void PokerChair::showPokerType(){
         }
             break;
     }
-//    pokerTypeLabel->setString(mString);
-//    pokerTypeLabel->setVisible(true);
+    pokerTypeLabel->setString(mString);
+    pokerTypeLabel->setVisible(true);
 }
 
 void PokerChair::calculateSettlement(PokerChair* dealerChair){
