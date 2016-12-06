@@ -105,6 +105,8 @@
 		FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */; };
 		FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
 		FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
+		FCDF45601DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
+		FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -241,6 +243,8 @@
 		FCD0BD771DF2D4C800952CAD /* BetLimiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetLimiter.h; sourceTree = "<group>"; };
 		FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerDeskScene.cpp; sourceTree = "<group>"; };
 		FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerDeskScene.h; sourceTree = "<group>"; };
+		FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonChosenSprite.cpp; sourceTree = "<group>"; };
+		FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonChosenSprite.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -407,6 +411,8 @@
 				FC139FF31DEC18860067383F /* PokerGlobal.h */,
 				FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */,
 				FCB5E04B1DF017D300EDB420 /* JettonSprite.h */,
+				FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */,
+				FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */,
 				FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */,
 				FC4B4B891DF1500200E0271B /* QLImageSprite.h */,
 				FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */,
@@ -646,6 +652,7 @@
 				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
 				FCBDFECF1DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
+				FCDF45601DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,6 +678,7 @@
 				FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */,
 				FCC2D04C1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

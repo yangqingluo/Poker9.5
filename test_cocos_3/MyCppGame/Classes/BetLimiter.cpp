@@ -7,7 +7,6 @@
 //
 
 #include "BetLimiter.h"
-#include "JettonSprite.h"
 
 BetLimiter::BetLimiter():m_value(0),selectedJetton(NULL){
     
@@ -40,7 +39,7 @@ BetLimiter* BetLimiter::create(const int* jettonValueArray, size_t count, Size s
     layer->setContentSize(size);
     for (int i = 0; i < count; i++) {
         int value = jettonValueArray[i];
-        JettonSprite* jetton = JettonSprite::create(value, Size(size.height, size.height));
+        auto jetton = JettonChosenSprite::create(value, Size(size.height, size.height));
         jetton->setPosition((0.5 + 1.1 * i) * jetton->getContentSize().width, 0.5 * layer->getContentSize().height);
         jetton->setCanTouch(true);
         jetton->setTouchCallBackFunc(layer, callfuncN_selector(BetLimiter::touchedJettonCallback));
@@ -54,7 +53,7 @@ BetLimiter* BetLimiter::create(const int* jettonValueArray, size_t count, Size s
 }
 
 void BetLimiter::touchedJettonCallback(Node* pSender){
-    JettonSprite* jetton = (JettonSprite* )pSender;
+    auto jetton = (JettonChosenSprite* )pSender;
     
     if (selectedJetton == jetton) {
         return;
