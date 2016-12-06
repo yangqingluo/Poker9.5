@@ -135,7 +135,7 @@ bool PokerDesk::init()
     showTimer->setCallBackFunc(this,callfuncN_selector(PokerDesk::showTimerDoneCallback));
     this->addChild(showTimer);
     
-    char imageName[4][100] = {"","images/chair_bet_bg.png","images/chair_bet_bg.png","images/chair_bet_bg.png"};
+    char imageName[4][100] = {"","images/chair_bet_1_bg.png","images/chair_bet_2_bg.png","images/chair_bet_3_bg.png"};
     float scaleArray[4][2] = {{0.5,0.65},{0.24,0.4},{0.5,0.4},{0.76,0.4}};
     for (int i = 0; i < 4; i++) {
         PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1], i);

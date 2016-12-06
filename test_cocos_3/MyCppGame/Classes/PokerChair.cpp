@@ -270,8 +270,8 @@ void PokerChair::showPokerType(){
         }
             break;
     }
-    pokerTypeLabel->setString(mString);
-    pokerTypeLabel->setVisible(true);
+//    pokerTypeLabel->setString(mString);
+//    pokerTypeLabel->setVisible(true);
 }
 
 void PokerChair::calculateSettlement(PokerChair* dealerChair){
