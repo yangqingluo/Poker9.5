@@ -538,6 +538,11 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     this->reorderChild(pSender, 0);
     PokerChair* chair = (PokerChair* )pData;
     chair->updatePokerPosition();
+    if (chair->pokerArray.size() == 2) {
+        PokerSprite* pk0 = chair->pokerArray.at(0);
+        PokerSprite* pk1 = chair->pokerArray.at(1);
+        this->reorderChild(pk1, pk0->getLocalZOrder());
+    }
     m_isSendSingle = true;
     if (m_IndexSend % 9 == 0) {
         m_deskState = DeskState_Bet;
