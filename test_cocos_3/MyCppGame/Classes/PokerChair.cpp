@@ -63,7 +63,7 @@ void PokerChair::onEnter(){
         background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
         this->addChild(background);
         
-        betTotalLabel = Label::createWithSystemFont("", "Arial", 20.0);
+        betTotalLabel = Label::createWithBMFont("fonts/betNumber.fnt", "");
         betTotalLabel->setColor(Color3B::WHITE);
 //        betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
 //        betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
@@ -71,7 +71,7 @@ void PokerChair::onEnter(){
         betTotalLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.2 * background->getContentSize().height);
         this->addChild(betTotalLabel);
         
-        betPlayerLabel = Label::createWithSystemFont("", "Arial", 20.0);
+        betPlayerLabel = Label::createWithBMFont("fonts/betNumber.fnt", "");
         betPlayerLabel->setColor(Color3B::YELLOW);
 //        betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
 //        betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
@@ -383,7 +383,7 @@ void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
 
 void PokerChair::stringFromBetValue(char* mString, int betValue){
     if (betValue / 10000 > 0) {
-        sprintf(mString,"%.2fw",betValue / 10000.0);
+        sprintf(mString,"%.2f万",betValue / 10000.0);
     }
     else{
         sprintf(mString,"%d",betValue);

@@ -112,20 +112,20 @@ bool PokerDesk::init()
     gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(gamePlayerInfoLabel);
     
-    message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
-    message_sprite->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
-//    bottom_sprite->addChild(message_sprite);
-    
-    messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 10);
-    messageLabel->setColor(Color3B::BLACK);
-    messageLabel->setHorizontalAlignment(TextHAlignment::LEFT);
-    messageLabel->setVerticalAlignment(TextVAlignment::CENTER);
-    messageLabel->setDimensions(message_sprite->getContentSize().width, message_sprite->getContentSize().height);
-    messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
-    message_sprite->addChild(messageLabel);
+//    message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
+//    message_sprite->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
+////    bottom_sprite->addChild(message_sprite);
+//    
+//    messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 10);
+//    messageLabel->setColor(Color3B::BLACK);
+//    messageLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+//    messageLabel->setVerticalAlignment(TextVAlignment::CENTER);
+//    messageLabel->setDimensions(message_sprite->getContentSize().width, message_sprite->getContentSize().height);
+//    messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
+//    message_sprite->addChild(messageLabel);
     
     int betJettonArray[3] = {10,100,1000};
-    betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width - message_sprite->getBoundingBox().getMaxX(), 0.8 * bottom_sprite->getContentSize().height));
+    betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
     betLimiter->setPosition(2 * bottom_sprite->getContentSize().height, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
     bottom_sprite->addChild(betLimiter);
     
@@ -404,7 +404,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
     float pokerScale = 0.125;
     
     float radius = MIN(0.24 * visibleSize.width, 0.36 * visibleSize.height);
-    PokerChair* chair = PokerChair::create(index == 0 ? NULL : backgroudImage, Size(radius, radius - pokerScale * visibleSize.height));
+    auto chair = PokerChair::create(index == 0 ? NULL : backgroudImage, Size(radius, radius - pokerScale * visibleSize.height));
     chair->setContentSize(Size(radius, (index == 0 ? pokerScale * visibleSize.height : radius)));
     chair->setPosition(origin.x + xScale * visibleSize.width - chair->getContentSize().width / 2, origin.y + yScale * visibleSize.height  - chair->getContentSize().height / 2);
     chair->setPoint(Vec2(chair->getPosition().x + 0.5 * chair->getContentSize().width, chair->getPosition().y + 0.5 * pokerScale * visibleSize.height));

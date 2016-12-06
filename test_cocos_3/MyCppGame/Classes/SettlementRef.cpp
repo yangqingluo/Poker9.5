@@ -8,7 +8,13 @@
 
 #include "SettlementRef.h"
 
+SettlementRef::SettlementRef(){
+    
+}
 
+SettlementRef::~SettlementRef(){
+    
+}
 
 
 
