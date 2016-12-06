@@ -151,7 +151,7 @@ void PokerChair::updatePokerPosition(){
 void PokerChair::removeAllPokers(){
     for (int i = 0; i < pokerArray.size(); i++) {
         PokerSprite* pk = pokerArray.at(i);
-        pk->removeFromParentAndCleanup(false);
+        pk->setVisible(false);
     }
     pokerArray.clear();
 }

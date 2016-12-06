@@ -439,13 +439,15 @@ PokerSprite* PokerDesk::createPoker(PokerColor color,PokerPoint point){
     return pk;
 }
 bool PokerDesk::createPokers(){
-    m_arrPokers.clear();
+//    m_arrPokers.clear();
     if (m_arrPokers.size() == 0) {
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
             for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
                 PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
                 m_arrPokers.pushBack(pk);
+                this->addChild(pk);
+                pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
             }
         }
         //创建小鬼
@@ -455,6 +457,11 @@ bool PokerDesk::createPokers(){
         //创建大鬼
         PokerSprite* joker_senior = createPoker(PokerColor_JokerSenior, PokerPoint_Joker);
         m_arrPokers.pushBack(joker_senior);
+        
+        this->addChild(joker_junior);
+        this->addChild(joker_senior);
+        joker_junior->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
+        joker_senior->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
     }
     
     return true;
@@ -473,8 +480,8 @@ bool PokerDesk::reindexPoker(){
     for (size_t i = m_arrPokers.size(); i > 0; --i) {
         PokerSprite* pk = m_arrPokers.at(i - 1);
         pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
-        pk->setCallBackFunc(this, callfuncN_selector(PokerDesk::turnedSinglePokerCallback));
-        this->addChild(pk);
+        pk->setVisible(true);
+        this->reorderChild(pk, (int)(m_arrPokers.size() - i));
     }
     
     return true;
@@ -491,7 +498,6 @@ void PokerDesk::sendPoker(){
         showTimer->showPrefix();
         
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
-        this->reorderChild(pk, 0);
         pk->showPokerAnimated(true, true, 0.5);
         
         ++m_IndexSend;
@@ -509,7 +515,6 @@ void PokerDesk::sendPoker(){
         showTimer->showPrefix();
         
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
-        this->reorderChild(pk, 0);
         PokerChair* chair = m_arrChairs.at(((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
         movePoker(chair, pk);
         
@@ -530,6 +535,7 @@ void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
 }
 
 void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
+    this->reorderChild(pSender, 0);
     PokerChair* chair = (PokerChair* )pData;
     chair->updatePokerPosition();
     m_isSendSingle = true;
@@ -547,8 +553,7 @@ void PokerDesk::turnedSinglePokerCallback(Node* pSender){
                 PokerChair* chair = m_arrChairs.at(i);
                 chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
             }
-            poker->removeFromParent();
-            
+            poker->setVisible(false);
             m_isSendSingle = true;
         }
     }
