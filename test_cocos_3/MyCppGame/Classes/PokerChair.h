@@ -17,7 +17,12 @@ USING_NS_CC_EXT;
 #include "PokerSprite.h"
 #include "JettonSprite.h"
 #include "QLImageSprite.h"
-#include "SettlementRef.h"
+
+struct SettlementRef {
+    int multiple;//结算倍数
+    int accounts;//结算数目
+    bool winned;
+};
 
 class PokerChair:public LayerColor{  //继承LayerColor类，方便更改layer的颜色和透明度
 public:
@@ -46,7 +51,7 @@ public:
     int betTotal;//总下注额
     int betPlayer;//玩家下注额
     PokerType m_PokerType;//牌型
-    SettlementRef* m_settlement;//结算数据
+    SettlementRef m_settlement;//结算数据
     Vector<PokerSprite *> pokerArray;
     Vector<JettonSprite *> jettonArray;
     void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);

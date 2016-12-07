@@ -260,9 +260,9 @@ void PokerDesk::settleAction(){
             chair->calculatePokerType();
             if (i > 0) {
                 chair->calculateSettlement(chair0);
-                accountDealer -= chair->m_settlement->accounts;
+                accountDealer -= chair->m_settlement.accounts;
                 if (chair->betPlayer > 0) {
-                    accountPlayer += chair->m_settlement->accounts;
+                    accountPlayer += chair->m_settlement.accounts;
                 }
             }
             

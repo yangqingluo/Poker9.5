@@ -23,8 +23,7 @@ bool PokerChair::init(){
         return false;
     }
     
-    m_settlement = new SettlementRef();
-    m_settlement->autorelease();
+    m_settlement = {0};
     //设置弹出层的颜色，指定为淡灰色
 //    setColor(Color3B::GRAY);
 //    setOpacity(0x50);
@@ -331,42 +330,42 @@ void PokerChair::calculateSettlement(PokerChair* dealerChair){
             //庄家赢
             
             if (dealerChair->m_PokerType <= PokerType_9) {
-                this->m_settlement->multiple = 3;
+                this->m_settlement.multiple = 3;
             }
             else if (dealerChair->m_PokerType <= PokerType_8) {
-                this->m_settlement->multiple = 2;
+                this->m_settlement.multiple = 2;
             }
             else {
-                this->m_settlement->multiple = 1;
+                this->m_settlement.multiple = 1;
             }
             
-            m_settlement->winned = false;
-            m_settlement->accounts = -m_settlement->multiple * betPlayer;
+            m_settlement.winned = false;
+            m_settlement.accounts = -m_settlement.multiple * betPlayer;
         }
         else {
             //闲家赢
             
             if (this->m_PokerType <= PokerType_9_Half) {
-                this->m_settlement->multiple = 9;
+                this->m_settlement.multiple = 9;
             }
             else if (this->m_PokerType <= PokerType_Pair) {
-                this->m_settlement->multiple = 6;
+                this->m_settlement.multiple = 6;
             }
             else if (this->m_PokerType <= PokerType_9) {
-                this->m_settlement->multiple = 3;
+                this->m_settlement.multiple = 3;
             }
             else if (this->m_PokerType <= PokerType_8) {
-                this->m_settlement->multiple = 2;
+                this->m_settlement.multiple = 2;
             }
             else {
-                this->m_settlement->multiple = 1;
+                this->m_settlement.multiple = 1;
             }
             
-            m_settlement->winned = true;
-            m_settlement->accounts = m_settlement->multiple * betPlayer;
+            m_settlement.winned = true;
+            m_settlement.accounts = m_settlement.multiple * betPlayer;
         }
         
-//        log("牌型:%d 倍数：%d 赔付额%d",this->m_PokerType ,m_settlement->multiple, m_settlement->accounts);
+//        log("牌型:%d 倍数：%d 赔付额%d",this->m_PokerType ,m_settlement.multiple, m_settlement.accounts);
     }
     else{
         CCLOG("no******************");
@@ -377,19 +376,19 @@ void PokerChair::showSettlement(){
     char mString[100];
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
-        pokerTypeLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
+        pokerTypeLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
         if (betPlayer <= 0) {
             settlementLabel->setColor(Color3B::WHITE);
             sprintf(mString,"无成绩");
         }
         else{
-            settlementLabel->setColor(m_settlement->winned ? Color3B::RED : Color3B::GREEN);
+            settlementLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
             
-            if (m_settlement->winned) {
-                sprintf(mString,"%d倍 +%d",m_settlement->multiple, m_settlement->accounts);
+            if (m_settlement.winned) {
+                sprintf(mString,"%d倍 +%d",m_settlement.multiple, m_settlement.accounts);
             }
             else{
-                sprintf(mString,"%d倍 %d",m_settlement->multiple, m_settlement->accounts);
+                sprintf(mString,"%d倍 %d",m_settlement.multiple, m_settlement.accounts);
             }
         }
         settlementLabel->setString(mString);
