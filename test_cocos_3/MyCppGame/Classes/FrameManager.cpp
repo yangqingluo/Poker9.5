@@ -10,6 +10,7 @@ m_frameBg(0),
 m_eventTarget(0),
 m_eventSelector(0)
 {
+    
 }
 
 bool FrameManager::setFrame(Widget* frameLayer,Widget* frameBg)

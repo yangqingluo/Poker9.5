@@ -72,11 +72,9 @@ bool LoginScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    
-    
     /*Frame的测试*/
     Widget* frame = cocostudio::GUIReader::getInstance()->widgetFromJsonFile("UIRes/DemoLogin.ExportJson");
-    frame->setScale(0.8f); //缩放比例可以随便设置
+    frame->setScale(0.8); //缩放比例可以随便设置
     frame->setAnchorPoint(Vec2(0.5f,0.5f));//锚点可以随便设置
     frame->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));//坐标可以随便设置
     this->addChild(frame);
