@@ -241,7 +241,7 @@ void PokerDesk::preparedAction(){
 
 void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
-        sprintf(showTimer->prefixString,"选择筹码，点击框形区域下注");
+        sprintf(showTimer->prefixString,"选择筹码，点击选择过门、天门、坎门下注");
         showTimer->start(3);
     }
 }
@@ -326,12 +326,12 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
         }
             break;
         case DeskState_Prepared:{
-            m_deskState = DeskState_SendPoker;
+            m_deskState = DeskState_Bet;
         }
             break;
             
         case DeskState_Bet:{
-            m_deskState = DeskState_Settle;
+            m_deskState = DeskState_SendPoker;
         }
             break;
             
@@ -342,7 +342,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             }
             
             if (m_IndexSend < m_arrPokers.size()) {
-                m_deskState = DeskState_SendPoker;
+                m_deskState = DeskState_Bet;
             }
             else{
                 m_deskState = DeskState_Waiting;
@@ -548,7 +548,7 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     }
     m_isSendSingle = true;
     if (m_IndexSend % 9 == 0) {
-        m_deskState = DeskState_Bet;
+        m_deskState = DeskState_Settle;
     }
 }
 
