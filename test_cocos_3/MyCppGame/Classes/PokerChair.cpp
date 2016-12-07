@@ -52,7 +52,7 @@ bool PokerChair::onTouchBegan(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
-    pokerTypeLabel = Label::createWithBMFont("fonts/pokerType.fnt", "");
+    pokerTypeLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
     pokerTypeLabel->setVisible(false);
     pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.08 * this->getContentSize().height);
     this->addChild(pokerTypeLabel);
@@ -62,7 +62,7 @@ void PokerChair::onEnter(){
         background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
         this->addChild(background);
         
-        betTotalLabel = Label::createWithBMFont("fonts/betNumber.fnt", "");
+        betTotalLabel = Label::createWithSystemFont("", "Arial", 20.0);
         betTotalLabel->setColor(Color3B::WHITE);
 //        betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
 //        betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
@@ -70,7 +70,7 @@ void PokerChair::onEnter(){
         betTotalLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.2 * background->getContentSize().height);
         this->addChild(betTotalLabel);
         
-        betPlayerLabel = Label::createWithBMFont("fonts/betNumber.fnt", "");
+        betPlayerLabel = Label::createWithSystemFont("", "Arial", 20.0);
         betPlayerLabel->setColor(Color3B::YELLOW);
 //        betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
 //        betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
@@ -78,7 +78,7 @@ void PokerChair::onEnter(){
         betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
         this->addChild(betPlayerLabel);
         
-        settlementLabel = Label::createWithBMFont("fonts/settlement.fnt", "");
+        settlementLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
         settlementLabel->setVisible(false);
         settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.24 * this->getContentSize().height);
         this->addChild(settlementLabel);

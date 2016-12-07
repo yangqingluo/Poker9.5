@@ -274,7 +274,7 @@ void PokerDesk::settleAction(){
             chair->showSettlement();
             for (int i = 0; i < chair->pokerArray.size(); i++) {
                 PokerSprite* poker = chair->pokerArray.at(i);
-                poker->showPokerAnimated(true, true, 0.1);
+                poker->showPokerAnimated(true, true, 0);
             }
         }
         
@@ -290,7 +290,7 @@ void PokerDesk::settleAction(){
 //            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
 //            chair->calculatePokerType();
 //            for (PokerSprite* poker : chair->pokerArray) {
-//                poker->showPokerAnimated(true, true, 0.1);
+//                poker->showPokerAnimated(true, true, 0);
 //            }
 //        }
     }
@@ -481,6 +481,9 @@ bool PokerDesk::reindexPoker(){
         PokerSprite* pk = m_arrPokers.at(i - 1);
         pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
         pk->setVisible(true);
+        if (pk->getIsFront()) {
+            pk->showPokerAnimated(false, false, 0);
+        }
         this->reorderChild(pk, (int)(m_arrPokers.size() - i));
     }
     

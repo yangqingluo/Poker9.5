@@ -41,9 +41,15 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDel
         return;
     }
     
-    Rect rect = Rect((p_point - 1) * pkWidth, (p_color - 1) * pkHeight, pkWidth, pkHeight);
-    if (p_point == PokerPoint_Joker) {
-        rect = Rect((p_color == PokerColor_JokerJunior ? 0 : 1) * pkWidth, 4 * pkHeight, pkWidth, pkHeight);
+    Rect rect = Rect::ZERO;
+    if (showFront) {
+        rect = Rect((p_point - 1) * pkWidth, (p_color - 1) * pkHeight, pkWidth, pkHeight);
+        if (p_point == PokerPoint_Joker) {
+            rect = Rect((p_color == PokerColor_JokerJunior ? 0 : 1) * pkWidth, 4 * pkHeight, pkWidth, pkHeight);
+        }
+    }
+    else{
+        rect = Rect(2 * pkWidth, 4 * pkHeight, pkWidth, pkHeight);
     }
     
     if (animated) {
@@ -52,14 +58,18 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDel
         CallFunc* func1 = CallFunc::create([=]{
             bgSprite->setTextureRect(rect);
         });
-        
-        DelayTime* delay = DelayTime::create(doneDelay);
-        
         CallFunc* func2 = CallFunc::create([=]{
             this->showedPoker();
         });
         
-        this->runAction(Sequence::create(scaleSmall, func1, scaleBig, delay, func2, NULL));
+        if (std::abs(doneDelay - 0) <= 1e-6) {
+            this->runAction(Sequence::create(scaleSmall, func1, scaleBig, func2, NULL));
+        }
+        else{
+            DelayTime* delay = DelayTime::create(doneDelay);
+            this->runAction(Sequence::create(scaleSmall, func1, scaleBig, delay, func2, NULL));
+        }
+        
     }
     else{
         bgSprite->setTextureRect(rect);
