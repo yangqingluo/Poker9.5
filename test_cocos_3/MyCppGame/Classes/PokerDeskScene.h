@@ -85,6 +85,8 @@ private:
     int m_deskState;//当前状态
     int m_IndexSend;//已发出第几张牌
     int m_IndexStart;//发牌起始顺序
+    Vec2 judgementPosition;//判定牌位置
+    size_t judgementPokerIndex;
     Vector<PokerChair *> m_arrChairs;//所有的座位
     Vector<PokerSprite *> m_arrPokers;//所有的牌
     PokerChair* createChair(const char* backgroudImage, float widthScale, float heightScale, int index);//生成一个座位

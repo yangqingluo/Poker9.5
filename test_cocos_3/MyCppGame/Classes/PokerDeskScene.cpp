@@ -46,6 +46,7 @@ bool PokerDesk::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    judgementPosition = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.95 * visibleSize.height);
     
     auto sprite = Sprite::create("images/pokerDesk_bg.jpg");
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
@@ -340,6 +341,10 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
                 PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
                 chair->clearChair();
             }
+            if (judgementPokerIndex < m_arrPokers.size()) {
+                PokerSprite* poker = m_arrPokers.at(judgementPokerIndex);
+                poker->setVisible(false);
+            }
             
             if (m_IndexSend < m_arrPokers.size()) {
                 m_deskState = DeskState_Bet;
@@ -503,6 +508,7 @@ void PokerDesk::sendPoker(){
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         pk->showPokerAnimated(true, true, 0.5);
         
+        judgementPokerIndex = m_IndexSend;
         ++m_IndexSend;
         m_isSendSingle = false;
         
@@ -561,8 +567,13 @@ void PokerDesk::turnedSinglePokerCallback(Node* pSender){
                 PokerChair* chair = m_arrChairs.at(i);
                 chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
             }
-            poker->setVisible(false);
+            MoveTo* move = MoveTo::create(0.5, judgementPosition);
+//            RotateBy* rotate = RotateBy::create(time, 360);
+//            CallFuncN* func = CallFuncN::create(CC_CALLBACK_1(PokerDesk::sendedSinglePoker, this, chair));
+            Sequence* sequence = Sequence::create(move,NULL);
+            poker->runAction(sequence);
             m_isSendSingle = true;
+            
         }
     }
     else if (m_deskState == DeskState_Settle){
