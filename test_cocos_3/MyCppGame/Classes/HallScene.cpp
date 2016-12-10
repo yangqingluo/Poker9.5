@@ -195,7 +195,7 @@ bool Hall::init()
     userInfoSprite->addChild(userinfoLabel);
     
     char userInfoString[300];
-    sprintf(userInfoString, "ID:20161010\nVIP:无\n金币:10000\n银币:500\n战斗次数:9527\n胜率:80%%");
+    sprintf(userInfoString, "ID:20161010\nVIP:无\n钻石:0\n金币:10000\n银币:500\n战斗次数:9527\n胜率:80%%");
     userinfoLabel->setString(userInfoString);
     
     auto refresh_UserInfoItem = MenuItemImage::create(
@@ -244,42 +244,6 @@ bool Hall::init()
         roomMenuItems.pushBack(room_Item);
         menu->addChild(room_Item);
     }
-//    auto room_TianItem = MenuItemImage::create(
-//                                          "images/btn_noselect.png",
-//                                          "images/btn_select.png",
-//                                          CC_CALLBACK_1(Hall::roomTypeCallback, this, 0));
-//    
-//    room_TianItem->setScale(roomListBG->getBoundingBox().size.height * 0.12 / room_TianItem->getContentSize().height);
-//    room_TianItem->setPosition(roomListTableView->getBoundingBox().getMinX() + 0.6 * room_TianItem->getBoundingBox().size.width, roomListBG->getBoundingBox().getMaxY() - 0.4 * room_TianItem->getBoundingBox().size.height);
-//    
-//    auto room_DiItem = MenuItemImage::create(
-//                                        "images/btn_noselect.png",
-//                                        "images/btn_select.png",
-//                                        CC_CALLBACK_1(Hall::roomTypeCallback, this, 1));
-//    
-//    room_DiItem->setScale(room_TianItem->getScale());
-//    room_DiItem->setPosition(room_TianItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
-//    
-//    auto room_XuanItem = MenuItemImage::create(
-//                                        "images/btn_noselect.png",
-//                                        "images/btn_select.png",
-//                                        CC_CALLBACK_1(Hall::roomTypeCallback, this, 2));
-//    
-//    room_XuanItem->setScale(room_TianItem->getScale());
-//    room_XuanItem->setPosition(room_DiItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
-//    
-//    auto room_HuangItem = MenuItemImage::create(
-//                                          "images/btn_noselect.png",
-//                                          "images/btn_select.png",
-//                                          CC_CALLBACK_1(Hall::roomTypeCallback, this, 3));
-//    
-//    room_HuangItem->setScale(room_TianItem->getScale());
-//    room_HuangItem->setPosition(room_XuanItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
-//    
-//    // create menu, it's an autorelease object
-//    auto menu = Menu::create(room_TianItem, room_DiItem, room_XuanItem, room_HuangItem, NULL);
-//    menu->setPosition(Vec2::ZERO);
-//    roomListSprite->addChild(menu);
     
     //默认房间类型0
     this->roomTypeSelectedAction(0);
