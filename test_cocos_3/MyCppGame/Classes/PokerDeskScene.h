@@ -57,6 +57,8 @@ public:
     Label* messageLabel;
     Label* gamePlayerInfoLabel;
     BetLimiter* betLimiter;
+    Sprite* dealerHead;
+    MenuItemImage* btn_BeBankerItem;
     
     MenuItemImage* btn_PrepareItem;
     MenuItemImage* btn_AnotherdeskItem;
@@ -73,6 +75,7 @@ public:
     void betAction();
     void settleAction();
     void chooseDealerAction();//选择庄家
+    void waitForChooseDealerAction();//等待选择庄家
     
     void showGamePlayerInfo();
     void showDealerInfo();

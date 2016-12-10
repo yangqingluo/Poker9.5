@@ -13,6 +13,7 @@ const float jetton_height_scale = 0.08;
 
 PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
     dealerPlayer = new Player();
+    dealerPlayer->setJettonCount(-1);
     gamePlayer = new Player();
 }
 
@@ -71,16 +72,16 @@ bool PokerDesk::init()
                                               "images/btn_prepare.png",
                                               CC_CALLBACK_1(PokerDesk::buttonCallback, this, 1));
     
-    btn_PrepareItem->setScale(this->getScaleX(), this->getScaleY());
-    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.8 * btn_PrepareItem->getContentSize().width, origin.y + 0.25 * visibleSize.height));
+    btn_PrepareItem->setScale(0.09 * visibleSize.height / btn_PrepareItem->getContentSize().height);
+    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.7 * btn_PrepareItem->getBoundingBox().size.width, origin.y + 0.25 * visibleSize.height));
     
     btn_AnotherdeskItem = MenuItemImage::create(
                                                  "images/btn_anotherdesk.png",
                                                  "images/btn_anotherdesk.png",
                                                  CC_CALLBACK_1(PokerDesk::buttonCallback, this, 2));
     
-    btn_AnotherdeskItem->setScale(this->getScaleX(), this->getScaleY());
-    btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.8 * btn_AnotherdeskItem->getContentSize().width, btn_PrepareItem->getPositionY()));
+    btn_AnotherdeskItem->setScale(btn_PrepareItem->getScale());
+    btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.7 * btn_AnotherdeskItem->getBoundingBox().size.width, btn_PrepareItem->getPositionY()));
     
     // create menu, it's an autorelease object
     auto menu = Menu::create(btn_BackItem, btn_PrepareItem, btn_AnotherdeskItem, NULL);
@@ -96,13 +97,29 @@ bool PokerDesk::init()
     upright_sprite->setPosition(origin.x + visibleSize.width - upright_sprite->getContentSize().width * 0.6, origin.y + visibleSize.height - upright_sprite->getContentSize().height * 0.6);
     this->addChild(upright_sprite);
     
+    dealerHead = Sprite::create("images/p2.png");
+    dealerHead->setScale(0.4 * upright_sprite->getContentSize().width / dealerHead->getContentSize().width);
+    dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 0.95 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
+    upright_sprite->addChild(dealerHead);
+    dealerHead->setVisible(false);
+    
+    btn_BeBankerItem = MenuItemImage::create(
+                                             "images/top_btn_banker.png",
+                                             "images/top_btn_banker_highlight.png",
+                                             CC_CALLBACK_1(PokerDesk::buttonCallback, this, 3));
+    btn_BeBankerItem->setScale(0.8 * upright_sprite->getContentSize().width / btn_BeBankerItem->getContentSize().width);
+    btn_BeBankerItem->setPosition(0.5 * upright_sprite->getContentSize().width, 0.75 * upright_sprite->getContentSize().height);
+    btn_BeBankerItem->setVisible(false);
+    auto menu_ur = Menu::create(btn_BeBankerItem, NULL);
+    menu_ur->setPosition(Vec2::ZERO);
+    upright_sprite->addChild(menu_ur, 0);
+    
     countLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
     countLabel->setColor(Color3B::BLACK);
 //    countLabel->setHorizontalAlignment(TextHAlignment::LEFT);
 //    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
     countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.2 * upright_sprite->getContentSize().height);
     upright_sprite->addChild(countLabel);
-    chooseDealerAction();
     
     bottom_sprite = QLImageSprite::create("images/desk_bottom_bg.png", Size(visibleSize.width, 0.12 * visibleSize.height));
     bottom_sprite->setPosition(origin.x + visibleSize.width / 2, origin.y + bottom_sprite->getContentSize().height / 2);
@@ -199,7 +216,7 @@ void PokerDesk::onExit(){
 void PokerDesk::showSettingChip(){
     PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
     popup->setTitle("");
-    popup->setContentText("请设置带入的金币数目",12,50,150);
+    popup->setContentText("请设置本金数目",12,50,130);
     popup->setCallBackFunc(this,callfuncN_selector(PokerDesk::popButtonCallback));
     popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
     popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
@@ -299,16 +316,25 @@ void PokerDesk::settleAction(){
     }
 }
 
+void PokerDesk::waitForChooseDealerAction(){
+    if (!showTimer->getIsValid()) {
+        btn_BeBankerItem->setVisible(true);
+        
+        sprintf(showTimer->prefixString,"抢庄");
+        showTimer->start(3);
+    }
+}
+
 void PokerDesk::chooseDealerAction(){
     sprintf(dealerPlayer->nickName,"电脑");
     sprintf(dealerPlayer->headImage,"p2");
     
     dealerPlayer->setJettonCount(3000000);
+    dealerHead->setTexture("images/p2.png");
+    btn_BeBankerItem->setVisible(false);
+    dealerHead->setVisible(true);
     
-    auto dealerHead = Sprite::create("images/p2.png");
-    dealerHead->setScale(0.4 * upright_sprite->getContentSize().width / dealerHead->getContentSize().width);
-    dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 0.95 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
-    upright_sprite->addChild(dealerHead);
+    showDealerInfo();
 }
 
 void PokerDesk::showGamePlayerInfo(){
@@ -317,9 +343,14 @@ void PokerDesk::showGamePlayerInfo(){
     gamePlayerInfoLabel->setString(mString);
 }
 void PokerDesk::showDealerInfo(){
-    char mString[100];
-    sprintf(mString,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
-    countLabel->setString(mString);
+    if (dealerPlayer->getJettonCount() > 0) {
+        char mString[100];
+        sprintf(mString,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
+        countLabel->setString(mString);
+    }
+    else{
+        countLabel->setString("庄家：无\n桌子人数：2\n");
+    }
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){
@@ -329,6 +360,17 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
         }
             break;
         case DeskState_Prepared:{
+            if (dealerPlayer->getJettonCount() > 0) {
+                m_deskState = DeskState_Bet;
+            }
+            else{
+                m_deskState = DeskState_ChooseDealer;
+            }
+        }
+            break;
+            
+        case DeskState_ChooseDealer:{
+            chooseDealerAction();
             m_deskState = DeskState_Bet;
         }
             break;
@@ -372,6 +414,11 @@ void PokerDesk::update(float delta){
             
         case DeskState_Prepared:{
             
+        }
+            break;
+            
+        case DeskState_ChooseDealer:{
+            waitForChooseDealerAction();
         }
             break;
             

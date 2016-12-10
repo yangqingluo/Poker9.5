@@ -74,7 +74,7 @@ public:
 //    void scrollViewDidZoom(ScrollView* view) {};
 private:
     void popButtonCallback(Node* pNode);
-    void showSettingChip();
+    void showSettingChip(bool needPassword);
 };
 
 class RoomListCell : public TableViewCell

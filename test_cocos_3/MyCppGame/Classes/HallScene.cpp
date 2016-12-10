@@ -87,7 +87,7 @@ bool Hall::init()
         if (i < 5) {
             item->chipMin = chip[0][i];
             item->perMin = chip[1][i];
-            sprintf(item->title, "vip创建");
+            sprintf(item->title, "创建vip房间");
             sprintf(item->content, "≥%d\n底注%d", item->chipMin, item->perMin);
         }
         else{
@@ -95,72 +95,24 @@ bool Hall::init()
             sprintf(item->content, "凭密码加入");
         }
         
-//        switch (i) {
-//            case 0:{
-//                sprintf(item->title, "vip新手");
-//                sprintf(item->content, "限VIP");
-//            }
-//                break;
-//                
-//            case 1:{
-//                sprintf(item->title, "创建1000金币房间");
-//                sprintf(item->content, "限VIP");
-//            }
-//                break;
-//                
-//            case 2:{
-//                sprintf(item->title, "创建3000金币房间");
-//                sprintf(item->content, "限VIP");
-//            }
-//                break;
-//                
-//            case 3:{
-//                sprintf(item->title, "创建5000金币房间");
-//                sprintf(item->content, "限VIP");
-//            }
-//                break;
-//                
-//            case 4:{
-//                sprintf(item->title, "创建10000金币房间");
-//                sprintf(item->content, "限VIP");
-//            }
-//                break;
-//                
-//            case 5:{
-//                sprintf(item->title, "加入房间");
-//                sprintf(item->content, "凭密码加入");
-//            }
-//                break;
-//                
-//            default:
-//                break;
-//        }
-        
         diItems.pushBack(item);
     }
     
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 6; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
         item->type = 1;
-        
-        switch (i) {
-            case 0:{
-                sprintf(item->title, "创建房间");
-                sprintf(item->content, "需要钻石");
-            }
-                break;
-                
-            case 1:{
-                sprintf(item->title, "加入房间");
-                sprintf(item->content, "凭密码加入");
-            }
-                break;
-                
-            default:
-                break;
+        if (i < 5) {
+            item->chipMin = chip[0][i];
+            item->perMin = chip[1][i];
+            sprintf(item->title, "创建钻石房间");
+            sprintf(item->content, "≥%d\n底注%d", item->chipMin, item->perMin);
+        }
+        else{
+            sprintf(item->title, "加入房间");
+            sprintf(item->content, "凭密码加入");
         }
         
         xuanItems.pushBack(item);
@@ -354,10 +306,16 @@ void Hall::buttonCallback(cocos2d::Ref* pSender, int index){
     
 }
 #pragma alert
-void Hall::showSettingChip(){
+void Hall::showSettingChip(bool needPassword){
     PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
     popup->setTitle("");
-    popup->setContentText("请设置带入的游戏币数目",12,50,150);
+    if (needPassword) {
+        popup->setContentText("请设置带入的游戏币数目并验证密码",12,50,100);
+    }
+    else{
+        popup->setContentText("请设置带入的游戏币数目",12,50,130);
+    }
+    
     popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
     popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
     popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
@@ -551,25 +509,12 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
     if (table == roomListTableView) {
-        this->showSettingChip();
-//        if (roomTypeSelected == 0) {
-//            
-//            
-//            
-//        }
-//        else if (roomTypeSelected == 1){
-//            
-//        }
-//        else if (roomTypeSelected == 2){
-//            auto scene = PokerDesk::createScene();
-//            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-//            sprintf(layer->gamePlayer->nickName,"阿罗");
-//            sprintf(layer->gamePlayer->headImage,"p4");
-//            layer->gamePlayer->setJettonCount(3000);
-//            
-//            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-//            Director::getInstance()->pushScene(ts);
-//        }
+        if (roomTypeSelected == 1 || roomTypeSelected == 2){
+            this->showSettingChip(cell->getIdx() == 5);
+        }
+        else{
+            this->showSettingChip(false);
+        }
     }
     else if (table == noteListTableView){
         switch (cell->getIdx()) {
