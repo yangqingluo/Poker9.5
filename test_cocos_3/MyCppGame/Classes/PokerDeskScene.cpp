@@ -184,9 +184,11 @@ void PokerDesk::popButtonCallback(Node* pNode){
 
 void PokerDesk::onEnter(){
     Layer::onEnter();
-    this->showSettingChip();
     this->showGamePlayerInfo();
     this->showDealerInfo();
+    
+    m_deskState = DeskState_Waiting;
+    scheduleUpdate();
 }
 
 void PokerDesk::onExit(){

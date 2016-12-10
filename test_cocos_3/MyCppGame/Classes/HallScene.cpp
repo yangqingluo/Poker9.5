@@ -11,6 +11,7 @@
 #include "ShopScene.h"
 #include "ExchangeScene.h"
 #include "PokerDeskScene.h"
+#include "PopAlertDialog.h"
 
 Scene* Hall::createScene()
 {
@@ -291,6 +292,38 @@ void Hall::roomTypeSelectedAction(int type){
 void Hall::buttonCallback(cocos2d::Ref* pSender, int index){
     
 }
+#pragma alert
+void Hall::showSettingChip(){
+    PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
+    popup->setTitle("");
+    popup->setContentText("请设置带入的游戏币数目",12,50,150);
+    popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
+    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
+    
+    this->addChild(popup, 2);
+    
+    ControlSlider* myslider = ControlSlider::create("images/slider_bg.png","images/slider_jd.png","images/slider_hk.png");
+    myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height * 0.45);
+    myslider->setMaximumValue(100);
+    myslider->setMinimumValue(0);
+    popup->addChild(myslider);
+}
+
+void Hall::popButtonCallback(Node* pNode){
+    if (pNode->getTag() == 0) {
+        auto scene = PokerDesk::createScene();
+        PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+        sprintf(layer->gamePlayer->nickName,"阿罗");
+        sprintf(layer->gamePlayer->headImage,"p4");
+        layer->gamePlayer->setJettonCount(3000);
+        
+        TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+        Director::getInstance()->pushScene(ts);
+    }
+    
+    pNode->removeFromParent();
+}
 
 #pragma tableview
 Size Hall::tableCellSizeForIndex(TableView* table, ssize_t idx)
@@ -457,14 +490,7 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
     if (table == roomListTableView) {
-        auto scene = PokerDesk::createScene();
-        PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-        sprintf(layer->gamePlayer->nickName,"阿罗");
-        sprintf(layer->gamePlayer->headImage,"p4");
-        layer->gamePlayer->setJettonCount(3000);
-        
-        TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-        Director::getInstance()->pushScene(ts);
+        this->showSettingChip();
 //        if (roomTypeSelected == 0) {
 //            
 //            

@@ -41,10 +41,6 @@ public:
     CREATE_FUNC(Hall);
     
     int roomTypeSelected;
-//    MenuItem* room_TianItem;
-//    MenuItem* room_DiItem;
-//    MenuItem* room_XuanItem;
-//    MenuItem* room_HuangItem;
     Vector<MenuItem* > roomMenuItems;
     Vector<RoomItem* > tianItems;
     Vector<RoomItem* > diItems;
@@ -75,6 +71,9 @@ public:
     
 //    void scrollViewDidScroll(ScrollView* view) {};
 //    void scrollViewDidZoom(ScrollView* view) {};
+private:
+    void popButtonCallback(Node* pNode);
+    void showSettingChip();
 };
 
 class RoomListCell : public TableViewCell
