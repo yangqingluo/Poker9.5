@@ -104,6 +104,33 @@ bool Hall::init()
         diItems.pushBack(item);
     }
     
+    for (int i = 0; i < 2; i++) {
+        RoomItem* item = new RoomItem();
+        item->autorelease();
+        item->chipMin = -1;
+        item->perMin = -1;
+        item->type = 1;
+        
+        switch (i) {
+            case 0:{
+                sprintf(item->title, "创建房间");
+                sprintf(item->content, "需要钻石");
+            }
+                break;
+                
+            case 1:{
+                sprintf(item->title, "加入房间");
+                sprintf(item->content, "凭密码加入");
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+        xuanItems.pushBack(item);
+    }
+    
     for (int i = 0; i < 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
@@ -122,7 +149,7 @@ bool Hall::init()
                 break;
         }
         
-        xuanItems.pushBack(item);
+        huangItems.pushBack(item);
     }
     
     for (int i = 0; i < 5; i++) {
@@ -227,8 +254,16 @@ bool Hall::init()
     room_XuanItem->setScale(room_TianItem->getScale());
     room_XuanItem->setPosition(room_DiItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
     
+    room_HuangItem = MenuItemImage::create(
+                                          "images/btn_noselect.png",
+                                          "images/btn_select.png",
+                                          CC_CALLBACK_1(Hall::roomTypeCallback, this, 3));
+    
+    room_HuangItem->setScale(room_TianItem->getScale());
+    room_HuangItem->setPosition(room_XuanItem->getBoundingBox().getMaxX() + 0.6 * room_TianItem->getBoundingBox().size.width, room_TianItem->getPositionY());
+    
     // create menu, it's an autorelease object
-    auto menu = Menu::create(room_TianItem, room_DiItem, room_XuanItem, NULL);
+    auto menu = Menu::create(room_TianItem, room_DiItem, room_XuanItem, room_HuangItem, NULL);
     menu->setPosition(Vec2::ZERO);
     roomListSprite->addChild(menu);
     
@@ -282,6 +317,14 @@ void Hall::roomTypeSelectedAction(int type){
             room_TianItem->unselected();
             room_DiItem->unselected();
             room_XuanItem->selected();
+        }
+            break;
+            
+        case 3:{
+            room_TianItem->unselected();
+            room_DiItem->unselected();
+            room_XuanItem->unselected();
+            room_HuangItem->selected();
         }
             break;
             
@@ -367,6 +410,11 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
             }
                 break;
                 
+            case 3:{
+                room = huangItems.at(idx);
+            }
+                break;
+                
             default:{
                 
             }
@@ -432,6 +480,11 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
                 
             case 2:{
                 return xuanItems.size();
+            }
+                break;
+                
+            case 3:{
+                return huangItems.size();
             }
                 break;
                 
