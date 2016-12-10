@@ -41,15 +41,16 @@ public:
     CREATE_FUNC(Hall);
     
     int roomTypeSelected;
-    MenuItem* room_TianItem;
-    MenuItem* room_DiItem;
-    MenuItem* room_XuanItem;
-    MenuItem* room_HuangItem;
-    Vector<RoomItem *> tianItems;
-    Vector<RoomItem *> diItems;
-    Vector<RoomItem *> xuanItems;
-    Vector<RoomItem *> huangItems;
-    Vector<NoteItem *> noteItems;
+//    MenuItem* room_TianItem;
+//    MenuItem* room_DiItem;
+//    MenuItem* room_XuanItem;
+//    MenuItem* room_HuangItem;
+    Vector<MenuItem* > roomMenuItems;
+    Vector<RoomItem* > tianItems;
+    Vector<RoomItem* > diItems;
+    Vector<RoomItem* > xuanItems;
+    Vector<RoomItem* > huangItems;
+    Vector<NoteItem* > noteItems;
     void roomTypeCallback(Ref* pSender, int index);
     void roomTypeSelectedAction(int type);
     
