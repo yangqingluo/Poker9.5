@@ -122,7 +122,7 @@ void ExchangeScene::buttonCallback(cocos2d::Ref* pSender, int index){
 Size ExchangeScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
     if (table == recordListTableView) {
-        return Size(recordListCellWidth, 30);
+        return Size(recordListCellWidth, 40);
     }
     
     return Size::ZERO;
@@ -139,24 +139,23 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
             cell = new TableViewCell();
             cell->autorelease();
             
-            Label* titleLabel = Label::createWithTTF("test", "fonts/STKaiti.ttf", 12);
+            Label* titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 10);
             titleLabel->setTextColor(Color4B::BLACK);
             titleLabel->setPosition(recordListCellWidth / 2, 15);
-            titleLabel->setDimensions(recordListCellWidth, 30);
+            titleLabel->setDimensions(recordListCellWidth, 40);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::TOP);
             cell->addChild(titleLabel, 0 , 1);
         }
         
         Label* label = (Label* )cell->getChildByTag(1);
-        char content[100];
-        if (idx%2 == 0) {
-            sprintf(content, "2016-10-%d\t-1000金币\t兑换AAAA 订单号:201610%02d%06d",(int)idx,(int)idx,(int)idx);
+        char content[200] = {0};
+        if (idx % 2 == 0) {
+            sprintf(content, "2016-10-%d\t-1000金币\t兑换AAAA 订单号:201610%02d%06d 快递单号:201610%02d%06d 快递公司:顺丰快递",(int)idx,(int)idx,(int)idx,(int)idx,(int)idx);
         }
         else{
-            sprintf(content, "2016-10-%d\t-2000金币\t兑换BBBB 订单号:201610%02d%06d",(int)idx,(int)idx,(int)idx);
+            sprintf(content, "2016-10-%d\t-2000金币\t兑换BBBB 订单号:201610%02d%06d 未发货",(int)idx,(int)idx,(int)idx);
         }
-        
         label->setString(content);
         
         

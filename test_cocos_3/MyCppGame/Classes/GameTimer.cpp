@@ -25,7 +25,6 @@ void GameTimer::start(float time){
     schedule(schedule_selector(GameTimer::update));
 }
 
-
 void GameTimer::update(float delta){
     pTime -= delta;
     char mtime[100];
@@ -37,7 +36,7 @@ void GameTimer::update(float delta){
     if (pTime <= 1) {
         unschedule(schedule_selector(GameTimer::update));
         m_valid = false;
-        if (m_callback&&m_callbackListener) {
+        if (m_callback && m_callbackListener) {
             (m_callbackListener->*m_callback)(this);
         }
     }
@@ -66,7 +65,7 @@ GameTimer* GameTimer::createTimer(){
     return NULL;
 }
 
-void GameTimer::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
+void GameTimer::setCallBackFunc(Ref* target, SEL_CallFuncN callfun){
     m_callbackListener = target;
     m_callback = callfun;
 }

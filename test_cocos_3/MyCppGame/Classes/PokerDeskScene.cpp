@@ -568,12 +568,9 @@ void PokerDesk::turnedSinglePokerCallback(Node* pSender){
                 chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
             }
             MoveTo* move = MoveTo::create(0.5, judgementPosition);
-//            RotateBy* rotate = RotateBy::create(time, 360);
-//            CallFuncN* func = CallFuncN::create(CC_CALLBACK_1(PokerDesk::sendedSinglePoker, this, chair));
             Sequence* sequence = Sequence::create(move,NULL);
             poker->runAction(sequence);
             m_isSendSingle = true;
-            
         }
     }
     else if (m_deskState == DeskState_Settle){
