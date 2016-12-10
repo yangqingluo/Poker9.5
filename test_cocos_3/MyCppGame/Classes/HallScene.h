@@ -17,7 +17,7 @@ USING_NS_CC_EXT;
 
 class RoomItem : public Ref{
 public:
-    char title[20];
+    char title[100];
     char content[100];
     int type;
     int status;
@@ -47,6 +47,7 @@ public:
     Vector<RoomItem* > xuanItems;
     Vector<RoomItem* > huangItems;
     Vector<NoteItem* > noteItems;
+    Label* roominfoLabel;
     void roomTypeCallback(Ref* pSender, int index);
     void roomTypeSelectedAction(int type);
     

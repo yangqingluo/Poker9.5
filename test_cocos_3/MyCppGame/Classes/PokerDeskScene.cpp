@@ -244,7 +244,7 @@ void PokerDesk::preparedAction(){
 
 void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
-        sprintf(showTimer->prefixString,"选择筹码，点击选择过门、天门、坎门下注");
+        sprintf(showTimer->prefixString,"设置筹码，选择过、天、坎下注");
         showTimer->start(3);
     }
 }

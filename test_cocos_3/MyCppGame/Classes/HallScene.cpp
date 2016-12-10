@@ -78,29 +78,63 @@ bool Hall::init()
         tianItems.pushBack(item);
     }
     
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 6; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
         item->type = 1;
-        
-        switch (i) {
-            case 0:{
-                sprintf(item->title, "创建房间");
-                sprintf(item->content, "限VIP");
-            }
-                break;
-                
-            case 1:{
-                sprintf(item->title, "加入房间");
-                sprintf(item->content, "凭密码加入");
-            }
-                break;
-                
-            default:
-                break;
+        if (i < 5) {
+            item->chipMin = chip[0][i];
+            item->perMin = chip[1][i];
+            sprintf(item->title, "vip创建");
+            sprintf(item->content, "≥%d\n底注%d", item->chipMin, item->perMin);
         }
+        else{
+            sprintf(item->title, "加入房间");
+            sprintf(item->content, "凭密码加入");
+        }
+        
+//        switch (i) {
+//            case 0:{
+//                sprintf(item->title, "vip新手");
+//                sprintf(item->content, "限VIP");
+//            }
+//                break;
+//                
+//            case 1:{
+//                sprintf(item->title, "创建1000金币房间");
+//                sprintf(item->content, "限VIP");
+//            }
+//                break;
+//                
+//            case 2:{
+//                sprintf(item->title, "创建3000金币房间");
+//                sprintf(item->content, "限VIP");
+//            }
+//                break;
+//                
+//            case 3:{
+//                sprintf(item->title, "创建5000金币房间");
+//                sprintf(item->content, "限VIP");
+//            }
+//                break;
+//                
+//            case 4:{
+//                sprintf(item->title, "创建10000金币房间");
+//                sprintf(item->content, "限VIP");
+//            }
+//                break;
+//                
+//            case 5:{
+//                sprintf(item->title, "加入房间");
+//                sprintf(item->content, "凭密码加入");
+//            }
+//                break;
+//                
+//            default:
+//                break;
+//        }
         
         diItems.pushBack(item);
     }
@@ -213,12 +247,10 @@ bool Hall::init()
     roomListSprite->setPosition(Vec2(userInfoSprite->getBoundingBox().getMaxX() + edge + roomListSprite->getContentSize().width / 2, userInfoSprite->getBoundingBox().getMinY() + roomListSprite->getContentSize().height / 2));
     this->addChild(roomListSprite, 1);
     
-    
     auto roomListBG = Sprite::create("images/room_list_bg.png");
     roomListBG->setScale(roomListSprite->getContentSize().width / roomListBG->getContentSize().width, (465.0 / 504.0) * roomListSprite->getContentSize().height / roomListBG->getContentSize().height);
     roomListBG->setPosition(Vec2(roomListBG->getBoundingBox().size.width / 2, roomListBG->getBoundingBox().size.height / 2));
     roomListSprite->addChild(roomListBG);
-    
     
     roomListCellHeight = roomListBG->getBoundingBox().size.height * 0.65;
     roomListTableView = TableView::create(this, Size(roomListBG->getBoundingBox().size.width * 0.96,  roomListCellHeight));
@@ -229,6 +261,11 @@ bool Hall::init()
     roomListTableView->setDelegate(this);
     roomListSprite->addChild(roomListTableView);
     
+    roominfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 12);
+    roominfoLabel->setTextColor(Color4B::BLACK);
+    roominfoLabel->setPosition(roomListSprite->getContentSize().width / 2, 0.08 * roomListSprite->getContentSize().height);
+    roominfoLabel->setDimensions(0.96 * roomListSprite->getContentSize().width, 0.16 * roomListSprite->getContentSize().height);
+    roomListSprite->addChild(roominfoLabel);
     
     auto menu = Menu::create();
     menu->setPosition(Vec2::ZERO);
@@ -276,6 +313,30 @@ void Hall::roomTypeCallback(cocos2d::Ref* pSender, int index){
 }
 
 void Hall::roomTypeSelectedAction(int type){
+    switch (type) {
+        case 0:{
+            roominfoLabel->setString("使用金币结算");
+        }
+            break;
+            
+        case 1:{
+            roominfoLabel->setString("使用金币结算，vip玩家可创建房间，非vip玩家凭密码加入");
+        }
+            break;
+            
+        case 2:{
+            roominfoLabel->setString("使用钻石结算，有足够钻石的玩家可创建或者加入房间");
+        }
+            break;
+            
+        case 3:{
+            roominfoLabel->setString("使用银币结算，单机练习");
+        }
+            break;
+            
+        default:
+            break;
+    }
     roomTypeSelected = type;
     for (int i = 0; i < roomMenuItems.size(); i++) {
         MenuItem* item = roomMenuItems.at(i);
