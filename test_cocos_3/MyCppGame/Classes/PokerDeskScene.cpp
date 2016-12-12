@@ -242,7 +242,7 @@ void PokerDesk::waitForPrepareAction(){
         btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(3);
+        showTimer->start(30);
     }
 }
 
@@ -262,14 +262,14 @@ void PokerDesk::preparedAction(){
 void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"设置筹码，选择过、天、坎下注");
-        showTimer->start(3);
+        showTimer->start(15);
     }
 }
 
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(5);
+        showTimer->start(30);
         
         int zeroCount = 0;//牌型为0点的座位计数
         int accountDealer = 0;
@@ -321,7 +321,7 @@ void PokerDesk::waitForChooseDealerAction(){
         btn_BeBankerItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"抢庄");
-        showTimer->start(3);
+        showTimer->start(10);
     }
 }
 
