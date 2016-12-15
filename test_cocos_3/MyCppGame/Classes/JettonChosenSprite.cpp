@@ -74,6 +74,31 @@ JettonChosenSprite* JettonChosenSprite::create(int value, Size size){
     return sp;
 }
 
+JettonChosenSprite* JettonChosenSprite::create(const char* imageName, Size size){
+    JettonChosenSprite* sp = new JettonChosenSprite();
+    if (sp && sp->init()){
+        sp->setContentSize(size);
+        sp->m_value = 0;
+        sp->autorelease();
+        
+        sp->bgSprite = Sprite::create("jetton/jetton_bg.png");
+        sp->bgSprite->setScale(sp->getContentSize().width / sp->bgSprite->getContentSize().width);
+        sp->bgSprite->setPosition(sp->getContentSize().width / 2, sp->getContentSize().height / 2);
+        sp->bgSprite->setVisible(false);
+        sp->addChild(sp->bgSprite);
+        
+        sp->valueSprite = Sprite::create(imageName);
+        sp->valueSprite->setScale(sp->getContentSize().width / sp->valueSprite->getContentSize().width);
+        sp->valueSprite->setPosition(sp->bgSprite->getPosition());
+        sp->addChild(sp->valueSprite);
+        
+        return sp;
+    }
+    
+    CC_SAFE_DELETE(sp);
+    return sp;
+}
+
 bool JettonChosenSprite::isValidValue(int value){
     int arr[9] = {10,20,50,100,200,500,1000,2000,5000};
     for (int i = 0; i < 9; i++) {

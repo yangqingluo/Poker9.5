@@ -17,6 +17,7 @@ USING_NS_CC_EXT;
 #include "PokerSprite.h"
 #include "JettonSprite.h"
 #include "QLImageSprite.h"
+#include "PokerStabber.h"
 
 struct SettlementRef {
     int multiple;//结算倍数
@@ -24,7 +25,7 @@ struct SettlementRef {
     bool winned;
 };
 
-class PokerChair:public LayerColor{  //继承LayerColor类，方便更改layer的颜色和透明度
+class PokerChair : public LayerColor{  //继承LayerColor类，方便更改layer的颜色和透明度
 public:
     PokerChair();
     ~PokerChair();
@@ -62,7 +63,7 @@ private:
     CC_SYNTHESIZE(bool,m_canTouch,CanTouch);//是否能被点击
     
     LayerColor* m_BeStabberSprite;//抢刺按钮
-    Sprite* m_StabberSprite;//刺标识
+    PokerStabber* m_Stabber;//刺标识
     Sprite* m_BankerSprite;//庄家标识
     Sprite* m_StartPointSprite;//发牌起始顺序标识的精灵
     Label* betTotalLabel;

@@ -14,6 +14,7 @@ public:
     
     bool isPlayer;//是否当前玩家下注
     static JettonChosenSprite* create(int value, Size size);
+    static JettonChosenSprite* create(const char* imageName, Size size);
     void setSelected(bool select);
     bool isValidValue(int value);
     

@@ -97,7 +97,7 @@ bool PokerDesk::init()
     upright_sprite->setPosition(origin.x + visibleSize.width - upright_sprite->getContentSize().width * 0.6, origin.y + visibleSize.height - upright_sprite->getContentSize().height * 0.6);
     this->addChild(upright_sprite);
     
-    dealerHead = Sprite::create("images/p2.png");
+    dealerHead = Sprite::create("images/default_head.png");
     dealerHead->setScale(0.4 * upright_sprite->getContentSize().width / dealerHead->getContentSize().width);
     dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 0.95 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
     upright_sprite->addChild(dealerHead);

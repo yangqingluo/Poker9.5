@@ -17,7 +17,7 @@ USING_NS_CC_EXT;
 #include "JettonChosenSprite.h"
 
 
-class BetLimiter:public LayerColor{  //继承LayerColor类，方便更改layer的颜色和透明度
+class BetLimiter : public LayerColor{  //继承LayerColor类，方便更改layer的颜色和透明度
 public:
     BetLimiter();
     ~BetLimiter();

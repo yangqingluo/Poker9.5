@@ -103,6 +103,8 @@
 		FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC339CF1DDFB45E00E71685 /* HallScene.cpp */; };
 		FCC33A031DDFD64000E71685 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = FCC339E51DDFD64000E71685 /* HelloWorld.png */; };
 		FCC33A041DDFD64000E71685 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = FCC339E51DDFD64000E71685 /* HelloWorld.png */; };
+		FCCBA4961E026E110072EA7E /* PokerStabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCCBA4941E026E110072EA7E /* PokerStabber.cpp */; };
+		FCCBA4971E026E110072EA7E /* PokerStabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCCBA4941E026E110072EA7E /* PokerStabber.cpp */; };
 		FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */; };
 		FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */; };
 		FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
@@ -242,6 +244,8 @@
 		FCC339CF1DDFB45E00E71685 /* HallScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HallScene.cpp; sourceTree = "<group>"; };
 		FCC339D01DDFB45E00E71685 /* HallScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HallScene.h; sourceTree = "<group>"; };
 		FCC339E51DDFD64000E71685 /* HelloWorld.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelloWorld.png; sourceTree = "<group>"; };
+		FCCBA4941E026E110072EA7E /* PokerStabber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerStabber.cpp; sourceTree = "<group>"; };
+		FCCBA4951E026E110072EA7E /* PokerStabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerStabber.h; sourceTree = "<group>"; };
 		FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BetLimiter.cpp; sourceTree = "<group>"; };
 		FCD0BD771DF2D4C800952CAD /* BetLimiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetLimiter.h; sourceTree = "<group>"; };
 		FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerDeskScene.cpp; sourceTree = "<group>"; };
@@ -421,6 +425,8 @@
 				FC4B4B891DF1500200E0271B /* QLImageSprite.h */,
 				FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */,
 				FCD0BD771DF2D4C800952CAD /* BetLimiter.h */,
+				FCCBA4941E026E110072EA7E /* PokerStabber.cpp */,
+				FCCBA4951E026E110072EA7E /* PokerStabber.h */,
 				FC47C01C1DF4385C00A22F70 /* Player.cpp */,
 				FC47C01D1DF4385C00A22F70 /* Player.h */,
 				FC292EE21DF7F0310096B017 /* FrameManager.cpp */,
@@ -653,6 +659,7 @@
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */,
+				FCCBA4961E026E110072EA7E /* PokerStabber.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
 				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
@@ -667,6 +674,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
+				FCCBA4971E026E110072EA7E /* PokerStabber.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,

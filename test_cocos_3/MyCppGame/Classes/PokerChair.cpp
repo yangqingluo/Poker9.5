@@ -8,6 +8,8 @@
 
 #include "PokerChair.h"
 #include "JettonSprite.h"
+#include "JettonChosenSprite.h"
+
 
 PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0),m_canTouch(false){
     
@@ -89,9 +91,19 @@ void PokerChair::onEnter(){
         listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
         getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
         
-        m_BeStabberSprite = LayerColor::create(Color4B::YELLOW, 0.3 * this->getContentSize().width, this->getContentSize().height - background->getContentSize().height);
-        m_BeStabberSprite->setPosition(this->getContentSize().width - 1.0 * m_BeStabberSprite->getContentSize().width, 0.0 * m_BeStabberSprite->getContentSize().height);
+        Size size_stabber = Size(0.3 * this->getContentSize().width, this->getContentSize().height - background->getContentSize().height);
+        m_BeStabberSprite = LayerColor::create(Color4B(0, 0, 0, 0), size_stabber.width, size_stabber.height);
+        m_BeStabberSprite->setPosition(this->getContentSize().width - 1.0 * m_BeStabberSprite->getContentSize().width, 0.0);
         this->addChild(m_BeStabberSprite);
+        
+        auto beStabber = JettonChosenSprite::create("images/btn_stabber.png", Size(MIN(m_BeStabberSprite->getContentSize().width, m_BeStabberSprite->getContentSize().height), MIN(m_BeStabberSprite->getContentSize().width, m_BeStabberSprite->getContentSize().height)));
+        beStabber->setPosition(0.5 * m_BeStabberSprite->getContentSize().width, 0.5 * m_BeStabberSprite->getContentSize().height);
+        m_BeStabberSprite->addChild(beStabber);
+        m_BeStabberSprite->setVisible(false);
+        
+        m_Stabber = PokerStabber::create("images/default_head.png", size_stabber);
+        m_Stabber->setPosition(this->getContentSize().width - 1.0 * m_Stabber->getContentSize().width, 0);
+        this->addChild(m_Stabber);
     }
     else{
         pokerTypeLabel->setPosition(m_BankerSprite->getPositionX(), 0.3 * this->getContentSize().height);
