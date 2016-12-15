@@ -86,7 +86,7 @@ bool PokerDesk::init()
     // create menu, it's an autorelease object
     auto menu = Menu::create(btn_BackItem, btn_PrepareItem, btn_AnotherdeskItem, NULL);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 0);
+    this->addChild(menu, 1);
     
     auto lotus = Sprite::create("images/lotus.png");
     lotus->setScale(150.0 / 640.0 * visibleSize.height / lotus->getTextureRect().getMaxY());
@@ -158,7 +158,7 @@ bool PokerDesk::init()
     for (int i = 0; i < 4; i++) {
         PokerChair* chair = this->createChair(imageName[i], scaleArray[i][0], scaleArray[i][1], i);
         m_arrChairs.pushBack(chair);
-        this->addChild(chair);
+        this->addChild(chair, 0);
     }
     
     srand((unsigned)time(NULL));//初始化随机种子
@@ -443,7 +443,7 @@ void PokerDesk::update(float delta){
 }
 
 #pragma chair
-void PokerDesk::touchedChairCallback(Node* pSender){
+void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
     if (m_deskState == DeskState_Bet) {
         PokerChair* chair = (PokerChair* )pSender;
         
@@ -467,7 +467,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
     }
     else{
         chair->setCanTouch(true);
-        chair->setTouchCallBackFunc(this, callfuncN_selector(PokerDesk::touchedChairCallback));
+        chair->setTouchCallBackFunc(this, callfuncND_selector(PokerDesk::touchedChairCallback));
     }
     
     return chair;

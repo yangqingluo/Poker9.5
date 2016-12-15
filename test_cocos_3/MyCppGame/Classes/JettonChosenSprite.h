@@ -1,5 +1,5 @@
-//#ifndef __JettonChosenSprite__
-//#define __JettonChosenSprite__
+#ifndef __JettonChosenSprite__
+#define __JettonChosenSprite__
 
 #include "JettonSprite.h"
 
@@ -30,4 +30,4 @@ private:
     SEL_CallFuncN m_touchCallback;
 };
 
-//#endif /* defined(__JettonChosenSprite__) */
+#endif /* defined(__JettonChosenSprite__) */

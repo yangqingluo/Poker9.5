@@ -40,7 +40,7 @@ bool PokerChair::onTouchBegan(Touch* touch,Event* event){
     
     if (rect.containsPoint(locationInNode) && m_canTouch){
         if (m_touchCallback && m_touchListener) {
-            (m_touchListener->*m_touchCallback)(this);
+            (m_touchListener->*m_touchCallback)(this, target);
         }
         
         return true;
@@ -88,6 +88,10 @@ void PokerChair::onEnter(){
         listener->setSwallowTouches(true);
         listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
         getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
+        
+        m_BeStabberSprite = LayerColor::create(Color4B::YELLOW, 0.3 * this->getContentSize().width, this->getContentSize().height - background->getContentSize().height);
+        m_BeStabberSprite->setPosition(this->getContentSize().width - 1.0 * m_BeStabberSprite->getContentSize().width, 0.0 * m_BeStabberSprite->getContentSize().height);
+        this->addChild(m_BeStabberSprite);
     }
     else{
         pokerTypeLabel->setPosition(m_BankerSprite->getPositionX(), 0.3 * this->getContentSize().height);
@@ -367,9 +371,6 @@ void PokerChair::calculateSettlement(PokerChair* dealerChair){
         
 //        log("牌型:%d 倍数：%d 赔付额%d",this->m_PokerType ,m_settlement.multiple, m_settlement.accounts);
     }
-    else{
-        CCLOG("no******************");
-    }
 }
 
 void PokerChair::showSettlement(){
@@ -424,7 +425,7 @@ void PokerChair::clearChair(){
     }
 }
 
-void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun){
+void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncND callfun){
     m_touchListener = target;
     m_touchCallback = callfun;
 }

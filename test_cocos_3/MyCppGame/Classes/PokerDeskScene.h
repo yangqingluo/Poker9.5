@@ -82,7 +82,7 @@ public:
     
     void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);
-    void touchedChairCallback(Node* pSender);
+    void touchedChairCallback(Node* pSender, void* pTarget);
 private:
     bool m_isSendSingle;//是否发完一张牌
     int m_deskState;//当前状态

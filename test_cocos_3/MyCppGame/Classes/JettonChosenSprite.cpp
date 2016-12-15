@@ -9,7 +9,7 @@ JettonChosenSprite::~JettonChosenSprite(){
 }
 
 bool JettonChosenSprite::onTouchBegan(Touch *touch, Event *event){
-    auto target = static_cast<Sprite*>(event->getCurrentTarget());//获取的当前触摸的目标
+    auto target = static_cast<Sprite* >(event->getCurrentTarget());//获取的当前触摸的目标
     
     Point locationInNode = target->convertToNodeSpace(touch->getLocation());
     Size s = target->getContentSize();

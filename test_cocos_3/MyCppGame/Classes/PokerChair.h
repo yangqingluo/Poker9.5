@@ -54,14 +54,16 @@ public:
     SettlementRef m_settlement;//结算数据
     Vector<PokerSprite *> pokerArray;
     Vector<JettonSprite *> jettonArray;
-    void setTouchCallBackFunc(Ref* target,SEL_CallFuncN callfun);
+    void setTouchCallBackFunc(Ref* target,SEL_CallFuncND callfun);
     void stringFromBetValue(char* mString, int betValue);
 private:
     CC_SYNTHESIZE_RETAIN(QLImageSprite*, m_betZoneBackGround, BetZoneBackGround);
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
     CC_SYNTHESIZE(bool,m_canTouch,CanTouch);//是否能被点击
     
-    Sprite* m_BankerSprite;
+    LayerColor* m_BeStabberSprite;//抢刺按钮
+    Sprite* m_StabberSprite;//刺标识
+    Sprite* m_BankerSprite;//庄家标识
     Sprite* m_StartPointSprite;//发牌起始顺序标识的精灵
     Label* betTotalLabel;
     Label* betPlayerLabel;
@@ -69,7 +71,7 @@ private:
     Label* settlementLabel;//结算文本
     
     Ref* m_touchListener;
-    SEL_CallFuncN m_touchCallback;
+    SEL_CallFuncND m_touchCallback;
 };
 
 #endif /* defined(__PokerChair__) */
