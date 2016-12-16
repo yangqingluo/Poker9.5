@@ -11,7 +11,7 @@
 
 const float jetton_height_scale = 0.08;
 
-PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true){
+PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true){
     dealerPlayer = new Player();
     dealerPlayer->setJettonCount(-1);
     gamePlayer = new Player();
@@ -302,17 +302,13 @@ void PokerDesk::settleAction(){
             dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
             gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
         }
+        else {
+            //跳过结算
+            
+        }
         
         showDealerInfo();
         showGamePlayerInfo();
-        
-//        for (int i = 0; i < m_arrChairs.size(); i++) {
-//            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
-//            chair->calculatePokerType();
-//            for (PokerSprite* poker : chair->pokerArray) {
-//                poker->showPokerAnimated(true, true, 0);
-//            }
-//        }
     }
 }
 
@@ -374,6 +370,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             break;
             
         case DeskState_Bet:{
+            m_isSendSet = false;
             m_deskState = DeskState_SendPoker;
         }
             break;
@@ -421,7 +418,13 @@ void PokerDesk::update(float delta){
             break;
             
         case DeskState_SendPoker:{
-            sendPoker();
+            if (m_isSendSet) {
+                //是否发完一副牌
+                m_deskState = DeskState_Settle;
+            }
+            else {
+                sendPoker();
+            }
         }
             break;
             
@@ -616,7 +619,7 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     }
     m_isSendSingle = true;
     if (m_IndexSend % 9 == 0) {
-        m_deskState = DeskState_Settle;
+        m_isSendSet = true;
     }
 }
 

@@ -86,6 +86,7 @@ public:
     void touchedChairCallback(Node* pSender, void* pTarget);
 private:
     bool m_isSendSingle;//是否发完一张牌
+    bool m_isSendSet;//是否发完一把牌(8张)
     int m_deskState;//当前状态
     int m_IndexSend;//已发出第几张牌
     int m_IndexStart;//发牌起始顺序
