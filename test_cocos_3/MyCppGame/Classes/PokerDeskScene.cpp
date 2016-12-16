@@ -273,42 +273,75 @@ void PokerDesk::betAction(){
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(3);
+        showTimer->start(15);
         
-        int zeroCount = 0;//牌型为0点的座位计数
-        int accountDealer = 0;
-        int accountPlayer = 0;
-        PokerChair* chair0 = m_arrChairs.at(0);
-        for (int i = 0; i < m_arrChairs.size(); i++) {
-            PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
-            chair->calculatePokerType();
-            if (i > 0) {
-                chair->calculateSettlement(chair0);
-                accountDealer -= chair->m_settlement.accounts;
-                if (chair->betPlayer > 0) {
-                    accountPlayer += chair->m_settlement.accounts;
+        if (stabberPlayer == NULL) {
+            int zeroCount = 0;//牌型为0点的座位计数
+            int accountDealer = 0;
+            int accountPlayer = 0;
+            PokerChair* chair0 = m_arrChairs.at(0);
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
+                chair->calculatePokerType();
+                if (i > 0) {
+                    chair->calculateSettlement(chair0);
+                    accountDealer -= chair->m_settlement.accounts;
+                    if (chair->betPlayer > 0) {
+                        accountPlayer += chair->m_settlement.accounts;
+                    }
+                    chair->showSettlement();
+                }
+                
+                if (chair->m_PokerType == PokerType_0) {
+                    zeroCount++;
+                }
+                
+                chair->showPokerType();
+                
+                for (int i = 0; i < chair->pokerArray.size(); i++) {
+                    PokerSprite* poker = chair->pokerArray.at(i);
+                    poker->showPokerAnimated(true, true, 0);
                 }
             }
             
-            if (chair->m_PokerType == PokerType_0) {
-                zeroCount++;
+            if (zeroCount < 3) {
+                dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
+                gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
             }
-            
-            chair->showPokerType();
-            chair->showSettlement();
-            for (int i = 0; i < chair->pokerArray.size(); i++) {
-                PokerSprite* poker = chair->pokerArray.at(i);
-                poker->showPokerAnimated(true, true, 0);
+            else {
+                //跳过结算
+                
             }
-        }
-        
-        if (zeroCount < 3) {
-            dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
-            gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
         }
         else {
-            //跳过结算
+            int accountDealer = 0;
+            int accountPlayer = 0;
+            PokerChair* chair0 = m_arrChairs.at(0);
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
+                chair->calculatePokerType();
+                if (i > 0) {
+                    chair->calculateSettlementForStabber(chair0, dealerPlayer->getJettonCount());
+                    chair->showSettlementForStabber();
+                    
+                    if (chair->m_Stabber->isVisible()) {
+                        if (stabberPlayer == gamePlayer) {
+                            accountDealer -= chair->m_settlement.accounts;
+                            accountPlayer += chair->m_settlement.accounts;
+                        }
+                    }
+                }
+                
+                chair->showPokerType();
+                
+                for (int i = 0; i < chair->pokerArray.size(); i++) {
+                    PokerSprite* poker = chair->pokerArray.at(i);
+                    poker->showPokerAnimated(true, true, 0);
+                }
+            }
             
+            dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
+            gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
         }
         
         showDealerInfo();
@@ -420,6 +453,16 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
                 poker->setVisible(false);
             }
             
+            if (stabberPlayer != NULL) {
+                stabberPlayer = NULL;
+            }
+            
+            //测试
+            if (dealerPlayer->getJettonCount() <= 0) {
+                dealerPlayer->setJettonCount(900);
+                showDealerInfo();
+            }
+            
             if (m_IndexSend < m_arrPokers.size()) {
                 m_deskState = DeskState_Bet;
             }
@@ -492,6 +535,7 @@ void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
             break;
             
         case 11:{
+            stabberPlayer = gamePlayer;
             for (int i = 0; i < m_arrChairs.size(); i++) {
                 PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
                 chair->showBeStabber(false);

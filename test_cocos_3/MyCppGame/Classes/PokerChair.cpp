@@ -350,55 +350,58 @@ void PokerChair::showPokerType(){
 void PokerChair::calculateSettlement(PokerChair* dealerChair){
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL){
-        
-        if (dealerChair->m_PokerType <= this->m_PokerType) {
-            //庄家赢
-            
-            if (dealerChair->m_PokerType <= PokerType_9) {
-                this->m_settlement.multiple = 3;
-            }
-            else if (dealerChair->m_PokerType <= PokerType_8) {
-                this->m_settlement.multiple = 2;
-            }
-            else {
-                this->m_settlement.multiple = 1;
-            }
-            
-            m_settlement.winned = false;
-            m_settlement.accounts = -m_settlement.multiple * betPlayer;
-        }
-        else {
-            //闲家赢
-            
-            if (this->m_PokerType <= PokerType_9_Half) {
-                this->m_settlement.multiple = 9;
-            }
-            else if (this->m_PokerType <= PokerType_Pair) {
-                this->m_settlement.multiple = 6;
-            }
-            else if (this->m_PokerType <= PokerType_9) {
-                this->m_settlement.multiple = 3;
-            }
-            else if (this->m_PokerType <= PokerType_8) {
-                this->m_settlement.multiple = 2;
+        if (!m_Stabber->isVisible()) {
+            if (dealerChair->m_PokerType <= m_PokerType) {
+                //庄家赢
+                if (dealerChair->m_PokerType <= PokerType_9) {
+                    m_settlement.multiple = 3;
+                }
+                else if (dealerChair->m_PokerType <= PokerType_8) {
+                    m_settlement.multiple = 2;
+                }
+                else {
+                    m_settlement.multiple = 1;
+                }
+                
+                m_settlement.winned = false;
+                m_settlement.accounts = -m_settlement.multiple * betPlayer;
             }
             else {
-                this->m_settlement.multiple = 1;
+                //闲家赢
+                if (m_PokerType <= PokerType_9_Half) {
+                    m_settlement.multiple = 9;
+                }
+                else if (m_PokerType <= PokerType_Pair) {
+                    m_settlement.multiple = 6;
+                }
+                else if (m_PokerType <= PokerType_9) {
+                    m_settlement.multiple = 3;
+                }
+                else if (m_PokerType <= PokerType_8) {
+                    m_settlement.multiple = 2;
+                }
+                else {
+                    m_settlement.multiple = 1;
+                }
+                
+                m_settlement.winned = true;
+                m_settlement.accounts = m_settlement.multiple * betPlayer;
             }
-            
-            m_settlement.winned = true;
-            m_settlement.accounts = m_settlement.multiple * betPlayer;
         }
-        
-//        log("牌型:%d 倍数：%d 赔付额%d",this->m_PokerType ,m_settlement.multiple, m_settlement.accounts);
+    }
+}
+
+void PokerChair::calculateSettlementForStabber(PokerChair* dealerChair, int jetton){
+    m_settlement.winned = (dealerChair->m_PokerType > m_PokerType);
+    if (m_Stabber->isVisible()) {
+        m_settlement.accounts = (m_settlement.winned ? jetton : -jetton);
     }
 }
 
 void PokerChair::showSettlement(){
-    char mString[100];
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
-        pokerTypeLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
+        char mString[100];
         if (betPlayer <= 0) {
             settlementLabel->setColor(Color3B::WHITE);
             sprintf(mString,"无成绩");
@@ -413,10 +416,33 @@ void PokerChair::showSettlement(){
                 sprintf(mString,"%d倍 %d",m_settlement.multiple, m_settlement.accounts);
             }
         }
+        
+        pokerTypeLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
         settlementLabel->setString(mString);
         settlementLabel->setVisible(true);
     }
     
+}
+
+void PokerChair::showSettlementForStabber(){
+    QLImageSprite* background = getBetZoneBackGround();
+    if (background != NULL) {
+        if (m_Stabber->isVisible()) {
+            char mString[100];
+            if (m_settlement.winned) {
+                sprintf(mString,"刺 +%d", m_settlement.accounts);
+            }
+            else{
+                sprintf(mString,"刺 %d", m_settlement.accounts);
+            }
+            
+            settlementLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
+            settlementLabel->setString(mString);
+            settlementLabel->setVisible(true);
+        }
+        
+        pokerTypeLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
+    }
 }
 
 void PokerChair::showBeStabber(bool yn){
@@ -460,7 +486,8 @@ void PokerChair::clearChair(){
         if (m_Stabber->isVisible()) {
             m_Stabber->setVisible(false);
         }
-        
+        pokerTypeLabel->setColor(Color3B::WHITE);
+        settlementLabel->setColor(Color3B::WHITE);
         betTotal = 0;
         betPlayer = 0;
         removeAllJettons();
