@@ -11,15 +11,19 @@
 
 const float jetton_height_scale = 0.08;
 
-PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true){
-    dealerPlayer = new Player();
-    dealerPlayer->setJettonCount(-1);
-    gamePlayer = new Player();
+PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),gamePlayer(NULL){
 }
 
 PokerDesk::~PokerDesk(){
-    CC_SAFE_DELETE(dealerPlayer);
-    CC_SAFE_DELETE(gamePlayer);
+    if (stabberPlayer != NULL) {
+        CC_SAFE_DELETE(stabberPlayer);
+    }
+    if (dealerPlayer != NULL) {
+        CC_SAFE_DELETE(dealerPlayer);
+    }
+    if (gamePlayer != NULL) {
+        CC_SAFE_DELETE(gamePlayer);
+    }
 }
 
 Scene* PokerDesk::createScene()
@@ -322,13 +326,24 @@ void PokerDesk::waitForChooseDealerAction(){
 }
 
 void PokerDesk::chooseDealerAction(){
-    dealerPlayer->infoConfig("电脑", "images/p2.png", 3000000);
-    
-    dealerHead->setTexture(dealerPlayer->headImage);
-    btn_BeBankerItem->setVisible(false);
-    dealerHead->setVisible(true);
+    if (dealerPlayer == NULL) {
+        dealerPlayer = new Player();
+        dealerPlayer->infoConfig("电脑", "images/p2.png", 3000);
+        dealerHead->setTexture(dealerPlayer->headImage);
+        btn_BeBankerItem->setVisible(false);
+        dealerHead->setVisible(true);
+    }
     
     showDealerInfo();
+}
+
+void PokerDesk::chooseStabberAction(){
+    if (gamePlayer->getJettonCount() >= dealerPlayer->getJettonCount()) {
+        for (int i = 0; i < m_arrChairs.size(); i++) {
+            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+            chair->showBeStabber(true);
+        }
+    }
 }
 
 void PokerDesk::showGamePlayerInfo(){
@@ -337,7 +352,7 @@ void PokerDesk::showGamePlayerInfo(){
     gamePlayerInfoLabel->setString(mString);
 }
 void PokerDesk::showDealerInfo(){
-    if (dealerPlayer->getJettonCount() > 0) {
+    if (dealerPlayer != NULL) {
         char mString[100];
         sprintf(mString,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
         countLabel->setString(mString);
@@ -354,7 +369,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
         }
             break;
         case DeskState_Prepared:{
-            if (dealerPlayer->getJettonCount() > 0) {
+            if (dealerPlayer != NULL) {
                 m_deskState = DeskState_Bet;
             }
             else{
@@ -372,6 +387,26 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
         case DeskState_Bet:{
             m_isSendSet = false;
             m_deskState = DeskState_SendPoker;
+            
+            if (dealerPlayer->getJettonCount() * 3 < dealerPlayer->getJettonInitial()) {
+                //庄家本金小于初始本金1/3，抢刺
+                chooseStabberAction();
+            }
+            
+            sprintf(showTimer->prefixString,"发牌");
+            showTimer->start(10);
+        }
+            break;
+            
+        case DeskState_SendPoker:{
+            if (m_isSendSet) {
+                //发完一把牌
+                m_deskState = DeskState_Settle;
+            }
+            else {
+                //取消动画，强制发完牌
+                
+            }
         }
             break;
             
@@ -419,8 +454,7 @@ void PokerDesk::update(float delta){
             
         case DeskState_SendPoker:{
             if (m_isSendSet) {
-                //是否发完一副牌
-                m_deskState = DeskState_Settle;
+                
             }
             else {
                 sendPoker();
@@ -567,8 +601,8 @@ void PokerDesk::sendPoker(){
     
     int index = m_IndexSend % 9;
     if (index == 0 && m_isSendSingle) {
-        sprintf(showTimer->prefixString,"翻牌决定发牌顺序");
-        showTimer->showPrefix();
+//        sprintf(showTimer->prefixString,"翻牌决定发牌顺序");
+//        showTimer->showPrefix();
         
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         pk->showPokerAnimated(true, true, 0.5);
@@ -585,8 +619,8 @@ void PokerDesk::sendPoker(){
         }
     }
     else if (index > 0 && index <= 8 && m_isSendSingle) {
-        sprintf(showTimer->prefixString,"发牌");
-        showTimer->showPrefix();
+//        sprintf(showTimer->prefixString,"发牌");
+//        showTimer->showPrefix();
         
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         PokerChair* chair = m_arrChairs.at(((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());

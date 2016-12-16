@@ -77,6 +77,7 @@ public:
     void settleAction();
     void chooseDealerAction();//选择庄家
     void waitForChooseDealerAction();//等待选择庄家
+    void chooseStabberAction();//抢刺
     
     void showGamePlayerInfo();
     void showDealerInfo();
