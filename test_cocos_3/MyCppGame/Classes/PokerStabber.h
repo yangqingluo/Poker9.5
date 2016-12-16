@@ -23,6 +23,7 @@ public:
     virtual void onExit();
     static PokerStabber* create(const char* imageName, Size size);
     
+    void showStabber(const char* imageName, const char* name, int jetton);
 private:
     Sprite* head;
     Label* infoLabel;

@@ -66,8 +66,9 @@ public:
     GameTimer* showTimer;
     void showTimerDoneCallback(Node* pNode);
     
-    Player* dealerPlayer;
-    Player* gamePlayer;
+    Player* dealerPlayer;//庄家
+    Player* gamePlayer;//玩家
+    Player* stabberPlayer;//刺
     
     void goBackAction();
     void waitForPrepareAction();

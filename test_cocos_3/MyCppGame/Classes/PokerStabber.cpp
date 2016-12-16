@@ -42,10 +42,22 @@ PokerStabber* PokerStabber::create(const char* imageName, Size size){
     layer->head->setPosition(0.5 * size.width, 0.75 * size.height);
     layer->addChild(layer->head);
     
-    layer->infoLabel = Label::createWithTTF("刺：测试玩家\n筹码：20000", "fonts/微软简标宋.ttf", 6);
+    layer->infoLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 6);
     layer->infoLabel->setColor(Color3B(255, 215, 0));
     layer->infoLabel->setPosition(0.5 * size.width, 0.2 * size.height);
     layer->addChild(layer->infoLabel);
     
     return layer;
 }
+
+void PokerStabber::showStabber(const char* imageName, const char* name, int jetton){
+    head->setTexture(imageName);
+    
+    char mString[100];
+    sprintf(mString, "刺:%s\n筹码:%d",name, jetton);
+    infoLabel->setString(mString);
+}
+
+
+
+

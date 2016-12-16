@@ -18,6 +18,7 @@ USING_NS_CC_EXT;
 #include "JettonSprite.h"
 #include "QLImageSprite.h"
 #include "PokerStabber.h"
+#include "PokerStabberBtn.h"
 
 struct SettlementRef {
     int multiple;//结算倍数
@@ -47,6 +48,7 @@ public:
     void showPokerType();//显示牌型
     void showSettlement();//显示结算
     void calculateSettlement(PokerChair* dealerChair);//结算
+    void showBeStabber(bool yn);//抢刺
     void clearChair();//清除显示
     
     int betTotal;//总下注额
@@ -62,7 +64,7 @@ private:
     CC_SYNTHESIZE(Point,m_point,Point);//牌在桌面的初始位置
     CC_SYNTHESIZE(bool,m_canTouch,CanTouch);//是否能被点击
     
-    LayerColor* m_BeStabberSprite;//抢刺按钮
+    PokerStabberBtn* m_BeStabberSprite;//抢刺按钮
     PokerStabber* m_Stabber;//刺标识
     Sprite* m_BankerSprite;//庄家标识
     Sprite* m_StartPointSprite;//发牌起始顺序标识的精灵

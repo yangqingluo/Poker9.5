@@ -83,6 +83,8 @@
 		FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
 		FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
 		FC851C741DDDAE8500732C40 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */; };
+		FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC8FEF771E038D63009D907E /* PokerStabberBtn.cpp */; };
+		FC8FEF7A1E038D63009D907E /* PokerStabberBtn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC8FEF771E038D63009D907E /* PokerStabberBtn.cpp */; };
 		FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
 		FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5B1DE16728006C2616 /* InviteScene.cpp */; };
 		FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5F1DE1691C006C2616 /* ShopScene.cpp */; };
@@ -227,6 +229,8 @@
 		FC6DB6201DE8395000621B55 /* poker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = poker; sourceTree = "<group>"; };
 		FC7FC2491DF00ACD007A6D25 /* jetton */ = {isa = PBXFileReference; lastKnownFileType = folder; path = jetton; sourceTree = "<group>"; };
 		FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		FC8FEF771E038D63009D907E /* PokerStabberBtn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerStabberBtn.cpp; sourceTree = "<group>"; };
+		FC8FEF781E038D63009D907E /* PokerStabberBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerStabberBtn.h; sourceTree = "<group>"; };
 		FC983D5B1DE16728006C2616 /* InviteScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InviteScene.cpp; sourceTree = "<group>"; };
 		FC983D5C1DE16728006C2616 /* InviteScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteScene.h; sourceTree = "<group>"; };
 		FC983D5F1DE1691C006C2616 /* ShopScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShopScene.cpp; sourceTree = "<group>"; };
@@ -427,6 +431,8 @@
 				FCD0BD771DF2D4C800952CAD /* BetLimiter.h */,
 				FCCBA4941E026E110072EA7E /* PokerStabber.cpp */,
 				FCCBA4951E026E110072EA7E /* PokerStabber.h */,
+				FC8FEF771E038D63009D907E /* PokerStabberBtn.cpp */,
+				FC8FEF781E038D63009D907E /* PokerStabberBtn.h */,
 				FC47C01C1DF4385C00A22F70 /* Player.cpp */,
 				FC47C01D1DF4385C00A22F70 /* Player.h */,
 				FC292EE21DF7F0310096B017 /* FrameManager.cpp */,
@@ -654,6 +660,7 @@
 				FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FCC2D04B1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
+				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
@@ -678,6 +685,7 @@
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,
+				FC8FEF7A1E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */,
