@@ -86,6 +86,16 @@ bool HelloWorld::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
+    
+    Label* txt = Label::createWithTTF("this is a clippingNode Test...this is a clippingNode Test...","fonts/arial.ttf",30);
+    txt->setColor(Color3B::RED);     //裁剪内容
+    txt->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    this->addChild(txt);
+    
+    MoveBy* to = MoveBy::create(5,Vec3(visibleSize.width / 2 + origin.x + txt->getContentSize().width / 2,0,0));      //来回滚动动画
+    txt->runAction(RepeatForever::create(Sequence::create(to,to->reverse(),NULL)));
+    
+    
 //    //使用两张图片分别创建精灵
 //    auto logo1 = Sprite::create("card/card_bg.png");
 //    auto logo2 = Sprite::create("card/1.jpg");
