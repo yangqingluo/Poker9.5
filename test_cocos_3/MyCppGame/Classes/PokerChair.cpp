@@ -439,6 +439,7 @@ void PokerChair::showSettlementForStabber(){
             settlementLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
             settlementLabel->setString(mString);
             settlementLabel->setVisible(true);
+            
         }
         
         pokerTypeLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
