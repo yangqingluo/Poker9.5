@@ -333,9 +333,7 @@ void Hall::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
         auto scene = PokerDesk::createScene();
         PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-        sprintf(layer->gamePlayer->nickName,"阿罗");
-        sprintf(layer->gamePlayer->headImage,"p4");
-        layer->gamePlayer->setJettonCount(3000);
+        layer->gamePlayer->infoConfig("阿罗", "images/p4.png", 3000);
         
         TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
         Director::getInstance()->pushScene(ts);

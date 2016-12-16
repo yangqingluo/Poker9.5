@@ -242,7 +242,7 @@ void PokerDesk::waitForPrepareAction(){
         btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(30);
+        showTimer->start(3);
     }
 }
 
@@ -269,7 +269,7 @@ void PokerDesk::betAction(){
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(30);
+        showTimer->start(3);
         
         int zeroCount = 0;//牌型为0点的座位计数
         int accountDealer = 0;
@@ -321,16 +321,14 @@ void PokerDesk::waitForChooseDealerAction(){
         btn_BeBankerItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"抢庄");
-        showTimer->start(10);
+        showTimer->start(5);
     }
 }
 
 void PokerDesk::chooseDealerAction(){
-    sprintf(dealerPlayer->nickName,"电脑");
-    sprintf(dealerPlayer->headImage,"p2");
+    dealerPlayer->infoConfig("电脑", "images/p2.png", 3000000);
     
-    dealerPlayer->setJettonCount(3000000);
-    dealerHead->setTexture("images/p2.png");
+    dealerHead->setTexture(dealerPlayer->headImage);
     btn_BeBankerItem->setVisible(false);
     dealerHead->setVisible(true);
     
