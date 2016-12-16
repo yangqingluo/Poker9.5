@@ -492,6 +492,14 @@ void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
             break;
             
         case 11:{
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+                chair->showBeStabber(false);
+                if (chair == pSender) {
+                    chair->showStabber(gamePlayer->headImage, gamePlayer->nickName, gamePlayer->getJettonCount());
+                }
+            }
+            
             
         }
             break;

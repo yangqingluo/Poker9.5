@@ -49,6 +49,7 @@ public:
     void showSettlement();//显示结算
     void calculateSettlement(PokerChair* dealerChair);//结算
     void showBeStabber(bool yn);//抢刺
+    void showStabber(const char* imageName, const char* name, int jetton);//显示刺的信息
     void clearChair();//清除显示
     
     int betTotal;//总下注额

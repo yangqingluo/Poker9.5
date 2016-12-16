@@ -425,6 +425,13 @@ void PokerChair::showBeStabber(bool yn){
     }
 }
 
+void PokerChair::showStabber(const char* imageName, const char* name, int jetton){
+    if (m_Stabber != NULL) {
+        m_Stabber->showStabber(imageName, name, jetton);
+        m_Stabber->setVisible(true);
+    }
+}
+
 void PokerChair::clearChair(){
     removeAllPokers();
     
