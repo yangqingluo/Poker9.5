@@ -444,12 +444,27 @@ void PokerDesk::update(float delta){
 
 #pragma chair
 void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
-    if (m_deskState == DeskState_Bet) {
-        PokerChair* chair = (PokerChair* )pSender;
-        
-        JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
-        chair->addJetton(sp);
+    Node* node = (Node* )pTarget;
+    switch (node->getTag()) {
+        case 10:{
+            if (m_deskState == DeskState_Bet) {
+                PokerChair* chair = (PokerChair* )pSender;
+                
+                JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
+                chair->addJetton(sp);
+            }
+        }
+            break;
+            
+        case 11:{
+            
+        }
+            break;
+            
+        default:
+            break;
     }
+    
 }
 
 PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, float yScale, int index){

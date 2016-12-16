@@ -11,7 +11,7 @@
 #include "JettonChosenSprite.h"
 
 
-PokerChair::PokerChair():m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0),m_canTouch(false){
+PokerChair::PokerChair():m_BeStabberSprite(NULL),m_Stabber(NULL),m_BankerSprite(NULL),m_betZoneBackGround(NULL),m_touchListener(NULL),m_touchCallback(NULL),betTotal(0),betPlayer(0),m_canTouch(false){
     
 }
 
@@ -61,6 +61,7 @@ void PokerChair::onEnter(){
     
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
+        background->setTag(10);
         background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
         this->addChild(background);
         
@@ -104,6 +105,15 @@ void PokerChair::onEnter(){
         m_Stabber = PokerStabber::create("images/default_head.png", size_stabber);
         m_Stabber->setPosition(this->getContentSize().width - 1.0 * m_Stabber->getContentSize().width, 0);
         this->addChild(m_Stabber);
+        m_Stabber->setVisible(false);
+        
+        m_BeStabberSprite->setTag(11);
+        //触摸响应注册
+        auto stabber_listener = EventListenerTouchOneByOne::create();
+        stabber_listener->setSwallowTouches(true);
+        stabber_listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
+        getEventDispatcher()->addEventListenerWithSceneGraphPriority(stabber_listener, m_BeStabberSprite);//注册分发器
+        
     }
     else{
         pokerTypeLabel->setPosition(m_BankerSprite->getPositionX(), 0.3 * this->getContentSize().height);
@@ -115,6 +125,9 @@ void PokerChair::onExit(){
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
         getEventDispatcher()->removeEventListenersForTarget(background);
+    }
+    if (m_BeStabberSprite != NULL) {
+        getEventDispatcher()->removeEventListenersForTarget(m_BeStabberSprite);
     }
     
     LayerColor::onExit();
