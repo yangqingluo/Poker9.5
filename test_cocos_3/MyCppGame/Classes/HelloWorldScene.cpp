@@ -87,14 +87,17 @@ bool HelloWorld::init()
     this->addChild(menu, 1);
     
     
-    Label* txt = Label::createWithTTF("this is a clippingNode Test...this is a clippingNode Test...","fonts/arial.ttf",30);
-    txt->setColor(Color3B::RED);     //裁剪内容
-    txt->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    Label* txt = Label::createWithTTF("大江东去浪淘尽，千古风流人物，故垒西边，人道是，三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。\n遥想公瑾当年，小乔初嫁了，雄姿英发，羽扇纶巾。谈笑间，樯橹灰飞烟灭。故国神游，多情应笑我，早生华发。人生如梦，一樽还酹江月。","fonts/STKaiti.ttf",30);
+    txt->setColor(Color3B::RED);
+    txt->setPosition(Vec2(visibleSize.width + origin.x + txt->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
     this->addChild(txt);
     
-    MoveBy* to = MoveBy::create(5,Vec3(visibleSize.width / 2 + origin.x + txt->getContentSize().width / 2,0,0));      //来回滚动动画
-    txt->runAction(RepeatForever::create(Sequence::create(to,to->reverse(),NULL)));
-    
+    float width = visibleSize.width + txt->getContentSize().width;
+    MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
+    CallFunc* func1 = CallFunc::create([=]{
+        txt->setPositionX(visibleSize.width + origin.x + txt->getContentSize().width / 2);
+    });
+    txt->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
     
 //    //使用两张图片分别创建精灵
 //    auto logo1 = Sprite::create("card/card_bg.png");
