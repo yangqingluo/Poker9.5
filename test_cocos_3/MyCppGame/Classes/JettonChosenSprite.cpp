@@ -118,9 +118,10 @@ void JettonChosenSprite::setSelected(bool select){
     m_isSelected = select;
     bgSprite->setVisible(select);
     if (select) {
-        Blink* blink = Blink::create(MAX_INPUT, 2 * MAX_INPUT);
-        blink->setTag(6);
-        this->bgSprite->runAction(blink);
+        Blink* blink = Blink::create(10, 2 * 10);
+        RepeatForever* repeat = RepeatForever::create(blink);
+        repeat->setTag(6);
+        this->bgSprite->runAction(repeat);
     }
     else{
         this->bgSprite->stopActionByTag(6);
