@@ -203,13 +203,13 @@ void HelloWorld::connectServer()
     
     if (result) {
         //发送数据 Send
-        
         SEND_PACKAGE package = {0};
         const char* handle = "{\"id\":1000}";
-        package.valueLength = (int)strlen(handle);
+        int length = (int)strlen(handle);
+        package.valueLength = reversebytes_uint32t(length);
         memcpy(package.value, handle, package.valueLength);
         
-        socket.Send((const char *)&package, sizeof(int) + package.valueLength);
+        socket.Send((const char *)&package, sizeof(int) + length);
         CCLOG("connect to server success!");
         // 开启新线程，在子线程中，接收数据
         std::thread recvThread = std::thread(&HelloWorld::receiveData, this);
