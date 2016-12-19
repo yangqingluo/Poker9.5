@@ -117,6 +117,8 @@
 		FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
 		FCDF45601DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
 		FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
+		FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */; };
+		FCF3B63D1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -266,6 +268,8 @@
 		FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerDeskScene.h; sourceTree = "<group>"; };
 		FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonChosenSprite.cpp; sourceTree = "<group>"; };
 		FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonChosenSprite.h; sourceTree = "<group>"; };
+		FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MTNotificationQueue.cpp; sourceTree = "<group>"; };
+		FCF3B63B1E07AD3B0065C788 /* MTNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationQueue.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,6 +508,8 @@
 		FC9EB5421E067F1800EFD14E /* ODSocket */ = {
 			isa = PBXGroup;
 			children = (
+				FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */,
+				FCF3B63B1E07AD3B0065C788 /* MTNotificationQueue.h */,
 				FC9EB5431E067F1800EFD14E /* ODSocket.cpp */,
 				FC9EB5441E067F1800EFD14E /* ODSocket.h */,
 				FC9EB5451E067F1800EFD14E /* stdafx.cpp */,
@@ -685,6 +691,7 @@
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FCC2D04B1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
 				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
+				FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
@@ -727,6 +734,7 @@
 				FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */,
 				FCC2D04C1DDF20DE00E8353D /* LoginScene.cpp in Sources */,
 				FC292EE51DF7F0310096B017 /* FrameManager.cpp in Sources */,
+				FCF3B63D1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */,
 			);
