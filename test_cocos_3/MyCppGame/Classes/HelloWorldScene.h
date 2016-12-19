@@ -22,7 +22,6 @@ public:
 public:
     void connectServer();
     void receiveData();
-    
 private:
     ODSocket socket;
 };

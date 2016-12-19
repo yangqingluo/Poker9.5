@@ -200,18 +200,17 @@ void HelloWorld::connectServer()
     // 初始化
     // ODSocket socket;
     socket.Init();
-    socket.Create(AF_INET, SOCK_STREAM, 0);
+    socket.Create(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     
     // 设置服务器的IP地址，端口号
     // 并连接服务器 Connect
-    const char* ip = "10.128.31.231";
-    int port = 8888;
+    const char* ip = "222.128.13.159";
+    int port = 8989;
     bool result = socket.Connect(ip, port);
     
-    // 发送数据 Send
-//    socket.Send("{\"id\":1000}", 5);
-    
     if (result) {
+        // 发送数据 Send
+        socket.Send("{\"id\":1000}", 11);
         CCLOG("connect to server success!");
         // 开启新线程，在子线程中，接收数据
         std::thread recvThread = std::thread(&HelloWorld::receiveData, this);
@@ -241,3 +240,6 @@ void HelloWorld::receiveData()
     // 关闭连接
     socket.Close();
 }
+
+
+
