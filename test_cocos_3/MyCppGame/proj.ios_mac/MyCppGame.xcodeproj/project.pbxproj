@@ -270,6 +270,7 @@
 		FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonChosenSprite.h; sourceTree = "<group>"; };
 		FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MTNotificationQueue.cpp; sourceTree = "<group>"; };
 		FCF3B63B1E07AD3B0065C788 /* MTNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationQueue.h; sourceTree = "<group>"; };
+		FCF3B63F1E07BAED0065C788 /* tcpcommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tcpcommand.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -516,6 +517,7 @@
 				FC9EB5461E067F1800EFD14E /* stdafx.h */,
 				FC9EB5471E067F1800EFD14E /* targetver.h */,
 				FC9EB5481E067F1800EFD14E /* tchar.h */,
+				FCF3B63F1E07BAED0065C788 /* tcpcommand.h */,
 			);
 			path = ODSocket;
 			sourceTree = "<group>";

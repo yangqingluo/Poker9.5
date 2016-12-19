@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "ODSocket.h"
+#include "tcpcommand.h"
 
 class HelloWorld : public cocos2d::Layer
 {

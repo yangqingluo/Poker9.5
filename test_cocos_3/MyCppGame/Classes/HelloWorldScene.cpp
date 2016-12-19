@@ -202,8 +202,14 @@ void HelloWorld::connectServer()
     bool result = socket.Connect(ip, port);
     
     if (result) {
-        // 发送数据 Send
-        socket.Send("{\"id\":1000}", 11);
+        //发送数据 Send
+        
+        SEND_PACKAGE package = {0};
+        const char* handle = "{\"id\":1000}";
+        package.valueLength = (int)strlen(handle);
+        memcpy(package.value, handle, package.valueLength);
+        
+        socket.Send((const char *)&package, sizeof(int) + package.valueLength);
         CCLOG("connect to server success!");
         // 开启新线程，在子线程中，接收数据
         std::thread recvThread = std::thread(&HelloWorld::receiveData, this);
