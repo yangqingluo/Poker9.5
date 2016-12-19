@@ -91,6 +91,10 @@
 		FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D5F1DE1691C006C2616 /* ShopScene.cpp */; };
 		FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D631DE171F9006C2616 /* ExchangeScene.cpp */; };
 		FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D631DE171F9006C2616 /* ExchangeScene.cpp */; };
+		FC9EB5491E067F1800EFD14E /* ODSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC9EB5431E067F1800EFD14E /* ODSocket.cpp */; };
+		FC9EB54A1E067F1800EFD14E /* ODSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC9EB5431E067F1800EFD14E /* ODSocket.cpp */; };
+		FC9EB54B1E067F1800EFD14E /* stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC9EB5451E067F1800EFD14E /* stdafx.cpp */; };
+		FC9EB54C1E067F1800EFD14E /* stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC9EB5451E067F1800EFD14E /* stdafx.cpp */; };
 		FCA0AD891DF54F4600DA1515 /* poker.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA0AD881DF54F4600DA1515 /* poker.png */; };
 		FCA0AD8A1DF54F4600DA1515 /* poker.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA0AD881DF54F4600DA1515 /* poker.png */; };
 		FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
@@ -237,6 +241,12 @@
 		FC983D601DE1691C006C2616 /* ShopScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopScene.h; sourceTree = "<group>"; };
 		FC983D631DE171F9006C2616 /* ExchangeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExchangeScene.cpp; sourceTree = "<group>"; };
 		FC983D641DE171F9006C2616 /* ExchangeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangeScene.h; sourceTree = "<group>"; };
+		FC9EB5431E067F1800EFD14E /* ODSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ODSocket.cpp; sourceTree = "<group>"; };
+		FC9EB5441E067F1800EFD14E /* ODSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODSocket.h; sourceTree = "<group>"; };
+		FC9EB5451E067F1800EFD14E /* stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdafx.cpp; sourceTree = "<group>"; };
+		FC9EB5461E067F1800EFD14E /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
+		FC9EB5471E067F1800EFD14E /* targetver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = targetver.h; sourceTree = "<group>"; };
+		FC9EB5481E067F1800EFD14E /* tchar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tchar.h; sourceTree = "<group>"; };
 		FCA0AD881DF54F4600DA1515 /* poker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poker.png; sourceTree = "<group>"; };
 		FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonSprite.cpp; sourceTree = "<group>"; };
 		FCB5E04B1DF017D300EDB420 /* JettonSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonSprite.h; sourceTree = "<group>"; };
@@ -437,6 +447,7 @@
 				FC47C01D1DF4385C00A22F70 /* Player.h */,
 				FC292EE21DF7F0310096B017 /* FrameManager.cpp */,
 				FC292EE31DF7F0310096B017 /* FrameManager.h */,
+				FC9EB5421E067F1800EFD14E /* ODSocket */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -489,6 +500,19 @@
 			name = Icons;
 			path = ios;
 			sourceTree = SOURCE_ROOT;
+		};
+		FC9EB5421E067F1800EFD14E /* ODSocket */ = {
+			isa = PBXGroup;
+			children = (
+				FC9EB5431E067F1800EFD14E /* ODSocket.cpp */,
+				FC9EB5441E067F1800EFD14E /* ODSocket.h */,
+				FC9EB5451E067F1800EFD14E /* stdafx.cpp */,
+				FC9EB5461E067F1800EFD14E /* stdafx.h */,
+				FC9EB5471E067F1800EFD14E /* targetver.h */,
+				FC9EB5481E067F1800EFD14E /* tchar.h */,
+			);
+			path = ODSocket;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -667,7 +691,9 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */,
 				FCCBA4961E026E110072EA7E /* PokerStabber.cpp in Sources */,
+				FC9EB5491E067F1800EFD14E /* ODSocket.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				FC9EB54B1E067F1800EFD14E /* stdafx.cpp in Sources */,
 				FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
 				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
@@ -688,7 +714,9 @@
 				FC8FEF7A1E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
+				FC9EB54C1E067F1800EFD14E /* stdafx.cpp in Sources */,
 				FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */,
+				FC9EB54A1E067F1800EFD14E /* ODSocket.cpp in Sources */,
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */,
 				FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
