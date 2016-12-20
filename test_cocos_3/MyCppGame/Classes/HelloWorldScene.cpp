@@ -150,30 +150,28 @@ bool HelloWorld::init()
 }
 
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
-    auto scene = Hall::createScene();
-    Director::getInstance()->pushScene(scene);
-//    switch (index) {
-//        case 0:{
-//            auto scene = Hall::createScene();
-//            Director::getInstance()->pushScene(scene);
-//        }
-//            break;
-//            
-//        case 1:{
-//            connectServer();
-//        }
-//            break;
-//            
-//        case 2:{
-//            auto scene = LoginScene::createScene();
-//            
-//            Director::getInstance()->pushScene(scene);
-//        }
-//            break;
-//            
-//        default:
-//            break;
-//    }
+    switch (index) {
+        case 0:{
+            auto scene = Hall::createScene();
+            Director::getInstance()->pushScene(scene);
+        }
+            break;
+            
+        case 1:{
+            
+        }
+            break;
+            
+        case 2:{
+            auto scene = LoginScene::createScene();
+            
+            Director::getInstance()->pushScene(scene);
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
