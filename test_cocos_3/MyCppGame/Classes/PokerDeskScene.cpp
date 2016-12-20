@@ -781,7 +781,7 @@ TableViewCell* PokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
             float height = 30;
             
             auto head = Sprite::create("images/default_head.png");
-            head->setScale(MIN(0.5 * listCellWidth, height) / head->getContentSize().width);
+            head->setScale(MIN(0.3 * listCellWidth, height) / head->getContentSize().width);
             head->setPosition(0.25 * listCellWidth, 0.5 * height);
             cell->addChild(head, 0 , 2);
             
