@@ -72,8 +72,8 @@
 		FC292F0D1DF7FA4A0096B017 /* UIRes in Resources */ = {isa = PBXBuildFile; fileRef = FC292F0B1DF7FA4A0096B017 /* UIRes */; };
 		FC2BEFFD1E09059A007A3F4E /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2BEFFB1E09059A007A3F4E /* LoginScene.cpp */; };
 		FC2BEFFE1E09059A007A3F4E /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2BEFFB1E09059A007A3F4E /* LoginScene.cpp */; };
-		FC2BF0021E090608007A3F4E /* InputCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2BF0001E090608007A3F4E /* InputCell.cpp */; };
-		FC2BF0031E090608007A3F4E /* InputCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2BF0001E090608007A3F4E /* InputCell.cpp */; };
+		FC2BF0021E090608007A3F4E /* RegistInputView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2BF0001E090608007A3F4E /* RegistInputView.cpp */; };
+		FC2BF0031E090608007A3F4E /* RegistInputView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2BF0001E090608007A3F4E /* RegistInputView.cpp */; };
 		FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
 		FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
 		FC47C01E1DF4385C00A22F70 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C01C1DF4385C00A22F70 /* Player.cpp */; };
@@ -228,8 +228,8 @@
 		FC292F0B1DF7FA4A0096B017 /* UIRes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = UIRes; sourceTree = "<group>"; };
 		FC2BEFFB1E09059A007A3F4E /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
 		FC2BEFFC1E09059A007A3F4E /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScene.h; sourceTree = "<group>"; };
-		FC2BF0001E090608007A3F4E /* InputCell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputCell.cpp; sourceTree = "<group>"; };
-		FC2BF0011E090608007A3F4E /* InputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputCell.h; sourceTree = "<group>"; };
+		FC2BF0001E090608007A3F4E /* RegistInputView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RegistInputView.cpp; sourceTree = "<group>"; };
+		FC2BF0011E090608007A3F4E /* RegistInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistInputView.h; sourceTree = "<group>"; };
 		FC35C0921DEAC741009C3A83 /* GameTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameTimer.cpp; sourceTree = "<group>"; };
 		FC35C0931DEAC741009C3A83 /* GameTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTimer.h; sourceTree = "<group>"; };
 		FC35C0961DEAE239009C3A83 /* PokerChair.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerChair.cpp; sourceTree = "<group>"; };
@@ -522,8 +522,8 @@
 		FC2BEFFF1E0905AC007A3F4E /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				FC2BF0001E090608007A3F4E /* InputCell.cpp */,
-				FC2BF0011E090608007A3F4E /* InputCell.h */,
+				FC2BF0001E090608007A3F4E /* RegistInputView.cpp */,
+				FC2BF0011E090608007A3F4E /* RegistInputView.h */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -727,7 +727,7 @@
 				FC9EB54B1E067F1800EFD14E /* stdafx.cpp in Sources */,
 				FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
 				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
-				FC2BF0021E090608007A3F4E /* InputCell.cpp in Sources */,
+				FC2BF0021E090608007A3F4E /* RegistInputView.cpp in Sources */,
 				FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
 				FCBDFECF1DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FCDF45601DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */,
@@ -755,7 +755,7 @@
 				FC2BEFFE1E09059A007A3F4E /* LoginScene.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
-				FC2BF0031E090608007A3F4E /* InputCell.cpp in Sources */,
+				FC2BF0031E090608007A3F4E /* RegistInputView.cpp in Sources */,
 				FC4B4B8B1DF1500200E0271B /* QLImageSprite.cpp in Sources */,
 				FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
 				FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */,

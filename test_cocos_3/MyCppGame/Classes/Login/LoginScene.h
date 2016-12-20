@@ -15,8 +15,7 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
-#include "FrameManager.h"
-#include "QLImageSprite.h"
+
 
 class LoginShowItem : public Ref{
 public:
@@ -24,7 +23,7 @@ public:
     char content[100];
 };
 
-class LoginScene : public Layer, public TableViewDataSource, public TableViewDelegate
+class LoginScene : public Layer
 {
 public:
     static Scene* createScene();
@@ -35,17 +34,8 @@ public:
     
     void buttonCallback(Ref* pSender, int index);
 private:
-    FrameManager m_frame;
-    Vector<LoginShowItem* > showItems;
-    TableView* inputListTableView;
     
-    Size tableCellSizeForIndex(TableView* table, ssize_t idx);
-    TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
-    ssize_t numberOfCellsInTableView(TableView* table);
-    void tableCellTouched(TableView* table, TableViewCell* cell);
     
-    void scrollViewDidScroll(ScrollView* view);
-    void scrollViewDidZoom(ScrollView* view);
 };
 
 #endif /* LoginScene_h */
