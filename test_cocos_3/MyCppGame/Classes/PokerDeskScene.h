@@ -33,7 +33,7 @@ enum DeskState
     DeskState_Settle,//结算
 };
 
-class PokerDesk : public cocos2d::Layer
+class PokerDesk : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
     PokerDesk();
@@ -53,6 +53,8 @@ public:
     QLImageSprite* upright_sprite;
 //    QLImageSprite* message_sprite;
     QLImageSprite* bottom_sprite;
+    QLImageSprite* playerList_sprite;
+    TableView* playerListTableView;
     Label* countLabel;
     Label* messageLabel;
     Label* gamePlayerInfoLabel;
@@ -67,6 +69,7 @@ public:
     void showTimerDoneCallback(Node* pNode);
     
     Player* dealerPlayer;//庄家
+    Player* pcPlayer;//电脑玩家
     Player* gamePlayer;//玩家
     Player* stabberPlayer;//刺
     
@@ -105,6 +108,12 @@ private:
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
     void addJetton(PokerChair* chair,JettonSprite* jetton);//添加筹码
     virtual void update(float delta);//系统scheduleupdate回调函数
+    
+    Size tableCellSizeForIndex(TableView* table, ssize_t idx);
+    TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
+    ssize_t numberOfCellsInTableView(TableView* table);
+    
+    void tableCellTouched(TableView* table, TableViewCell* cell);
 };
 
 #endif /* PokerDeskScene_h */

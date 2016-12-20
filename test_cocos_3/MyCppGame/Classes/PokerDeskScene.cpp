@@ -12,6 +12,8 @@
 const float jetton_height_scale = 0.08;
 
 PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),gamePlayer(NULL){
+    pcPlayer = new Player();
+    pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
 }
 
 PokerDesk::~PokerDesk(){
@@ -22,6 +24,9 @@ PokerDesk::~PokerDesk(){
         CC_SAFE_DELETE(dealerPlayer);
     }
     if (gamePlayer != NULL) {
+        CC_SAFE_DELETE(gamePlayer);
+    }
+    if (pcPlayer != NULL) {
         CC_SAFE_DELETE(gamePlayer);
     }
 }
@@ -205,6 +210,17 @@ void PokerDesk::popButtonCallback(Node* pNode){
 
 void PokerDesk::onEnter(){
     Layer::onEnter();
+    
+    playerList_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(upright_sprite->getContentSize().width, 0.9 * (upright_sprite->getBoundingBox().getMinY() - bottom_sprite->getBoundingBox().getMaxY())));
+    playerList_sprite->setPosition(upright_sprite->getPositionX(), 0.5 * (upright_sprite->getBoundingBox().getMinY() + bottom_sprite->getBoundingBox().getMaxY()));
+    this->addChild(playerList_sprite);
+    
+    playerListTableView = TableView::create(this, Size(playerList_sprite->getContentSize().width,  playerList_sprite->getContentSize().height));
+    playerListTableView->setPosition(0 , 0);
+    playerListTableView->setDirection(TableView::Direction::VERTICAL);
+    playerListTableView->setDelegate(this);
+    playerList_sprite->addChild(playerListTableView);
+    
     this->showGamePlayerInfo();
     this->showDealerInfo();
     
@@ -362,8 +378,7 @@ void PokerDesk::waitForChooseDealerAction(){
 
 void PokerDesk::chooseDealerAction(){
     if (dealerPlayer == NULL) {
-        dealerPlayer = new Player();
-        dealerPlayer->infoConfig("电脑", "images/p2.png", 3000);
+        dealerPlayer = pcPlayer;
         dealerHead->setTexture(dealerPlayer->headImage);
         btn_BeBankerItem->setVisible(false);
         dealerHead->setVisible(true);
@@ -395,6 +410,8 @@ void PokerDesk::showDealerInfo(){
     else{
         countLabel->setString("庄家：无\n桌子人数：2\n");
     }
+    
+    playerListTableView->reloadData();
 }
 
 void PokerDesk::showTimerDoneCallback(Node* pNode){
@@ -737,4 +754,79 @@ void PokerDesk::turnedSinglePokerCallback(Node* pSender){
 //            }
 //        }
     }
+}
+
+#pragma tableview
+Size PokerDesk::tableCellSizeForIndex(TableView* table, ssize_t idx)
+{
+    if (table == playerListTableView) {
+        return Size(playerList_sprite->getContentSize().width, 30);
+    }
+    
+    return Size::ZERO;
+}
+
+//定制每个cell的内容
+TableViewCell* PokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
+{
+    if (table == playerListTableView) {
+        TableViewCell* cell = table->dequeueCell();
+        
+        if(!cell)
+        {
+            cell = new TableViewCell();
+            cell->autorelease();
+            
+            float listCellWidth = playerList_sprite->getContentSize().width;
+            float height = 30;
+            
+            auto head = Sprite::create("images/default_head.png");
+            head->setScale(MIN(0.5 * listCellWidth, height) / head->getContentSize().width);
+            head->setPosition(0.25 * listCellWidth, 0.5 * height);
+            cell->addChild(head, 0 , 2);
+            
+            Label* titleLabel = Label::createWithTTF("test", "fonts/STKaiti.ttf", 8);
+            titleLabel->setTextColor(Color4B::BLACK);
+            titleLabel->setPosition(0.75 * listCellWidth, 0.5 * height);
+            titleLabel->setDimensions(0.5 * listCellWidth, height);
+            titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+            titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            cell->addChild(titleLabel, 0 , 1);
+        }
+        
+        Label* label = (Label* )cell->getChildByTag(1);
+        Sprite* head = (Sprite* )cell->getChildByTag(2);
+        char content[100];
+        if (idx == 0) {
+            sprintf(content, "电脑\n%d",pcPlayer->getJettonCount());
+            head->setTexture(pcPlayer->headImage);
+        }
+        else{
+            sprintf(content, "%s\n%d", gamePlayer->nickName, gamePlayer->getJettonCount());
+            head->setTexture(gamePlayer->headImage);
+        }
+        
+        label->setString(content);
+        
+        
+        
+        
+        return cell;
+    }
+    
+    return NULL;
+}
+
+//确定这个tableview的cell行数
+ssize_t PokerDesk::numberOfCellsInTableView(TableView* table)
+{
+    if (table == playerListTableView) {
+        return 2;
+    }
+    
+    return 0;
+}
+
+void PokerDesk::tableCellTouched(TableView* table, TableViewCell* cell){
+    
 }
