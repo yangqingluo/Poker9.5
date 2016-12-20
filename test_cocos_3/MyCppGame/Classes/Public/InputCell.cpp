@@ -24,8 +24,29 @@ bool InputCell::init(){
     textField->setHorizontalAlignment(TextHAlignment::LEFT);
     textField->setVerticalAlignment(TextVAlignment::CENTER);
     textField->setTextColor(Color4B::BLACK);
-    this->addChild(textField, 0, 2);
-    textField->setDelegate(this);
+//    this->addChild(textField, 0, 2);
+//    textField->setDelegate(this);
+    
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    inputBox = EditBox::create(Size(0.5 * visibleSize.width, 0.8 * 30), Scale9Sprite::create("images/green_edit.png"));
+    this->addChild(inputBox);
+    
+    //属性设置
+//    inputBox->setFontName("fonts/STKaiti.ttf");
+    inputBox->setFontSize(12);
+    inputBox->setFontColor(Color4B::BLACK);
+//    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+    inputBox->setPlaceholderFontSize(12);
+    inputBox->setPlaceholderFontColor(Color4B::GRAY);
+    inputBox->setMaxLength(8);
+    
+    //模式类型设置
+    inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+    inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
+    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
+    
+    //委托代理对象this
+    inputBox->setDelegate(this);
     
     return true;
 }
@@ -33,20 +54,23 @@ bool InputCell::init(){
 void InputCell::onEnter(){
     TableViewCell::onEnter();
     
-    auto dispatcher = Director::getInstance()->getEventDispatcher();
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(InputCell::onTouchBegan,this);
-    listener->onTouchMoved = CC_CALLBACK_2(InputCell::onTouchMoved,this);
-    listener->onTouchEnded = CC_CALLBACK_2(InputCell::onTouchEnded,this);
-    listener->setSwallowTouches(false);//向下传递触摸
-    dispatcher->addEventListenerWithSceneGraphPriority(listener,this);
+//    auto dispatcher = Director::getInstance()->getEventDispatcher();
+//    auto listener = EventListenerTouchOneByOne::create();
+//    listener->onTouchBegan = CC_CALLBACK_2(InputCell::onTouchBegan,this);
+//    listener->onTouchMoved = CC_CALLBACK_2(InputCell::onTouchMoved,this);
+//    listener->onTouchEnded = CC_CALLBACK_2(InputCell::onTouchEnded,this);
+//    listener->setSwallowTouches(false);//向下传递触摸
+//    dispatcher->addEventListenerWithSceneGraphPriority(listener,this);
     
 //    titleLabel->setPosition(0.15 * this->getContentSize().width, 0.5 * this->getContentSize().height);
 //    titleLabel->setDimensions(0.3 * this->getContentSize().width, this->getContentSize().height);
     
-    textField->setContentSize(Size(0.5 * this->getContentSize().width, 0.8 * this->getContentSize().height));
-    textField->setPosition(0.5 * this->getContentSize().width, 0.5 * this->getContentSize().height);
+//    textField->setContentSize(Size(0.5 * this->getContentSize().width, 0.8 * this->getContentSize().height));
+//    textField->setPosition(0.5 * this->getContentSize().width, 0.5 * this->getContentSize().height);
 //    textField->setDimensions(0.5 * this->getContentSize().width, 0.8 * this->getContentSize().height);
+    
+    inputBox->setPosition(Vec2(0.5 * this->getContentSize().width, 0.5 * this->getContentSize().height));
+    
 }
 void InputCell::onExit(){
     TableViewCell::onExit();
@@ -101,15 +125,38 @@ bool InputCell::onTextFieldDetachWithIME(TextFieldTTF* sender)
 bool InputCell::onTextFieldInsertText(TextFieldTTF* sender, const char* text, int nLen)
 {
     //事件处理
-    CCLOG("CharCount: %d", sender->getCharCount());
-    
-    return false; //输入字符。若不允许输入字符return true;
+    return true; //输入字符。若不允许输入字符return true;
 }
 
 //当用户删除文字的时候的回调函数
 bool InputCell::onTextFieldDeleteBackward(TextFieldTTF* sender, const char* delText, int nLen)
 {
-    return false; //删除字符。若不允许删除字符return true;
+    return true; //删除字符。若不允许删除字符return true;
+}
+
+#pragma edixBox
+//开始编辑
+void InputCell::editBoxEditingDidBegin(EditBox* editBox)
+{
+    CCLog("editBox %p DidBegin !", editBox);
+}
+
+//结束编辑
+void InputCell::editBoxEditingDidEnd(EditBox* editBox)
+{
+    CCLog("editBox %p DidEnd !", editBox);
+}
+
+//编辑框内容改变
+void InputCell::editBoxTextChanged(EditBox* editBox, const std::string& text)
+{
+    CCLog("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+}
+
+//触发return返回
+void InputCell::editBoxReturn(EditBox* editBox)
+{
+    CCLog("editBox %p was returned !",editBox);
 }
 
 #pragma public

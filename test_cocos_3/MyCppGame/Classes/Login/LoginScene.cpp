@@ -130,12 +130,12 @@ TableViewCell* LoginScene::tableCellAtIndex(TableView* table, ssize_t idx)
         }
         
         LoginShowItem* item = showItems.at(idx);
-        cell->textField->setPlaceHolder(item->content);
+        cell->inputBox->setPlaceHolder(item->content);
         if (idx == 2 || idx == 3) {
-            cell->textField->setSecureTextEntry(true);
+            cell->inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
         }
         else {
-            cell->textField->setSecureTextEntry(false);
+            cell->inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
         }
         
         return cell;
