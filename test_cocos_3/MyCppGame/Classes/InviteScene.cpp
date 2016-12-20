@@ -75,10 +75,6 @@ bool InviteScene::init()
     inviteBG->setPosition(Vec2(inviteBG->getBoundingBox().size.width / 2, inviteBG->getBoundingBox().size.height / 2));
     inviteSprite->addChild(inviteBG);
     
-    
-    
-    
-    
     return true;
 }
 

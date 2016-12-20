@@ -246,7 +246,7 @@ void PokerDesk::waitForPrepareAction(){
         btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(3);
+        showTimer->start(30);
     }
 }
 
@@ -273,7 +273,7 @@ void PokerDesk::betAction(){
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(15);
+        showTimer->start(30);
         
         if (stabberPlayer == NULL) {
             int zeroCount = 0;//牌型为0点的座位计数
@@ -356,7 +356,7 @@ void PokerDesk::waitForChooseDealerAction(){
         btn_BeBankerItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"抢庄");
-        showTimer->start(5);
+        showTimer->start(15);
     }
 }
 
