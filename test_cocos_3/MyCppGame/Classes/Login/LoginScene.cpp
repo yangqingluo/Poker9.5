@@ -56,6 +56,17 @@ bool LoginScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
+    char showTitle[4][100] = {"手机号","验证码","密码","确认密码"};
+    char showContent[4][100] = {"输入手机号","输入验证码","输入密码","再次输入密码"};
+    for (int i = 0; i < 4; i++) {
+        LoginShowItem* item = new LoginShowItem();
+        item->autorelease();
+        memcpy(item->title, showTitle[i], strlen(showTitle[i]));
+        memcpy(item->content, showContent[i], strlen(showContent[i]));
+        
+        showItems.pushBack(item);
+    }
+    
     auto inputListSprite = QLImageSprite::create("images/window_upright_bg.png", Size(0.5 * visibleSize.width, 0.9 * visibleSize.height));
     inputListSprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     this->addChild(inputListSprite);
@@ -65,6 +76,7 @@ bool LoginScene::init()
     inputListTableView->setDirection(TableView::Direction::VERTICAL);
     inputListTableView->setDelegate(this);
     inputListSprite->addChild(inputListTableView);
+    
     inputListTableView->reloadData();
     
     return true;
@@ -99,7 +111,7 @@ void LoginScene::buttonCallback(cocos2d::Ref* pSender, int index){
 Size LoginScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
     if (table == inputListTableView) {
-        return Size(inputListTableView->getContentSize().width, 30);
+        return InputCell::tableCellSizeForIndex(table, idx);
     }
     
     return Size::ZERO;
@@ -114,29 +126,12 @@ TableViewCell* LoginScene::tableCellAtIndex(TableView* table, ssize_t idx)
         if(!cell)
         {
             cell = InputCell::create();
-            
-            float cellWidth = inputListTableView->getContentSize().width;
-            
-            Label* titleLabel = Label::createWithTTF("test", "fonts/STKaiti.ttf", 12);
-            titleLabel->setTextColor(Color4B::BLACK);
-            titleLabel->setPosition(cellWidth / 2, 15);
-            titleLabel->setDimensions(cellWidth, 30);
-            titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
-            titleLabel->setVerticalAlignment(TextVAlignment::TOP);
-            cell->addChild(titleLabel, 0 , 1);
-            
-            cell->titleLabel = titleLabel;
+            cell->setContentSize(tableCellSizeForIndex(table, idx));
         }
         
-        char content[100];
-        if (idx % 2 == 0) {
-            sprintf(content, "2016-10-%d\t+25金币\tVIP奖励",(int)idx);
-        }
-        else{
-            sprintf(content, "2016-10-%d\t+1000金币\t充值",(int)idx);
-        }
+        LoginShowItem* item = showItems.at(idx);
+        cell->textField->setPlaceHolder(item->content);
         
-        cell->titleLabel->setString(content);
         
         return cell;
     }
@@ -148,7 +143,7 @@ TableViewCell* LoginScene::tableCellAtIndex(TableView* table, ssize_t idx)
 ssize_t LoginScene::numberOfCellsInTableView(TableView* table)
 {
     if (table == inputListTableView) {
-        return 10;
+        return showItems.size();
     }
     
     return 0;

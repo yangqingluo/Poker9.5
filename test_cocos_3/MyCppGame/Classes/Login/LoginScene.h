@@ -18,7 +18,13 @@ USING_NS_CC_EXT;
 #include "FrameManager.h"
 #include "QLImageSprite.h"
 
-class LoginScene : public Layer, public TableViewDataSource, public TableViewDelegate
+class LoginShowItem : public Ref{
+public:
+    char title[20];
+    char content[100];
+};
+
+class LoginScene : public Layer, TableViewDataSource, TableViewDelegate
 {
 public:
     static Scene* createScene();
@@ -28,10 +34,9 @@ public:
     CREATE_FUNC(LoginScene);
     
     void buttonCallback(Ref* pSender, int index);
-    
-    
 private:
     FrameManager m_frame;
+    Vector<LoginShowItem* > showItems;
     TableView* inputListTableView;
     
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
