@@ -131,7 +131,12 @@ TableViewCell* LoginScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         LoginShowItem* item = showItems.at(idx);
         cell->textField->setPlaceHolder(item->content);
-        
+        if (idx == 2 || idx == 3) {
+            cell->textField->setSecureTextEntry(true);
+        }
+        else {
+            cell->textField->setSecureTextEntry(false);
+        }
         
         return cell;
     }

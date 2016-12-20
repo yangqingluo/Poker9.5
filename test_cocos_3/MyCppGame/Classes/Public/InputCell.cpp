@@ -20,7 +20,7 @@ bool InputCell::init(){
 //    titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
 //    this->addChild(titleLabel, 0 , 1);
     
-    textField = TextFieldTTF::textFieldWithPlaceHolder("", "Arial", 12);
+    textField = TextFieldTTF::textFieldWithPlaceHolder("", "fonts/STKaiti.ttf", 12);
     textField->setHorizontalAlignment(TextHAlignment::LEFT);
     textField->setVerticalAlignment(TextVAlignment::CENTER);
     textField->setTextColor(Color4B::BLACK);
