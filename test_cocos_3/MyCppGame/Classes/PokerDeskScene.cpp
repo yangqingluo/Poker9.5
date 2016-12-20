@@ -119,9 +119,6 @@ bool PokerDesk::init()
     btn_BeBankerItem->setScale(0.8 * upright_sprite->getContentSize().width / btn_BeBankerItem->getContentSize().width);
     btn_BeBankerItem->setPosition(0.5 * upright_sprite->getContentSize().width, 0.75 * upright_sprite->getContentSize().height);
     btn_BeBankerItem->setVisible(false);
-    auto menu_ur = Menu::create(btn_BeBankerItem, NULL);
-    menu_ur->setPosition(Vec2::ZERO);
-    upright_sprite->addChild(menu_ur, 0);
     
     countLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
     countLabel->setColor(Color3B::BLACK);
@@ -129,6 +126,16 @@ bool PokerDesk::init()
 //    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
     countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.2 * upright_sprite->getContentSize().height);
     upright_sprite->addChild(countLabel);
+    
+    auto btn_playerList = MenuItemFont::create("点击查看玩家列表", CC_CALLBACK_1(PokerDesk::buttonCallback, this, 4));
+    btn_playerList->setFontNameObj("fonts/STKaiti.ttf");
+    btn_playerList->setFontSizeObj(8);
+    btn_playerList->setColor(Color3B::BLACK);
+    btn_playerList->setPosition(0.5 * upright_sprite->getContentSize().width, 0.5 * btn_playerList->getContentSize().height);
+    
+    auto menu_ur = Menu::create(btn_BeBankerItem, btn_playerList, NULL);
+    menu_ur->setPosition(Vec2::ZERO);
+    upright_sprite->addChild(menu_ur, 0);
     
     bottom_sprite = QLImageSprite::create("images/desk_bottom_bg.png", Size(visibleSize.width, 0.12 * visibleSize.height));
     bottom_sprite->setPosition(origin.x + visibleSize.width / 2, origin.y + bottom_sprite->getContentSize().height / 2);
@@ -187,8 +194,9 @@ void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
         }
             break;
             
-        case 2:{
-            
+        case 4:{
+            //玩家列表
+            playerList_sprite->setVisible(!playerList_sprite->isVisible());
         }
             break;
             
@@ -213,6 +221,7 @@ void PokerDesk::onEnter(){
     
     playerList_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(upright_sprite->getContentSize().width, 0.9 * (upright_sprite->getBoundingBox().getMinY() - bottom_sprite->getBoundingBox().getMaxY())));
     playerList_sprite->setPosition(upright_sprite->getPositionX(), 0.5 * (upright_sprite->getBoundingBox().getMinY() + bottom_sprite->getBoundingBox().getMaxY()));
+    playerList_sprite->setVisible(false);
     this->addChild(playerList_sprite);
     
     playerListTableView = TableView::create(this, Size(playerList_sprite->getContentSize().width,  playerList_sprite->getContentSize().height));
@@ -404,11 +413,11 @@ void PokerDesk::showGamePlayerInfo(){
 void PokerDesk::showDealerInfo(){
     if (dealerPlayer != NULL) {
         char mString[100];
-        sprintf(mString,"庄家：%s\n筹码：%d\n桌子人数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
+        sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
         countLabel->setString(mString);
     }
     else{
-        countLabel->setString("庄家：无\n桌子人数：2\n");
+        countLabel->setString("庄家：无\n玩家总数：2\n");
     }
     
     playerListTableView->reloadData();
