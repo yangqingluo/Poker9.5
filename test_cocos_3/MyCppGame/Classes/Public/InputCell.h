@@ -15,6 +15,10 @@ public:
     virtual bool init();
     virtual void onEnter();
     virtual void onExit();
+    //开启触控
+    virtual bool onTouchBegan(Touch* touch, Event* event);
+    virtual void onTouchMoved(Touch* touch, Event* event);
+    virtual void onTouchEnded(Touch* touch, Event* event);
     CREATE_FUNC(InputCell);
     
     Label* titleLabel;

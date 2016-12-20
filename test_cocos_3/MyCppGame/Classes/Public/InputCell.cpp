@@ -20,9 +20,10 @@ bool InputCell::init(){
 //    titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
 //    this->addChild(titleLabel, 0 , 1);
     
-    textField = TextFieldTTF::textFieldWithPlaceHolder("", "fonts/STKaiti.ttf", 12);
+    textField = TextFieldTTF::textFieldWithPlaceHolder("", "Arial", 12);
     textField->setHorizontalAlignment(TextHAlignment::LEFT);
     textField->setVerticalAlignment(TextVAlignment::CENTER);
+    textField->setTextColor(Color4B::BLACK);
     this->addChild(textField, 0, 2);
     textField->setDelegate(this);
     
@@ -32,16 +33,45 @@ bool InputCell::init(){
 void InputCell::onEnter(){
     TableViewCell::onEnter();
     
+    auto dispatcher = Director::getInstance()->getEventDispatcher();
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = CC_CALLBACK_2(InputCell::onTouchBegan,this);
+    listener->onTouchMoved = CC_CALLBACK_2(InputCell::onTouchMoved,this);
+    listener->onTouchEnded = CC_CALLBACK_2(InputCell::onTouchEnded,this);
+    listener->setSwallowTouches(false);//向下传递触摸
+    dispatcher->addEventListenerWithSceneGraphPriority(listener,this);
+    
 //    titleLabel->setPosition(0.15 * this->getContentSize().width, 0.5 * this->getContentSize().height);
 //    titleLabel->setDimensions(0.3 * this->getContentSize().width, this->getContentSize().height);
     
-//    textField->setContentSize(Size(0.5 * this->getContentSize().width, 0.8 * this->getContentSize().height));
+    textField->setContentSize(Size(0.5 * this->getContentSize().width, 0.8 * this->getContentSize().height));
     textField->setPosition(0.5 * this->getContentSize().width, 0.5 * this->getContentSize().height);
-    textField->setDimensions(0.5 * this->getContentSize().width, 0.8 * this->getContentSize().height);
+//    textField->setDimensions(0.5 * this->getContentSize().width, 0.8 * this->getContentSize().height);
 }
 void InputCell::onExit(){
     TableViewCell::onExit();
     
+}
+
+bool InputCell::onTouchBegan(Touch* touch, Event* event){
+    return true;
+}
+void InputCell::onTouchMoved(Touch* touch, Event* event){
+    
+}
+void InputCell::onTouchEnded(Touch* touch, Event* event){
+    //获取触点
+    auto target = static_cast<Sprite*>(event->getCurrentTarget());//获取的当前触摸的目标
+    Point locationInNode = target->convertToNodeSpace(touch->getLocation());
+    
+    Rect rect = textField->getBoundingBox();
+    
+    //判断触点是否触摸到文本框内部
+    if( rect.containsPoint(locationInNode) ) {
+        textField->attachWithIME(); //开启虚拟键盘
+    }else {
+        textField->detachWithIME(); //关闭虚拟键盘
+    }
 }
 
 #pragma textField

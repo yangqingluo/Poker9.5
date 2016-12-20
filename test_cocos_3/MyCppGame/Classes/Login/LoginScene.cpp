@@ -152,3 +152,11 @@ ssize_t LoginScene::numberOfCellsInTableView(TableView* table)
 void LoginScene::tableCellTouched(TableView* table, TableViewCell* cell){
     
 }
+
+#pragma scrollview
+void LoginScene::scrollViewDidScroll(cocos2d::extension::ScrollView* view){
+    
+}
+void LoginScene::scrollViewDidZoom(cocos2d::extension::ScrollView* view){
+    
+}

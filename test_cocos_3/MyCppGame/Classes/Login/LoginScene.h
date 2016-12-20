@@ -24,7 +24,7 @@ public:
     char content[100];
 };
 
-class LoginScene : public Layer, TableViewDataSource, TableViewDelegate
+class LoginScene : public Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
     static Scene* createScene();
@@ -43,6 +43,9 @@ private:
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);
     void tableCellTouched(TableView* table, TableViewCell* cell);
+    
+    void scrollViewDidScroll(ScrollView* view);
+    void scrollViewDidZoom(ScrollView* view);
 };
 
 #endif /* LoginScene_h */
