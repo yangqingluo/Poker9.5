@@ -18,10 +18,26 @@ void MessageManager::show(Node* nodeParent, int type,const char *msg)
         {
             auto colorLayer = LayerColor::create(Color4B(0, 0, 0, 60));
             m_pLayer->addChild(colorLayer);
-            auto sp = Sprite::create("images/loading.png");
+//            auto sp = Sprite::create("images/loading.png");
+//            sp->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+//            sp->runAction(RepeatForever::create(RotateTo::create(1.0, 720)));
+//            m_pLayer->addChild(sp);
+            
+            auto sp = Sprite::create("animations/listheader_0.png");
             sp->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-            sp->runAction(RepeatForever::create(RotateTo::create(1.0, 720)));
             m_pLayer->addChild(sp);
+            
+            auto animation = Animation::create();
+            animation->setDelayPerUnit(0.5);
+            animation->setLoops(-1);
+            animation->setRestoreOriginalFrame(true);
+            for (int i = 0; i < 2; i++) {
+                char name[40] = {0};
+                sprintf(name, "animations/listheader_%d.png", i);
+                animation->addSpriteFrameWithFile(name);
+            }
+            
+            sp->runAction(Animate::create(animation));
         }
             break;
         case MESSAGETYPE_WARNING:
