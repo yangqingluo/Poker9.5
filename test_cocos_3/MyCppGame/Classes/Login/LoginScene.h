@@ -15,15 +15,7 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
-
-
-class LoginShowItem : public Ref{
-public:
-    char title[20];
-    char content[100];
-};
-
-class LoginScene : public Layer
+class LoginScene : public Layer, EditBoxDelegate
 {
 public:
     static Scene* createScene();
@@ -34,8 +26,13 @@ public:
     
     void buttonCallback(Ref* pSender, int index);
 private:
+    EditBox* usernameBox;
+    EditBox* passwordBox;
     
-    
+    virtual void editBoxEditingDidBegin(EditBox* editBox); //开始编辑
+    virtual void editBoxEditingDidEnd(EditBox* editBox); //结束编辑
+    virtual void editBoxTextChanged(EditBox* editBox, const std::string& text); //编辑框文字改变
+    virtual void editBoxReturn(EditBox* editBox); //触发return后的回调函数
 };
 
 #endif /* LoginScene_h */

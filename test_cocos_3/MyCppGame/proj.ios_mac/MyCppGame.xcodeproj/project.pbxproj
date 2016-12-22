@@ -80,6 +80,8 @@
 		FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C01C1DF4385C00A22F70 /* Player.cpp */; };
 		FC4B4B8A1DF1500200E0271B /* QLImageSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */; };
 		FC4B4B8B1DF1500200E0271B /* QLImageSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */; };
+		FC4E35A51E0B71BA00FCF20F /* RegistScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC4E35A31E0B71BA00FCF20F /* RegistScene.cpp */; };
+		FC4E35A61E0B71BA00FCF20F /* RegistScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC4E35A31E0B71BA00FCF20F /* RegistScene.cpp */; };
 		FC6DB6211DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
 		FC6DB6221DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
 		FC7FC24A1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
@@ -238,6 +240,9 @@
 		FC47C01D1DF4385C00A22F70 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QLImageSprite.cpp; sourceTree = "<group>"; };
 		FC4B4B891DF1500200E0271B /* QLImageSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QLImageSprite.h; sourceTree = "<group>"; };
+		FC4E35A31E0B71BA00FCF20F /* RegistScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RegistScene.cpp; sourceTree = "<group>"; };
+		FC4E35A41E0B71BA00FCF20F /* RegistScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistScene.h; sourceTree = "<group>"; };
+		FC4E35A81E0B791D00FCF20F /* PublicHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicHeader.h; sourceTree = "<group>"; };
 		FC6DB6201DE8395000621B55 /* poker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = poker; sourceTree = "<group>"; };
 		FC7FC2491DF00ACD007A6D25 /* jetton */ = {isa = PBXFileReference; lastKnownFileType = folder; path = jetton; sourceTree = "<group>"; };
 		FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
@@ -515,6 +520,8 @@
 			children = (
 				FC2BEFFB1E09059A007A3F4E /* LoginScene.cpp */,
 				FC2BEFFC1E09059A007A3F4E /* LoginScene.h */,
+				FC4E35A31E0B71BA00FCF20F /* RegistScene.cpp */,
+				FC4E35A41E0B71BA00FCF20F /* RegistScene.h */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -524,6 +531,7 @@
 			children = (
 				FC2BF0001E090608007A3F4E /* RegistInputView.cpp */,
 				FC2BF0011E090608007A3F4E /* RegistInputView.h */,
+				FC4E35A81E0B791D00FCF20F /* PublicHeader.h */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -716,6 +724,7 @@
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
 				FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
+				FC4E35A51E0B71BA00FCF20F /* RegistScene.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
@@ -762,6 +771,7 @@
 				FC292EE51DF7F0310096B017 /* FrameManager.cpp in Sources */,
 				FCF3B63D1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				FC4E35A61E0B71BA00FCF20F /* RegistScene.cpp in Sources */,
 				FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

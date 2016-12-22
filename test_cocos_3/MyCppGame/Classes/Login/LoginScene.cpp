@@ -57,13 +57,63 @@ bool LoginScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    auto inputView = RegistInputView::create();
-    inputView->setPosition(0, 0);
-    
-    auto inputListSprite = QLImageSprite::create("images/window_upright_bg.png", inputView->getContentSize());
+    auto inputListSprite = QLImageSprite::create("images/window_upright_bg.png", Size(0.5 * visibleSize.width, 0.9 * visibleSize.height));
     inputListSprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     this->addChild(inputListSprite);
-    inputListSprite->addChild(inputView);
+    
+    char showContent[2][100] = {"11位手机号码","6-16位密码"};
+    float inputHeight = MIN(30, inputListSprite->getContentSize().height / 8);
+    float inputY = 0.0;
+    for (int i = 0; i < 2; i++) {
+        auto inputBox = EditBox::create(Size(0.9 * inputListSprite->getContentSize().width, 0.8 * inputHeight), Scale9Sprite::create("images/orange_edit.png"));
+        inputBox->setPosition(Vec2(0.5 * inputListSprite->getContentSize().width, inputListSprite->getContentSize().height - (i * 1.0 + 0.8) * inputHeight));
+        inputListSprite->addChild(inputBox);
+        inputY = inputBox->getBoundingBox().getMinY();
+        
+        //属性设置
+        //    inputBox->setFontName("fonts/STKaiti.ttf");
+        inputBox->setFontSize(12);
+        inputBox->setFontColor(Color4B::BLACK);
+        //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+        inputBox->setPlaceholderFontSize(12);
+        inputBox->setPlaceholderFontColor(Color4B::GRAY);
+        
+        //模式类型设置
+        inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+        inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
+        inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
+        
+        //委托代理对象this
+        inputBox->setDelegate(this);
+        
+        inputBox->setPlaceHolder(showContent[i]);
+        switch (i) {
+            case 0:{
+                inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::PHONE_NUMBER);
+                inputBox->setMaxLength(11);
+            }
+                break;
+                
+            case 1:{
+                inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
+                inputBox->setMaxLength(16);
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    auto btn_login = MenuItemFont::create("登录", CC_CALLBACK_1(LoginScene::buttonCallback, this, 1));
+    btn_login->setFontNameObj("fonts/STKaiti.ttf");
+    btn_login->setFontSizeObj(16);
+    btn_login->setColor(Color3B::BLACK);
+    btn_login->setPosition(0.5 * inputListSprite->getContentSize().width, inputY - btn_login->getContentSize().height);
+    
+    auto menu_input = Menu::create(btn_login, NULL);
+    menu_input->setPosition(Vec2::ZERO);
+    inputListSprite->addChild(menu_input);
     
     return true;
 }
@@ -85,12 +135,50 @@ void LoginScene::buttonCallback(cocos2d::Ref* pSender, int index){
         }
             break;
             
+        case 1:{
+            if (strlen(usernameBox->getText()) != 11) {
+                
+            }
+            else if (strlen(passwordBox->getText()) < 6) {
+                
+            }
+            else {
+                
+            }
+        }
+            break;
+            
             break;
             
         default:{
         }
             break;
     }
+}
+
+#pragma edixBox
+//开始编辑
+void LoginScene::editBoxEditingDidBegin(EditBox* editBox)
+{
+    CCLog("editBox %p DidBegin !", editBox);
+}
+
+//结束编辑
+void LoginScene::editBoxEditingDidEnd(EditBox* editBox)
+{
+    CCLog("editBox %p DidEnd !", editBox);
+}
+
+//编辑框内容改变
+void LoginScene::editBoxTextChanged(EditBox* editBox, const std::string& text)
+{
+    CCLog("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+}
+
+//触发return返回
+void LoginScene::editBoxReturn(EditBox* editBox)
+{
+    CCLog("editBox %p was returned !",editBox);
 }
 
 //#pragma tableview
