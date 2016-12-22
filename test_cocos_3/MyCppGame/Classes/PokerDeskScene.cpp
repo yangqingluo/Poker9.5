@@ -128,7 +128,6 @@ bool PokerDesk::init()
     upright_sprite->addChild(countLabel);
     
     auto btn_playerList = MenuItemFont::create("点击查看玩家列表", CC_CALLBACK_1(PokerDesk::buttonCallback, this, 4));
-    btn_playerList->setFontNameObj("fonts/STKaiti.ttf");
     btn_playerList->setFontSizeObj(8);
     btn_playerList->setColor(Color3B::BLACK);
     btn_playerList->setPosition(0.5 * upright_sprite->getContentSize().width, 0.5 * btn_playerList->getContentSize().height);

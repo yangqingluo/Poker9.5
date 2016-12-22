@@ -127,6 +127,8 @@
 		FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
 		FCDF45601DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
 		FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
+		FCE9ADF41E0C10E500C97945 /* PasswordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */; };
+		FCE9ADF51E0C10E500C97945 /* PasswordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */; };
 		FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */; };
 		FCF3B63D1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */; };
 /* End PBXBuildFile section */
@@ -288,6 +290,8 @@
 		FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerDeskScene.h; sourceTree = "<group>"; };
 		FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonChosenSprite.cpp; sourceTree = "<group>"; };
 		FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonChosenSprite.h; sourceTree = "<group>"; };
+		FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PasswordScene.cpp; sourceTree = "<group>"; };
+		FCE9ADF31E0C10E500C97945 /* PasswordScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordScene.h; sourceTree = "<group>"; };
 		FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MTNotificationQueue.cpp; sourceTree = "<group>"; };
 		FCF3B63B1E07AD3B0065C788 /* MTNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationQueue.h; sourceTree = "<group>"; };
 		FCF3B63F1E07BAED0065C788 /* tcpcommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tcpcommand.h; sourceTree = "<group>"; };
@@ -534,6 +538,8 @@
 				FC2BEFFC1E09059A007A3F4E /* LoginScene.h */,
 				FC4E35A31E0B71BA00FCF20F /* RegistScene.cpp */,
 				FC4E35A41E0B71BA00FCF20F /* RegistScene.h */,
+				FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */,
+				FCE9ADF31E0C10E500C97945 /* PasswordScene.h */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -745,6 +751,7 @@
 				FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
 				FC4E35A51E0B71BA00FCF20F /* RegistScene.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
+				FCE9ADF41E0C10E500C97945 /* PasswordScene.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
@@ -779,6 +786,7 @@
 				FC9EB54C1E067F1800EFD14E /* stdafx.cpp in Sources */,
 				FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */,
 				FC9EB54A1E067F1800EFD14E /* ODSocket.cpp in Sources */,
+				FCE9ADF51E0C10E500C97945 /* PasswordScene.cpp in Sources */,
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */,
 				FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */,

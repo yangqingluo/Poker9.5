@@ -9,7 +9,8 @@
 #include "LoginScene.h"
 #include "RegistInputView.h"
 #include "QLImageSprite.h"
-
+#include "RegistScene.h"
+#include "PasswordScene.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -63,7 +64,7 @@ bool LoginScene::init()
     this->addChild(inputListSprite);
     
     char showContent[2][100] = {"11位手机号码","6-16位密码"};
-    float inputHeight = MIN(30, inputListSprite->getContentSize().height / 8);
+    float inputHeight = MAX(32, inputListSprite->getContentSize().height / 8);
     float inputY = 0.0;
     for (int i = 0; i < 2; i++) {
         auto inputBox = ui::EditBox::create(Size(0.9 * inputListSprite->getContentSize().width, 0.8 * inputHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
@@ -112,12 +113,26 @@ bool LoginScene::init()
     btn_login->setScale9Enabled(true);//打开scale9 可以拉伸图片
     btn_login->setTitleText("登录");
     btn_login->setTitleFontSize(16);
-    btn_login->setContentSize(Size(0.9 * inputListSprite->getContentSize().width, inputHeight));
+    btn_login->setContentSize(Size(0.9 * inputListSprite->getContentSize().width, 0.8 * inputHeight));
     btn_login->setPosition(Vec2(0.5 * inputListSprite->getContentSize().width, inputY - btn_login->getContentSize().height));
     btn_login->addTouchEventListener(CC_CALLBACK_2(LoginScene::touchEvent, this));
     btn_login->setTag(1);
     inputListSprite->addChild(btn_login);
     
+    
+    auto btn_GoToRegist = MenuItemFont::create("手机注册", CC_CALLBACK_1(LoginScene::buttonCallback, this, 2));
+    btn_GoToRegist->setFontSizeObj(12);
+    btn_GoToRegist->setColor(Color3B::GRAY);
+    btn_GoToRegist->setPosition(Vec2(btn_login->getBoundingBox().getMinX() + 0.5 * btn_GoToRegist->getContentSize().width, btn_login->getBoundingBox().getMinY() -  btn_GoToRegist->getContentSize().height));
+    
+    auto btn_GoToPassword = MenuItemFont::create("忘记密码", CC_CALLBACK_1(LoginScene::buttonCallback, this, 3));
+    btn_GoToPassword->setFontSizeObj(12);
+    btn_GoToPassword->setColor(Color3B::GRAY);
+    btn_GoToPassword->setPosition(Vec2(btn_login->getBoundingBox().getMaxX() - 0.5 * btn_GoToPassword->getContentSize().width, btn_GoToRegist->getPositionY()));
+    
+    auto menu_input = Menu::create(btn_GoToRegist, btn_GoToPassword, NULL);
+    menu_input->setPosition(Vec2::ZERO);
+    inputListSprite->addChild(menu_input, 1);
     
     return true;
 }
@@ -138,6 +153,18 @@ void LoginScene::buttonCallback(cocos2d::Ref* pSender, int index){
             Director::getInstance()->popScene();
         }
             
+            break;
+            
+        case 2:{
+            auto scene = RegistScene::createScene();
+            Director::getInstance()->pushScene(scene);
+        }
+            break;
+            
+        case 3:{
+            auto scene = PasswordScene::createScene();
+            Director::getInstance()->pushScene(scene);
+        }
             break;
             
         default:{
