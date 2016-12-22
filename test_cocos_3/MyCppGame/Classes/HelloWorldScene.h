@@ -5,6 +5,9 @@
 #include "ODSocket.h"
 #include "tcpcommand.h"
 
+#include "network/HttpClient.h"
+using namespace cocos2d::network;
+
 class HelloWorld : public cocos2d::Layer
 {
 public:
@@ -23,6 +26,8 @@ public:
 public:
     void connectServer();
     void receiveData();
+    void onHttpRequest(std::string type);
+    void onHttpResponse(HttpClient* sender, HttpResponse* response);
 private:
     ODSocket socket;
 };
