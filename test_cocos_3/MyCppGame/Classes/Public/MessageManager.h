@@ -4,11 +4,14 @@
 #include "cocos2d.h"
 USING_NS_CC;
 using namespace std;
+
 enum
 {
     MESSAGETYPE_LOADING,
     MESSAGETYPE_WARNING,
 };
+
+
 class ShadowLayer:public Layer
 {
 public:
