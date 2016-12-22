@@ -167,8 +167,7 @@ void LoginScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                         NoteTip::show("密码输入有误");
                     }
                     else {
-                        m_pMessage = MessageManager::create();
-                        m_pMessage->show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
                         
                         onHttpRequest_Login(usernameBox->getText(), passwordBox->getText());
                     }
@@ -253,6 +252,7 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response)
         CCLOG("error buffer: %s", response->getErrorBuffer());
         return;
     }
+    m_pMessage->hidden();
     
     // 获取数据
     std::vector<char>* v = response->getResponseData();

@@ -12,26 +12,22 @@ enum
 };
 
 
-class ShadowLayer:public Layer
+class MessageManager : public LayerColor
 {
 public:
-    CREATE_FUNC(ShadowLayer);
+    MessageManager();
+    ~MessageManager();
+    CREATE_FUNC(MessageManager);
     bool init();
     virtual bool onTouchBegan(Touch* touch, Event* event);
     virtual void onEnter();
     virtual void onExit();
-};
-class MessageManager : public Ref
-{
-public:
-    CREATE_FUNC(MessageManager);
-    bool init();
-    void show(Node* nodeParent, int type,const char *msg);
+    
+    static MessageManager* show(Node* nodeParent, int type,const char *msg);
     void hidden();
     void onWarningHidden(Node *node);
 private:
-    int         m_iType;
-    ShadowLayer *m_pLayer;
+    int m_iType;
 };
 
 #endif /* defined(__MyFighter__MessageManager__) */
