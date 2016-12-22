@@ -26,7 +26,7 @@ void MessageManager::show(Node* nodeParent, int type,const char *msg)
             break;
         case MESSAGETYPE_WARNING:
         {
-            auto sp = Sprite::create("images/bg_notice.png");
+            auto sp = Sprite::create("images/warning.png");
             sp->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
             sp->runAction(Sequence::create(DelayTime::create(2),CallFuncN::create(this, callfuncN_selector(MessageManager::onWarningHidden)),NULL));
             m_pLayer->addChild(sp);
