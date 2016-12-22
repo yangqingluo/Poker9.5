@@ -10,6 +10,7 @@
 #include "RegistInputView.h"
 #include "QLImageSprite.h"
 #include "NoteTip.h"
+#include "MessageManager.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -143,10 +144,12 @@ void LoginScene::buttonCallback(cocos2d::Ref* pSender, int index){
                 NoteTip::show("手机号码输入有误");
             }
             else if (strlen(passwordBox->getText()) < 6) {
-                NoteTip::show("密码输入有误");
+//                NoteTip::show("密码输入有误");
+                MessageManager::create()->show(this, MESSAGETYPE_WARNING, "密码输入有误");
             }
             else {
-                
+                auto m_pMessage = MessageManager::create();
+                m_pMessage->show(this ,MESSAGETYPE_LOADING,NULL);//显示
             }
         }
             break;
