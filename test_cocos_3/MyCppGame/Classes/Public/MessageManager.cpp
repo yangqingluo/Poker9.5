@@ -23,8 +23,8 @@ void MessageManager::show(Node* nodeParent, int type,const char *msg)
 //            sp->runAction(RepeatForever::create(RotateTo::create(1.0, 720)));
 //            m_pLayer->addChild(sp);
             
-            auto sp = Sprite::create("animations/listheader_0.png");
-            sp->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+            auto sp = Sprite::create("animations/meituan/listheader_0.png");
+            sp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.65 * visibleSize.height));
             m_pLayer->addChild(sp);
             
             auto animation = Animation::create();
@@ -32,8 +32,8 @@ void MessageManager::show(Node* nodeParent, int type,const char *msg)
             animation->setLoops(-1);
             animation->setRestoreOriginalFrame(true);
             for (int i = 0; i < 2; i++) {
-                char name[40] = {0};
-                sprintf(name, "animations/listheader_%d.png", i);
+                char name[100] = {0};
+                sprintf(name, "animations/meituan/listheader_%d.png", i);
                 animation->addSpriteFrameWithFile(name);
             }
             
