@@ -9,6 +9,7 @@
 #include "LoginScene.h"
 #include "RegistInputView.h"
 #include "QLImageSprite.h"
+#include "NoteTip.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -65,7 +66,7 @@ bool LoginScene::init()
     float inputHeight = MIN(30, inputListSprite->getContentSize().height / 8);
     float inputY = 0.0;
     for (int i = 0; i < 2; i++) {
-        auto inputBox = EditBox::create(Size(0.9 * inputListSprite->getContentSize().width, 0.8 * inputHeight), Scale9Sprite::create("images/orange_edit.png"));
+        auto inputBox = ui::EditBox::create(Size(0.9 * inputListSprite->getContentSize().width, 0.8 * inputHeight), ui::Scale9Sprite::create("images/orange_edit.png"));
         inputBox->setPosition(Vec2(0.5 * inputListSprite->getContentSize().width, inputListSprite->getContentSize().height - (i * 1.0 + 0.8) * inputHeight));
         inputListSprite->addChild(inputBox);
         inputY = inputBox->getBoundingBox().getMinY();
@@ -91,12 +92,14 @@ bool LoginScene::init()
             case 0:{
                 inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::PHONE_NUMBER);
                 inputBox->setMaxLength(11);
+                usernameBox = inputBox;
             }
                 break;
                 
             case 1:{
                 inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
                 inputBox->setMaxLength(16);
+                passwordBox = inputBox;
             }
                 break;
                 
@@ -137,10 +140,10 @@ void LoginScene::buttonCallback(cocos2d::Ref* pSender, int index){
             
         case 1:{
             if (strlen(usernameBox->getText()) != 11) {
-                
+                NoteTip::show("手机号码输入有误");
             }
             else if (strlen(passwordBox->getText()) < 6) {
-                
+                NoteTip::show("密码输入有误");
             }
             else {
                 
@@ -158,25 +161,25 @@ void LoginScene::buttonCallback(cocos2d::Ref* pSender, int index){
 
 #pragma edixBox
 //开始编辑
-void LoginScene::editBoxEditingDidBegin(EditBox* editBox)
+void LoginScene::editBoxEditingDidBegin(ui::EditBox* editBox)
 {
     CCLog("editBox %p DidBegin !", editBox);
 }
 
 //结束编辑
-void LoginScene::editBoxEditingDidEnd(EditBox* editBox)
+void LoginScene::editBoxEditingDidEnd(ui::EditBox* editBox)
 {
     CCLog("editBox %p DidEnd !", editBox);
 }
 
 //编辑框内容改变
-void LoginScene::editBoxTextChanged(EditBox* editBox, const std::string& text)
+void LoginScene::editBoxTextChanged(ui::EditBox* editBox, const std::string& text)
 {
     CCLog("editBox %p TextChanged, text: %s ", editBox, text.c_str());
 }
 
 //触发return返回
-void LoginScene::editBoxReturn(EditBox* editBox)
+void LoginScene::editBoxReturn(ui::EditBox* editBox)
 {
     CCLog("editBox %p was returned !",editBox);
 }
