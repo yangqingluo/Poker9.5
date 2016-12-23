@@ -66,6 +66,20 @@
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 		FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */; };
 		FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */; };
+		FC1F943D1E0D1FDA002040B9 /* json_internalarray.inl in Resources */ = {isa = PBXBuildFile; fileRef = FC1F94351E0D1FDA002040B9 /* json_internalarray.inl */; };
+		FC1F943E1E0D1FDA002040B9 /* json_internalarray.inl in Resources */ = {isa = PBXBuildFile; fileRef = FC1F94351E0D1FDA002040B9 /* json_internalarray.inl */; };
+		FC1F943F1E0D1FDA002040B9 /* json_internalmap.inl in Resources */ = {isa = PBXBuildFile; fileRef = FC1F94361E0D1FDA002040B9 /* json_internalmap.inl */; };
+		FC1F94401E0D1FDA002040B9 /* json_internalmap.inl in Resources */ = {isa = PBXBuildFile; fileRef = FC1F94361E0D1FDA002040B9 /* json_internalmap.inl */; };
+		FC1F94411E0D1FDA002040B9 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F94371E0D1FDA002040B9 /* json_reader.cpp */; };
+		FC1F94421E0D1FDA002040B9 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F94371E0D1FDA002040B9 /* json_reader.cpp */; };
+		FC1F94431E0D1FDA002040B9 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F94381E0D1FDA002040B9 /* json_value.cpp */; };
+		FC1F94441E0D1FDA002040B9 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F94381E0D1FDA002040B9 /* json_value.cpp */; };
+		FC1F94451E0D1FDA002040B9 /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = FC1F94391E0D1FDA002040B9 /* json_valueiterator.inl */; };
+		FC1F94461E0D1FDA002040B9 /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = FC1F94391E0D1FDA002040B9 /* json_valueiterator.inl */; };
+		FC1F94471E0D1FDA002040B9 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F943A1E0D1FDA002040B9 /* json_writer.cpp */; };
+		FC1F94481E0D1FDA002040B9 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F943A1E0D1FDA002040B9 /* json_writer.cpp */; };
+		FC1F94491E0D1FDA002040B9 /* sconscript in Resources */ = {isa = PBXBuildFile; fileRef = FC1F943B1E0D1FDA002040B9 /* sconscript */; };
+		FC1F944A1E0D1FDA002040B9 /* sconscript in Resources */ = {isa = PBXBuildFile; fileRef = FC1F943B1E0D1FDA002040B9 /* sconscript */; };
 		FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC292EE21DF7F0310096B017 /* FrameManager.cpp */; };
 		FC292EE51DF7F0310096B017 /* FrameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC292EE21DF7F0310096B017 /* FrameManager.cpp */; };
 		FC292F0C1DF7FA4A0096B017 /* UIRes in Resources */ = {isa = PBXBuildFile; fileRef = FC292F0B1DF7FA4A0096B017 /* UIRes */; };
@@ -233,6 +247,22 @@
 		FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerSprite.cpp; sourceTree = "<group>"; };
 		FC139FEF1DEC17AC0067383F /* PokerSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerSprite.h; sourceTree = "<group>"; };
 		FC139FF31DEC18860067383F /* PokerGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerGlobal.h; sourceTree = "<group>"; };
+		FC1F942A1E0D1FDA002040B9 /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
+		FC1F942B1E0D1FDA002040B9 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		FC1F942C1E0D1FDA002040B9 /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = features.h; sourceTree = "<group>"; };
+		FC1F942D1E0D1FDA002040B9 /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forwards.h; sourceTree = "<group>"; };
+		FC1F942E1E0D1FDA002040B9 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		FC1F942F1E0D1FDA002040B9 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		FC1F94301E0D1FDA002040B9 /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+		FC1F94311E0D1FDA002040B9 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		FC1F94341E0D1FDA002040B9 /* json_batchallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_batchallocator.h; sourceTree = "<group>"; };
+		FC1F94351E0D1FDA002040B9 /* json_internalarray.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalarray.inl; sourceTree = "<group>"; };
+		FC1F94361E0D1FDA002040B9 /* json_internalmap.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalmap.inl; sourceTree = "<group>"; };
+		FC1F94371E0D1FDA002040B9 /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_reader.cpp; sourceTree = "<group>"; };
+		FC1F94381E0D1FDA002040B9 /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_value.cpp; sourceTree = "<group>"; };
+		FC1F94391E0D1FDA002040B9 /* json_valueiterator.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_valueiterator.inl; sourceTree = "<group>"; };
+		FC1F943A1E0D1FDA002040B9 /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_writer.cpp; sourceTree = "<group>"; };
+		FC1F943B1E0D1FDA002040B9 /* sconscript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sconscript; sourceTree = "<group>"; };
 		FC292EE21DF7F0310096B017 /* FrameManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameManager.cpp; sourceTree = "<group>"; };
 		FC292EE31DF7F0310096B017 /* FrameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameManager.h; sourceTree = "<group>"; };
 		FC292F0B1DF7FA4A0096B017 /* UIRes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = UIRes; sourceTree = "<group>"; };
@@ -477,6 +507,7 @@
 				FC292EE31DF7F0310096B017 /* FrameManager.h */,
 				FC2BEFFA1E09059A007A3F4E /* Login */,
 				FC2BEFFF1E0905AC007A3F4E /* Public */,
+				FC1F94271E0D1FDA002040B9 /* jsoncpp */,
 				FC9EB5421E067F1800EFD14E /* ODSocket */,
 			);
 			name = Classes;
@@ -530,6 +561,69 @@
 			name = Icons;
 			path = ios;
 			sourceTree = SOURCE_ROOT;
+		};
+		FC1F94271E0D1FDA002040B9 /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				FC1F94281E0D1FDA002040B9 /* include */,
+				FC1F94321E0D1FDA002040B9 /* src */,
+			);
+			path = jsoncpp;
+			sourceTree = "<group>";
+		};
+		FC1F94281E0D1FDA002040B9 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				FC1F94291E0D1FDA002040B9 /* json */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		FC1F94291E0D1FDA002040B9 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				FC1F942A1E0D1FDA002040B9 /* autolink.h */,
+				FC1F942B1E0D1FDA002040B9 /* config.h */,
+				FC1F942C1E0D1FDA002040B9 /* features.h */,
+				FC1F942D1E0D1FDA002040B9 /* forwards.h */,
+				FC1F942E1E0D1FDA002040B9 /* json.h */,
+				FC1F942F1E0D1FDA002040B9 /* reader.h */,
+				FC1F94301E0D1FDA002040B9 /* value.h */,
+				FC1F94311E0D1FDA002040B9 /* writer.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		FC1F94321E0D1FDA002040B9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FC1F94331E0D1FDA002040B9 /* lib_json */,
+				FC1F943C1E0D1FDA002040B9 /* test_lib_json */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		FC1F94331E0D1FDA002040B9 /* lib_json */ = {
+			isa = PBXGroup;
+			children = (
+				FC1F94341E0D1FDA002040B9 /* json_batchallocator.h */,
+				FC1F94351E0D1FDA002040B9 /* json_internalarray.inl */,
+				FC1F94361E0D1FDA002040B9 /* json_internalmap.inl */,
+				FC1F94371E0D1FDA002040B9 /* json_reader.cpp */,
+				FC1F94381E0D1FDA002040B9 /* json_value.cpp */,
+				FC1F94391E0D1FDA002040B9 /* json_valueiterator.inl */,
+				FC1F943A1E0D1FDA002040B9 /* json_writer.cpp */,
+				FC1F943B1E0D1FDA002040B9 /* sconscript */,
+			);
+			path = lib_json;
+			sourceTree = "<group>";
+		};
+		FC1F943C1E0D1FDA002040B9 /* test_lib_json */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = test_lib_json;
+			sourceTree = "<group>";
 		};
 		FC2BEFFA1E09059A007A3F4E /* Login */ = {
 			isa = PBXGroup;
@@ -699,12 +793,16 @@
 				FCC33A031DDFD64000E71685 /* HelloWorld.png in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
+				FC1F94491E0D1FDA002040B9 /* sconscript in Resources */,
+				FC1F94451E0D1FDA002040B9 /* json_valueiterator.inl in Resources */,
 				FC292F0C1DF7FA4A0096B017 /* UIRes in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
+				FC1F943D1E0D1FDA002040B9 /* json_internalarray.inl in Resources */,
 				FC4E35B91E0BA6F900FCF20F /* animations in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
+				FC1F943F1E0D1FDA002040B9 /* json_internalmap.inl in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
 				FCA0AD891DF54F4600DA1515 /* poker.png in Resources */,
 				FC6DB6211DE8395000621B55 /* poker in Resources */,
@@ -716,13 +814,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC1F94461E0D1FDA002040B9 /* json_valueiterator.inl in Resources */,
 				FC292F0D1DF7FA4A0096B017 /* UIRes in Resources */,
+				FC1F94401E0D1FDA002040B9 /* json_internalmap.inl in Resources */,
 				FCC2D0521DDF23A600E8353D /* images in Resources */,
+				FC1F943E1E0D1FDA002040B9 /* json_internalarray.inl in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				FC7FC24B1DF00ACD007A6D25 /* jetton in Resources */,
 				3EACC99019EE6D4300EB3C5E /* res in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
 				FCA0AD8A1DF54F4600DA1515 /* poker.png in Resources */,
+				FC1F944A1E0D1FDA002040B9 /* sconscript in Resources */,
 				FC4E35BA1E0BA6F900FCF20F /* animations in Resources */,
 				FC6DB6221DE8395000621B55 /* poker in Resources */,
 				FCC33A041DDFD64000E71685 /* HelloWorld.png in Resources */,
@@ -737,6 +839,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC4B4B8A1DF1500200E0271B /* QLImageSprite.cpp in Sources */,
+				FC1F94431E0D1FDA002040B9 /* json_value.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
@@ -745,9 +848,11 @@
 				FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FC4E35AB1E0B7AB300FCF20F /* NoteTip.cpp in Sources */,
 				FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
+				FC1F94471E0D1FDA002040B9 /* json_writer.cpp in Sources */,
 				FC2BEFFD1E09059A007A3F4E /* LoginScene.cpp in Sources */,
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
+				FC1F94411E0D1FDA002040B9 /* json_reader.cpp in Sources */,
 				FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
 				FC4E35A51E0B71BA00FCF20F /* RegistScene.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
@@ -784,7 +889,9 @@
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FC9EB54C1E067F1800EFD14E /* stdafx.cpp in Sources */,
+				FC1F94421E0D1FDA002040B9 /* json_reader.cpp in Sources */,
 				FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */,
+				FC1F94441E0D1FDA002040B9 /* json_value.cpp in Sources */,
 				FC9EB54A1E067F1800EFD14E /* ODSocket.cpp in Sources */,
 				FCE9ADF51E0C10E500C97945 /* PasswordScene.cpp in Sources */,
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
@@ -794,6 +901,7 @@
 				FC4E35AC1E0B7AB300FCF20F /* NoteTip.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
+				FC1F94481E0D1FDA002040B9 /* json_writer.cpp in Sources */,
 				FC2BF0031E090608007A3F4E /* RegistInputView.cpp in Sources */,
 				FC4B4B8B1DF1500200E0271B /* QLImageSprite.cpp in Sources */,
 				FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */,

@@ -28,6 +28,20 @@ Scene* Hall::createScene()
     return scene;
 }
 
+void Hall::onEnter(){
+    Layer::onEnter();
+    
+    userNameLabel->setString(user_data.nikename);
+    
+    char userInfoString[300];
+    sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:0\n金币:10000\n银币:500\n钻石:500\n战斗次数:%d\n胜率:%s",user_data.ID, user_data.gameTimes, user_data.winningPercent);
+    userinfoLabel->setString(userInfoString);
+}
+void Hall::onExit(){
+    Layer::onExit();
+    
+}
+
 bool Hall::init()
 {
     // super init first
@@ -170,20 +184,16 @@ bool Hall::init()
     userInfoBG->setPosition(Vec2(0.5 * userInfoSize.width, 0.5 * userInfoSize.height));
     userInfoSprite->addChild(userInfoBG);
     
+    userNameLabel = Label::createWithTTF("没有昵称", "fonts/STKaiti.ttf", 14);
+    userNameLabel->setTextColor(Color4B::WHITE);
+    userNameLabel->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.6));
+    userInfoSprite->addChild(userNameLabel);
     
-    auto label = Label::createWithTTF("阿罗", "fonts/STKaiti.ttf", 14);
-    label->setTextColor(Color4B::WHITE);
-    label->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.6));
-    userInfoSprite->addChild(label);
-    
-    userinfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 10);
+    userinfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
     userinfoLabel->setTextColor(Color4B(0xe0, 0xe0, 0xe0, 0xff));
-    userinfoLabel->setPosition(userInfoSprite->getContentSize().width / 2, 0.3 * userInfoSprite->getContentSize().height);
+    userinfoLabel->setPosition(userInfoSprite->getContentSize().width / 2, 0.28 * userInfoSprite->getContentSize().height);
+    userinfoLabel->setDimensions(0.95 * userInfoSprite->getContentSize().width, 0.56 * userInfoSprite->getContentSize().height);
     userInfoSprite->addChild(userinfoLabel);
-    
-    char userInfoString[300];
-    sprintf(userInfoString, "ID:20161010\nVIP:无\n钻石:0\n金币:10000\n银币:500\n战斗次数:9527\n胜率:80%%");
-    userinfoLabel->setString(userInfoString);
     
     auto refresh_UserInfoItem = MenuItemImage::create(
                                                   "images/btn_fresh.png",

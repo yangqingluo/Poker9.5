@@ -11,6 +11,7 @@
 #include "QLImageSprite.h"
 #include "RegistScene.h"
 #include "PasswordScene.h"
+#include "HallScene.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -37,6 +38,7 @@ bool LoginScene::init()
     {
         return false;
     }
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
@@ -262,7 +264,7 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
     
     // 没有收到响应
     if (!response){
-        CCLOG("no response");
+        NoteTip::show("请检查网络");
         return;
     }
     
@@ -276,16 +278,116 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
     {
         CCLOG("response failed");
         CCLOG("error buffer: %s", response->getErrorBuffer());
+        NoteTip::show("请检查网络");
         return;
     }
     
-    // 获取数据
-    std::vector<char>* v = response->getResponseData();
-    for (int i = 0; i < v->size(); i++)
-    {
-        printf("%c", v->at(i));
+//    // 获取数据
+//    std::vector<char>* v = response->getResponseData();
+//    for (int i = 0; i < v->size(); i++)
+//    {
+//        printf("%c", v->at(i));
+//    }
+//    printf("\n");
+    
+    
+    std::vector<char>* responseData = response -> getResponseData();
+    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
+    log("%s\n", responseStr.c_str());
+    rapidjson::Document document;
+    document.Parse<0>(responseStr.c_str());
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code")){
+            const rapidjson::Value& val_code = document["code"];
+            int code = val_code.GetInt();
+            if (code == 1) {
+                //登录成功
+                auto scene = Hall::createScene();
+                Vector<Node* >children = scene->getChildren();
+                Hall* layer = (Hall* )(scene->getChildren().at(1));
+                
+                if (document.HasMember("content")) {
+                    const rapidjson::Value& val_content = document["content"];
+                    
+                    UserData user_data = {0};
+                    user_data.gameTimes = val_content["gameTimes"].GetInt();
+                    
+                    const char* nikename = val_content["nikename"].GetString();
+                    memcpy(user_data.nikename, nikename, strlen(nikename));
+                    
+                    const char* ID = val_content["id"].GetString();
+                    memcpy(user_data.ID, ID, strlen(ID));
+                    
+                    const char* winningPercent = val_content["winningPercent"].GetString();
+                    memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
+                    
+                    layer->user_data = user_data;
+                }
+                
+                Director::getInstance()->replaceScene(scene);
+            }
+            else {
+                const rapidjson::Value& val_content = document["content"];
+                const char* content = val_content.GetString();
+                NoteTip::show(content);
+            }
+        }
+        
+//        if(document.HasMember("data")){
+//            const rapidjson::Value& val_data = document["data"];
+//            log("data: %s \n", val_data.GetString());
+//        }
+//        
+//        if(document.HasMember("files")){
+//            const rapidjson::Value& val_files = document["files"];
+//            if(val_files.IsObject()){
+//                log("files: \n");
+//            }
+//            
+//        }
+//
+//        if(document.HasMember("json")){
+//            const rapidjson::Value& val_form = document["json"];
+//            if(val_form.IsObject()){
+//                log("json:{");
+//                if(val_form.HasMember("ID")){
+//                    log("   ID: %d", val_form["ID"].GetInt());
+//                }
+//                
+//                if(val_form.HasMember("info")){
+//                    const rapidjson::Value& info = val_form["info"];
+//                    CC_ASSERT(info.IsArray());
+//                    log("   info: { ");
+//                    for(unsigned int i = 0; i < info.Size(); ++i){
+//                        // 获得一条记录对象
+//                        const rapidjson::Value& record = info[i];
+//                        CC_ASSERT(record.HasMember("no"));
+//                        log("       no: %d", record["no"].GetInt());
+//                        
+//                        CC_ASSERT(record.HasMember("content"));
+//                        log("       content: %s", record["content"].GetString());
+//                        
+//                    }
+//                }
+//                
+//                log("   } \n");
+//                
+//            }
+//        }
+//        
+//        if(document.HasMember("origin")){
+//            const rapidjson::Value& val_visitor = document["origin"];
+//            log("origin: %s \n", val_visitor.GetString());
+//        }
+//        
+//        if(document.HasMember("url")){
+//            const rapidjson::Value& val_headers = document["url"];
+//            log("url: %s \n", val_headers.GetString());
+//        }
+        
     }
-    printf("\n");
 }
 
 //#pragma tableview

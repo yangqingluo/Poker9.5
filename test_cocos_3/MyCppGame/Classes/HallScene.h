@@ -15,6 +15,8 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+#include "PublicHeader.h"
+
 class RoomItem : public Ref{
 public:
     char title[100];
@@ -37,8 +39,12 @@ class Hall : public Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
     static Scene* createScene();
+    virtual void onEnter();
+    virtual void onExit();
     virtual bool init();
     CREATE_FUNC(Hall);
+    
+    UserData user_data;
     
     int roomTypeSelected;
     Vector<MenuItem* > roomMenuItems;
@@ -51,6 +57,7 @@ public:
     void roomTypeCallback(Ref* pSender, int index);
     void roomTypeSelectedAction(int type);
     
+    Label* userNameLabel;
     Label* userinfoLabel;
     void buttonCallback(Ref* pSender, int index);
     

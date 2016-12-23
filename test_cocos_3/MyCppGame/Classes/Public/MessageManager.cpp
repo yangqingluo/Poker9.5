@@ -23,6 +23,7 @@ MessageManager* MessageManager::show(Node* nodeParent, int type,const char *msg)
     
     MessageManager* m_Layer = MessageManager::create();
     m_Layer->setContentSize(visibleSize);
+    m_Layer->setPosition(origin.x, origin.y);
     
     switch (type) {
         case MESSAGETYPE_LOADING:
