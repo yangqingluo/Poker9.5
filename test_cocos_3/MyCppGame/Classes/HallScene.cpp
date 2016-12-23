@@ -34,7 +34,7 @@ void Hall::onEnter(){
     userNameLabel->setString(user_data.nikename);
     
     char userInfoString[300];
-    sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:0\n金币:10000\n银币:500\n钻石:500\n战斗次数:%d\n胜率:%s",user_data.ID, user_data.gameTimes, user_data.winningPercent);
+    sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.ID, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
     userinfoLabel->setString(userInfoString);
 }
 void Hall::onExit(){
@@ -191,7 +191,7 @@ bool Hall::init()
     
     userinfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
     userinfoLabel->setTextColor(Color4B(0xe0, 0xe0, 0xe0, 0xff));
-    userinfoLabel->setPosition(userInfoSprite->getContentSize().width / 2, 0.28 * userInfoSprite->getContentSize().height);
+    userinfoLabel->setPosition(userInfoSprite->getContentSize().width / 2, 0.3 * userInfoSprite->getContentSize().height);
     userinfoLabel->setDimensions(0.95 * userInfoSprite->getContentSize().width, 0.56 * userInfoSprite->getContentSize().height);
     userInfoSprite->addChild(userinfoLabel);
     

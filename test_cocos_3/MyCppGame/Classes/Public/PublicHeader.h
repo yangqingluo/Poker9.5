@@ -14,6 +14,9 @@ struct UserData {
     char winningPercent[20];
 //    "introCount": 0,
     int gameTimes;
+    int diamond;
+    int gold;
+    int silver;
 //    "token": null,
 };
 

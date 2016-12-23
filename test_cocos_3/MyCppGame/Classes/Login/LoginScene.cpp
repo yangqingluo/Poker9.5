@@ -323,6 +323,22 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                     const char* winningPercent = val_content["winningPercent"].GetString();
                     memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
                     
+                    if (val_content.HasMember("diamondGameBit")) {
+                        const rapidjson::Value& val_diamondGameBit = val_content["diamondGameBit"];
+                        user_data.diamond = val_diamondGameBit["amount"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("silverGameBit")) {
+                        const rapidjson::Value& val_silverGameBit = val_content["silverGameBit"];
+                        user_data.silver = val_silverGameBit["amount"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("goldGameBit")) {
+                        const rapidjson::Value& val_goldGameBit = val_content["goldGameBit"];
+                        user_data.gold = val_goldGameBit["amount"].GetInt();
+                    }
+                    
+                    
                     layer->user_data = user_data;
                 }
                 
