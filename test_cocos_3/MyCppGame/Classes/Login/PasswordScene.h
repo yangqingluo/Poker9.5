@@ -48,6 +48,13 @@ private:
     
     MessageManager* m_pMessage;
     
+    cocos2d::ui::Button* btn_getVCode;
+    float pTime;
+    void wait(float delta);
+    
+    void onHttpRequest_GetVCode(string username);
+    void onHttpRequest_ChangePassword(string username, string password, string vcode);
+    void onHttpResponse(HttpClient* sender, HttpResponse* response);
 };
 
 #endif /* PasswordScene_h */

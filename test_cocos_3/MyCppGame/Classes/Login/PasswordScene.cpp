@@ -107,7 +107,7 @@ bool PasswordScene::init()
                 inputBox->setContentSize(Size(0.45 * inputBox->getContentSize().width, inputBox->getContentSize().height));
                 inputBox->setPositionX(0.05 * inputListSprite->getContentSize().width + 0.5 * inputBox->getContentSize().width);
                 
-                auto btn_getVCode = Button::create("images/btn_green.png","images/btn_green.png");
+                btn_getVCode = Button::create("images/btn_green.png","images/btn_green.png");
                 btn_getVCode->setScale9Enabled(true);//打开scale9 可以拉伸图片
                 btn_getVCode->setTitleText("获取验证码");
                 btn_getVCode->setTitleFontSize(12);
@@ -123,6 +123,16 @@ bool PasswordScene::init()
                 break;
         }
     }
+    
+    auto btn_changePassword = Button::create("images/btn_green.png","images/btn_green.png");
+    btn_changePassword->setScale9Enabled(true);//打开scale9 可以拉伸图片
+    btn_changePassword->setTitleText("修改密码");
+    btn_changePassword->setTitleFontSize(12);
+    btn_changePassword->setContentSize(Size(0.9 * inputListSprite->getContentSize().width, 0.8 * inputHeight));
+    btn_changePassword->setPosition(Vec2(0.5 * inputListSprite->getContentSize().width, inputY - btn_changePassword->getContentSize().height));
+    btn_changePassword->addTouchEventListener(CC_CALLBACK_2(PasswordScene::touchEvent, this));
+    btn_changePassword->setTag(2);
+    inputListSprite->addChild(btn_changePassword);
     
     return true;
 }
@@ -171,8 +181,24 @@ void PasswordScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     }
                     else {
                         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-                        
-                        
+                        onHttpRequest_GetVCode(usernameBox->getText());
+                    }
+                }
+                    break;
+                    
+                case 2:{
+                    if (strlen(usernameBox->getText()) != 11) {
+                        NoteTip::show("手机号码输入有误");
+                    }
+                    else if (strlen(passwordBox->getText()) < 6) {
+                        NoteTip::show("密码输入有误");
+                    }
+                    else if (strlen(vcodeBox->getText()) != 6) {
+                        NoteTip::show("验证码输入有误");
+                    }
+                    else {
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        onHttpRequest_ChangePassword(usernameBox->getText(), passwordBox->getText(), vcodeBox->getText());
                     }
                 }
                     break;
@@ -190,4 +216,120 @@ void PasswordScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
         default:
             break;
     }
+}
+
+void PasswordScene::wait(float delta){
+    pTime -= delta;
+    char mtime[100];
+    sprintf(mtime,"%ds重新获取",(int)pTime % 60);
+    btn_getVCode->setTitleText(mtime);
+    
+    if (pTime <= 1) {
+        unschedule(schedule_selector(PasswordScene::wait));
+        btn_getVCode->setTouchEnabled(true);
+        btn_getVCode->setTitleText("获取验证码");
+    }
+}
+
+#pragma http
+void PasswordScene::onHttpRequest_GetVCode(string username){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/getverifycode");
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "mobile=%s", username.c_str());
+    std::string data;
+    data.assign(param);
+    request->setRequestData(data.c_str(), data.length());
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(PasswordScene::onHttpResponse, this));
+    request->setTag("getverifycode");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+void PasswordScene::onHttpRequest_ChangePassword(string username, string password, string vcode){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/changepassword");
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "mobile=%s&verifyCode=%s&password=%s", username.c_str(), vcode.c_str() ,password.c_str());
+    std::string data;
+    data.assign(param);
+    request->setRequestData(data.c_str(), data.length());
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(PasswordScene::onHttpResponse, this));
+    request->setTag("changepassword");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+void PasswordScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
+    m_pMessage->hidden();
+    
+    // 没有收到响应
+    if (!response){
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    long statusCode = response->getResponseCode();
+    char statusString[64] = {};
+    sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    CCLOG("response code: %s", statusString);
+    
+    // 链接失败
+    if (!response->isSucceed())
+    {
+        CCLOG("response failed");
+        CCLOG("error buffer: %s", response->getErrorBuffer());
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    std::vector<char>* responseData = response -> getResponseData();
+    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
+    log("%s\n", responseStr.c_str());
+    rapidjson::Document document;
+    document.Parse<0>(responseStr.c_str());
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code")){
+            const rapidjson::Value& val_code = document["code"];
+            int code = val_code.GetInt();
+            if (code == 1) {
+                //成功
+                if (0 != strlen(response->getHttpRequest()->getTag())){
+                    std::string tag = response->getHttpRequest()->getTag();
+                    if (tag == "getverifycode") {
+                        btn_getVCode->setTouchEnabled(false);
+                        pTime = 60;
+                        schedule(schedule_selector(PasswordScene::wait));
+                    }
+                    else if (tag == "changepassword"){
+                        NoteTip::show("密码修改成功");
+                    }
+                }
+            }
+            else {
+                const rapidjson::Value& val_content = document["content"];
+                const char* content = val_content.GetString();
+                NoteTip::show(content);
+            }
+        }
+    }
+
 }

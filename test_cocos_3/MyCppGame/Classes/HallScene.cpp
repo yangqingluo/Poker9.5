@@ -192,7 +192,7 @@ bool Hall::init()
     userinfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
     userinfoLabel->setTextColor(Color4B(0xe0, 0xe0, 0xe0, 0xff));
     userinfoLabel->setPosition(userInfoSprite->getContentSize().width / 2, 0.3 * userInfoSprite->getContentSize().height);
-    userinfoLabel->setDimensions(0.95 * userInfoSprite->getContentSize().width, 0.56 * userInfoSprite->getContentSize().height);
+    userinfoLabel->setDimensions(0.95 * userInfoSprite->getContentSize().width, 0.5 * userInfoSprite->getContentSize().height);
     userInfoSprite->addChild(userinfoLabel);
     
     auto refresh_UserInfoItem = MenuItemImage::create(
