@@ -65,7 +65,7 @@ bool LoginScene::init()
     inputListSprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     this->addChild(inputListSprite);
     
-    char showContent[2][100] = {"11位手机号码","6-16位密码"};
+    char showContent[2][100] = {"手机号码(11位)","密码(6-16位)"};
     float inputHeight = MAX(32, inputListSprite->getContentSize().height / 8);
     float inputY = 0.0;
     for (int i = 0; i < 2; i++) {
