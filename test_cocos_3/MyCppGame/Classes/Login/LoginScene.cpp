@@ -59,7 +59,7 @@ bool LoginScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    auto inputListSprite = QLImageSprite::create("images/window_upright_bg.png", Size(0.5 * visibleSize.width, 0.9 * visibleSize.height));
+    auto inputListSprite = QLImageSprite::create("images/window_upright_bg.png", Size(0.5 * visibleSize.width, 0.95 * visibleSize.height));
     inputListSprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     this->addChild(inputListSprite);
     

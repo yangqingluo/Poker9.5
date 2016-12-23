@@ -15,7 +15,7 @@ bool RegistInputView::init(){
     }
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    this->setContentSize(Size(0.5 * visibleSize.width, 0.9 * visibleSize.height));
+    this->setContentSize(Size(0.5 * visibleSize.width, 0.95 * visibleSize.height));
     
     char showContent[8][100] = {"输入手机号","输入验证码","输入密码","再次输入密码","生日","邮箱","邀请码","验证码"};
     float inputHeight = MIN(30, this->getContentSize().height / 8);
@@ -25,7 +25,7 @@ bool RegistInputView::init(){
 //        memcpy(item->title, showTitle[i], strlen(showTitle[i]));
 //        memcpy(item->content, showContent[i], strlen(showContent[i]));
         
-        auto inputBox = EditBox::create(Size(0.9 * this->getContentSize().width, 0.8 * inputHeight), Scale9Sprite::create("images/orange_edit.png"));
+        auto inputBox = ui::EditBox::create(Size(0.9 * this->getContentSize().width, 0.8 * inputHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
         inputBox->setPosition(Vec2(0.5 * this->getContentSize().width, this->getContentSize().height - (i * 1.0 + 0.8) * inputHeight));
         this->addChild(inputBox);
         
@@ -102,26 +102,25 @@ void RegistInputView::onExit(){
 
 #pragma edixBox
 //开始编辑
-void RegistInputView::editBoxEditingDidBegin(EditBox* editBox)
-{
-    CCLog("editBox %p DidBegin !", editBox);
+void RegistInputView::editBoxEditingDidBegin(ui::EditBox* editBox){
+    CCLOG("editBox %p DidBegin !", editBox);
 }
 
 //结束编辑
-void RegistInputView::editBoxEditingDidEnd(EditBox* editBox)
+void RegistInputView::editBoxEditingDidEnd(ui::EditBox* editBox)
 {
-    CCLog("editBox %p DidEnd !", editBox);
+    CCLOG("editBox %p DidEnd !", editBox);
 }
 
 //编辑框内容改变
-void RegistInputView::editBoxTextChanged(EditBox* editBox, const std::string& text)
+void RegistInputView::editBoxTextChanged(ui::EditBox* editBox, const std::string& text)
 {
-    CCLog("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+    CCLOG("editBox %p TextChanged, text: %s ", editBox, text.c_str());
 }
 
 //触发return返回
-void RegistInputView::editBoxReturn(EditBox* editBox)
+void RegistInputView::editBoxReturn(ui::EditBox* editBox)
 {
-    CCLog("editBox %p was returned !",editBox);
+    CCLOG("editBox %p was returned !",editBox);
 }
 
