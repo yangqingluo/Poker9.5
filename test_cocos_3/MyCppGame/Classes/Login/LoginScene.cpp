@@ -235,8 +235,7 @@ void LoginScene::editBoxReturn(ui::EditBox* editBox){
 
 #pragma http
 // 发送HTTP请求
-void LoginScene::onHttpRequest_Login(string username, string password)
-{
+void LoginScene::onHttpRequest_Login(string username, string password){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
     
@@ -258,11 +257,11 @@ void LoginScene::onHttpRequest_Login(string username, string password)
 
 
 // HTTP响应请求函数
-void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response)
-{
+void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
+    m_pMessage->hidden();
+    
     // 没有收到响应
-    if (!response)
-    {
+    if (!response){
         CCLOG("no response");
         return;
     }
@@ -279,7 +278,6 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response)
         CCLOG("error buffer: %s", response->getErrorBuffer());
         return;
     }
-    m_pMessage->hidden();
     
     // 获取数据
     std::vector<char>* v = response->getResponseData();

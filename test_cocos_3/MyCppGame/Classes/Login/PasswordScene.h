@@ -15,6 +15,12 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+#include "network/HttpClient.h"
+using namespace cocos2d::network;
+using namespace std;
+
+#include "NoteTip.h"
+#include "MessageManager.h"
 
 
 class PasswordShowItem : public Ref{
@@ -33,8 +39,14 @@ public:
     CREATE_FUNC(PasswordScene);
     
     void buttonCallback(Ref* pSender, int index);
+    void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
 private:
+    ui::EditBox* usernameBox;
+    ui::EditBox* passwordBox;
+    ui::EditBox* passwordAgainBox;
+    ui::EditBox* vcodeBox;
     
+    MessageManager* m_pMessage;
     
 };
 
