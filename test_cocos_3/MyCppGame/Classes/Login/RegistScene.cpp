@@ -386,8 +386,8 @@ void RegistScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             layer->user_data = user_data;
                         }
                         
+                        UserDefault::getInstance()->setStringForKey("username", usernameBox->getText());
                         Director::getInstance()->replaceScene(scene);
-                        
                     }
                 }
             }

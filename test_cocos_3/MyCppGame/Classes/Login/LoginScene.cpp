@@ -148,7 +148,11 @@ bool LoginScene::init()
 
 void LoginScene::onEnter(){
     Layer::onEnter();
-    log("enter login");
+    
+    std::string username = UserDefault::getInstance()->getStringForKey("username");
+    if (strlen(username.c_str()) == 11) {
+        usernameBox->setText(username.c_str());
+    }
 }
 
 void LoginScene::onExit(){
@@ -353,6 +357,7 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                     layer->user_data = user_data;
                 }
                 
+                UserDefault::getInstance()->setStringForKey("username", usernameBox->getText());
                 Director::getInstance()->replaceScene(scene);
             }
             else {
