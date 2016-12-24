@@ -21,7 +21,6 @@ using namespace std;
 
 #include "NoteTip.h"
 #include "MessageManager.h"
-#include "json.h"
 
 class LoginScene : public Layer, ui::EditBoxDelegate
 {
@@ -40,7 +39,6 @@ private:
     ui::EditBox* usernameBox;
     ui::EditBox* passwordBox;
     MessageManager* m_pMessage;
-    Json::Reader reader;
     
     virtual void editBoxEditingDidBegin(ui::EditBox* editBox); //开始编辑
     virtual void editBoxEditingDidEnd(ui::EditBox* editBox); //结束编辑

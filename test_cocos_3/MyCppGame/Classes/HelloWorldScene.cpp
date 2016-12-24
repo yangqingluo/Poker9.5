@@ -152,19 +152,17 @@ bool HelloWorld::init()
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            auto scene = Hall::createScene();
-            Director::getInstance()->pushScene(scene);
+            NoteTip::show("精彩功能敬请期待");
         }
             break;
             
         case 1:{
-            this->onHttpRequest("get");
+            NoteTip::show("精彩功能敬请期待");
         }
             break;
             
         case 2:{
             auto scene = LoginScene::createScene();
-            
             Director::getInstance()->pushScene(scene);
         }
             break;
