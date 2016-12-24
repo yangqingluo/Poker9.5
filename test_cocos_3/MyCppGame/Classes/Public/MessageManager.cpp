@@ -36,7 +36,7 @@ MessageManager* MessageManager::show(Node* nodeParent, int type,const char *msg)
 //            m_pLayer->addChild(sp);
             
             auto sp = Sprite::create("animations/meituan/listheader_0.png");
-            sp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.55 * visibleSize.height));
+            sp->setPosition(Vec2(visibleSize.width / 2, 0.55 * visibleSize.height));
             m_Layer->addChild(sp);
             
             auto animation = Animation::create();

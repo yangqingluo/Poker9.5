@@ -109,7 +109,7 @@ bool RegistScene::init()
                 break;
                 
             case 3:{
-                inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_WORD);
+                inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::EMAIL_ADDRESS);
                 inputBox->setMaxLength(20);
                 nikenameBox = inputBox;
             }
@@ -361,7 +361,7 @@ void RegistScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             const char* nikename = val_content["nikename"].GetString();
                             memcpy(user_data.nikename, nikename, strlen(nikename));
                             
-                            const char* ID = val_content["id"].GetString();
+                            const char* ID = val_content["account"].GetString();
                             memcpy(user_data.ID, ID, strlen(ID));
                             
                             const char* winningPercent = val_content["winningPercent"].GetString();
