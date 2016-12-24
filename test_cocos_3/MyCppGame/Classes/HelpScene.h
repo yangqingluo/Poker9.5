@@ -1,13 +1,13 @@
 //
-//   SettingScene.h
+//   HelpScene.h
 //  MyCppGame
 //
 //  Created by yangqingluo on 2016/11/20.
 //
 //
 
-#ifndef  SettingScene_h
-#define  SettingScene_h
+#ifndef  HelpScene_h
+#define  HelpScene_h
 
 #include "cocos2d.h"
 USING_NS_CC;
@@ -24,25 +24,21 @@ using namespace ui;
 #include "MessageManager.h"
 #include "YNButton.h"
 
-class  SettingScene : public cocos2d::Layer
+class  HelpScene : public cocos2d::Layer
 {
 public:
     static cocos2d::Scene* createScene();
     virtual void onEnter();
     virtual void onExit();
     virtual bool init();
-    CREATE_FUNC( SettingScene);
+    CREATE_FUNC( HelpScene);
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
 private:
-    YNButton* btn_infoSetting;
-    YNButton* btn_systemSetting;
-    LayerColor* infoSettingLayer;
-    LayerColor* systemSettingLayer;
-    
+    Vector<YNButton* > listButtons;
+    Vector<LayerColor* > listLayers;
     ui::EditBox* nikenameBox;
-    
     MessageManager* m_pMessage;
     
     void showSettingWithIndex(int index);
@@ -51,4 +47,4 @@ private:
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
 };
 
-#endif /*  SettingScene_h */
+#endif /*  HelpScene_h */

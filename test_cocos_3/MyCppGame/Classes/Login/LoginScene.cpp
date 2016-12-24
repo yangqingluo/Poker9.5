@@ -118,7 +118,7 @@ bool LoginScene::init()
         }
     }
     
-    auto btn_login = Button::create("images/btn_green.png","images/btn_green_selected.png");
+    auto btn_login = Button::create("images/btn_green.png");
     btn_login->setScale9Enabled(true);//打开scale9 可以拉伸图片
     btn_login->setTitleText("登录");
     btn_login->setTitleFontSize(16);

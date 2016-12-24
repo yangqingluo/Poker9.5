@@ -13,6 +13,7 @@
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
 #include "SettingScene.h"
+#include "HelpScene.h"
 
 Scene* Hall::createScene()
 {
@@ -553,7 +554,8 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 3:{
-                
+                auto scene = HelpScene::createScene();
+                Director::getInstance()->pushScene(scene);
             }
                 break;
                 
