@@ -171,6 +171,12 @@ bool SettingScene::init()
         
         switch (i) {
             case 0:{
+                if (Global::getInstance()->isEffect()) {
+                    btn_Item->selected();
+                }
+                else {
+                    btn_Item->unselected();
+                }
             }
                 break;
                 
@@ -205,6 +211,18 @@ void SettingScene::buttonCallback(cocos2d::Ref* pSender, int index){
         case 1:
         case 2:{
             showSettingWithIndex(index);
+        }
+            break;
+            
+        case 3:{
+            if (Global::getInstance()->isEffect()) {
+                Global::getInstance()->setEffect(false);
+                item->unselected();
+            }
+            else {
+                Global::getInstance()->setEffect(true);
+                item->selected();
+            }
         }
             break;
             

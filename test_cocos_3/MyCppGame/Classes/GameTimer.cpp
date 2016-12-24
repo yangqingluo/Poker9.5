@@ -1,4 +1,5 @@
 #include "GameTimer.h"
+#include "Global.h"
 
 GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL),m_valid(false){
     
@@ -7,6 +8,7 @@ GameTimer::GameTimer():m_callbackListener(NULL),m_callback(NULL),m_valid(false){
 GameTimer::~GameTimer(){
     if (m_valid) {
         unschedule(schedule_selector(GameTimer::update));
+//        Global::getInstance()->stopEffect(soundID_timer);
     }
 }
 
@@ -22,7 +24,15 @@ bool GameTimer::init(){
 void GameTimer::start(float time){
     pTime = time;
     m_valid = true;
-    schedule(schedule_selector(GameTimer::update));
+    
+//    soundID_timer = Global::getInstance()->playEffect_timer(true);
+    
+    char mtime[100];
+    if (strcmp(prefixString, "") != 0) {
+        sprintf(mtime,"%s%d",prefixString,(int)pTime % 60);
+        label->setString(mtime);
+    }
+    schedule(schedule_selector(GameTimer::update), 1.0);
 }
 
 void GameTimer::update(float delta){
@@ -33,8 +43,13 @@ void GameTimer::update(float delta){
         label->setString(mtime);
     }
     
-    if (pTime <= 1) {
+    if (pTime <= 5) {
+        Global::getInstance()->playEffect_warning(false);
+    }
+    
+    if (pTime <= 0) {
         unschedule(schedule_selector(GameTimer::update));
+//        Global::getInstance()->stopEffect(soundID_timer);
         m_valid = false;
         if (m_callback && m_callbackListener) {
             (m_callbackListener->*m_callback)(this);

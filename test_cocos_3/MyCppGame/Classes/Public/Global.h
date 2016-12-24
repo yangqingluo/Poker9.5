@@ -18,6 +18,17 @@ public:
     bool isBackgroundMusic();
     void setBackgroundMusic(bool yn);
     void playBackgroundMusic(bool yn);
+    
+    bool isEffect();
+    void setEffect(bool yn);
+    
+    void stopEffect(int ID);
+    int playEffect(const char* fileName , bool loop);
+    int playEffect_sendcard(bool loop);
+    int playEffect_place(bool loop);
+    int playEffect_timer(bool loop);
+    int playEffect_warning(bool loop);
+    
 protected:
     ~Global();
 };

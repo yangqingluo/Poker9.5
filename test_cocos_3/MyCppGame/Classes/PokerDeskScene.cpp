@@ -8,6 +8,7 @@
 
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
+#include "Global.h"
 
 const float jetton_height_scale = 0.08;
 
@@ -291,6 +292,8 @@ void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"设置筹码，选择过、天、坎下注");
         showTimer->start(15);
+        
+        Global::getInstance()->playEffect_place(false);
     }
 }
 
@@ -722,6 +725,8 @@ void PokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
 }
 
 void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
+    Global::getInstance()->playEffect_sendcard(false);
+    
     this->reorderChild(pSender, 0);
     PokerChair* chair = (PokerChair* )pData;
     chair->updatePokerPosition();

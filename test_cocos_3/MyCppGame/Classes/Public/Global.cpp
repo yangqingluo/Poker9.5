@@ -1,6 +1,13 @@
 #include "Global.h"
 
 #define key_BackgroundMusic "background_music_game"
+#define key_Effect          "effect_game"
+
+#define EFFECT_sendcard     "music/sendcard.wav"
+#define EFFECT_place        "music/place.wav"
+#define EFFECT_timer        "music/timer.wav"
+#define EFFECT_warning      "music/warning.wav"
+
 //音效文件
 //Android平台只支持OGG的音效格式
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -64,3 +71,46 @@ void Global::playBackgroundMusic(bool yn){
         SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     }
 }
+
+bool Global::isEffect(){
+    return UserDefault::getInstance()->getBoolForKey(key_Effect);
+}
+void Global::setEffect(bool yn){
+    UserDefault::getInstance()->setBoolForKey(key_Effect, yn);
+    if (!yn) {
+        SimpleAudioEngine::getInstance()->stopAllEffects();
+    }
+}
+
+void Global::stopEffect(int ID){
+    SimpleAudioEngine::getInstance()->stopEffect(ID);
+}
+
+int Global::playEffect(const char* fileName , bool loop){
+    if (isEffect()) {
+        return SimpleAudioEngine::getInstance()->playEffect(fileName, loop);
+    }
+    
+    return -1;
+}
+//发牌声
+int Global::playEffect_sendcard(bool loop){
+    return playEffect(EFFECT_sendcard, loop);
+}
+
+//请下注
+int Global::playEffect_place(bool loop){
+    return playEffect(EFFECT_place, loop);
+}
+
+//计时
+int Global::playEffect_timer(bool loop){
+    return playEffect(EFFECT_timer, loop);
+}
+
+//警告
+int Global::playEffect_warning(bool loop){
+    return playEffect(EFFECT_warning, loop);
+}
+
+
