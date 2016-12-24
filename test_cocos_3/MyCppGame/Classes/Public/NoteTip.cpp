@@ -18,8 +18,12 @@ bool NoteTip::init()
     }
     return true;
 }
-void NoteTip::show(const char *content)
-{
+void NoteTip::show(const char *content){
+    auto scene = Director::getInstance()->getRunningScene();
+    NoteTip::show(scene, content);
+}
+
+void NoteTip::show(Node* pParent, const char *content){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
@@ -41,10 +45,9 @@ void NoteTip::show(const char *content)
     sp->addChild(label);
     noteTip->addChild(sp);
     
-    
-    auto scene = Director::getInstance()->getRunningScene();
-    scene->addChild(noteTip);
+    pParent->addChild(noteTip);
 }
+
 void NoteTip::onEnter()
 {
     Layer::onEnter();

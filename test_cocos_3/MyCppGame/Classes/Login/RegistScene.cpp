@@ -109,6 +109,7 @@ bool RegistScene::init()
                 break;
                 
             case 3:{
+                inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_WORD);
                 inputBox->setMaxLength(20);
                 nikenameBox = inputBox;
             }
@@ -166,6 +167,7 @@ void RegistScene::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
             Director::getInstance()->popScene();
+            
         }
             break;
             

@@ -16,6 +16,13 @@
 USING_NS_CC;
 using namespace ui;
 
+LoginScene::LoginScene(){
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(LoginScene::onNotification_NoteTip), showNoteTipTag, NULL);
+}
+LoginScene::~LoginScene(){
+    NotificationCenter::getInstance()->removeAllObservers(this);
+}
+
 Scene* LoginScene::createScene()
 {
     // 'scene' is an autorelease object
@@ -141,7 +148,7 @@ bool LoginScene::init()
 
 void LoginScene::onEnter(){
     Layer::onEnter();
-    
+    log("enter login");
 }
 
 void LoginScene::onExit(){
@@ -408,6 +415,12 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
 //        }
         
     }
+}
+
+#pragma notification
+void LoginScene::onNotification_NoteTip(Ref* pSender){
+    auto msg = (String*)pSender;
+    NoteTip::show(this, msg->getCString());
 }
 
 //#pragma tableview

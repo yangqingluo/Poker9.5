@@ -26,6 +26,8 @@ using namespace std;
 class LoginScene : public Layer, ui::EditBoxDelegate
 {
 public:
+    LoginScene();
+    ~LoginScene();
     static Scene* createScene();
     virtual bool init();
     virtual void onEnter();
@@ -47,6 +49,8 @@ private:
     
     void onHttpRequest_Login(string username, string password);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
+    
+    void onNotification_NoteTip(Ref* pSender);
 };
 
 #endif /* LoginScene_h */

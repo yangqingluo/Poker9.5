@@ -323,7 +323,9 @@ void PasswordScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         schedule(schedule_selector(PasswordScene::wait));
                     }
                     else if (tag == "changepassword"){
-                        NoteTip::show("密码修改成功");
+                        Director::getInstance()->popScene();
+                        auto sData = String::create("密码修改成功");
+                        NotificationCenter::getInstance()->postNotification(showNoteTipTag, sData);
                     }
                 }
             }
