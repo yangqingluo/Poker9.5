@@ -28,6 +28,9 @@ public:
     int playEffect_place(bool loop);
     int playEffect_timer(bool loop);
     int playEffect_warning(bool loop);
+    int playEffect_add_gold(bool loop);
+    int playEffect_select(bool loop);
+    int playEffect_button(bool loop);
     
 protected:
     ~Global();

@@ -7,6 +7,9 @@
 #define EFFECT_place        "music/place.wav"
 #define EFFECT_timer        "music/timer.wav"
 #define EFFECT_warning      "music/warning.wav"
+#define EFFECT_add_gold     "music/add_gold.wav"
+#define EFFECT_select       "music/select.wav"
+#define EFFECT_button       "music/button.wav"
 
 //音效文件
 //Android平台只支持OGG的音效格式
@@ -113,4 +116,13 @@ int Global::playEffect_warning(bool loop){
     return playEffect(EFFECT_warning, loop);
 }
 
+int Global::playEffect_add_gold(bool loop){
+    return playEffect(EFFECT_add_gold, loop);
+}
+int Global::playEffect_select(bool loop){
+    return playEffect(EFFECT_select, loop);
+}
 
+int Global::playEffect_button(bool loop){
+    return playEffect(EFFECT_button, loop);
+}

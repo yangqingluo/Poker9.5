@@ -560,6 +560,7 @@ void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                 
                 JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
                 chair->addJetton(sp);
+                Global::getInstance()->playEffect_add_gold(false);
             }
         }
             break;
