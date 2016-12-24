@@ -15,7 +15,7 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
-#include "PublicHeader.h"
+#include "Global.h"
 
 class RoomItem : public Ref{
 public:
@@ -43,8 +43,6 @@ public:
     virtual void onExit();
     virtual bool init();
     CREATE_FUNC(Hall);
-    
-    UserData user_data;
     
     int roomTypeSelected;
     Vector<MenuItem* > roomMenuItems;

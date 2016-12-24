@@ -3,9 +3,9 @@
 
 
 struct UserData {
-    char ID[100];
-    char nikename[100];
-//    "account": "20161220469c15",
+//    char ID[30];
+    char nikename[50];
+    char account[20];
 //    "mobile": "18811610036",
 //    "birthday": "1990-08-15",
 //    "email": null,

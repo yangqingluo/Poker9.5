@@ -348,10 +348,6 @@ void RegistScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         schedule(schedule_selector(RegistScene::wait));
                     }
                     else if (tag == "register"){
-                        auto scene = Hall::createScene();
-                        Vector<Node* >children = scene->getChildren();
-                        Hall* layer = (Hall* )(scene->getChildren().at(1));
-                        
                         if (document.HasMember("content")) {
                             const rapidjson::Value& val_content = document["content"];
                             
@@ -361,8 +357,8 @@ void RegistScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             const char* nikename = val_content["nikename"].GetString();
                             memcpy(user_data.nikename, nikename, strlen(nikename));
                             
-                            const char* ID = val_content["account"].GetString();
-                            memcpy(user_data.ID, ID, strlen(ID));
+                            const char* account = val_content["account"].GetString();
+                            memcpy(user_data.account, account, strlen(account));
                             
                             const char* winningPercent = val_content["winningPercent"].GetString();
                             memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
@@ -383,10 +379,12 @@ void RegistScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             }
                             
                             
-                            layer->user_data = user_data;
+                            Global::getInstance()->user_data = user_data;
                         }
                         
                         UserDefault::getInstance()->setStringForKey("username", usernameBox->getText());
+                        
+                        auto scene = Hall::createScene();
                         Director::getInstance()->replaceScene(scene);
                     }
                 }

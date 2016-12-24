@@ -127,6 +127,10 @@
 		FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
 		FCBDFECF1DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
 		FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
+		FCC0226E1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */; };
+		FCC0226F1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */; };
+		FCC022731E0E6DC100A1D6F4 /* Global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC022711E0E6DC100A1D6F4 /* Global.cpp */; };
+		FCC022741E0E6DC100A1D6F4 /* Global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC022711E0E6DC100A1D6F4 /* Global.cpp */; };
 		FCC2D0511DDF23A600E8353D /* images in Resources */ = {isa = PBXBuildFile; fileRef = FCC2D0501DDF23A600E8353D /* images */; };
 		FCC2D0521DDF23A600E8353D /* images in Resources */ = {isa = PBXBuildFile; fileRef = FCC2D0501DDF23A600E8353D /* images */; };
 		FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC339CF1DDFB45E00E71685 /* HallScene.cpp */; };
@@ -308,6 +312,10 @@
 		FCB5E04B1DF017D300EDB420 /* JettonSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonSprite.h; sourceTree = "<group>"; };
 		FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PopAlertDialog.cpp; sourceTree = "<group>"; };
 		FCBDFECE1DE9D8F4001EA2BC /* PopAlertDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopAlertDialog.h; sourceTree = "<group>"; };
+		FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingScene.cpp; sourceTree = "<group>"; };
+		FCC0226D1E0E615F00A1D6F4 /* SettingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingScene.h; sourceTree = "<group>"; };
+		FCC022711E0E6DC100A1D6F4 /* Global.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Global.cpp; sourceTree = "<group>"; };
+		FCC022721E0E6DC100A1D6F4 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		FCC2D0501DDF23A600E8353D /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		FCC339CF1DDFB45E00E71685 /* HallScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HallScene.cpp; sourceTree = "<group>"; };
 		FCC339D01DDFB45E00E71685 /* HallScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HallScene.h; sourceTree = "<group>"; };
@@ -478,6 +486,8 @@
 				FC983D601DE1691C006C2616 /* ShopScene.h */,
 				FC983D631DE171F9006C2616 /* ExchangeScene.cpp */,
 				FC983D641DE171F9006C2616 /* ExchangeScene.h */,
+				FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */,
+				FCC0226D1E0E615F00A1D6F4 /* SettingScene.h */,
 				FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */,
 				FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */,
 				FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */,
@@ -648,6 +658,8 @@
 				FC2BF0001E090608007A3F4E /* RegistInputView.cpp */,
 				FC2BF0011E090608007A3F4E /* RegistInputView.h */,
 				FC4E35A81E0B791D00FCF20F /* PublicHeader.h */,
+				FCC022711E0E6DC100A1D6F4 /* Global.cpp */,
+				FCC022721E0E6DC100A1D6F4 /* Global.h */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -850,6 +862,7 @@
 				FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
 				FC1F94471E0D1FDA002040B9 /* json_writer.cpp in Sources */,
 				FC2BEFFD1E09059A007A3F4E /* LoginScene.cpp in Sources */,
+				FCC022731E0E6DC100A1D6F4 /* Global.cpp in Sources */,
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
 				FC1F94411E0D1FDA002040B9 /* json_reader.cpp in Sources */,
@@ -858,6 +871,7 @@
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FCE9ADF41E0C10E500C97945 /* PasswordScene.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
+				FCC0226E1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				FC983D5D1DE16728006C2616 /* InviteScene.cpp in Sources */,
@@ -883,8 +897,10 @@
 				FCCBA4971E026E110072EA7E /* PokerStabber.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC4E35B01E0B852000FCF20F /* MessageManager.cpp in Sources */,
+				FCC022741E0E6DC100A1D6F4 /* Global.cpp in Sources */,
 				FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,
+				FCC0226F1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */,
 				FC8FEF7A1E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,

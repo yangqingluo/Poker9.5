@@ -12,6 +12,7 @@
 #include "ExchangeScene.h"
 #include "PokerDeskScene.h"
 #include "PopAlertDialog.h"
+#include "SettingScene.h"
 
 Scene* Hall::createScene()
 {
@@ -31,10 +32,11 @@ Scene* Hall::createScene()
 void Hall::onEnter(){
     Layer::onEnter();
     
+    UserData user_data = Global::getInstance()->user_data;
     userNameLabel->setString(user_data.nikename);
     
     char userInfoString[300];
-    sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.ID, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
+    sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
     userinfoLabel->setString(userInfoString);
 }
 void Hall::onExit(){
@@ -554,7 +556,8 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 4:{
-                
+                auto scene = SettingScene::createScene();
+                Director::getInstance()->pushScene(scene);
             }
                 break;
                 
