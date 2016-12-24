@@ -106,6 +106,8 @@
 		FC6DB6221DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
 		FC7E776B1E0E75BD008EBE40 /* music in Resources */ = {isa = PBXBuildFile; fileRef = FC7E776A1E0E75BD008EBE40 /* music */; };
 		FC7E776C1E0E75BD008EBE40 /* music in Resources */ = {isa = PBXBuildFile; fileRef = FC7E776A1E0E75BD008EBE40 /* music */; };
+		FC7E77701E0EAC1F008EBE40 /* YNButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E776E1E0EAC1F008EBE40 /* YNButton.cpp */; };
+		FC7E77711E0EAC1F008EBE40 /* YNButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E776E1E0EAC1F008EBE40 /* YNButton.cpp */; };
 		FC7FC24A1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
 		FC7FC24B1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
 		FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
@@ -294,6 +296,8 @@
 		FC4E35B81E0BA6F900FCF20F /* animations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = animations; sourceTree = "<group>"; };
 		FC6DB6201DE8395000621B55 /* poker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = poker; sourceTree = "<group>"; };
 		FC7E776A1E0E75BD008EBE40 /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; path = music; sourceTree = "<group>"; };
+		FC7E776E1E0EAC1F008EBE40 /* YNButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YNButton.cpp; sourceTree = "<group>"; };
+		FC7E776F1E0EAC1F008EBE40 /* YNButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNButton.h; sourceTree = "<group>"; };
 		FC7FC2491DF00ACD007A6D25 /* jetton */ = {isa = PBXFileReference; lastKnownFileType = folder; path = jetton; sourceTree = "<group>"; };
 		FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		FC8FEF771E038D63009D907E /* PokerStabberBtn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerStabberBtn.cpp; sourceTree = "<group>"; };
@@ -655,6 +659,8 @@
 		FC2BEFFF1E0905AC007A3F4E /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				FC7E776E1E0EAC1F008EBE40 /* YNButton.cpp */,
+				FC7E776F1E0EAC1F008EBE40 /* YNButton.h */,
 				FC4E35AD1E0B852000FCF20F /* MessageManager.cpp */,
 				FC4E35AE1E0B852000FCF20F /* MessageManager.h */,
 				FC4E35A91E0B7AB300FCF20F /* NoteTip.cpp */,
@@ -864,6 +870,7 @@
 				FC47C01E1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */,
 				FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
+				FC7E77701E0EAC1F008EBE40 /* YNButton.cpp in Sources */,
 				FC4E35AB1E0B7AB300FCF20F /* NoteTip.cpp in Sources */,
 				FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
 				FC1F94471E0D1FDA002040B9 /* json_writer.cpp in Sources */,
@@ -922,6 +929,7 @@
 				FC2BEFFE1E09059A007A3F4E /* LoginScene.cpp in Sources */,
 				FC4E35AC1E0B7AB300FCF20F /* NoteTip.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				FC7E77711E0EAC1F008EBE40 /* YNButton.cpp in Sources */,
 				FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FC1F94481E0D1FDA002040B9 /* json_writer.cpp in Sources */,
 				FC2BF0031E090608007A3F4E /* RegistInputView.cpp in Sources */,

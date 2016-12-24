@@ -123,7 +123,7 @@ bool RegistScene::init()
                 inputBox->setContentSize(Size(0.45 * inputBox->getContentSize().width, inputBox->getContentSize().height));
                 inputBox->setPositionX(0.05 * inputListSprite->getContentSize().width + 0.5 * inputBox->getContentSize().width);
                 
-                btn_getVCode = Button::create("images/btn_green.png","images/btn_green.png");
+                btn_getVCode = Button::create("images/btn_green.png","images/btn_green_selected.png");
                 btn_getVCode->setScale9Enabled(true);//打开scale9 可以拉伸图片
                 btn_getVCode->setTitleText("获取验证码");
                 btn_getVCode->setTitleFontSize(12);
@@ -141,7 +141,7 @@ bool RegistScene::init()
         }
     }
     
-    auto btn_changePassword = Button::create("images/btn_green.png","images/btn_green.png");
+    auto btn_changePassword = Button::create("images/btn_green.png","images/btn_green_selected.png");
     btn_changePassword->setScale9Enabled(true);//打开scale9 可以拉伸图片
     btn_changePassword->setTitleText("注册");
     btn_changePassword->setTitleFontSize(12);

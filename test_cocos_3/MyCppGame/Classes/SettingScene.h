@@ -22,6 +22,7 @@ using namespace ui;
 
 #include "NoteTip.h"
 #include "MessageManager.h"
+#include "YNButton.h"
 
 class  SettingScene : public cocos2d::Layer
 {
@@ -35,8 +36,10 @@ public:
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
 private:
-    MenuItemImage* btn_InfoSettingItem;
-    MenuItemImage* btn_SystemSettingItem;
+//    MenuItemImage* btn_InfoSettingItem;
+//    MenuItemImage* btn_SystemSettingItem;
+    YNButton* btn_infoSetting;
+    YNButton* btn_systemSetting;
     LayerColor* infoSettingLayer;
     LayerColor* systemSettingLayer;
     

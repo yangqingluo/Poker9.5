@@ -44,7 +44,7 @@ void GameTimer::update(float delta){
     }
     
     if (pTime <= 5) {
-        Global::getInstance()->playEffect_timewarning(false);
+        Global::getInstance()->playEffect_warning(false);
     }
     
     if (pTime <= 0) {

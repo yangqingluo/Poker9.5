@@ -70,25 +70,26 @@ bool SettingScene::init()
     btn_BackItem->setScale(this->getScaleX(), this->getScaleY());
     btn_BackItem->setPosition(Vec2(origin.x + btn_BackItem->getContentSize().width, origin.y + visibleSize.height - btn_BackItem->getContentSize().height));
     
-    btn_InfoSettingItem = MenuItemImage::create(
-                                             "images/btn_setting_userinfo.png",
-                                             "images/btn_setting_userinfo_selected.png",
-                                             CC_CALLBACK_1(SettingScene::buttonCallback, this, 1));
+    btn_infoSetting = YNButton::create();
+    btn_infoSetting->configImage("images/btn_setting_userinfo.png", "", "images/btn_setting_userinfo_selected.png");
+    btn_infoSetting->setScale9Enabled(true);
+    btn_infoSetting->setScale((160.0 / 960.0) * visibleSize.width / btn_infoSetting->getContentSize().width);
+    btn_infoSetting->setPosition(Vec2(origin.x + (100.0 / 960.0) * visibleSize.width, origin.y + 0.3 * visibleSize.height + btn_infoSetting->getBoundingBox().size.height / 2));
+    btn_infoSetting->addTouchEventListener(CC_CALLBACK_2(SettingScene::touchEvent, this));
+    btn_infoSetting->setTag(1);
+    this->addChild(btn_infoSetting);
     
-    btn_InfoSettingItem->setScale((160.0 / 960.0) * visibleSize.width / btn_InfoSettingItem->getContentSize().width);
-    btn_InfoSettingItem->setPosition(Vec2(origin.x + (100.0 / 960.0) * visibleSize.width, origin.y + 0.3 * visibleSize.height + btn_InfoSettingItem->getBoundingBox().size.height / 2));
-    
-    
-    btn_SystemSettingItem = MenuItemImage::create(
-                                                     "images/btn_setting_system.png",
-                                                     "images/btn_setting_system_selected.png",
-                                                     CC_CALLBACK_1(SettingScene::buttonCallback, this, 2));
-    
-    btn_SystemSettingItem->setScale(btn_InfoSettingItem->getScale());
-    btn_SystemSettingItem->setPosition(Vec2(btn_InfoSettingItem->getPositionX(), btn_InfoSettingItem->getBoundingBox().getMinY() - btn_SystemSettingItem->getBoundingBox().size.height));
+    btn_systemSetting= YNButton::create();
+    btn_systemSetting->configImage("images/btn_setting_system.png", "", "images/btn_setting_system_selected.png");
+    btn_systemSetting->setScale9Enabled(true);
+    btn_systemSetting->setScale(btn_infoSetting->getScale());
+    btn_systemSetting->setPosition(Vec2(btn_infoSetting->getPositionX(), btn_infoSetting->getBoundingBox().getMinY() - btn_systemSetting->getBoundingBox().size.height));
+    btn_systemSetting->addTouchEventListener(CC_CALLBACK_2(SettingScene::touchEvent, this));
+    btn_systemSetting->setTag(2);
+    this->addChild(btn_systemSetting);
     
     // create menu, it's an autorelease object
-    auto menu = Menu::create(btn_BackItem, btn_InfoSettingItem, btn_SystemSettingItem, NULL);
+    auto menu = Menu::create(btn_BackItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
@@ -110,7 +111,7 @@ bool SettingScene::init()
     systemSettingLayer->setPosition(0, 0);
     listSprite->addChild(systemSettingLayer);
     
-    float inputHeight = btn_InfoSettingItem->getBoundingBox().size.height;
+    float inputHeight = btn_infoSetting->getBoundingBox().size.height;
     
     
     auto inputBox = ui::EditBox::create(Size(0.6 * infoSettingLayer->getContentSize().width, inputHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
@@ -134,18 +135,15 @@ bool SettingScene::init()
     inputBox->setMaxLength(20);
     nikenameBox = inputBox;
     
-    auto btn_changeNikename = Button::create("images/btn_green.png","images/btn_green.png");
+    auto btn_changeNikename = Button::create("images/btn_green.png","images/btn_green_selected.png");
     btn_changeNikename->setScale9Enabled(true);//打开scale9 可以拉伸图片
     btn_changeNikename->setTitleText("修改昵称");
     btn_changeNikename->setTitleFontSize(12);
     btn_changeNikename->setContentSize(Size(0.3 * infoSettingLayer->getContentSize().width, inputBox->getContentSize().height));
     btn_changeNikename->setPosition(Vec2(0.95 * infoSettingLayer->getContentSize().width - 0.5 * btn_changeNikename->getContentSize().width, inputBox->getPositionY()));
     btn_changeNikename->addTouchEventListener(CC_CALLBACK_2(SettingScene::touchEvent, this));
-    btn_changeNikename->setTag(1);
+    btn_changeNikename->setTag(10);
     infoSettingLayer->addChild(btn_changeNikename);
-    
-    auto menu_system = Menu::create();
-    menu_system->setPosition(Vec2::ZERO);
     
     char showContent[2][100] = {"音效","背景音乐"};
     float cellHeight = MAX(60, systemSettingLayer->getContentSize().height / 5);
@@ -160,33 +158,21 @@ bool SettingScene::init()
         label->setHorizontalAlignment(TextHAlignment::LEFT);
         cellBG->addChild(label);
         
-        auto btn_Item = MenuItemImage::create(
-                                              "images/btn_switch_off.png",
-                                              "images/btn_switch_on.png",
-                                              CC_CALLBACK_1(SettingScene::buttonCallback, this, i + 3));
-        
-        btn_Item->setScale(btn_Item->getScale());
-        btn_Item->setPosition(Vec2(cellBG->getContentSize().width - 0.8 * btn_Item->getContentSize().width, cellBG->getPositionY()));
-        menu_system->addChild(btn_Item);
+        auto btn_cell = YNButton::create();
+        btn_cell->configImage("images/btn_switch_off.png", "", "images/btn_switch_on.png");
+        btn_cell->setPosition(Vec2(cellBG->getContentSize().width - 0.8 * btn_cell->getContentSize().width, label->getPositionY()));
+        btn_cell->setTag(i + 3);
+        btn_cell->addTouchEventListener(CC_CALLBACK_2(SettingScene::touchEvent, this));
+        cellBG->addChild(btn_cell);
         
         switch (i) {
             case 0:{
-                if (Global::getInstance()->isEffect()) {
-                    btn_Item->selected();
-                }
-                else {
-                    btn_Item->unselected();
-                }
+                btn_cell->setSelected(Global::getInstance()->isEffect());
             }
                 break;
                 
             case 1:{
-                if (Global::getInstance()->isBackgroundMusic()) {
-                    btn_Item->selected();
-                }
-                else {
-                    btn_Item->unselected();
-                }
+                btn_cell->setSelected(Global::getInstance()->isBackgroundMusic());
             }
                 break;
                 
@@ -194,14 +180,12 @@ bool SettingScene::init()
                 break;
         }
     }
-    systemSettingLayer->addChild(menu_system);
     
     return true;
 }
 
 
 void SettingScene::buttonCallback(cocos2d::Ref* pSender, int index){
-    MenuItem* item = (MenuItem* )pSender;
     switch (index) {
         case 0:{
             Director::getInstance()->popScene();
@@ -211,30 +195,6 @@ void SettingScene::buttonCallback(cocos2d::Ref* pSender, int index){
         case 1:
         case 2:{
             showSettingWithIndex(index);
-        }
-            break;
-            
-        case 3:{
-            if (Global::getInstance()->isEffect()) {
-                Global::getInstance()->setEffect(false);
-                item->unselected();
-            }
-            else {
-                Global::getInstance()->setEffect(true);
-                item->selected();
-            }
-        }
-            break;
-            
-        case 4:{
-            if (Global::getInstance()->isBackgroundMusic()) {
-                Global::getInstance()->setBackgroundMusic(false);
-                item->unselected();
-            }
-            else {
-                Global::getInstance()->setBackgroundMusic(true);
-                item->selected();
-            }
         }
             break;
             
@@ -256,7 +216,39 @@ void SettingScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
             
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
-                case 1:{
+                case 1:
+                case 2:{
+                    this->showSettingWithIndex(button->getTag());
+                }
+                    break;
+                    
+                case 3:{
+                    YNButton* soundButton = (YNButton *)pSender;
+                    if (Global::getInstance()->isEffect()) {
+                        Global::getInstance()->setEffect(false);
+                        soundButton->setSelected(false);
+                    }
+                    else {
+                        Global::getInstance()->setEffect(true);
+                        soundButton->setSelected(true);
+                    }
+                }
+                    break;
+                    
+                case 4:{
+                    YNButton* soundButton = (YNButton *)pSender;
+                    if (Global::getInstance()->isBackgroundMusic()) {
+                        Global::getInstance()->setBackgroundMusic(false);
+                        soundButton->setSelected(false);
+                    }
+                    else {
+                        Global::getInstance()->setBackgroundMusic(true);
+                        soundButton->setSelected(true);
+                    }
+                }
+                    break;
+                    
+                case 10:{
                     if (strlen(nikenameBox->getText()) == 0) {
                         NoteTip::show("请输入昵称");
                     }
@@ -267,10 +259,7 @@ void SettingScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                 }
                     break;
                     
-                case 2:{
-                    
-                }
-                    break;
+                
                     
                 default:
                     break;
@@ -295,19 +284,19 @@ void SettingScene::showSettingWithIndex(int index){
             break;
             
         case 1:{
-            btn_InfoSettingItem->selected();
+            btn_infoSetting->setSelected(true);
             infoSettingLayer->setVisible(true);
             
-            btn_SystemSettingItem->unselected();
+            btn_systemSetting->setSelected(false);
             systemSettingLayer->setVisible(false);
         }
             break;
             
         case 2:{
-            btn_InfoSettingItem->unselected();
+            btn_infoSetting->setSelected(false);
             infoSettingLayer->setVisible(false);
             
-            btn_SystemSettingItem->selected();
+            btn_systemSetting->setSelected(true);
             systemSettingLayer->setVisible(true);
         }
             break;
