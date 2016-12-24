@@ -153,7 +153,7 @@ bool Hall::init()
         huangItems.pushBack(item);
     }
     
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
         NoteItem* item = new NoteItem();
         item->autorelease();
         sprintf(item->image, "images/server_btn_%d.png", i);
@@ -510,7 +510,7 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
         }
     }
     else if (table == noteListTableView){
-        return 5;
+        return noteItems.size();
     }
     
     return 0;
@@ -545,6 +545,21 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 auto scene = InviteScene::createScene();
                 
                 Director::getInstance()->pushScene(scene);
+            }
+                break;
+                
+            case 3:{
+                
+            }
+                break;
+                
+            case 4:{
+                
+            }
+                break;
+                
+            case 5:{
+                Director::getInstance()->popToRootScene();
             }
                 break;
                 
