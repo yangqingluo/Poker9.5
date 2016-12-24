@@ -8,6 +8,7 @@
 
 #include "SettingScene.h"
 #include "Global.h"
+#include "QLImageSprite.h"
 
 USING_NS_CC;
 
@@ -91,9 +92,9 @@ bool SettingScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    auto label = Label::createWithTTF("设置", "fonts/STKaiti.ttf", 14);
+    auto label = Label::createWithTTF("设置", "fonts/STKaiti.ttf", 20);
     label->setTextColor(Color4B::BLACK);
-    label->setPosition(origin.x + (560.0 / 960.0) * visibleSize.width, origin.y + (610.0 / 640.0) * visibleSize.height);
+    label->setPosition(origin.x + (560.0 / 960.0) * visibleSize.width, origin.y + (580.0 / 640.0) * visibleSize.height);
     this->addChild(label);
     
     auto listSprite = Sprite::create();
@@ -143,11 +144,58 @@ bool SettingScene::init()
     btn_changeNikename->setTag(1);
     infoSettingLayer->addChild(btn_changeNikename);
     
+    auto menu_system = Menu::create();
+    menu_system->setPosition(Vec2::ZERO);
+    
+    char showContent[2][100] = {"音效","背景音乐"};
+    float cellHeight = MAX(60, systemSettingLayer->getContentSize().height / 5);
+    for (int i = 0; i < 2; i++) {
+        auto cellBG = QLImageSprite::create("images/white_cell_bg.png", Size(0.9 * systemSettingLayer->getContentSize().width, cellHeight));
+        cellBG->setPosition(0.5 * systemSettingLayer->getContentSize().width, systemSettingLayer->getContentSize().height - (i * 1.0 + 0.8) * cellHeight);
+        systemSettingLayer->addChild(cellBG);
+        
+        auto label = Label::createWithTTF(showContent[i], "fonts/STKaiti.ttf", 16);
+        label->setTextColor(Color4B::BLACK);
+        label->setPosition(0.3 * cellBG->getContentSize().width, 0.5 * cellBG->getContentSize().height);
+        label->setHorizontalAlignment(TextHAlignment::LEFT);
+        cellBG->addChild(label);
+        
+        auto btn_Item = MenuItemImage::create(
+                                              "images/btn_switch_off.png",
+                                              "images/btn_switch_on.png",
+                                              CC_CALLBACK_1(SettingScene::buttonCallback, this, i + 3));
+        
+        btn_Item->setScale(btn_Item->getScale());
+        btn_Item->setPosition(Vec2(cellBG->getContentSize().width - 0.8 * btn_Item->getContentSize().width, cellBG->getPositionY()));
+        menu_system->addChild(btn_Item);
+        
+        switch (i) {
+            case 0:{
+            }
+                break;
+                
+            case 1:{
+                if (Global::getInstance()->isBackgroundMusic()) {
+                    btn_Item->selected();
+                }
+                else {
+                    btn_Item->unselected();
+                }
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    systemSettingLayer->addChild(menu_system);
+    
     return true;
 }
 
 
 void SettingScene::buttonCallback(cocos2d::Ref* pSender, int index){
+    MenuItem* item = (MenuItem* )pSender;
     switch (index) {
         case 0:{
             Director::getInstance()->popScene();
@@ -157,6 +205,18 @@ void SettingScene::buttonCallback(cocos2d::Ref* pSender, int index){
         case 1:
         case 2:{
             showSettingWithIndex(index);
+        }
+            break;
+            
+        case 4:{
+            if (Global::getInstance()->isBackgroundMusic()) {
+                Global::getInstance()->setBackgroundMusic(false);
+                item->unselected();
+            }
+            else {
+                Global::getInstance()->setBackgroundMusic(true);
+                item->selected();
+            }
         }
             break;
             

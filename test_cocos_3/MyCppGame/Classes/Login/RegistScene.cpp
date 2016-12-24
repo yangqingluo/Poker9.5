@@ -132,6 +132,7 @@ bool RegistScene::init()
                 btn_getVCode->addTouchEventListener(CC_CALLBACK_2(RegistScene::touchEvent, this));
                 btn_getVCode->setTag(1);
                 inputListSprite->addChild(btn_getVCode);
+                
             }
                 break;
                 
