@@ -273,6 +273,10 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
     sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
     CCLOG("response code: %s", statusString);
     
+    if (statusCode > 200) {
+        NoteTip::show("网络错误");
+        return;
+    }
     // 链接失败
     if (!response->isSucceed())
     {

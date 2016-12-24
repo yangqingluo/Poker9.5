@@ -311,6 +311,11 @@ void RegistScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
     sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
     CCLOG("response code: %s", statusString);
     
+    if (statusCode > 200) {
+        NoteTip::show("网络错误");
+        return;
+    }
+    
     // 链接失败
     if (!response->isSucceed())
     {
@@ -341,7 +346,6 @@ void RegistScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         schedule(schedule_selector(RegistScene::wait));
                     }
                     else if (tag == "register"){
-                        //登录成功
                         auto scene = Hall::createScene();
                         Vector<Node* >children = scene->getChildren();
                         Hall* layer = (Hall* )(scene->getChildren().at(1));
