@@ -7,9 +7,7 @@
 //
 
 #include "ShopScene.h"
-
-USING_NS_CC;
-using namespace ui;
+#include "Global.h"
 
 Scene* ShopScene::createScene()
 {
@@ -146,7 +144,7 @@ bool ShopScene::init()
                     switch (j) {
                         case 0:{
                             inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::EMAIL_ADDRESS);
-                            inputBox->setMaxLength(11);
+                            inputBox->setMaxLength(14);
                             userIDBox = inputBox;
                             
                             inputBox->setContentSize(Size(0.45 * inputBox->getContentSize().width, inputBox->getContentSize().height));
@@ -212,9 +210,6 @@ bool ShopScene::init()
     
     showSettingWithIndex(0);
     
-    
-    
-    
     return true;
 }
 
@@ -262,12 +257,36 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     break;
                     
                 case 10:{
-                    
+                    //充值
+                    if (strlen(buyCountBox->getText()) == 0) {
+                        NoteTip::show("请输入充值的金币数目");
+                    }
+                    else {
+                        NoteTip::show("精彩功能敬请期待");
+                    }
                 }
                     break;
                     
                 case 11:{
+                    //查询用户
+                    if (strlen(userIDBox->getText()) == 0) {
+                        NoteTip::show("请输入查询的用户账号ID");
+                    }
+                    else {
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        onHttpRequest_SearchUser(userIDBox->getText());
+                    }
+                }
+                    break;
                     
+                case 12:{
+                    //赠送
+                    if (strlen(giveCountBox->getText()) == 0) {
+                        NoteTip::show("请输入赠送的钻石数目");
+                    }
+                    else {
+                        NoteTip::show("精彩功能敬请期待");
+                    }
                 }
                     break;
                 default:
@@ -362,78 +381,118 @@ void ShopScene::tableCellTouched(TableView* table, TableViewCell* cell){
 
 #pragma http
 // 发送HTTP请求
-//void ShopScene::onHttpRequest_SearchUser(char* account){
-//    // 创建HTTP请求
-//    HttpRequest* request = new HttpRequest();
-//    
-//    request->setRequestType(HttpRequest::Type::POST);
-//    request->setUrl("http://115.28.109.174:8181/game/user/userinfo");
-//    
-//    // 设置post发送请求的数据信息
-//    char param[200] = {0};
-//    sprintf(param, "account=%s", account);
-//    request->setRequestData(param, strlen(param));
-//    
-//    // HTTP响应函数
-//    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
-//    request->setTag("updatenikename");
-//    // 发送请求
-//    HttpClient::getInstance()->send(request);
-//    
-//    // 释放链接
-//    request->release();
-//}
-//
-//
-//// HTTP响应请求函数
-//void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
-//    m_pMessage->hidden();
-//    
-//    // 没有收到响应
-//    if (!response){
-//        NoteTip::show("请检查网络");
-//        return;
-//    }
-//    
-//    long statusCode = response->getResponseCode();
-//    char statusString[64] = {};
-//    sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
-//    CCLOG("response code: %s", statusString);
-//    
-//    if (statusCode > 200) {
-//        NoteTip::show("网络错误");
-//        return;
-//    }
-//    // 链接失败
-//    if (!response->isSucceed())
-//    {
-//        CCLOG("response failed");
-//        CCLOG("error buffer: %s", response->getErrorBuffer());
-//        NoteTip::show("请检查网络");
-//        return;
-//    }
-//    
-//    std::vector<char>* responseData = response -> getResponseData();
-//    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
-//    log("%s\n", responseStr.c_str());
-//    rapidjson::Document document;
-//    document.Parse<0>(responseStr.c_str());
-//    CCASSERT(!document.HasParseError(), "Parsing to document failed");
-//    
-//    if(document.IsObject()){
-//        if(document.HasMember("code")){
-//            const rapidjson::Value& val_code = document["code"];
-//            int code = val_code.GetInt();
-//            if (code == 1) {
-//                
-//            }
-//            else {
-//                const rapidjson::Value& val_content = document["content"];
-//                const char* content = val_content.GetString();
-//                NoteTip::show(content);
-//            }
-//        }
-//        
-//        
-//    }
-//}
+void ShopScene::onHttpRequest_SearchUser(const char* account){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/userinfo");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "account=%s", account);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
+    request->setTag("searchuser");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+// HTTP响应请求函数
+void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
+    m_pMessage->hidden();
+    
+    // 没有收到响应
+    if (!response){
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    long statusCode = response->getResponseCode();
+    char statusString[64] = {};
+    sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    CCLOG("response code: %s", statusString);
+    
+    if (statusCode > 200) {
+        NoteTip::show("网络错误");
+        return;
+    }
+    // 链接失败
+    if (!response->isSucceed())
+    {
+        CCLOG("response failed");
+        CCLOG("error buffer: %s", response->getErrorBuffer());
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    std::vector<char>* responseData = response -> getResponseData();
+    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
+    log("%s\n", responseStr.c_str());
+    rapidjson::Document document;
+    document.Parse<0>(responseStr.c_str());
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code")){
+            const rapidjson::Value& val_code = document["code"];
+            int code = val_code.GetInt();
+            if (code == 1) {
+                if (0 != strlen(response->getHttpRequest()->getTag())){
+                    std::string tag = response->getHttpRequest()->getTag();
+                    if (tag == "searchuser") {
+                        if (document.HasMember("content")) {
+                            const rapidjson::Value& val_content = document["content"];
+                            
+                            UserData user_data = {0};
+                            user_data.gameTimes = val_content["gameTimes"].GetInt();
+                            
+                            const char* nikename = val_content["nikename"].GetString();
+                            memcpy(user_data.nikename, nikename, strlen(nikename));
+                            
+                            const char* account = val_content["account"].GetString();
+                            memcpy(user_data.account, account, strlen(account));
+                            
+                            const char* winningPercent = val_content["winningPercent"].GetString();
+                            memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
+                            
+                            const char* inviteCode = val_content["inviteCode"].GetString();
+                            memcpy(user_data.inviteCode, inviteCode, strlen(inviteCode));
+                            
+                            if (val_content.HasMember("diamondGameBit")) {
+                                const rapidjson::Value& val_diamondGameBit = val_content["diamondGameBit"];
+                                user_data.diamond = val_diamondGameBit["amount"].GetInt();
+                            }
+                            
+                            if (val_content.HasMember("silverGameBit")) {
+                                const rapidjson::Value& val_silverGameBit = val_content["silverGameBit"];
+                                user_data.silver = val_silverGameBit["amount"].GetInt();
+                            }
+                            
+                            if (val_content.HasMember("goldGameBit")) {
+                                const rapidjson::Value& val_goldGameBit = val_content["goldGameBit"];
+                                user_data.gold = val_goldGameBit["amount"].GetInt();
+                            }
+                            
+                            char msg[200] = {0};
+                            sprintf(msg, "ID：%s\n昵称：%s", user_data.account, user_data.nikename);
+                            MessageBox(msg, "用户信息");
+                        }
+                        
+                    }
+                }
+            }
+            else {
+                const rapidjson::Value& val_content = document["content"];
+                const char* content = val_content.GetString();
+                NoteTip::show(content);
+            }
+        }
+        
+        
+    }
+}

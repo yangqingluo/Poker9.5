@@ -44,8 +44,8 @@ private:
     ui::EditBox* giveCountBox;
     MessageManager* m_pMessage;
     
-//    void onHttpRequest_SearchUser(const char* account);
-//    void onHttpResponse(HttpClient* sender, HttpResponse* response);
+    void onHttpRequest_SearchUser(const char* account);
+    void onHttpResponse(HttpClient* sender, HttpResponse* response);
     
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
