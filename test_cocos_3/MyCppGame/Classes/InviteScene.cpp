@@ -9,6 +9,7 @@
 #include "InviteScene.h"
 #include "QLImageSprite.h"
 #include "Global.h"
+#include "InviterScene.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -94,6 +95,13 @@ bool InviteScene::init()
     btn_share->setTag(2);
     inviteBG->addChild(btn_share);
     
+    auto btn_inviter = Button::create("images/share_btn_invite.png", "images/share_btn_invite_hover.png");
+    btn_inviter->setScale(btn_copy->getScale());
+    btn_inviter->setPosition(Vec2(btn_copy->getBoundingBox().getMaxX() - 0.5 * btn_inviter->getContentSize().width, (560.0 / 609.0) * inviteBG->getContentSize().height));
+    btn_inviter->addTouchEventListener(CC_CALLBACK_2(InviteScene::touchEvent, this));
+    btn_inviter->setTag(3);
+    inviteBG->addChild(btn_inviter);
+    
     auto btn_code = Button::create("images/bg_yellow_square.png");
     btn_code->setScale9Enabled(true);//打开scale9 可以拉伸图片
     btn_code->setTitleText(Global::getInstance()->user_data.inviteCode);
@@ -143,8 +151,9 @@ void InviteScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
             
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
-                case 1:{
-                    
+                case 3:{
+                    auto scene = InviterScene::createScene();
+                    Director::getInstance()->pushScene(scene);
                 }
                     break;
                     

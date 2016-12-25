@@ -110,6 +110,8 @@
 		FC7E77711E0EAC1F008EBE40 /* YNButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E776E1E0EAC1F008EBE40 /* YNButton.cpp */; };
 		FC7E77741E0EBFBC008EBE40 /* HelpScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E77721E0EBFBC008EBE40 /* HelpScene.cpp */; };
 		FC7E77751E0EBFBC008EBE40 /* HelpScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E77721E0EBFBC008EBE40 /* HelpScene.cpp */; };
+		FC7E77781E0F6C94008EBE40 /* InviterScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E77761E0F6C94008EBE40 /* InviterScene.cpp */; };
+		FC7E77791E0F6C94008EBE40 /* InviterScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E77761E0F6C94008EBE40 /* InviterScene.cpp */; };
 		FC7FC24A1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
 		FC7FC24B1DF00ACD007A6D25 /* jetton in Resources */ = {isa = PBXBuildFile; fileRef = FC7FC2491DF00ACD007A6D25 /* jetton */; };
 		FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
@@ -302,6 +304,8 @@
 		FC7E776F1E0EAC1F008EBE40 /* YNButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNButton.h; sourceTree = "<group>"; };
 		FC7E77721E0EBFBC008EBE40 /* HelpScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelpScene.cpp; sourceTree = "<group>"; };
 		FC7E77731E0EBFBC008EBE40 /* HelpScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpScene.h; sourceTree = "<group>"; };
+		FC7E77761E0F6C94008EBE40 /* InviterScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InviterScene.cpp; sourceTree = "<group>"; };
+		FC7E77771E0F6C94008EBE40 /* InviterScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviterScene.h; sourceTree = "<group>"; };
 		FC7FC2491DF00ACD007A6D25 /* jetton */ = {isa = PBXFileReference; lastKnownFileType = folder; path = jetton; sourceTree = "<group>"; };
 		FC851C731DDDAE8500732C40 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		FC8FEF771E038D63009D907E /* PokerStabberBtn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerStabberBtn.cpp; sourceTree = "<group>"; };
@@ -494,6 +498,8 @@
 				FCC339D01DDFB45E00E71685 /* HallScene.h */,
 				FC983D5B1DE16728006C2616 /* InviteScene.cpp */,
 				FC983D5C1DE16728006C2616 /* InviteScene.h */,
+				FC7E77761E0F6C94008EBE40 /* InviterScene.cpp */,
+				FC7E77771E0F6C94008EBE40 /* InviterScene.h */,
 				FC983D5F1DE1691C006C2616 /* ShopScene.cpp */,
 				FC983D601DE1691C006C2616 /* ShopScene.h */,
 				FC983D631DE171F9006C2616 /* ExchangeScene.cpp */,
@@ -900,6 +906,7 @@
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				FC9EB54B1E067F1800EFD14E /* stdafx.cpp in Sources */,
 				FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
+				FC7E77781E0F6C94008EBE40 /* InviterScene.cpp in Sources */,
 				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC2BF0021E090608007A3F4E /* RegistInputView.cpp in Sources */,
 				FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
@@ -943,6 +950,7 @@
 				FC2BF0031E090608007A3F4E /* RegistInputView.cpp in Sources */,
 				FC4B4B8B1DF1500200E0271B /* QLImageSprite.cpp in Sources */,
 				FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
+				FC7E77791E0F6C94008EBE40 /* InviterScene.cpp in Sources */,
 				FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */,
 				FC292EE51DF7F0310096B017 /* FrameManager.cpp in Sources */,
 				FCF3B63D1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
