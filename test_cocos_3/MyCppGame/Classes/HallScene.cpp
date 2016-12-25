@@ -180,7 +180,7 @@ bool Hall::init()
     
     auto userInfoSprite = Sprite::create();
     userInfoSprite->setContentSize(Size((193.0 / 504.0) * 0.7 * visibleSize.height, 0.7 * visibleSize.height));
-    userInfoSprite->setPosition(Vec2(origin.x + edge + 0.5 * userInfoSprite->getContentSize().width, 0.95 * visibleSize.height + origin.y - 0.5 * userInfoSprite->getContentSize().height));
+    userInfoSprite->setPosition(Vec2(origin.x + edge + 0.5 * userInfoSprite->getContentSize().width, 0.98 * visibleSize.height + origin.y - 0.5 * userInfoSprite->getContentSize().height));
     this->addChild(userInfoSprite, 1);
     
     auto userInfoSize = userInfoSprite->getContentSize();
@@ -253,33 +253,22 @@ bool Hall::init()
     //默认房间类型0
     this->roomTypeSelectedAction(0);
     
-    auto noteListSprite = Sprite::create();
-    noteListSprite->setContentSize(Size(1.0 * visibleSize.width, userInfoSprite->getBoundingBox().getMinY() - origin.y));
+    auto noteListSprite = QLImageSprite::create("images/note_list_bg.png", Size(1.0 * visibleSize.width, userInfoSprite->getBoundingBox().getMinY() - origin.y));
     noteListSprite->setPosition(origin.x + noteListSprite->getContentSize().width / 2, origin.y + noteListSprite->getContentSize().height / 2);
-    this->addChild(noteListSprite);
+    this->addChild(noteListSprite, 2);
     
-    auto noteListBG = Sprite::create("images/note_list_bg.png");
-    noteListBG->setScale(noteListSprite->getContentSize().width / noteListBG->getContentSize().width, noteListSprite->getContentSize().height / noteListBG->getContentSize().height);
-    noteListBG->setPosition(Vec2(noteListBG->getBoundingBox().size.width / 2, noteListBG->getBoundingBox().size.height / 2));
-    noteListSprite->addChild(noteListBG);
-    
-    noteListCellHeight = noteListBG->getBoundingBox().size.height * 0.6;
-    noteListTableView = TableView::create(this, Size(noteListBG->getBoundingBox().size.width * 0.96,  noteListCellHeight));
-    noteListTableView->setPosition(noteListBG->getBoundingBox().size.width * 0.02, 0.1 * noteListSprite->getBoundingBox().size.height);
+    noteListCellHeight = noteListSprite->getBoundingBox().size.height * 0.5;
+    noteListTableView = TableView::create(this, Size(noteListSprite->getBoundingBox().size.width * 0.96,  noteListCellHeight));
+    noteListTableView->setPosition(noteListSprite->getBoundingBox().size.width * 0.02, 0.0 * noteListSprite->getBoundingBox().size.height);
     noteListTableView->setDirection(TableView::Direction::HORIZONTAL);
     noteListTableView->setDelegate(this);
     noteListSprite->addChild(noteListTableView);
     
     noteListTableView->reloadData();
     
-    auto msgSprite = Sprite::create();
-    msgSprite->setContentSize(Size(0.4 * visibleSize.width, noteListSprite->getContentSize().height));
-    msgSprite->setPosition(origin.x + visibleSize.width - 0.5 * msgSprite->getContentSize().width, origin.y + msgSprite->getContentSize().height / 2);
-    this->addChild(msgSprite);
-    
-    auto inputBox = ui::EditBox::create(Size(1.0 * msgSprite->getContentSize().width, MIN(0.5 * msgSprite->getContentSize().height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
-    inputBox->setPosition(Vec2(0.35 * msgSprite->getContentSize().width, 0.5 * msgSprite->getContentSize().height));
-    msgSprite->addChild(inputBox);
+    auto inputBox = ui::EditBox::create(Size(0.8 * noteListSprite->getContentSize().width, MIN(0.3 * noteListSprite->getContentSize().height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+    inputBox->setPosition(Vec2(noteListTableView->getPositionX() + 0.5 * inputBox->getContentSize().width, 0.65 * noteListSprite->getContentSize().height));
+    noteListSprite->addChild(inputBox);
     
     //属性设置
     //    inputBox->setFontName("fonts/STKaiti.ttf");
@@ -292,11 +281,22 @@ bool Hall::init()
     //模式类型设置
     inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
     inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
-    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::SEND);
+    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 
     inputBox->setPlaceHolder("请输入喇叭的内容");
     inputBox->setDelegate(this);
     msgBox = inputBox;
+    
+    auto btn_send = Button::create("images/chat_btn_send.png");
+    btn_send->setScale9Enabled(true);//打开scale9 可以拉伸图片
+    btn_send->setTitleText("发送");
+    btn_send->setTitleFontSize(12);
+    btn_send->setTitleColor(Color3B::BLACK);
+    btn_send->setContentSize(Size(MIN(2 * inputBox->getContentSize().height, 0.15 * noteListSprite->getContentSize().width), inputBox->getContentSize().height));
+    btn_send->setPosition(Vec2(inputBox->getBoundingBox().getMaxX() + 0.6 * btn_send->getContentSize().width, inputBox->getPositionY()));
+    btn_send->setTag(0);
+    btn_send->addTouchEventListener(CC_CALLBACK_2(Hall::touchEvent, this));
+    noteListSprite->addChild(btn_send);
     
     msgLabel = Label::createWithTTF("","fonts/STKaiti.ttf",16);
     msgLabel->setColor(Color3B::WHITE);
@@ -349,6 +349,55 @@ void Hall::roomTypeSelectedAction(int type){
 
 void Hall::buttonCallback(cocos2d::Ref* pSender, int index){
     
+}
+
+void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
+    Button* button = (Button* )pSender;
+    switch (type){
+        case Widget::TouchEventType::BEGAN:
+            
+            break;
+            
+        case Widget::TouchEventType::MOVED:
+            
+            break;
+            
+        case Widget::TouchEventType::ENDED:
+            switch (button->getTag()) {
+                case 0:{
+                    if (strlen(msgBox->getText()) > 0) {
+                        auto visibleSize = Director::getInstance()->getVisibleSize();
+                        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+                        
+                        msgLabel->stopAllActions();
+                        msgLabel->setString(msgBox->getText());
+                        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.6 * msgLabel->getContentSize().height));
+                        
+                        msgBox->setText("");
+                        
+                        float width = visibleSize.width + msgLabel->getContentSize().width;
+                        MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
+                        CallFunc* func1 = CallFunc::create([=]{
+                            msgLabel->setPositionX(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2);
+                        });
+                        msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
+                    }
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+            
+        case Widget::TouchEventType::CANCELED:{
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 #pragma alert
 void Hall::showSettingChip(bool needPassword){
@@ -490,21 +539,16 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
             cell = new NoteListCell();
             cell->autorelease();
             
-            cell->bg_sprite = Sprite::create();
+            cell->bg_sprite = QLImageSprite::create("images/server_btn_0.png", Size(0.9 * noteListCellHeight, 0.9 * noteListCellHeight));
             cell->bg_sprite->setPosition(0.5 * noteListCellHeight, 0.5 * noteListCellHeight);
             cell->bg_sprite->setContentSize(Size(0.9 * noteListCellHeight, 0.9 * noteListCellHeight));
             cell->addChild(cell->bg_sprite);
             
-            auto cellBG = Sprite::create("images/server_btn_0.png");
-            cellBG->setScale(cell->bg_sprite->getContentSize().height / cellBG->getContentSize().height);
-            cellBG->setPosition(cell->bg_sprite->getContentSize().width / 2, cell->bg_sprite->getContentSize().height / 2);
-            cell->bg_sprite->addChild(cellBG, 0 , 1);
         }
         
         NoteItem* item = noteItems.at((int)idx);
         if (item != NULL) {
-            Sprite* sprite = (Sprite *)cell->bg_sprite->getChildByTag(1);
-            sprite->setTexture(item->image);
+            cell->bg_sprite->setBackgroundImage(item->image);
         }
         
         return cell;
@@ -639,19 +683,5 @@ void Hall::editBoxTextChanged(ui::EditBox* editBox, const std::string& text){
 
 //触发return返回
 void Hall::editBoxReturn(ui::EditBox* editBox){
-    if (strlen(msgBox->getText()) > 0) {
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        
-        msgLabel->stopAllActions();
-        msgLabel->setString(msgBox->getText());
-        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.6 * msgLabel->getContentSize().height));
-        
-        float width = visibleSize.width + msgLabel->getContentSize().width;
-        MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
-        CallFunc* func1 = CallFunc::create([=]{
-            msgLabel->setPositionX(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2);
-        });
-        msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
-    }
+    
 }

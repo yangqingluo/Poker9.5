@@ -30,3 +30,6 @@ QLImageSprite* QLImageSprite::create(const char* backgroudImage, cocos2d::Size s
     return sp;
 }
 
+void QLImageSprite::setBackgroundImage(const char* backgroudImage){
+    this->bgSprite->setTexture(backgroudImage);
+}

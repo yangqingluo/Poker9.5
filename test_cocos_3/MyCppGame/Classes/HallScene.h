@@ -16,6 +16,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 #include "Global.h"
+#include "QLImageSprite.h"
 
 class RoomItem : public Ref{
 public:
@@ -58,6 +59,7 @@ public:
     Label* userNameLabel;
     Label* userinfoLabel;
     void buttonCallback(Ref* pSender, int index);
+    void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
     
     float roomListCellHeight = 0;
     float roomListCellScale = 0.66;
@@ -106,7 +108,7 @@ public:
 class NoteListCell : public TableViewCell
 {
 public:
-    Sprite* bg_sprite;
+    QLImageSprite* bg_sprite;
 };
 
 #endif /* HallScene_h */

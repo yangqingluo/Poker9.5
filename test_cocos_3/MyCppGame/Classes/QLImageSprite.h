@@ -10,6 +10,7 @@ public:
     ~QLImageSprite();
     
     static QLImageSprite* create(const char* backgroudImage, cocos2d::Size size);
+    void setBackgroundImage(const char* backgroudImage);
 private:
     Sprite* bgSprite;
 };
