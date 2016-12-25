@@ -38,6 +38,7 @@ public:
 private:
     Vector<YNButton* > listButtons;
     Vector<LayerColor* > listLayers;
+    Vector<ScrollView* > listScrolls;
     ui::EditBox* nikenameBox;
     MessageManager* m_pMessage;
     
