@@ -61,8 +61,11 @@ bool HelloWorld::init()
                                            "images/login_wechat.png",
                                            "images/login_wechat.png",
                                            CC_CALLBACK_1(HelloWorld::loginCallback, this, 0));
+    if (login_WechatItem->getContentSize().width > 0.2 * visibleSize.width) {
+        login_WechatItem->setScale(0.2 * visibleSize.width / login_WechatItem->getContentSize().width);
+    }
     
-    login_WechatItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 1.5 * login_WechatItem->getContentSize().width,
+    login_WechatItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 1.5 * login_WechatItem->getBoundingBox().size.width,
                                 origin.y + 0.1 * visibleSize.height));
     
     
@@ -70,15 +73,15 @@ bool HelloWorld::init()
                                               "images/login_qq.png",
                                               "images/login_qq.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 1));
-    
+    login_QQItem->setScale(login_WechatItem->getScale());
     login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.1 * visibleSize.height));
     
     auto login_SystemItem = MenuItemImage::create(
                                               "images/login_system.png",
                                               "images/login_system.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 2));
-    
-    login_SystemItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1.5 * login_SystemItem->getContentSize().width, origin.y + 0.1 * visibleSize.height));
+    login_SystemItem->setScale(login_WechatItem->getScale());
+    login_SystemItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1.5 * login_SystemItem->getBoundingBox().size.width, origin.y + 0.1 * visibleSize.height));
     
     
     // create menu, it's an autorelease object
