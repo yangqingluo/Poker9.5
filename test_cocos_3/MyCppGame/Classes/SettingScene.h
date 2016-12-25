@@ -47,7 +47,7 @@ private:
     
     void showSettingWithIndex(int index);
     
-    void onHttpRequest_SettingNikename(string nikename);
+    void onHttpRequest_SettingNikename(const char* nikename);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
 };
 

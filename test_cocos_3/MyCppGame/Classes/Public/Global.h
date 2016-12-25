@@ -9,6 +9,7 @@ using namespace CocosDenshion;
 
 #include "PublicHeader.h"
 
+
 class Global: public Ref{
 public:
     static Global* getInstance();
@@ -32,6 +33,9 @@ public:
     int playEffect_select(bool loop);
     int playEffect_button(bool loop);
     
+    int code_convert(const char *from_charset, const char *to_charset, const char *inbuf, size_t inlen, char *outbuf, size_t outlen);
+    int u2g(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
+    int g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
 protected:
     ~Global();
 };

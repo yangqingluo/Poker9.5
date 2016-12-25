@@ -307,18 +307,22 @@ void SettingScene::showSettingWithIndex(int index){
 }
 
 #pragma http
-void SettingScene::onHttpRequest_SettingNikename(string nikename){
+void SettingScene::onHttpRequest_SettingNikename(const char* nikename){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
     request->setUrl("http://115.28.109.174:8181/game/user/updateinfo");
+    
+    
+    size_t inlen = strlen(nikename);
+    char * outbuf = new char[inlen * 2 + 2];
+    Global::getInstance()->g2u((char* )nikename, inlen, outbuf, inlen * 2 + 2);
+    
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "account=%s&nikename=%s", Global::getInstance()->user_data.account, nikename.c_str());
-    std::string data;
-    data.assign(param);
-    request->setRequestData(data.c_str(), data.length());
+    sprintf(param, "account=%s&nikename=%s", Global::getInstance()->user_data.account, outbuf);
+    request->setRequestData(param, strlen(param));
     
     // HTTP响应函数
     request->setResponseCallback(CC_CALLBACK_2(SettingScene::onHttpResponse, this));
@@ -375,6 +379,7 @@ void SettingScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                     std::string tag = response->getHttpRequest()->getTag();
                     if (tag == "updatenikename") {
                         NoteTip::show("修改成功");
+                        memset(Global::getInstance()->user_data.nikename, 0, sizeof(Global::getInstance()->user_data.nikename));
                         memcpy(Global::getInstance()->user_data.nikename, nikenameBox->getText(), strlen(nikenameBox->getText()));
                     }
                 }

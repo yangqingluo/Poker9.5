@@ -1,5 +1,13 @@
 #include "Global.h"
 
+#include <iconv.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/stat.h>
+
 #define key_BackgroundMusic "background_music_game"
 #define key_Effect          "effect_game"
 
@@ -126,3 +134,31 @@ int Global::playEffect_select(bool loop){
 int Global::playEffect_button(bool loop){
     return playEffect(EFFECT_button, loop);
 }
+
+
+int Global::code_convert(const char *from_charset, const char *to_charset, const char *inbuf, size_t inlen, char *outbuf, size_t outlen)
+{
+    iconv_t cd;
+    const char *temp = inbuf;
+    const char **pin = &temp;
+    char **pout = &outbuf;
+    memset(outbuf, 0, outlen);
+    
+    cd = iconv_open(to_charset, from_charset);
+    if (cd == 0) {
+        return -1;
+    }
+    if (iconv(cd, (char **)pin, &inlen, pout, &outlen) == -1) {
+        return -1;
+    }
+    iconv_close(cd);
+    return 0;
+}
+
+int Global::u2g(char *inbuf, size_t inlen, char *outbuf, size_t outlen) {
+    return code_convert("UTF-8", "GBK", inbuf, inlen, outbuf, outlen);
+}
+
+int Global::g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen) {
+    return code_convert("GBK", "UTF-8", inbuf, inlen, outbuf, outlen);
+}  
