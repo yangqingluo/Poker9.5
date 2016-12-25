@@ -180,7 +180,7 @@ bool Hall::init()
     
     auto userInfoSprite = Sprite::create();
     userInfoSprite->setContentSize(Size((193.0 / 504.0) * 0.7 * visibleSize.height, 0.7 * visibleSize.height));
-    userInfoSprite->setPosition(Vec2(origin.x + edge + 0.5 * userInfoSprite->getContentSize().width, visibleSize.height + origin.y - 0.5 * userInfoSprite->getContentSize().height));
+    userInfoSprite->setPosition(Vec2(origin.x + edge + 0.5 * userInfoSprite->getContentSize().width, 0.95 * visibleSize.height + origin.y - 0.5 * userInfoSprite->getContentSize().height));
     this->addChild(userInfoSprite, 1);
     
     auto userInfoSize = userInfoSprite->getContentSize();
@@ -254,7 +254,7 @@ bool Hall::init()
     this->roomTypeSelectedAction(0);
     
     auto noteListSprite = Sprite::create();
-    noteListSprite->setContentSize(Size(visibleSize.width, visibleSize.height - userInfoSize.height));
+    noteListSprite->setContentSize(Size(visibleSize.width, userInfoSprite->getBoundingBox().getMinY() - origin.y));
     noteListSprite->setPosition(origin.x + noteListSprite->getContentSize().width / 2, origin.y + noteListSprite->getContentSize().height / 2);
     this->addChild(noteListSprite, 1);
     
@@ -263,9 +263,9 @@ bool Hall::init()
     noteListBG->setPosition(Vec2(noteListBG->getBoundingBox().size.width / 2, noteListBG->getBoundingBox().size.height / 2));
     noteListSprite->addChild(noteListBG);
     
-    noteListCellHeight = noteListBG->getBoundingBox().size.height * 0.5;
+    noteListCellHeight = noteListBG->getBoundingBox().size.height * 0.6;
     noteListTableView = TableView::create(this, Size(noteListBG->getBoundingBox().size.width * 0.96,  noteListCellHeight));
-    noteListTableView->setPosition(noteListBG->getBoundingBox().size.width * 0.02, noteListBG->getBoundingBox().size.height * 0.25);
+    noteListTableView->setPosition(noteListBG->getBoundingBox().size.width * 0.02, 0.1 * noteListSprite->getBoundingBox().size.height);
     noteListTableView->setDirection(TableView::Direction::HORIZONTAL);
     noteListTableView->setDelegate(this);
     noteListSprite->addChild(noteListTableView);
