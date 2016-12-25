@@ -254,9 +254,9 @@ bool Hall::init()
     this->roomTypeSelectedAction(0);
     
     auto noteListSprite = Sprite::create();
-    noteListSprite->setContentSize(Size(visibleSize.width, userInfoSprite->getBoundingBox().getMinY() - origin.y));
+    noteListSprite->setContentSize(Size(1.0 * visibleSize.width, userInfoSprite->getBoundingBox().getMinY() - origin.y));
     noteListSprite->setPosition(origin.x + noteListSprite->getContentSize().width / 2, origin.y + noteListSprite->getContentSize().height / 2);
-    this->addChild(noteListSprite, 1);
+    this->addChild(noteListSprite);
     
     auto noteListBG = Sprite::create("images/note_list_bg.png");
     noteListBG->setScale(noteListSprite->getContentSize().width / noteListBG->getContentSize().width, noteListSprite->getContentSize().height / noteListBG->getContentSize().height);
@@ -272,6 +272,36 @@ bool Hall::init()
     
     noteListTableView->reloadData();
     
+    auto msgSprite = Sprite::create();
+    msgSprite->setContentSize(Size(0.4 * visibleSize.width, noteListSprite->getContentSize().height));
+    msgSprite->setPosition(origin.x + visibleSize.width - 0.5 * msgSprite->getContentSize().width, origin.y + msgSprite->getContentSize().height / 2);
+    this->addChild(msgSprite);
+    
+    auto inputBox = ui::EditBox::create(Size(1.0 * msgSprite->getContentSize().width, MIN(0.5 * msgSprite->getContentSize().height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+    inputBox->setPosition(Vec2(0.35 * msgSprite->getContentSize().width, 0.5 * msgSprite->getContentSize().height));
+    msgSprite->addChild(inputBox);
+    
+    //属性设置
+    //    inputBox->setFontName("fonts/STKaiti.ttf");
+    inputBox->setFontSize(12);
+    inputBox->setFontColor(Color4B::BLACK);
+    //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+    inputBox->setPlaceholderFontSize(12);
+    inputBox->setPlaceholderFontColor(Color4B::GRAY);
+    
+    //模式类型设置
+    inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+    inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
+    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::SEND);
+
+    inputBox->setPlaceHolder("请输入喇叭的内容");
+    inputBox->setDelegate(this);
+    msgBox = inputBox;
+    
+    msgLabel = Label::createWithTTF("","fonts/STKaiti.ttf",16);
+    msgLabel->setColor(Color3B::WHITE);
+    this->addChild(msgLabel, 20);
+
     return true;
 }
 
@@ -593,3 +623,35 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
 //void scrollViewDidZoom(ScrollView* view) {
 //    
 //}
+
+#pragma edixBox
+//开始编辑
+void Hall::editBoxEditingDidBegin(ui::EditBox* editBox){
+}
+
+//结束编辑
+void Hall::editBoxEditingDidEnd(ui::EditBox* editBox){
+}
+
+//编辑框内容改变
+void Hall::editBoxTextChanged(ui::EditBox* editBox, const std::string& text){
+}
+
+//触发return返回
+void Hall::editBoxReturn(ui::EditBox* editBox){
+    if (strlen(msgBox->getText()) > 0) {
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        
+        msgLabel->stopAllActions();
+        msgLabel->setString(msgBox->getText());
+        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.6 * msgLabel->getContentSize().height));
+        
+        float width = visibleSize.width + msgLabel->getContentSize().width;
+        MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
+        CallFunc* func1 = CallFunc::create([=]{
+            msgLabel->setPositionX(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2);
+        });
+        msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
+    }
+}

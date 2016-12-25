@@ -94,7 +94,7 @@ bool HelloWorld::init()
 //    txt->setColor(Color3B::RED);
 //    txt->setPosition(Vec2(visibleSize.width + origin.x + txt->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
 //    this->addChild(txt);
-//    
+//
 //    float width = visibleSize.width + txt->getContentSize().width;
 //    MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
 //    CallFunc* func1 = CallFunc::create([=]{

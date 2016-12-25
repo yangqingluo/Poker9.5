@@ -35,7 +35,7 @@ public:
     int type;
 };
 
-class Hall : public Layer, public TableViewDataSource, public TableViewDelegate
+class Hall : public Layer, public TableViewDataSource, public TableViewDelegate, public ui::EditBoxDelegate
 {
 public:
     static Scene* createScene();
@@ -80,6 +80,14 @@ public:
 private:
     void popButtonCallback(Node* pNode);
     void showSettingChip(bool needPassword);
+    
+    Label* msgLabel;
+    ui::EditBox* msgBox;
+    
+    virtual void editBoxEditingDidBegin(ui::EditBox* editBox); //开始编辑
+    virtual void editBoxEditingDidEnd(ui::EditBox* editBox); //结束编辑
+    virtual void editBoxTextChanged(ui::EditBox* editBox, const std::string& text);//编辑框文字改变
+    virtual void editBoxReturn(ui::EditBox* editBox); //触发return后的回调函数
 };
 
 class RoomListCell : public TableViewCell
