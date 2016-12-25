@@ -10,7 +10,7 @@ struct UserData {
 //    "birthday": "1990-08-15",
 //    "email": null,
 //    "headImgUrl": null,
-//    "inviteCode": "0055f058",
+    char inviteCode[20];
     char winningPercent[20];
 //    "introCount": 0,
     int gameTimes;

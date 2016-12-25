@@ -334,6 +334,9 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                     const char* winningPercent = val_content["winningPercent"].GetString();
                     memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
                     
+                    const char* inviteCode = val_content["inviteCode"].GetString();
+                    memcpy(user_data.inviteCode, inviteCode, strlen(inviteCode));
+                    
                     if (val_content.HasMember("diamondGameBit")) {
                         const rapidjson::Value& val_diamondGameBit = val_content["diamondGameBit"];
                         user_data.diamond = val_diamondGameBit["amount"].GetInt();
