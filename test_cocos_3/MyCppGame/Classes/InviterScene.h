@@ -22,6 +22,7 @@ using namespace std;
 #include "NoteTip.h"
 #include "MessageManager.h"
 
+
 class InviterScene : public Layer, ui::EditBoxDelegate
 {
 public:
