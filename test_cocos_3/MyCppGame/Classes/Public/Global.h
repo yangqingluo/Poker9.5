@@ -45,7 +45,10 @@ public:
 private:
     ODSocket socket;
     void connectServer();
+    void disconnectServer();
     void receiveData();
+    
+    bool endianBig;//大端判断
 protected:
     ~Global();
 };

@@ -53,6 +53,10 @@ Global* Global::getInstance(){
         //预加载音乐音效
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(MUSIC_FILE);
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(EFFECT_FILE);
+        
+        int nNum = 0x12345678;
+        char chData = *(char*)(&nNum);
+        share->endianBig = (chData == 0x12);
     }
     
     return share;
@@ -198,16 +202,24 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
     
     auto scene = Hall::createScene();
     Director::getInstance()->replaceScene(scene);
+    
+    this->connectServer();
 }
 
 void Global::logout(){
     Director::getInstance()->popToRootScene();
-    playBackgroundMusic(false);
+    this->playBackgroundMusic(false);
+    
+    this->disconnectServer();
 }
 
 #pragma Socket
-void Global::connectServer()
-{
+void Global::disconnectServer(){
+    // 关闭连接
+    socket.Close();
+    socket.Clean();
+}
+void Global::connectServer(){
     // 初始化
     // ODSocket socket;
     socket.Init();
@@ -220,40 +232,52 @@ void Global::connectServer()
     bool result = socket.Connect(ip, port);
     
     if (result) {
-        //发送数据 Send
-        SEND_PACKAGE package = {0};
-        const char* handle = "{\"id\":1000}";
-        int length = (int)strlen(handle);
-        package.valueLength = reversebytes_uint32t(length);
-        memcpy(package.value, handle, package.valueLength);
-        
-        socket.Send((const char *)&package, sizeof(int) + length);
-        CCLOG("connect to server success!");
+        CCLOG("Socket::connect to server success!");
         // 开启新线程，在子线程中，接收数据
         std::thread recvThread = std::thread(&Global::receiveData, this);
         recvThread.detach(); // 从主线程分离
+        
+        //发送数据 Send
+        SEND_PACKAGE package = {0};
+        char handle[200];
+        sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":%s}}", user_data.account);
+        
+        int length = (int)strlen(handle);
+        if (endianBig) {
+            package.valueLength = reversebytes_uint32t(length);
+        }
+        else {
+            package.valueLength = length;
+        }
+        
+        memcpy(package.value, handle, length);
+        
+        int result = socket.Send((const char *)&package, sizeof(int) + length);
+        if (result > 0) {
+            log("Socket::send->%s\n",package.value);
+        }
     }
     else {
-        CCLOG("can not connect to server");
+        log("Socket::can not connect to server");
         return;
     }
 }
 
 // 接收数据
-void Global::receiveData()
-{
+void Global::receiveData(){
     // 因为是强联网
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
         // 接收数据 Recv
         char data[512] = "";
         int result = socket.Recv(data, 512, 0);
-        printf("%d", result);
+        log("Socket::%d\n", result);
         // 与服务器的连接断开了
-        if (result <= 0) break;
+        if (result <= 0){
+            log("Socket::disconnect");
+            break;
+        }
         
-        CCLOG("%s", data);
+        log("Socket::receive->%s\n", data);
     }
-    // 关闭连接
-    socket.Close();
 }
