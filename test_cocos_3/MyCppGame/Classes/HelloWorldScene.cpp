@@ -90,17 +90,6 @@ bool HelloWorld::init()
     this->addChild(menu, 1);
     
     
-//    Label* txt = Label::createWithTTF("大江东去浪淘尽，千古风流人物，故垒西边，人道是，三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。\n遥想公瑾当年，小乔初嫁了，雄姿英发，羽扇纶巾。谈笑间，樯橹灰飞烟灭。故国神游，多情应笑我，早生华发。人生如梦，一樽还酹江月。","fonts/STKaiti.ttf",30);
-//    txt->setColor(Color3B::RED);
-//    txt->setPosition(Vec2(visibleSize.width + origin.x + txt->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
-//    this->addChild(txt);
-//
-//    float width = visibleSize.width + txt->getContentSize().width;
-//    MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
-//    CallFunc* func1 = CallFunc::create([=]{
-//        txt->setPositionX(visibleSize.width + origin.x + txt->getContentSize().width / 2);
-//    });
-//    txt->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
     
 //    //使用两张图片分别创建精灵
 //    auto logo1 = Sprite::create("card/card_bg.png");
@@ -183,60 +172,6 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
-}
-
-
-// Socker连接
-void HelloWorld::connectServer()
-{
-    // 初始化
-    // ODSocket socket;
-    socket.Init();
-    socket.Create(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    
-    // 设置服务器的IP地址，端口号
-    // 并连接服务器 Connect
-    const char* ip = "222.128.13.159";
-    int port = 8989;
-    bool result = socket.Connect(ip, port);
-    
-    if (result) {
-        //发送数据 Send
-        SEND_PACKAGE package = {0};
-        const char* handle = "{\"id\":1000}";
-        int length = (int)strlen(handle);
-        package.valueLength = reversebytes_uint32t(length);
-        memcpy(package.value, handle, package.valueLength);
-        
-        socket.Send((const char *)&package, sizeof(int) + length);
-        CCLOG("connect to server success!");
-        // 开启新线程，在子线程中，接收数据
-        std::thread recvThread = std::thread(&HelloWorld::receiveData, this);
-        recvThread.detach(); // 从主线程分离
-    }
-    else {
-        CCLOG("can not connect to server");
-        return;
-    }
-}
-
-// 接收数据
-void HelloWorld::receiveData()
-{
-    // 因为是强联网
-    // 所以可以一直检测服务端是否有数据传来
-    while (true) {
-        // 接收数据 Recv
-        char data[512] = "";
-        int result = socket.Recv(data, 512, 0);
-        printf("%d", result);
-        // 与服务器的连接断开了
-        if (result <= 0) break;
-        
-        CCLOG("%s", data);
-    }
-    // 关闭连接
-    socket.Close();
 }
 
 // 发送HTTP请求

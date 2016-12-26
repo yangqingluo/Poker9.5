@@ -371,7 +371,7 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
                         
                         msgLabel->stopAllActions();
                         msgLabel->setString(msgBox->getText());
-                        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.6 * msgLabel->getContentSize().height));
+                        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.5 * msgLabel->getContentSize().height));
                         
                         msgBox->setText("");
                         

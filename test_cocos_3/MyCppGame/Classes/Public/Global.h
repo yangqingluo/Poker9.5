@@ -3,12 +3,15 @@
 
 #include "cocos2d.h"
 USING_NS_CC;
+#include "cocos-ext.h"
+USING_NS_CC_EXT;
 
 #include "SimpleAudioEngine.h"
 using namespace CocosDenshion;
 
 #include "PublicHeader.h"
-
+#include "ODSocket.h"
+#include "tcpcommand.h"
 
 class Global: public Ref{
 public:
@@ -36,6 +39,12 @@ public:
     int code_convert(const char *from_charset, const char *to_charset, const char *inbuf, size_t inlen, char *outbuf, size_t outlen);
     int u2g(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
     int g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
+    
+    void saveLoginData(const rapidjson::Value& val_content);
+private:
+    ODSocket socket;
+    void connectServer();
+    void receiveData();
 protected:
     ~Global();
 };

@@ -161,4 +161,92 @@ int Global::u2g(char *inbuf, size_t inlen, char *outbuf, size_t outlen) {
 
 int Global::g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen) {
     return code_convert("GBK", "UTF-8", inbuf, inlen, outbuf, outlen);
-}  
+}
+
+
+void Global::saveLoginData(const rapidjson::Value& val_content){
+    user_data = {0};
+    user_data.gameTimes = val_content["gameTimes"].GetInt();
+    
+    const char* nikename = val_content["nikename"].GetString();
+    memcpy(user_data.nikename, nikename, strlen(nikename));
+    
+    const char* account = val_content["account"].GetString();
+    memcpy(user_data.account, account, strlen(account));
+    
+    const char* winningPercent = val_content["winningPercent"].GetString();
+    memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
+    
+    const char* inviteCode = val_content["inviteCode"].GetString();
+    memcpy(user_data.inviteCode, inviteCode, strlen(inviteCode));
+    
+    if (val_content.HasMember("diamondGameBit")) {
+        const rapidjson::Value& val_diamondGameBit = val_content["diamondGameBit"];
+        user_data.diamond = val_diamondGameBit["amount"].GetInt();
+    }
+    
+    if (val_content.HasMember("silverGameBit")) {
+        const rapidjson::Value& val_silverGameBit = val_content["silverGameBit"];
+        user_data.silver = val_silverGameBit["amount"].GetInt();
+    }
+    
+    if (val_content.HasMember("goldGameBit")) {
+        const rapidjson::Value& val_goldGameBit = val_content["goldGameBit"];
+        user_data.gold = val_goldGameBit["amount"].GetInt();
+    }
+    
+//    Global::getInstance()->user_data = user_data;
+}
+
+#pragma Socket
+void Global::connectServer()
+{
+    // 初始化
+    // ODSocket socket;
+    socket.Init();
+    socket.Create(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    
+    // 设置服务器的IP地址，端口号
+    // 并连接服务器 Connect
+    const char* ip = "115.28.109.174";
+    int port = 8888;
+    bool result = socket.Connect(ip, port);
+    
+    if (result) {
+        //发送数据 Send
+        SEND_PACKAGE package = {0};
+        const char* handle = "{\"id\":1000}";
+        int length = (int)strlen(handle);
+        package.valueLength = reversebytes_uint32t(length);
+        memcpy(package.value, handle, package.valueLength);
+        
+        socket.Send((const char *)&package, sizeof(int) + length);
+        CCLOG("connect to server success!");
+        // 开启新线程，在子线程中，接收数据
+        std::thread recvThread = std::thread(&Global::receiveData, this);
+        recvThread.detach(); // 从主线程分离
+    }
+    else {
+        CCLOG("can not connect to server");
+        return;
+    }
+}
+
+// 接收数据
+void Global::receiveData()
+{
+    // 因为是强联网
+    // 所以可以一直检测服务端是否有数据传来
+    while (true) {
+        // 接收数据 Recv
+        char data[512] = "";
+        int result = socket.Recv(data, 512, 0);
+        printf("%d", result);
+        // 与服务器的连接断开了
+        if (result <= 0) break;
+        
+        CCLOG("%s", data);
+    }
+    // 关闭连接
+    socket.Close();
+}

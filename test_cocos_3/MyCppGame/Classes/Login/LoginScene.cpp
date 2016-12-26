@@ -319,44 +319,10 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
             int code = val_code.GetInt();
             if (code == 1) {
                 //登录成功
-                if (document.HasMember("content")) {
-                    const rapidjson::Value& val_content = document["content"];
-                    
-                    UserData user_data = {0};
-                    user_data.gameTimes = val_content["gameTimes"].GetInt();
-                    
-                    const char* nikename = val_content["nikename"].GetString();
-                    memcpy(user_data.nikename, nikename, strlen(nikename));
-                    
-                    const char* account = val_content["account"].GetString();
-                    memcpy(user_data.account, account, strlen(account));
-                    
-                    const char* winningPercent = val_content["winningPercent"].GetString();
-                    memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
-                    
-                    const char* inviteCode = val_content["inviteCode"].GetString();
-                    memcpy(user_data.inviteCode, inviteCode, strlen(inviteCode));
-                    
-                    if (val_content.HasMember("diamondGameBit")) {
-                        const rapidjson::Value& val_diamondGameBit = val_content["diamondGameBit"];
-                        user_data.diamond = val_diamondGameBit["amount"].GetInt();
-                    }
-                    
-                    if (val_content.HasMember("silverGameBit")) {
-                        const rapidjson::Value& val_silverGameBit = val_content["silverGameBit"];
-                        user_data.silver = val_silverGameBit["amount"].GetInt();
-                    }
-                    
-                    if (val_content.HasMember("goldGameBit")) {
-                        const rapidjson::Value& val_goldGameBit = val_content["goldGameBit"];
-                        user_data.gold = val_goldGameBit["amount"].GetInt();
-                    }
-                    
-                    Global::getInstance()->user_data = user_data;
-                }
-                
                 UserDefault::getInstance()->setStringForKey("username", usernameBox->getText());
-                
+                if (document.HasMember("content")) {
+                    Global::getInstance()->saveLoginData(document["content"]);
+                }
                 auto scene = Hall::createScene();
                 Director::getInstance()->replaceScene(scene);
             }

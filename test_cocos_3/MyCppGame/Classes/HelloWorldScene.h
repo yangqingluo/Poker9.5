@@ -2,8 +2,6 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include "ODSocket.h"
-#include "tcpcommand.h"
 
 #include "network/HttpClient.h"
 using namespace cocos2d::network;
@@ -23,13 +21,11 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
-public:
-    void connectServer();
-    void receiveData();
+private:
+    
     void onHttpRequest(std::string type);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
-private:
-    ODSocket socket;
+
 };
 
 #endif // __HELLOWORLD_SCENE_H__
