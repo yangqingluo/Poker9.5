@@ -48,6 +48,9 @@ private:
     void disconnectServer();
     void receiveData();
     
+    void socketdidConnect();
+    void socketDidDisconnect();
+    
     bool endianBig;//大端判断
 protected:
     ~Global();

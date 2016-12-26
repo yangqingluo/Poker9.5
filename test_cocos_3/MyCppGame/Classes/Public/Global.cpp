@@ -231,31 +231,8 @@ void Global::connectServer(){
     int port = 8888;
     bool result = socket.Connect(ip, port);
     
-    //发送数据 Send
-    SEND_PACKAGE package = {0};
-    char handle[200];
-    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":%s}}", user_data.account);
-    
-    int length = (int)strlen(handle);
-    if (!endianBig) {
-        package.valueLength = reversebytes_uint32t(length);
-    }
-    else {
-        package.valueLength = length;
-    }
-    
-    memcpy(package.value, handle, length);
-    
-    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
-    if (result_send > 0) {
-        log("Socket::send->%s\n",package.value);
-    }
-    
     if (result) {
-        CCLOG("Socket::connect to server success!");
-        // 开启新线程，在子线程中，接收数据
-        std::thread recvThread = std::thread(&Global::receiveData, this);
-        recvThread.detach(); // 从主线程分离
+        this->socketdidConnect();
     }
     else {
         log("Socket::can not connect to server");
@@ -273,21 +250,55 @@ void Global::receiveData(){
         int result = socket.Recv(data, 512, 0);
         // 与服务器的连接断开了
         if (result <= 0){
-            log("Socket::disconnect");
+            Global::getInstance()->socketDidDisconnect();
             break;
         }
         else if (result >= 4) {
             int len = 0;
             memcpy(&len, data, 4);
-            len = reversebytes_uint32t(len);
+            if (!endianBig) {
+                len = reversebytes_uint32t(len);
+            }
+            
             if (len + 4 == result) {
-                log("Socket::receive->%s\n", data + 4);
+                log("Socket::receive->%s", data + 4);
                 continue;
             }
         }
         
         log("Socket::receive->unknown data....");
     }
-    // 关闭连接
-    socket.Close();
+    
+}
+
+void Global::socketdidConnect(){
+    log("Socket::connect to server success!");
+    // 开启新线程，在子线程中，接收数据
+    std::thread recvThread = std::thread(&Global::receiveData, this);
+    recvThread.detach(); // 从主线程分离
+    
+    //发送数据 Send
+    SEND_PACKAGE package = {0};
+    char handle[200];
+    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":%s}}", user_data.account);
+    
+    int length = (int)strlen(handle);
+    if (!endianBig) {
+        package.valueLength = reversebytes_uint32t(length);
+    }
+    else {
+        package.valueLength = length;
+    }
+    
+    memcpy(package.value, handle, length);
+    
+    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
+    if (result_send > 0) {
+        log("Socket::send->%s",package.value);
+    }
+}
+void Global::socketDidDisconnect(){
+    log("Socket::disconnect");
+    
+    
 }
