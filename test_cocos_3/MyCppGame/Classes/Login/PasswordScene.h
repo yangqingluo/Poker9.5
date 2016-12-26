@@ -23,12 +23,6 @@ using namespace std;
 #include "MessageManager.h"
 
 
-class PasswordShowItem : public Ref{
-public:
-    char title[20];
-    char content[100];
-};
-
 class PasswordScene : public Layer
 {
 public:

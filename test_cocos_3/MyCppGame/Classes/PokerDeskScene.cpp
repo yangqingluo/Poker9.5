@@ -12,24 +12,20 @@
 
 const float jetton_height_scale = 0.08;
 
-PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),gamePlayer(NULL){
+PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL){
+    gamePlayer = new Player();
+    gamePlayer->retain();
+    
     pcPlayer = new Player();
+    pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
 }
 
 PokerDesk::~PokerDesk(){
-    if (stabberPlayer != NULL) {
-        CC_SAFE_DELETE(stabberPlayer);
-    }
-    if (dealerPlayer != NULL) {
-        CC_SAFE_DELETE(dealerPlayer);
-    }
-    if (gamePlayer != NULL) {
-        CC_SAFE_DELETE(gamePlayer);
-    }
-    if (pcPlayer != NULL) {
-        CC_SAFE_DELETE(gamePlayer);
-    }
+    CC_SAFE_RELEASE(gamePlayer);
+    CC_SAFE_RELEASE(pcPlayer);
+//    CC_SAFE_RELEASE(stabberPlayer);
+//    CC_SAFE_RELEASE(dealerPlayer);    
 }
 
 Scene* PokerDesk::createScene()

@@ -13,6 +13,14 @@ using namespace CocosDenshion;
 #include "ODSocket.h"
 #include "tcpcommand.h"
 
+enum RoomType
+{
+    RoomType_Silver = 0,
+    RoomType_Gold,
+    RoomType_VIP,
+    RoomType_Diamond,
+};
+
 class Global: public Ref{
 public:
     static Global* getInstance();

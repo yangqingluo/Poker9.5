@@ -22,6 +22,7 @@ class RoomItem : public Ref{
 public:
     char title[100];
     char content[100];
+    char typeID[33];
     int type;
     int status;
     int chipMin;//带入筹码最小值
@@ -47,11 +48,12 @@ public:
     
     int roomTypeSelected;
     Vector<MenuItem* > roomMenuItems;
+    Vector<NoteItem* > noteItems;
     Vector<RoomItem* > tianItems;
     Vector<RoomItem* > diItems;
     Vector<RoomItem* > xuanItems;
     Vector<RoomItem* > huangItems;
-    Vector<NoteItem* > noteItems;
+    
     Label* roominfoLabel;
     void roomTypeCallback(Ref* pSender, int index);
     void roomTypeSelectedAction(int type);

@@ -22,12 +22,6 @@ using namespace std;
 #include "NoteTip.h"
 #include "MessageManager.h"
 
-class RegistShowItem : public Ref{
-public:
-    char title[20];
-    char content[100];
-};
-
 class RegistScene : public Layer
 {
 public:

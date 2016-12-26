@@ -55,55 +55,38 @@ bool Hall::init()
     
     Global::getInstance()->playBackgroundMusic(true);
     
-    int chip[2][5] = {{500,1000,3000,5000,10000},{10,20,50,100,200}};
-    for (int i = 0; i < 5; i++) {
+    int roomIDLength = 32;
+    char goldRoomID[4][33] = {"11d01846ca6e4449ad1809426ff33b6f","9310fedae22b45a59d4ef9768a7bbeec","bdfe95b277e84ce5bfe2ce8123558bc8","f869fe26232b464c9159a87b0ee236a0"};
+    char vipRoomID[4][33] = {"8b36978ce93a4dd485ffd61e5405499c","7299037e3e9e4a44b843e2f2110dd00d","75788e6f3f34450180a10c59d10a28fd","8494f5ea601d4427b17ce9e2a0ab1112"};
+    char diamondRoomID[4][33] = {"281c8761602d41a8b91ed3ac3fabcbc5","cd027cf993434e22b0f908d3f1f51192","e867c097effb431f92d934fc66c997d5","da531815c8c54317b3db887d84c9952a"};
+    
+    int chipTypeCount = 4;
+    int chip[2][4] = {{1000,3000,5000,10000},{20,50,100,200}};
+    
+    
+    char goldTitle[4][20] = {"初级房","普通房","中级房","高级房"};
+    for (int i = 0; i < chipTypeCount; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
         item->chipMin = chip[0][i];
         item->perMin = chip[1][i];
-        item->type = 0;
+        item->type = 1;
         item->status = i % 3;
         sprintf(item->content, "≥%d\n底注%d", item->chipMin, item->perMin);
-        switch (i) {
-            case 0:{
-                sprintf(item->title, "新手房");
-            }
-                break;
-                
-            case 1:{
-                sprintf(item->title, "初级房");
-            }
-                break;
-                
-            case 2:{
-                sprintf(item->title, "普通房");
-            }
-                break;
-                
-            case 3:{
-                sprintf(item->title, "中级房");
-            }
-                break;
-                
-            case 4:{
-                sprintf(item->title, "高级房");
-            }
-                break;
-                
-            default:
-                break;
-        }
+        memcpy(item->title, goldTitle[i], strlen(goldTitle[i]));
+        memcpy(item->typeID, goldRoomID[i], roomIDLength);
         
         tianItems.pushBack(item);
     }
     
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < chipTypeCount + 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
-        item->type = 1;
-        if (i < 5) {
+        item->type = 2;
+        memcpy(item->typeID, vipRoomID[i], roomIDLength);
+        if (i < chipTypeCount) {
             item->chipMin = chip[0][i];
             item->perMin = chip[1][i];
             sprintf(item->title, "创建vip房间");
@@ -117,13 +100,14 @@ bool Hall::init()
         diItems.pushBack(item);
     }
     
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < chipTypeCount + 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
-        item->type = 1;
-        if (i < 5) {
+        item->type = 3;
+        memcpy(item->typeID, diamondRoomID[i], roomIDLength);
+        if (i < chipTypeCount) {
             item->chipMin = chip[0][i];
             item->perMin = chip[1][i];
             sprintf(item->title, "创建钻石房间");
@@ -142,8 +126,7 @@ bool Hall::init()
         item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
-        item->type = 2;
-        
+        item->type = 0;
         switch (i) {
             case 0:{
                 sprintf(item->title, "练习房");
@@ -427,7 +410,6 @@ void Hall::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
         auto scene = PokerDesk::createScene();
         PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-        layer->gamePlayer = new Player();
         layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
         
         TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
