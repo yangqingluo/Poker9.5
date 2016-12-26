@@ -57,7 +57,7 @@ public:
 	int Send(const char* buf, int len, int flags = 0);
 
 	// Recv socket
-	int Recv(char* buf, int len, int flags = 0);
+	int Recv(unsigned char* buf, int len, int flags = 0);
 	
 	// Close socket
 	int Close();

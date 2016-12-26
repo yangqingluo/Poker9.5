@@ -269,7 +269,7 @@ void Global::receiveData(){
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
         // 接收数据 Recv
-        char data[512] = "";
+        unsigned char data[512] = "";
         int result = socket.Recv(data, 512, 0);
         log("Socket::%d\n", result);
         // 与服务器的连接断开了
@@ -280,7 +280,6 @@ void Global::receiveData(){
         
         log("Socket::receive->%s\n", data + 4);
     }
-    log("&&&&&&");
     // 关闭连接
     socket.Close();
 }

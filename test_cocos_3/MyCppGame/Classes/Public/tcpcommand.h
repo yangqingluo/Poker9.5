@@ -22,7 +22,7 @@ typedef struct _errorcode_string ERRORCODE_STRING;
 struct _send_package
 {
     int valueLength;
-    char value[200];
+    unsigned char value[200];
 };
 typedef struct _send_package SEND_PACKAGE;
 

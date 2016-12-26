@@ -146,7 +146,7 @@ int ODSocket::Send(const char* buf, int len, int flags)
 	return count;
 }
 
-int ODSocket::Recv(char* buf, int len, int flags)
+int ODSocket::Recv(unsigned char* buf, int len, int flags)
 {
 	return (int)(recv(m_sock, buf, len, flags));
 }
