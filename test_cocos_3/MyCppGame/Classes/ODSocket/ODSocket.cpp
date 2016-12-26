@@ -137,7 +137,7 @@ int ODSocket::Send(const char* buf, int len, int flags)
 
 	while ( count < len ) {
 
-		bytes = send(m_sock, buf + count, len - count, flags);
+		bytes = (int)send(m_sock, buf + count, len - count, flags);
 		if ( bytes == -1 || bytes == 0 )
 			return -1;
 		count += bytes;
@@ -148,7 +148,7 @@ int ODSocket::Send(const char* buf, int len, int flags)
 
 int ODSocket::Recv(char* buf, int len, int flags)
 {
-	return (recv(m_sock, buf, len, flags));
+	return (int)(recv(m_sock, buf, len, flags));
 }
 
 int ODSocket::Close()

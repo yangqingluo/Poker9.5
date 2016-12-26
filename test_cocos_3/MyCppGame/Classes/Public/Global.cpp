@@ -278,7 +278,7 @@ void Global::receiveData(){
             break;
         }
         
-        log("Socket::receive->%s\n", data);
+        log("Socket::receive->%s\n", data + 4);
     }
     log("&&&&&&");
     // 关闭连接

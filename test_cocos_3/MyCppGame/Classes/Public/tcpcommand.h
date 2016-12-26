@@ -9,6 +9,7 @@
 
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
+#pragma pack(1)
 
 struct _errorcode_string
 {
@@ -21,8 +22,8 @@ typedef struct _errorcode_string ERRORCODE_STRING;
 struct _send_package
 {
     int valueLength;
-    unsigned char value[200];
-}__attribute__ ((packed, aligned(4)));
+    char value[200];
+};
 typedef struct _send_package SEND_PACKAGE;
 
 
