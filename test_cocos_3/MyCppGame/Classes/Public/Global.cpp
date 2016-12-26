@@ -271,14 +271,22 @@ void Global::receiveData(){
         // 接收数据 Recv
         unsigned char data[512] = "";
         int result = socket.Recv(data, 512, 0);
-        log("Socket::%d\n", result);
         // 与服务器的连接断开了
         if (result <= 0){
             log("Socket::disconnect");
             break;
         }
+        else if (result >= 4) {
+            int len = 0;
+            memcpy(&len, data, 4);
+            len = reversebytes_uint32t(len);
+            if (len + 4 == result) {
+                log("Socket::receive->%s\n", data + 4);
+                continue;
+            }
+        }
         
-        log("Socket::receive->%s\n", data + 4);
+        log("Socket::receive->unknown data....");
     }
     // 关闭连接
     socket.Close();
