@@ -323,8 +323,6 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                 if (document.HasMember("content")) {
                     Global::getInstance()->saveLoginData(document["content"]);
                 }
-                auto scene = Hall::createScene();
-                Director::getInstance()->replaceScene(scene);
             }
             else {
                 const rapidjson::Value& val_content = document["content"];

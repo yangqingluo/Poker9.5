@@ -41,6 +41,7 @@ public:
     int g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
     
     void saveLoginData(const rapidjson::Value& val_content);
+    void logout();
 private:
     ODSocket socket;
     void connectServer();

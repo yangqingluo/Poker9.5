@@ -1,4 +1,5 @@
 #include "Global.h"
+#include "HallScene.h"
 
 #include <iconv.h>
 #include <stdlib.h>
@@ -195,7 +196,13 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
         user_data.gold = val_goldGameBit["amount"].GetInt();
     }
     
-//    Global::getInstance()->user_data = user_data;
+    auto scene = Hall::createScene();
+    Director::getInstance()->replaceScene(scene);
+}
+
+void Global::logout(){
+    Director::getInstance()->popToRootScene();
+    playBackgroundMusic(false);
 }
 
 #pragma Socket

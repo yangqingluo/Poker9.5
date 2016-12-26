@@ -640,8 +640,7 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 5:{
-                Director::getInstance()->popToRootScene();
-                Global::getInstance()->playBackgroundMusic(false);
+                Global::getInstance()->logout();
             }
                 break;
                 
