@@ -1,5 +1,6 @@
 #include "Global.h"
 #include "HallScene.h"
+#include "tcpcommand.h"
 
 #include <iconv.h>
 #include <stdlib.h>
@@ -179,6 +180,9 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
     const char* account = val_content["account"].GetString();
     memcpy(user_data.account, account, strlen(account));
     
+    const char* ID = val_content["id"].GetString();
+    memcpy(user_data.ID, ID, strlen(ID));
+    
     const char* winningPercent = val_content["winningPercent"].GetString();
     memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
     
@@ -280,7 +284,7 @@ void Global::socketdidConnect(){
     //发送数据 Send
     SEND_PACKAGE package = {0};
     char handle[200];
-    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":%s}}", user_data.account);
+    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":\"%s\"}}", user_data.ID);
     
     int length = (int)strlen(handle);
     if (!endianBig) {

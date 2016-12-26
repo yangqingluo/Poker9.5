@@ -7,8 +7,6 @@
 #define ERROR_CODE_SUCCESS                      0x00
 #define ERROR_CODE_ERROR                        0xff
 
-#define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
-
 #pragma pack(1)
 
 struct _errorcode_string

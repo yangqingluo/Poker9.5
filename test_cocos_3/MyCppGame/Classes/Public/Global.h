@@ -11,7 +11,9 @@ using namespace CocosDenshion;
 
 #include "PublicHeader.h"
 #include "ODSocket.h"
-#include "tcpcommand.h"
+
+
+#define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
 enum RoomType
 {
