@@ -231,31 +231,31 @@ void Global::connectServer(){
     int port = 8888;
     bool result = socket.Connect(ip, port);
     
+    //发送数据 Send
+    SEND_PACKAGE package = {0};
+    char handle[200];
+    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":%s}}", user_data.account);
+    
+    int length = (int)strlen(handle);
+    if (!endianBig) {
+        package.valueLength = reversebytes_uint32t(length);
+    }
+    else {
+        package.valueLength = length;
+    }
+    
+    memcpy(package.value, handle, length);
+    
+    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
+    if (result_send > 0) {
+        log("Socket::send->%s\n",package.value);
+    }
+    
     if (result) {
         CCLOG("Socket::connect to server success!");
         // 开启新线程，在子线程中，接收数据
         std::thread recvThread = std::thread(&Global::receiveData, this);
         recvThread.detach(); // 从主线程分离
-        
-        //发送数据 Send
-        SEND_PACKAGE package = {0};
-        char handle[200];
-        sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":%s}}", user_data.account);
-        
-        int length = (int)strlen(handle);
-        if (endianBig) {
-            package.valueLength = reversebytes_uint32t(length);
-        }
-        else {
-            package.valueLength = length;
-        }
-        
-        memcpy(package.value, handle, length);
-        
-        int result = socket.Send((const char *)&package, sizeof(int) + length);
-        if (result > 0) {
-            log("Socket::send->%s\n",package.value);
-        }
     }
     else {
         log("Socket::can not connect to server");
@@ -280,4 +280,7 @@ void Global::receiveData(){
         
         log("Socket::receive->%s\n", data);
     }
+    log("&&&&&&");
+    // 关闭连接
+    socket.Close();
 }
