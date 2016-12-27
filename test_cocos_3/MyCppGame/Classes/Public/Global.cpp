@@ -64,6 +64,12 @@ Global* Global::getInstance(){
     if(!share){
         share = new (std::nothrow) Global();
         
+        Director::getInstance()->getScheduler()->scheduleSelector(
+                                                                       schedule_selector(MTNotificationQueue::postNotifications),
+                                                                       MTNotificationQueue::sharedNotificationQueue(),
+                                                                       1.0 / 60.0,  
+                                                                       false);
+        
         //预加载音乐音效
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(MUSIC_FILE);
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(EFFECT_FILE);
@@ -409,10 +415,10 @@ void Global::parseData(char* pbuf){
 }
 
 void Global::postNotification(int cmd){
-//    PostRef* post = new PostRef();
-//    post->cmd = cmd;
+    PostRef* post = new PostRef();
+    post->cmd = cmd;
     
-    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Socket, NULL);
+    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Socket, post);
 }
 
 #pragma send cmd

@@ -15,6 +15,13 @@
 #include "SettingScene.h"
 #include "HelpScene.h"
 
+Hall::Hall(){
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(::Hall::onNotification_Socket), kNotification_Socket, NULL);
+}
+Hall::~Hall(){
+    NotificationCenter::getInstance()->removeAllObservers(this);
+}
+
 Scene* Hall::createScene()
 {
     // 'scene' is an autorelease object
@@ -665,4 +672,18 @@ void Hall::editBoxTextChanged(ui::EditBox* editBox, const std::string& text){
 //触发return返回
 void Hall::editBoxReturn(ui::EditBox* editBox){
     
+}
+
+#pragma notification
+void Hall::onNotification_Socket(Ref* pSender){
+    PostRef* post = (PostRef* )pSender;
+    switch (post->cmd) {
+        case cmd_enterRoom:{
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
 }

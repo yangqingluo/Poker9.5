@@ -40,6 +40,8 @@ public:
 class Hall : public Layer, public TableViewDataSource, public TableViewDelegate, public ui::EditBoxDelegate
 {
 public:
+    Hall();
+    ~Hall();
     static Scene* createScene();
     virtual void onEnter();
     virtual void onExit();
@@ -92,6 +94,8 @@ private:
     virtual void editBoxEditingDidEnd(ui::EditBox* editBox); //结束编辑
     virtual void editBoxTextChanged(ui::EditBox* editBox, const std::string& text);//编辑框文字改变
     virtual void editBoxReturn(ui::EditBox* editBox); //触发return后的回调函数
+    
+    void onNotification_Socket(Ref* pSender);
 };
 
 class RoomListCell : public TableViewCell
