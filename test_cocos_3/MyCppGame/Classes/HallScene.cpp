@@ -15,8 +15,9 @@
 #include "SettingScene.h"
 #include "HelpScene.h"
 
-#define dialogTag 9527
-#define sliderTag 9528
+#define dialogTag      9527
+#define sliderTag      9528
+#define passwordBoxTag   9529
 
 static int chipTypeCount = 4;
 
@@ -398,12 +399,13 @@ void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
     ControlSlider* slider = (ControlSlider* )pSender;
     switch (slider->getTag()) {
         case sliderTag:{
+            jettonToEnter = (int)slider->getValue();
             PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
             
             char content[200];
             switch (roomTypeSelected) {
                 case 0:{
-                    sprintf(content, "请设置带入的金币数目:%d", (int)slider->getValue());
+                    sprintf(content, "请设置带入的金币数目:%d", jettonToEnter);
                 }
                     break;
                     
@@ -450,6 +452,7 @@ void Hall::showSettingChip(){
     myslider->setTag(sliderTag);
     
     bool canEnter = true;
+    bool passwordEnter = false;
     RoomItem* room = NULL;
     switch (roomTypeSelected) {
         case 0:{
@@ -480,12 +483,9 @@ void Hall::showSettingChip(){
             break;
     }
     
+    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
     if (canEnter) {
-        popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
         popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
-    }
-    else {
-        popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",1);
     }
     
     this->addChild(popup, 2);
@@ -498,16 +498,58 @@ void Hall::showSettingChip(){
             myslider->setValue(room->chipMin);
         }
     }
+    
+    if (passwordEnter) {
+        auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, MIN(0.1 * popup->m_dialogContentSize.height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+        inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.40 * popup->getContentSize().height));
+        inputBox->setTag(passwordBoxTag);
+        popup->addChild(inputBox);
+        
+        //属性设置
+        //    inputBox->setFontName("fonts/STKaiti.ttf");
+        inputBox->setFontSize(12);
+        inputBox->setFontColor(Color4B::BLACK);
+        //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+        inputBox->setPlaceholderFontSize(12);
+        inputBox->setPlaceholderFontColor(Color4B::GRAY);
+        
+        //模式类型设置
+        inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+        inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
+        inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
+        
+        inputBox->setPlaceHolder("请输入房间密码");
+        inputBox->setMaxLength(6);
+    }
 }
 
 void Hall::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
+        RoomItem* room = NULL;
+        switch (roomTypeSelected) {
+            case 0:{
+                room = tianItems.at(roomIndexSelected);
+            }
+                break;
+                
+            case 1:{
+                
+            }
+                break;
+                
+            case 2:{
+                
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
         
-        Global::getInstance()->sendEnterRoom("ca22bf326f78469ab3f387f9625b43c4", Global::getInstance()->user_data.gold);
+        Global::getInstance()->sendEnterRoom(room->typeID, jettonToEnter);
     }
-    
-    pNode->removeFromParent();
 }
 
 #pragma tableview

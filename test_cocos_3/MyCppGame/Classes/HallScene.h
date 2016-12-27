@@ -90,6 +90,7 @@ private:
     ui::EditBox* msgBox;
     int roomTypeSelected;
     int roomIndexSelected;
+    int jettonToEnter;
     
     virtual void editBoxEditingDidBegin(ui::EditBox* editBox); //开始编辑
     virtual void editBoxEditingDidEnd(ui::EditBox* editBox); //结束编辑
