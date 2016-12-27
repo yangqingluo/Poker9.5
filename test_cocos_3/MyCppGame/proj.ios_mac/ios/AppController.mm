@@ -63,7 +63,7 @@ static AppDelegate s_sharedApplication;
     [window makeKeyAndVisible];
 
     [[UIApplication sharedApplication] setStatusBarHidden:true];
-
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];//屏幕常量
 
     return YES;
 }
