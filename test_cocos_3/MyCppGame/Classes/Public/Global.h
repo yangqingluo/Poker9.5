@@ -59,15 +59,15 @@ public:
     
     void saveLoginData(const rapidjson::Value& val_content);
     void logout();
+    
+    void sendHandle();
+    void sendEnterRoom(const char* roomTypeId, int capital);
 private:
     ODSocket socket;
     void connectServer();
     void disconnectServer();
     void receiveData();
     void sendData(const char* value);
-    
-    void sendHandle();
-    void sendEnterRoom(const char* roomTypeId, int capital);
     
     void socketdidConnect();
     void socketDidDisconnect();

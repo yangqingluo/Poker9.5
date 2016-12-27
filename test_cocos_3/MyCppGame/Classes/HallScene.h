@@ -17,6 +17,8 @@ USING_NS_CC_EXT;
 
 #include "Global.h"
 #include "QLImageSprite.h"
+#include "NoteTip.h"
+#include "MessageManager.h"
 
 class RoomItem : public Ref{
 public:
@@ -87,6 +89,7 @@ private:
     void popButtonCallback(Node* pNode);
     void showSettingChip(bool needPassword);
     
+    MessageManager* m_pMessage;
     Label* msgLabel;
     ui::EditBox* msgBox;
     

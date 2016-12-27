@@ -15,7 +15,7 @@
 #include "SettingScene.h"
 #include "HelpScene.h"
 
-Hall::Hall(){
+Hall::Hall():m_pMessage(NULL){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(::Hall::onNotification_Socket), kNotification_Socket, NULL);
 }
 Hall::~Hall(){
@@ -415,12 +415,9 @@ void Hall::showSettingChip(bool needPassword){
 
 void Hall::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
-        auto scene = PokerDesk::createScene();
-        PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-        layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
+        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
         
-        TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-        Director::getInstance()->pushScene(ts);
+        Global::getInstance()->sendEnterRoom("ca22bf326f78469ab3f387f9625b43c4", Global::getInstance()->user_data.gold);
     }
     
     pNode->removeFromParent();
@@ -679,7 +676,16 @@ void Hall::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     switch (post->cmd) {
         case cmd_enterRoom:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+            }
             
+            auto scene = PokerDesk::createScene();
+            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+            layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
+            
+            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+            Director::getInstance()->pushScene(ts);
         }
             break;
             

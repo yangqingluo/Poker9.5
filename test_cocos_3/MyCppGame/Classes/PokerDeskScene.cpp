@@ -25,7 +25,7 @@ PokerDesk::~PokerDesk(){
     CC_SAFE_RELEASE(gamePlayer);
     CC_SAFE_RELEASE(pcPlayer);
 //    CC_SAFE_RELEASE(stabberPlayer);
-//    CC_SAFE_RELEASE(dealerPlayer);    
+//    CC_SAFE_RELEASE(dealerPlayer);
 }
 
 Scene* PokerDesk::createScene()
