@@ -119,6 +119,8 @@
 		FCA0AD8A1DF54F4600DA1515 /* poker.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA0AD881DF54F4600DA1515 /* poker.png */; };
 		FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
 		FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
+		FCBCA5851E12398C003ADFF1 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBCA5831E12398C003ADFF1 /* MTNotificationQueue.cpp */; };
+		FCBCA5861E12398C003ADFF1 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBCA5831E12398C003ADFF1 /* MTNotificationQueue.cpp */; };
 		FCBDFECF1DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
 		FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
 		FCC0226E1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */; };
@@ -141,8 +143,6 @@
 		FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
 		FCE9ADF41E0C10E500C97945 /* PasswordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */; };
 		FCE9ADF51E0C10E500C97945 /* PasswordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */; };
-		FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */; };
-		FCF3B63D1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,6 +296,8 @@
 		FCA0AD881DF54F4600DA1515 /* poker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poker.png; sourceTree = "<group>"; };
 		FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonSprite.cpp; sourceTree = "<group>"; };
 		FCB5E04B1DF017D300EDB420 /* JettonSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonSprite.h; sourceTree = "<group>"; };
+		FCBCA5831E12398C003ADFF1 /* MTNotificationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MTNotificationQueue.cpp; sourceTree = "<group>"; };
+		FCBCA5841E12398C003ADFF1 /* MTNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationQueue.h; sourceTree = "<group>"; };
 		FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PopAlertDialog.cpp; sourceTree = "<group>"; };
 		FCBDFECE1DE9D8F4001EA2BC /* PopAlertDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopAlertDialog.h; sourceTree = "<group>"; };
 		FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingScene.cpp; sourceTree = "<group>"; };
@@ -316,8 +318,6 @@
 		FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonChosenSprite.h; sourceTree = "<group>"; };
 		FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PasswordScene.cpp; sourceTree = "<group>"; };
 		FCE9ADF31E0C10E500C97945 /* PasswordScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordScene.h; sourceTree = "<group>"; };
-		FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MTNotificationQueue.cpp; sourceTree = "<group>"; };
-		FCF3B63B1E07AD3B0065C788 /* MTNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationQueue.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -585,6 +585,8 @@
 				FC4E35AA1E0B7AB300FCF20F /* NoteTip.h */,
 				FC2BF0001E090608007A3F4E /* RegistInputView.cpp */,
 				FC2BF0011E090608007A3F4E /* RegistInputView.h */,
+				FCBCA5831E12398C003ADFF1 /* MTNotificationQueue.cpp */,
+				FCBCA5841E12398C003ADFF1 /* MTNotificationQueue.h */,
 				FC4E35A81E0B791D00FCF20F /* PublicHeader.h */,
 				FC3505551E10C95900016CC8 /* tcpcommand.h */,
 				FCC022711E0E6DC100A1D6F4 /* Global.cpp */,
@@ -596,8 +598,6 @@
 		FC9EB5421E067F1800EFD14E /* ODSocket */ = {
 			isa = PBXGroup;
 			children = (
-				FCF3B63A1E07AD3B0065C788 /* MTNotificationQueue.cpp */,
-				FCF3B63B1E07AD3B0065C788 /* MTNotificationQueue.h */,
 				FC9EB5431E067F1800EFD14E /* ODSocket.cpp */,
 				FC9EB5441E067F1800EFD14E /* ODSocket.h */,
 				FC9EB5451E067F1800EFD14E /* stdafx.cpp */,
@@ -786,12 +786,12 @@
 				FCC022731E0E6DC100A1D6F4 /* Global.cpp in Sources */,
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
-				FCF3B63C1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
 				FC4E35A51E0B71BA00FCF20F /* RegistScene.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FCE9ADF41E0C10E500C97945 /* PasswordScene.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
 				FCC0226E1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */,
+				FCBCA5851E12398C003ADFF1 /* MTNotificationQueue.cpp in Sources */,
 				FC7E77741E0EBFBC008EBE40 /* HelpScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
@@ -834,6 +834,7 @@
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */,
 				FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
+				FCBCA5861E12398C003ADFF1 /* MTNotificationQueue.cpp in Sources */,
 				FC2BEFFE1E09059A007A3F4E /* LoginScene.cpp in Sources */,
 				FC4E35AC1E0B7AB300FCF20F /* NoteTip.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
@@ -845,7 +846,6 @@
 				FC7E77791E0F6C94008EBE40 /* InviterScene.cpp in Sources */,
 				FC983D5E1DE16728006C2616 /* InviteScene.cpp in Sources */,
 				FC292EE51DF7F0310096B017 /* FrameManager.cpp in Sources */,
-				FCF3B63D1E07AD3B0065C788 /* MTNotificationQueue.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				FC4E35A61E0B71BA00FCF20F /* RegistScene.cpp in Sources */,
 				FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */,

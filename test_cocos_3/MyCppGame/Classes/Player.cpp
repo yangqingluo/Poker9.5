@@ -12,8 +12,8 @@ Player::~Player()
 
 
 void Player::infoConfig(const char* nick, const char* head, int jetton){
-    memcpy(nickName, nick, strlen(nick));
-    memcpy(headImage, head, strlen(head));
+    strcpy(nickName, nick);
+    strcpy(headImage, head);
     this->setJettonCount(jetton);
     m_jettonInitial = jetton;
 }

@@ -46,6 +46,15 @@
 #define MUSIC_FILE        "music/background.mp3"
 #endif
 
+
+PostRef::PostRef(){
+    
+}
+
+PostRef::~PostRef(){
+    
+}
+
 static Global* share = nullptr;
 
 Global::~Global(void){
@@ -212,7 +221,7 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
     Director::getInstance()->replaceScene(scene);
     
     this->connectServer();
-}
+}   
 
 void Global::logout(){
     Director::getInstance()->popToRootScene();
@@ -254,8 +263,11 @@ void Global::receiveData(){
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
         // 接收数据 Recv
-        unsigned char data[1024] = "";
+        char data[1024] = "";
         int result = socket.Recv(data, 1024, 0);
+        
+        log("Socket::receive->length:%d", result);
+        
         // 与服务器的连接断开了
         if (result <= 0){
             Global::getInstance()->socketDidDisconnect();
@@ -269,12 +281,10 @@ void Global::receiveData(){
             }
             
             if (len + 4 == result) {
-                log("Socket::receive->%s", data + 4);
+                Global::getInstance()->parseData(data + 4);
                 continue;
             }
         }
-        
-        log("Socket::receive->unknown data....");
     }
     
 }
@@ -314,32 +324,14 @@ void Global::sendData(const char* value){
     }
 }
 
-void Global::sendHandle(const char* userId){
-    rapidjson::Document doc;
-    doc.SetObject();
-    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-    rapidjson::Value content(rapidjson::kObjectType);
-    
-    content.AddMember("userId", rapidjson::Value(userId, allocator), allocator);
-    
-    doc.AddMember("id", cmd_handle, allocator);
-    doc.AddMember("content", content, allocator);
-    
-    rapidjson::StringBuffer buffer;
-    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
-    doc.Accept(write);
-    
-    sendData(buffer.GetString());
-}
-
-
 void Global::socketdidConnect(){
     log("Socket::connect to server success!");
+    
     // 开启新线程，在子线程中，接收数据
     std::thread recvThread = std::thread(&Global::receiveData, this);
     recvThread.detach(); // 从主线程分离
     
-    sendHandle(Global::getInstance()->user_data.ID);
+    sendHandle();
 //    //发送数据 Send
 //    SEND_PACKAGE package = {0};
 //    char handle[200];
@@ -363,5 +355,101 @@ void Global::socketdidConnect(){
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");
     
+}
+
+void Global::parseData(char* pbuf){
+    log("Socket::parse->%s", pbuf);
     
+    rapidjson::Document document;
+    document.Parse<0>(pbuf);
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code") && document.HasMember("id")){
+            int code = document["code"].GetInt();
+            int cmd = document["id"].GetInt();
+            if (code == 1) {
+                //成功
+                switch (cmd) {
+                    case cmd_handle:{
+                        //握手
+                        
+                    }
+                        break;
+                        
+                    case cmd_enterRoom:{
+                        //加入房间
+                        if (document.HasMember("content")) {
+                            rapidjson::Value& val_content = document["content"];
+                            
+                            table_data = {0};
+                            table_data.code = val_content["code"].GetInt();
+                            
+                            const char* tableId = val_content["tableId"].GetString();
+                            memcpy(table_data.tableId, tableId, strlen(tableId));
+                            
+                            const char* roomId = val_content["roomId"].GetString();
+                            memcpy(table_data.roomId, roomId, strlen(roomId));
+                            
+                            const char* description = val_content["description"].GetString();
+                            memcpy(table_data.description, description, strlen(description));
+                            
+                        }
+                    }
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+                postNotification(cmd);
+            }
+        }
+    }
+}
+
+void Global::postNotification(int cmd){
+//    PostRef* post = new PostRef();
+//    post->cmd = cmd;
+    
+    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Socket, NULL);
+}
+
+#pragma send cmd
+void Global::sendHandle(){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    
+    doc.AddMember("id", cmd_handle, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendEnterRoom(const char* roomTypeId, int capital){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roomTypeId", rapidjson::Value(roomTypeId, allocator), allocator);
+    content.AddMember("capital", capital, allocator);
+    
+    doc.AddMember("id", cmd_enterRoom, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
 }

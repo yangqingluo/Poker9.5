@@ -11,12 +11,14 @@ using namespace CocosDenshion;
 
 #include "PublicHeader.h"
 #include "ODSocket.h"
-
+#include "MTNotificationQueue.h"
 
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
+#define kNotification_Socket "notification_socket"
 
-#define cmd_handle 1000
+#define cmd_handle                     1000//握手
+#define cmd_enterRoom                  3000//加入普通金币房间
 
 
 enum RoomType
@@ -32,6 +34,7 @@ public:
     static Global* getInstance();
     
     UserData user_data;
+    TableData table_data;
     
     bool isBackgroundMusic();
     void setBackgroundMusic(bool yn);
@@ -63,15 +66,27 @@ private:
     void receiveData();
     void sendData(const char* value);
     
-    void sendHandle(const char* userId);
+    void sendHandle();
+    void sendEnterRoom(const char* roomTypeId, int capital);
     
     void socketdidConnect();
     void socketDidDisconnect();
     
     bool endianBig;//大端判断
     
+    void postNotification(int cmd);
+    void parseData(char* pbuf);
 protected:
     ~Global();
+};
+
+class PostRef: public Ref{
+public:
+    PostRef();
+    ~PostRef();
+    
+    int cmd;
+    
 };
 
 
