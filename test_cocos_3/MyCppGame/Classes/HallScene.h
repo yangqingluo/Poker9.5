@@ -50,7 +50,7 @@ public:
     virtual bool init();
     CREATE_FUNC(Hall);
     
-    int roomTypeSelected;
+    
     Vector<MenuItem* > roomMenuItems;
     Vector<NoteItem* > noteItems;
     Vector<RoomItem* > tianItems;
@@ -66,6 +66,7 @@ public:
     Label* userinfoLabel;
     void buttonCallback(Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
+    void sliderChangerCallBack(Ref* pSender, Control::EventType type);
     
     float roomListCellHeight = 0;
     float roomListCellScale = 0.66;
@@ -79,19 +80,16 @@ public:
     ssize_t numberOfCellsInTableView(TableView* table);
     
     void tableCellTouched(TableView* table, TableViewCell* cell);
-//    void tableCellHighlight(TableView* table, TableViewCell* cell);
-//    void tableCellUnhighlight(TableView* table, TableViewCell* cell);
-//    void tableCellWillRecycle(TableView* table, TableViewCell* cell);
     
-//    void scrollViewDidScroll(ScrollView* view) {};
-//    void scrollViewDidZoom(ScrollView* view) {};
 private:
     void popButtonCallback(Node* pNode);
-    void showSettingChip(bool needPassword);
+    void showSettingChip();
     
     MessageManager* m_pMessage;
     Label* msgLabel;
     ui::EditBox* msgBox;
+    int roomTypeSelected;
+    int roomIndexSelected;
     
     virtual void editBoxEditingDidBegin(ui::EditBox* editBox); //开始编辑
     virtual void editBoxEditingDidEnd(ui::EditBox* editBox); //结束编辑

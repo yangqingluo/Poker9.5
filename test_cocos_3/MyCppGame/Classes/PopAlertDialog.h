@@ -27,6 +27,7 @@ public:
     void onTouchMoved(Touch* touch,Event* event);
     void onTouchEnded(Touch* touch,Event* event);
     void setTitle(const char* title,int fontsize=20);
+    void setContentTextShowed(const char* text);
     void setContentText(const char* text,int fontsize=20,int padding=50,int paddingTop=50);
     void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);
     bool addButton(const char* normalImage,const char* selectedImage,const char* title,int tag=0);

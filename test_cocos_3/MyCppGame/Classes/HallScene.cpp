@@ -15,6 +15,10 @@
 #include "SettingScene.h"
 #include "HelpScene.h"
 
+#define dialogTag 9527
+
+static int chipTypeCount = 4;
+
 Hall::Hall():m_pMessage(NULL){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(::Hall::onNotification_Socket), kNotification_Socket, NULL);
 }
@@ -67,7 +71,6 @@ bool Hall::init()
     char vipRoomID[4][33] = {"8b36978ce93a4dd485ffd61e5405499c","7299037e3e9e4a44b843e2f2110dd00d","75788e6f3f34450180a10c59d10a28fd","8494f5ea601d4427b17ce9e2a0ab1112"};
     char diamondRoomID[4][33] = {"281c8761602d41a8b91ed3ac3fabcbc5","cd027cf993434e22b0f908d3f1f51192","e867c097effb431f92d934fc66c997d5","da531815c8c54317b3db887d84c9952a"};
     
-    int chipTypeCount = 4;
     int chip[2][4] = {{1000,3000,5000,10000},{20,50,100,200}};
     
     
@@ -389,27 +392,95 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
             break;
     }
 }
+
+void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
+    ControlSlider* slider = (ControlSlider* )pSender;
+    switch (slider->getTag()) {
+        case 0:{
+            PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
+            
+            char content[200];
+            switch (roomTypeSelected) {
+                case 0:{
+                    sprintf(content, "请设置带入的金币数目:%d", (int)slider->getValue());
+                }
+                    break;
+                    
+                case 1:{
+                    
+                }
+                    break;
+                    
+                case 2:{
+                    
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            
+            popup->setContentTextShowed(content);
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 #pragma alert
-void Hall::showSettingChip(bool needPassword){
+void Hall::showSettingChip(){
     PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
     popup->setTitle("");
-    if (needPassword) {
-        popup->setContentText("请设置带入的游戏币数目并验证密码",12,50,100);
-    }
-    else{
-        popup->setContentText("请设置带入的游戏币数目",12,50,130);
-    }
+    
+//    if (needPassword) {
+//        popup->setContentText("请设置带入的游戏币数目并验证密码",12,50,100);
+//    }
+//    else{
+//        
+//    }
     
     popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
     popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
     popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
     
+    
+    ControlSlider* myslider = ControlSlider::create("images/slider_jd.png", "images/slider_bg.png", "images/slider_hk.png");
+    myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height * 0.45);
+    myslider->setTag(0);
+    myslider->setMinimumValue(0);
+    
+    
+    switch (roomTypeSelected) {
+        case 0:{
+            RoomItem* room = tianItems.at(roomIndexSelected);
+            
+            popup->setContentText("请设置带入的金币数目:", 12, 50, 130);
+            
+            myslider->setMaximumValue(10000);
+            myslider->setMinimumAllowedValue(room->chipMin);
+        }
+            break;
+            
+        case 1:{
+            
+        }
+            break;
+            
+        case 2:{
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    myslider->addTargetWithActionForControlEvents(this, cccontrol_selector(Hall::sliderChangerCallBack), Control::EventType::VALUE_CHANGED);
+    popup->setTag(dialogTag);
     this->addChild(popup, 2);
     
-    ControlSlider* myslider = ControlSlider::create("images/slider_bg.png","images/slider_jd.png","images/slider_hk.png");
-    myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height * 0.45);
-    myslider->setMaximumValue(100);
-    myslider->setMinimumValue(0);
     popup->addChild(myslider);
 }
 
@@ -583,12 +654,8 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
 
 void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
     if (table == roomListTableView) {
-        if (roomTypeSelected == 1 || roomTypeSelected == 2){
-            this->showSettingChip(cell->getIdx() == 5);
-        }
-        else{
-            this->showSettingChip(false);
-        }
+        roomIndexSelected = (int)cell->getIdx();
+        this->showSettingChip();
     }
     else if (table == noteListTableView){
         switch (cell->getIdx()) {
@@ -635,23 +702,6 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
         }
     }
 }
-//void Hall::tableCellHighlight(TableView* table, TableViewCell* cell){
-//
-//}
-//void Hall::tableCellUnhighlight(TableView* table, TableViewCell* cell){
-//
-//}
-//void Hall::tableCellWillRecycle(TableView* table, TableViewCell* cell){
-//
-//}
-//#pragma scrollview
-////由于CCTableView是继承CCScrollView，所以要继承这两个方法
-//void scrollViewDidScroll(ScrollView* view) {
-//
-//}
-//void scrollViewDidZoom(ScrollView* view) {
-//    
-//}
 
 #pragma edixBox
 //开始编辑

@@ -184,4 +184,11 @@ void PopAlertDialog::onExit(){
     LayerColor::onExit();
 }
 
+void PopAlertDialog::setContentTextShowed(const char* text){
+    if (getLabelContentText()) {
+        Label* ltf = getLabelContentText();
+        ltf->setString(text);
+    }
+}
+
 
