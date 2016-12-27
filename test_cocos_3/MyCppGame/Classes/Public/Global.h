@@ -15,6 +15,10 @@ using namespace CocosDenshion;
 
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
+
+#define cmd_handle 1000
+
+
 enum RoomType
 {
     RoomType_Silver = 0,
@@ -57,11 +61,15 @@ private:
     void connectServer();
     void disconnectServer();
     void receiveData();
+    void sendData(const char* value);
+    
+    void sendHandle(const char* userId);
     
     void socketdidConnect();
     void socketDidDisconnect();
     
     bool endianBig;//大端判断
+    
 protected:
     ~Global();
 };

@@ -2,6 +2,10 @@
 #include "HallScene.h"
 #include "tcpcommand.h"
 
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 #include <iconv.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -250,8 +254,8 @@ void Global::receiveData(){
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
         // 接收数据 Recv
-        unsigned char data[512] = "";
-        int result = socket.Recv(data, 512, 0);
+        unsigned char data[1024] = "";
+        int result = socket.Recv(data, 1024, 0);
         // 与服务器的连接断开了
         if (result <= 0){
             Global::getInstance()->socketDidDisconnect();
@@ -275,31 +279,86 @@ void Global::receiveData(){
     
 }
 
+void Global::sendData(const char* value){
+//    rapidjson::Document d1;
+//    d1.SetObject();
+//    rapidjson::Document::AllocatorType& allocator = d1.GetAllocator();
+//    rapidjson::Value array(rapidjson::kArrayType);
+//    rapidjson::Value object(rapidjson::kObjectType);
+//    
+//    object.AddMember("id", 1000, allocator);
+//    object.AddMember("name", "234", allocator);
+//    object.AddMember("年龄", "111", allocator);
+//    //            array.PushBack(object, allocator);
+//    
+//    d1.AddMember("propety", "PLAYER-TO", allocator);
+//    d1.AddMember("id", 3000, allocator);
+//    d1.AddMember("player", object, allocator);
+//    
+//    rapidjson::StringBuffer buffer;
+//    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+//    d1.Accept(write);
+//    
+//    //            StringUtils::format("%s",buffer.GetString());
+//    log("******%s",buffer.GetString());
+    
+    char send_data[1024] = {0};
+    int value_len = (int)strlen(value);
+    int reverseLen = reversebytes_uint32t(value_len);
+    memcpy(send_data, &reverseLen, 4);
+    memcpy(send_data + 4, value, value_len);
+    
+    int result_send = socket.Send(send_data, 4 + value_len);
+    if (result_send > 0) {
+        log("Socket::send->%s",value);
+    }
+}
+
+void Global::sendHandle(const char* userId){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(userId, allocator), allocator);
+    
+    doc.AddMember("id", cmd_handle, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+
 void Global::socketdidConnect(){
     log("Socket::connect to server success!");
     // 开启新线程，在子线程中，接收数据
     std::thread recvThread = std::thread(&Global::receiveData, this);
     recvThread.detach(); // 从主线程分离
     
-    //发送数据 Send
-    SEND_PACKAGE package = {0};
-    char handle[200];
-    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":\"%s\"}}", user_data.ID);
-    
-    int length = (int)strlen(handle);
-    if (!endianBig) {
-        package.valueLength = reversebytes_uint32t(length);
-    }
-    else {
-        package.valueLength = length;
-    }
-    
-    memcpy(package.value, handle, length);
-    
-    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
-    if (result_send > 0) {
-        log("Socket::send->%s",package.value);
-    }
+    sendHandle(Global::getInstance()->user_data.ID);
+//    //发送数据 Send
+//    SEND_PACKAGE package = {0};
+//    char handle[200];
+//    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":\"%s\"}}", user_data.ID);
+//    
+//    int length = (int)strlen(handle);
+//    if (!endianBig) {
+//        package.valueLength = reversebytes_uint32t(length);
+//    }
+//    else {
+//        package.valueLength = length;
+//    }
+//    
+//    memcpy(package.value, handle, length);
+//    
+//    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
+//    if (result_send > 0) {
+//        log("Socket::send->%s",package.value);
+//    }
 }
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");
