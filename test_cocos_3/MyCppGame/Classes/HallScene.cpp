@@ -16,6 +16,7 @@
 #include "HelpScene.h"
 
 #define dialogTag 9527
+#define sliderTag 9528
 
 static int chipTypeCount = 4;
 
@@ -396,7 +397,7 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
 void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
     ControlSlider* slider = (ControlSlider* )pSender;
     switch (slider->getTag()) {
-        case 0:{
+        case sliderTag:{
             PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
             
             char content[200];
@@ -431,35 +432,37 @@ void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
 }
 #pragma alert
 void Hall::showSettingChip(){
-    PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    
+    PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+    popup->setTag(dialogTag);
     popup->setTitle("");
     
-//    if (needPassword) {
-//        popup->setContentText("请设置带入的游戏币数目并验证密码",12,50,100);
-//    }
-//    else{
-//        
-//    }
-    
     popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
-    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
-    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
     
+    auto contentPosition = Vec2(0.1 * popup->m_dialogContentSize.width, (120.0 / 190.0) * popup->m_dialogContentSize.height);
+    popup->setContentText("", 12, contentPosition.x, contentPosition.y);
     
-    ControlSlider* myslider = ControlSlider::create("images/slider_jd.png", "images/slider_bg.png", "images/slider_hk.png");
-    myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height * 0.45);
-    myslider->setTag(0);
+    auto myslider = ControlSlider::create("images/slider_jd.png", "images/slider_bg.png", "images/slider_hk.png");
+    myslider->setPosition(popup->getContentSize().width / 2, 0.50 * popup->getContentSize().height);
+//    myslider->setScale(0.2 * popup->m_dialogContentSize.width / myslider->getContentSize().width);
     myslider->setMinimumValue(0);
+    myslider->setTag(sliderTag);
     
-    
+    bool canEnter = true;
+    RoomItem* room = NULL;
     switch (roomTypeSelected) {
         case 0:{
-            RoomItem* room = tianItems.at(roomIndexSelected);
+            room = tianItems.at(roomIndexSelected);
+            canEnter = Global::getInstance()->user_data.gold >= room->chipMin;
+            if (Global::getInstance()->user_data.gold < room->chipMin) {
+                popup->setContentTextShowed("您的金币不够");
+            }
+            else {
+                myslider->setMaximumValue(Global::getInstance()->user_data.gold);
+                
+            }
             
-            popup->setContentText("请设置带入的金币数目:", 12, 50, 130);
-            
-            myslider->setMaximumValue(10000);
-            myslider->setMinimumAllowedValue(room->chipMin);
         }
             break;
             
@@ -477,11 +480,24 @@ void Hall::showSettingChip(){
             break;
     }
     
-    myslider->addTargetWithActionForControlEvents(this, cccontrol_selector(Hall::sliderChangerCallBack), Control::EventType::VALUE_CHANGED);
-    popup->setTag(dialogTag);
+    if (canEnter) {
+        popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
+        popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+    }
+    else {
+        popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",1);
+    }
+    
     this->addChild(popup, 2);
     
-    popup->addChild(myslider);
+    if (canEnter) {
+        popup->addChild(myslider);
+        myslider->addTargetWithActionForControlEvents(this, cccontrol_selector(Hall::sliderChangerCallBack), Control::EventType::VALUE_CHANGED);
+        if (room != NULL) {
+            myslider->setMinimumAllowedValue(room->chipMin);
+            myslider->setValue(room->chipMin);
+        }
+    }
 }
 
 void Hall::popButtonCallback(Node* pNode){

@@ -35,11 +35,13 @@ public:
     virtual void onEnter();
     virtual void onExit();
     void backgroundFinish();
+    
+    Size m_dialogContentSize; //对话框大小
 private:
     void buttonCallBack(Ref* pSender);
     int m_contentPadding;
     int m_contentPaddingTop;
-    Size m_dialogContentSize; //对话框大小
+    
     Ref* m_callbackListener;
     SEL_CallFuncN m_callback;
     

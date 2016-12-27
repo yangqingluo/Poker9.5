@@ -64,7 +64,7 @@ PopAlertDialog* PopAlertDialog::create(const char* backgoundImage,Size dialogSiz
     
     layer->setSpriteBackGround(Sprite::create(backgoundImage));
 //    layer->setSprite9BackGround(Scale9Sprite::create(backgoundImage));
-    layer->m_dialogContentSize=dialogSize;
+    layer->m_dialogContentSize = dialogSize;
     
     return layer;
 }
@@ -89,7 +89,7 @@ void PopAlertDialog::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
 }
 
 bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImage,const char* title,int tag){
-    Size winSize=Director::getInstance()->getWinSize();
+    Size winSize = Director::getInstance()->getWinSize();
     Point center_point = Point(winSize.width / 2,winSize.height / 2);
     
     auto menuImage = MenuItemImage::create(normalImage,
@@ -97,7 +97,7 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
                                          CC_CALLBACK_1(PopAlertDialog::buttonCallBack,this));
     menuImage->setTag(tag);
     menuImage->setPosition(center_point);
-    menuImage->setScale(0.2 * this->getContentSize().width / menuImage->getContentSize().width);
+    menuImage->setScale(0.2 * m_dialogContentSize.width / menuImage->getContentSize().width);
     
 //    Size menuSize = menuImage->getContentSize();
 //    Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
