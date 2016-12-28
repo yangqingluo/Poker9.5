@@ -281,7 +281,6 @@ void Global::receiveData(){
             break;
         }
         
-        log("Socket::receive->length:%d", result);
         onReceiveData(data, result);
     }
     
@@ -358,7 +357,7 @@ void Global::socketDidDisconnect(){
 }
 
 void Global::onReceiveData(char *buffer, int len){
-    log("解析数据（长度 %d）",len);
+    log("Socket::receive->length:%d", len);
     
     bool parseHeader = false;
     for(int i = 0; i < len; i++){
@@ -375,7 +374,7 @@ void Global::onReceiveData(char *buffer, int len){
         else if(m_nRecvLen == m_nRecvFrameLen){
             parseData(m_ucRecvBuffer, m_nRecvLen);
             
-            memset(m_ucRecvBuffer, 0, MAX_NET_DATA_LEN);
+            memset(m_ucRecvBuffer, 0, m_nRecvLen);
             parseHeader = false;
             m_nRecvLen = 0;
             m_nRecvFrameLen = 0;
