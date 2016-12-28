@@ -1,7 +1,6 @@
 #ifndef __TCP_COMMAND_H__
 #define __TCP_COMMAND_H__
 
-#define MAX_NET_DATA_LEN (10 * 1024)
 #define NET_HEADER_LEN       16
 
 #define ERROR_CODE_SUCCESS                      0x00

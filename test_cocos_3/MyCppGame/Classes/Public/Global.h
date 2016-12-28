@@ -13,6 +13,9 @@ using namespace CocosDenshion;
 #include "ODSocket.h"
 #include "MTNotificationQueue.h"
 
+#define MAX_NET_DATA_LEN (10 * 1024)
+
+
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
 #define kNotification_Socket "notification_socket"
@@ -58,6 +61,8 @@ public:
     int u2g(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
     int g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
     
+    int getInt(char *buffer, int offset);
+    
     void saveLoginData(const rapidjson::Value& val_content);
     void logout();
     
@@ -65,10 +70,15 @@ public:
     void sendEnterRoom(const char* roomTypeId, int capital);
     void sendLeaveRoom();
 private:
+    char m_ucRecvBuffer[MAX_NET_DATA_LEN] = {0};//缓冲区
+    unsigned int m_nRecvLen = 0;
+    unsigned int m_nRecvFrameLen = 0;
+    
     ODSocket socket;
     void connectServer();
     void disconnectServer();
     void receiveData();
+    void onReceiveData(char *buffer, int len);
     void sendData(const char* value);
     
     void socketdidConnect();
@@ -77,7 +87,7 @@ private:
     bool endianBig;//大端判断
     
     void postNotification(int cmd);
-    void parseData(char* pbuf);
+    void parseData(char* pbuf, int len);
 protected:
     ~Global();
 };

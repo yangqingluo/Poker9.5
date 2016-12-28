@@ -236,6 +236,10 @@ void Global::logout(){
     this->disconnectServer();
 }
 
+int Global::getInt(char *buffer, int offset) {
+    return buffer[offset + 0] << 24 | (buffer[offset + 1] & 0xff) << 16 | (buffer[offset + 2] & 0xff) << 8 | (buffer[offset + 3] & 0xff);
+}
+
 #pragma Socket
 void Global::disconnectServer(){
     // 关闭连接
@@ -269,28 +273,16 @@ void Global::receiveData(){
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
         // 接收数据 Recv
-        char data[1024] = "";
-        int result = socket.Recv(data, 1024, 0);
-        
-        log("Socket::receive->length:%d", result);
-        
+        char data[MAX_NET_DATA_LEN] = "";
+        int result = socket.Recv(data, MAX_NET_DATA_LEN, 0);
         // 与服务器的连接断开了
         if (result <= 0){
-            Global::getInstance()->socketDidDisconnect();
+            socketDidDisconnect();
             break;
         }
-        else if (result >= 4) {
-            int len = 0;
-            memcpy(&len, data, 4);
-            if (!endianBig) {
-                len = reversebytes_uint32t(len);
-            }
-            
-            if (len + 4 == result) {
-                Global::getInstance()->parseData(data + 4);
-                continue;
-            }
-        }
+        
+        log("Socket::receive->length:%d", result);
+        onReceiveData(data, result);
     }
     
 }
@@ -365,7 +357,34 @@ void Global::socketDidDisconnect(){
     
 }
 
-void Global::parseData(char* pbuf){
+void Global::onReceiveData(char *buffer, int len){
+    log("解析数据（长度 %d）",len);
+    
+    bool parseHeader = false;
+    for(int i = 0; i < len; i++){
+        m_ucRecvBuffer[m_nRecvLen++] = buffer[i];
+        if(m_nRecvLen == 4){
+            if (!parseHeader) {
+                int header = getInt(m_ucRecvBuffer, 0);
+                m_nRecvFrameLen = header;
+                m_nRecvLen = 0;
+                parseHeader = true;
+                continue;
+            }
+        }
+        else if(m_nRecvLen == m_nRecvFrameLen){
+            parseData(m_ucRecvBuffer, m_nRecvLen);
+            
+            memset(m_ucRecvBuffer, 0, MAX_NET_DATA_LEN);
+            parseHeader = false;
+            m_nRecvLen = 0;
+            m_nRecvFrameLen = 0;
+        }
+        
+    }
+}
+
+void Global::parseData(char* pbuf, int len){
     log("Socket::parse->%s", pbuf);
     
     rapidjson::Document document;
