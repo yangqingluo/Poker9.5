@@ -227,7 +227,7 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
     Director::getInstance()->replaceScene(scene);
     
     this->connectServer();
-}   
+}
 
 void Global::logout(){
     Director::getInstance()->popToRootScene();
@@ -318,6 +318,8 @@ void Global::sendData(const char* value){
 //    //            StringUtils::format("%s",buffer.GetString());
 //    log("******%s",buffer.GetString());
     
+    
+    
     char send_data[1024] = {0};
     int value_len = (int)strlen(value);
     int reverseLen = reversebytes_uint32t(value_len);
@@ -404,6 +406,21 @@ void Global::parseData(char* pbuf){
                     }
                         break;
                         
+                    case cmd_leaveRoom:{
+                        //退出房间
+                        if (document.HasMember("content")) {
+                            rapidjson::Value& val_content = document["content"];
+                            
+                            table_data = {0};
+                            table_data.code = val_content["code"].GetInt();
+                            
+                            const char* description = val_content["description"].GetString();
+                            memcpy(table_data.description, description, strlen(description));
+                            
+                        }
+                    }
+                        break;
+                        
                     default:
                         break;
                 }
@@ -426,12 +443,9 @@ void Global::sendHandle(){
     rapidjson::Document doc;
     doc.SetObject();
     rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-    rapidjson::Value content(rapidjson::kObjectType);
-    
-    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
     
     doc.AddMember("id", cmd_handle, allocator);
-    doc.AddMember("content", content, allocator);
+    doc.AddMember("content", rapidjson::Value(user_data.ID, allocator), allocator);
     
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
@@ -451,6 +465,26 @@ void Global::sendEnterRoom(const char* roomTypeId, int capital){
     content.AddMember("capital", capital, allocator);
     
     doc.AddMember("id", cmd_enterRoom, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendLeaveRoom(){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
+    content.AddMember("tableId", rapidjson::Value(table_data.tableId, allocator), allocator);
+    
+    doc.AddMember("id", cmd_leaveRoom, allocator);
     doc.AddMember("content", content, allocator);
     
     rapidjson::StringBuffer buffer;

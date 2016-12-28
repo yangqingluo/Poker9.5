@@ -22,7 +22,7 @@
 static int chipTypeCount = 5;
 
 Hall::Hall():m_pMessage(NULL){
-    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(::Hall::onNotification_Socket), kNotification_Socket, NULL);
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_Socket), kNotification_Socket, NULL);
 }
 Hall::~Hall(){
     NotificationCenter::getInstance()->removeAllObservers(this);
@@ -529,6 +529,11 @@ void Hall::popButtonCallback(Node* pNode){
         switch (roomTypeSelected) {
             case 0:{
                 room = tianItems.at(roomIndexSelected);
+                
+                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                
+                Global::getInstance()->sendEnterRoom(room->typeID, jettonToEnter);
+
             }
                 break;
                 
@@ -542,13 +547,19 @@ void Hall::popButtonCallback(Node* pNode){
             }
                 break;
                 
+            case 3:{
+                auto scene = PokerDesk::createScene();
+                PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+                layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
+                
+                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+                Director::getInstance()->pushScene(ts);
+            }
+                break;
             default:
                 break;
         }
         
-        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-        
-        Global::getInstance()->sendEnterRoom(room->typeID, jettonToEnter);
     }
 }
 

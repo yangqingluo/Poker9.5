@@ -286,7 +286,7 @@ void PokerChair::showPokerType(){
         }
             break;
         case PokerType_6:{
-            sprintf(mString,"五点");
+            sprintf(mString,"六点");
         }
             break;
         case PokerType_5_Half:{

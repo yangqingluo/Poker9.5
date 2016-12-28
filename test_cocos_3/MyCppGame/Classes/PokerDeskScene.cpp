@@ -19,9 +19,13 @@ PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSin
     pcPlayer = new Player();
     pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
+    
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(PokerDesk::onNotification_Socket), kNotification_Socket, NULL);
 }
 
 PokerDesk::~PokerDesk(){
+    NotificationCenter::getInstance()->removeAllObservers(this);
+    
     CC_SAFE_RELEASE(gamePlayer);
     CC_SAFE_RELEASE(pcPlayer);
 //    CC_SAFE_RELEASE(stabberPlayer);
@@ -181,7 +185,10 @@ bool PokerDesk::init()
 void PokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            this->goBackAction();
+            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+            
+            Global::getInstance()->sendLeaveRoom();
+            
         }
             break;
             
@@ -267,7 +274,7 @@ void PokerDesk::waitForPrepareAction(){
         btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(30);
+        showTimer->start(3);
     }
 }
 
@@ -287,7 +294,7 @@ void PokerDesk::preparedAction(){
 void PokerDesk::betAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"设置筹码，选择过、天、坎下注");
-        showTimer->start(15);
+        showTimer->start(1);
         
         Global::getInstance()->playEffect_place(false);
     }
@@ -379,7 +386,7 @@ void PokerDesk::waitForChooseDealerAction(){
         btn_BeBankerItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"抢庄");
-        showTimer->start(15);
+        showTimer->start(1);
     }
 }
 
@@ -839,4 +846,22 @@ ssize_t PokerDesk::numberOfCellsInTableView(TableView* table)
 
 void PokerDesk::tableCellTouched(TableView* table, TableViewCell* cell){
     
+}
+
+#pragma notification
+void PokerDesk::onNotification_Socket(Ref* pSender){
+    PostRef* post = (PostRef* )pSender;
+    switch (post->cmd) {
+        case cmd_leaveRoom:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+            }
+            
+            Director::getInstance()->popScene();
+        }
+            break;
+            
+        default:
+            break;
+    }
 }

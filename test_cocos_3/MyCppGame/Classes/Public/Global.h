@@ -19,6 +19,7 @@ using namespace CocosDenshion;
 
 #define cmd_handle                     1000//握手
 #define cmd_enterRoom                  3000//加入普通金币房间
+#define cmd_leaveRoom                  3001//退出房间
 
 
 enum RoomType
@@ -62,6 +63,7 @@ public:
     
     void sendHandle();
     void sendEnterRoom(const char* roomTypeId, int capital);
+    void sendLeaveRoom();
 private:
     ODSocket socket;
     void connectServer();

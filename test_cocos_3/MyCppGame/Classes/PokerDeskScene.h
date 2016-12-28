@@ -20,6 +20,9 @@ USING_NS_CC_EXT;
 #include "BetLimiter.h"
 #include "Player.h"
 
+#include "NoteTip.h"
+#include "MessageManager.h"
+
 //牌局状态
 enum DeskState
 {
@@ -37,7 +40,7 @@ class PokerDesk : public cocos2d::Layer, public TableViewDataSource, public Tabl
 {
 public:
     PokerDesk();
-    virtual ~PokerDesk();
+    ~PokerDesk();
     static cocos2d::Scene* createScene();
     
     virtual void onEnter();
@@ -89,6 +92,8 @@ public:
     void sendedSinglePoker(Node* pSender, void* pData);
     void touchedChairCallback(Node* pSender, void* pTarget);
 private:
+    MessageManager* m_pMessage;
+    
     bool m_isSendSingle;//是否发完一张牌
     bool m_isSendSet;//是否发完一把牌(8张)
     int m_deskState;//当前状态
@@ -114,6 +119,8 @@ private:
     ssize_t numberOfCellsInTableView(TableView* table);
     
     void tableCellTouched(TableView* table, TableViewCell* cell);
+    
+    void onNotification_Socket(Ref* pSender);
 };
 
 #endif /* PokerDeskScene_h */
