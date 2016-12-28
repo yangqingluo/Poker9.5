@@ -19,7 +19,7 @@
 #define sliderTag      9528
 #define passwordBoxTag   9529
 
-static int chipTypeCount = 4;
+static int chipTypeCount = 5;
 
 Hall::Hall():m_pMessage(NULL){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(::Hall::onNotification_Socket), kNotification_Socket, NULL);
@@ -69,14 +69,14 @@ bool Hall::init()
     Global::getInstance()->playBackgroundMusic(true);
     
     int roomIDLength = 32;
-    char goldRoomID[4][33] = {"11d01846ca6e4449ad1809426ff33b6f","9310fedae22b45a59d4ef9768a7bbeec","bdfe95b277e84ce5bfe2ce8123558bc8","f869fe26232b464c9159a87b0ee236a0"};
-    char vipRoomID[4][33] = {"8b36978ce93a4dd485ffd61e5405499c","7299037e3e9e4a44b843e2f2110dd00d","75788e6f3f34450180a10c59d10a28fd","8494f5ea601d4427b17ce9e2a0ab1112"};
-    char diamondRoomID[4][33] = {"281c8761602d41a8b91ed3ac3fabcbc5","cd027cf993434e22b0f908d3f1f51192","e867c097effb431f92d934fc66c997d5","da531815c8c54317b3db887d84c9952a"};
+    char goldRoomID[5][33] = {"ca22bf326f78469ab3f387f9625b43c4","11d01846ca6e4449ad1809426ff33b6f","9310fedae22b45a59d4ef9768a7bbeec","bdfe95b277e84ce5bfe2ce8123558bc8","f869fe26232b464c9159a87b0ee236a0"};
+    char vipRoomID[5][33] = {"de8b5d247b02491e88b011f33df3ea65","8b36978ce93a4dd485ffd61e5405499c","7299037e3e9e4a44b843e2f2110dd00d","75788e6f3f34450180a10c59d10a28fd","8494f5ea601d4427b17ce9e2a0ab1112"};
+    char diamondRoomID[5][33] = {"93e9ff7482dc4be4a6100ef61a103adb","281c8761602d41a8b91ed3ac3fabcbc5","cd027cf993434e22b0f908d3f1f51192","e867c097effb431f92d934fc66c997d5","da531815c8c54317b3db887d84c9952a"};
     
-    int chip[2][4] = {{1000,3000,5000,10000},{20,50,100,200}};
+    int chip[2][5] = {{500, 1000,3000,5000,10000},{10, 20,50,100,200}};
     
     
-    char goldTitle[4][20] = {"初级房","普通房","中级房","高级房"};
+    char goldTitle[5][20] = {"新手房", "初级房","普通房","中级房","高级房"};
     for (int i = 0; i < chipTypeCount; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
@@ -196,9 +196,9 @@ bool Hall::init()
     userInfoSprite->addChild(userinfoLabel);
     
     auto refresh_UserInfoItem = MenuItemImage::create(
-                                                  "images/btn_fresh.png",
-                                                  "images/btn_fresh.png",
-                                                  CC_CALLBACK_1(Hall::buttonCallback, this, 0));
+                                                      "images/btn_fresh.png",
+                                                      "images/btn_fresh.png",
+                                                      CC_CALLBACK_1(Hall::buttonCallback, this, 0));
     refresh_UserInfoItem->setScale(0.3 * userInfoSprite->getContentSize().width / refresh_UserInfoItem->getContentSize().width);
     refresh_UserInfoItem->setPosition(0.85 * userInfoSprite->getContentSize().width, refresh_UserInfoItem->getBoundingBox().size.height * 0.6);
     userInfoSprite->addChild(refresh_UserInfoItem);
@@ -216,7 +216,7 @@ bool Hall::init()
     
     roomListCellHeight = roomListBG->getBoundingBox().size.height * 0.65;
     roomListTableView = TableView::create(this, Size(roomListBG->getBoundingBox().size.width * 0.96,  roomListCellHeight));
-//    roomListTableView->autorelease();
+    //    roomListTableView->autorelease();
     roomListTableView->setPosition(roomListBG->getBoundingBox().size.width * 0.02, roomListBG->getBoundingBox().size.height * 0.22);
     roomListTableView->setDirection(TableView::Direction::HORIZONTAL);
     //    roomListTableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
@@ -277,7 +277,7 @@ bool Hall::init()
     inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
     inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
     inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
-
+    
     inputBox->setPlaceHolder("请输入喇叭的内容");
     inputBox->setDelegate(this);
     msgBox = inputBox;
@@ -296,7 +296,7 @@ bool Hall::init()
     msgLabel = Label::createWithTTF("","fonts/STKaiti.ttf",16);
     msgLabel->setColor(Color3B::WHITE);
     this->addChild(msgLabel, 20);
-
+    
     return true;
 }
 
@@ -447,7 +447,7 @@ void Hall::showSettingChip(){
     
     auto myslider = ControlSlider::create("images/slider_jd.png", "images/slider_bg.png", "images/slider_hk.png");
     myslider->setPosition(popup->getContentSize().width / 2, 0.50 * popup->getContentSize().height);
-//    myslider->setScale(0.2 * popup->m_dialogContentSize.width / myslider->getContentSize().width);
+    //    myslider->setScale(0.2 * popup->m_dialogContentSize.width / myslider->getContentSize().width);
     myslider->setMinimumValue(0);
     myslider->setTag(sliderTag);
     
