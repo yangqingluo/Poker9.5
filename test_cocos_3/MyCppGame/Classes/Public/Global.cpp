@@ -416,46 +416,6 @@ void Global::parseData(char* pbuf, int len){
                 switch (cmd) {
                     case cmd_handle:{
                         //握手
-                        
-                    }
-                        break;
-                        
-                    case cmd_beginCountDownBeforeBureau:{
-                        //牌局开始前倒计时
-                        countDownInSecond = document["content"].GetInt();
-                        const char* tableId = document["tableId"].GetString();
-                        if (0 != strcmp(tableId, table_data.tableId)) {
-                            
-                            return;
-                        }
-                        
-                    }
-                        break;
-                        
-                    case cmd_synPlayerList:{
-                        //同步玩家列表
-                        rapidjson::Value& val_content = document["content"];
-                        
-                        const char* tableId = document["tableId"].GetString();
-                        if (0 != strcmp(tableId, table_data.tableId)) {
-                            
-                            return;
-                        }
-                        
-                        if (val_content.IsArray()) {
-                            clearPlayerList();
-                            
-                            playerListCount = val_content.Size();
-                            for (int i = 0; i < playerListCount; ++i) {
-                                rapidjson::Value& val_player = val_content[i];
-                                assert(val_player.IsObject());
-                                
-                                PlayerData player_buf = {0};
-                                parsePlayerData(val_player, &player_buf);
-                                
-                                playerList[i] = player_buf;
-                            }
-                        }
                     }
                         break;
                         
@@ -492,9 +452,55 @@ void Global::parseData(char* pbuf, int len){
                     default:
                         break;
                 }
-                
                 postNotification(cmd);
             }
+        }
+        else if(document.HasMember("commandId") && document.HasMember("content")){
+            int commandId = document["commandId"].GetInt();
+            switch (commandId) {
+                case cmd_beginCountDownBeforeBureau:{
+                    //牌局开始前倒计时
+                    countDownInSecond = document["content"].GetInt();
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                }
+                    break;
+                    
+                case cmd_synPlayerList:{
+                    //同步玩家列表
+                    rapidjson::Value& val_content = document["content"];
+                    
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                    if (val_content.IsArray()) {
+                        clearPlayerList();
+                        
+                        playerListCount = val_content.Size();
+                        for (int i = 0; i < playerListCount; ++i) {
+                            rapidjson::Value& val_player = val_content[i];
+                            assert(val_player.IsObject());
+                            
+                            PlayerData player_buf = {0};
+                            parsePlayerData(val_player, &player_buf);
+                            
+                            playerList[i] = player_buf;
+                        }
+                    }
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            postNotification(commandId);
         }
     }
 }
