@@ -291,10 +291,10 @@ void PokerDesk::preparedAction(){
     showTimer->showPrefix();
 }
 
-void PokerDesk::betAction(){
+void PokerDesk::waitForBetAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"设置筹码，选择过、天、坎下注");
-        showTimer->start(1);
+        showTimer->start(10);
         
         Global::getInstance()->playEffect_place(false);
     }
@@ -303,7 +303,7 @@ void PokerDesk::betAction(){
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(30);
+        showTimer->start(15);
         
         if (stabberPlayer == NULL) {
             int zeroCount = 0;//牌型为0点的座位计数
@@ -326,7 +326,6 @@ void PokerDesk::settleAction(){
                     zeroCount++;
                 }
                 
-                chair->showBeStabber(false);
                 chair->showPokerType();
                 
                 for (int i = 0; i < chair->pokerArray.size(); i++) {
@@ -363,7 +362,6 @@ void PokerDesk::settleAction(){
                     }
                 }
                 
-                chair->showBeStabber(false);
                 chair->showPokerType();
                 
                 for (int i = 0; i < chair->pokerArray.size(); i++) {
@@ -391,6 +389,7 @@ void PokerDesk::waitForChooseDealerAction(){
 }
 
 void PokerDesk::chooseDealerAction(){
+    //单机模拟强制选择电脑为庄家
     if (dealerPlayer == NULL) {
         dealerPlayer = pcPlayer;
         dealerHead->setTexture(dealerPlayer->headImage);
@@ -401,13 +400,51 @@ void PokerDesk::chooseDealerAction(){
     showDealerInfo();
 }
 
-void PokerDesk::chooseStabberAction(){
-    if (gamePlayer->getJettonCount() >= dealerPlayer->getJettonCount()) {
-        for (int i = 0; i < m_arrChairs.size(); i++) {
-            PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
-            chair->showBeStabber(true);
+void PokerDesk::dealerDidChoosedAction(){
+    if (dealerPlayer->getJettonCount() * 3 < dealerPlayer->getJettonInitial()) {
+        //庄家本金小于初始本金1/3，抢刺
+        m_deskState = DeskState_ChooseStabber;
+    }
+    else {
+        //下注
+        m_deskState = DeskState_Bet;
+    }
+}
+
+void PokerDesk::waitForChooseStabberAction(){
+    if (!showTimer->getIsValid()) {
+        if (gamePlayer->getJettonCount() >= dealerPlayer->getJettonCount()) {
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+                chair->showBeStabber(true);
+            }
+            sprintf(showTimer->prefixString,"抢刺");
+        }
+        else {
+            sprintf(showTimer->prefixString,"等待其他玩家抢刺");
+        }
+        
+        showTimer->start(10);
+    }
+}
+
+void PokerDesk::chooseStabberAction(int index){
+    stabberPlayer = gamePlayer;
+    for (int i = 0; i < m_arrChairs.size(); i++) {
+        PokerChair* chair = m_arrChairs.at(i);
+        chair->showBeStabber(false);
+        if (i == index) {
+            chair->showStabber(gamePlayer->headImage, gamePlayer->nickName, gamePlayer->getJettonCount());
         }
     }
+}
+
+void PokerDesk::sendPokerAction(){
+    m_isSendSet = false;
+    m_deskState = DeskState_SendPoker;
+    
+    sprintf(showTimer->prefixString,"发牌");
+    showTimer->start(10);
 }
 
 void PokerDesk::showGamePlayerInfo(){
@@ -436,7 +473,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             break;
         case DeskState_Prepared:{
             if (dealerPlayer != NULL) {
-                m_deskState = DeskState_Bet;
+                dealerDidChoosedAction();
             }
             else{
                 m_deskState = DeskState_ChooseDealer;
@@ -446,21 +483,28 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             
         case DeskState_ChooseDealer:{
             chooseDealerAction();
-            m_deskState = DeskState_Bet;
+            
+            dealerDidChoosedAction();
+        }
+            break;
+            
+        case DeskState_ChooseStabber:{
+            if (stabberPlayer != NULL) {
+                sendPokerAction();
+            }
+            else {
+                for (int i = 0; i < m_arrChairs.size(); i++) {
+                    PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
+                    chair->showBeStabber(false);
+                }
+                
+                m_deskState = DeskState_Bet;
+            }
         }
             break;
             
         case DeskState_Bet:{
-            m_isSendSet = false;
-            m_deskState = DeskState_SendPoker;
-            
-            if (dealerPlayer->getJettonCount() * 3 < dealerPlayer->getJettonInitial()) {
-                //庄家本金小于初始本金1/3，抢刺
-                chooseStabberAction();
-            }
-            
-            sprintf(showTimer->prefixString,"发牌");
-            showTimer->start(10);
+            sendPokerAction();
         }
             break;
             
@@ -497,7 +541,7 @@ void PokerDesk::showTimerDoneCallback(Node* pNode){
             }
             
             if (m_IndexSend < m_arrPokers.size()) {
-                m_deskState = DeskState_Bet;
+                dealerDidChoosedAction();
             }
             else{
                 m_deskState = DeskState_Waiting;
@@ -528,6 +572,11 @@ void PokerDesk::update(float delta){
         }
             break;
             
+        case DeskState_ChooseStabber:{
+            waitForChooseStabberAction();
+        }
+            break;
+            
         case DeskState_SendPoker:{
             if (m_isSendSet) {
                 
@@ -539,7 +588,7 @@ void PokerDesk::update(float delta){
             break;
             
         case DeskState_Bet:{
-            betAction();
+            waitForBetAction();
         }
             break;
             
@@ -555,12 +604,11 @@ void PokerDesk::update(float delta){
 
 #pragma chair
 void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
+    PokerChair* chair = (PokerChair* )pSender;
     Node* node = (Node* )pTarget;
     switch (node->getTag()) {
         case 10:{
             if (m_deskState == DeskState_Bet) {
-                PokerChair* chair = (PokerChair* )pSender;
-                
                 JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
                 chair->addJetton(sp);
                 Global::getInstance()->playEffect_add_gold(false);
@@ -569,15 +617,8 @@ void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
             break;
             
         case 11:{
-            if (m_deskState == DeskState_SendPoker) {
-                stabberPlayer = gamePlayer;
-                for (int i = 0; i < m_arrChairs.size(); i++) {
-                    PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
-                    chair->showBeStabber(false);
-                    if (chair == pSender) {
-                        chair->showStabber(gamePlayer->headImage, gamePlayer->nickName, gamePlayer->getJettonCount());
-                    }
-                }
+            if (m_deskState == DeskState_ChooseStabber) {
+                chooseStabberAction((int)m_arrChairs.getIndex(chair));
             }
         }
             break;

@@ -79,11 +79,14 @@ public:
     void goBackAction();
     void waitForPrepareAction();
     void preparedAction();
-    void betAction();
+    void waitForBetAction();
     void settleAction();
     void chooseDealerAction();//选择庄家
     void waitForChooseDealerAction();//等待选择庄家
-    void chooseStabberAction();//抢刺
+    void dealerDidChoosedAction();//庄家已选择
+    void waitForChooseStabberAction();//等待抢刺
+    void chooseStabberAction(int index);//抢刺
+    void sendPokerAction();//发牌
     
     void showGamePlayerInfo();
     void showDealerInfo();
