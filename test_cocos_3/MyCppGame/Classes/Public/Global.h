@@ -14,13 +14,16 @@ using namespace CocosDenshion;
 #include "MTNotificationQueue.h"
 
 #define MAX_NET_DATA_LEN (10 * 1024)
-
+#define MAX_PLAYER_NUM       7
 
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
 #define kNotification_Socket "notification_socket"
 
 #define cmd_handle                     1000//握手
+#define cmd_beginCountDownBeforeBureau 1001//牌局开始前倒计时通知
+#define cmd_synPlayerList              1002//同步玩家列表
+
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
 
@@ -37,8 +40,11 @@ class Global: public Ref{
 public:
     static Global* getInstance();
     
-    UserData user_data;
-    TableData table_data;
+    UserData user_data;//用户数据
+    TableData table_data;//牌桌数据
+    int countDownInSecond;//倒计时读秒数
+    UserData playerList[MAX_PLAYER_NUM];
+    
     
     bool isBackgroundMusic();
     void setBackgroundMusic(bool yn);
@@ -88,6 +94,7 @@ private:
     
     void postNotification(int cmd);
     void parseData(char* pbuf, int len);
+    void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
 protected:
     ~Global();
 };

@@ -191,37 +191,7 @@ int Global::g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen) {
 
 void Global::saveLoginData(const rapidjson::Value& val_content){
     user_data = {0};
-    user_data.gameTimes = val_content["gameTimes"].GetInt();
-    
-    const char* nikename = val_content["nikename"].GetString();
-    memcpy(user_data.nikename, nikename, strlen(nikename));
-    
-    const char* account = val_content["account"].GetString();
-    memcpy(user_data.account, account, strlen(account));
-    
-    const char* ID = val_content["id"].GetString();
-    memcpy(user_data.ID, ID, strlen(ID));
-    
-    const char* winningPercent = val_content["winningPercent"].GetString();
-    memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
-    
-    const char* inviteCode = val_content["inviteCode"].GetString();
-    memcpy(user_data.inviteCode, inviteCode, strlen(inviteCode));
-    
-    if (val_content.HasMember("diamondGameBit")) {
-        const rapidjson::Value& val_diamondGameBit = val_content["diamondGameBit"];
-        user_data.diamond = val_diamondGameBit["amount"].GetInt();
-    }
-    
-    if (val_content.HasMember("silverGameBit")) {
-        const rapidjson::Value& val_silverGameBit = val_content["silverGameBit"];
-        user_data.silver = val_silverGameBit["amount"].GetInt();
-    }
-    
-    if (val_content.HasMember("goldGameBit")) {
-        const rapidjson::Value& val_goldGameBit = val_content["goldGameBit"];
-        user_data.gold = val_goldGameBit["amount"].GetInt();
-    }
+    parseUserData(val_content, &user_data);
     
     auto scene = Hall::createScene();
     Director::getInstance()->replaceScene(scene);
@@ -238,6 +208,40 @@ void Global::logout(){
 
 int Global::getInt(char *buffer, int offset) {
     return buffer[offset + 0] << 24 | (buffer[offset + 1] & 0xff) << 16 | (buffer[offset + 2] & 0xff) << 8 | (buffer[offset + 3] & 0xff);
+}
+
+void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user){
+    data_user->gameTimes = val_user["gameTimes"].GetInt();
+    
+    const char* nikename = val_user["nikename"].GetString();
+    memcpy(data_user->nikename, nikename, strlen(nikename));
+    
+    const char* account = val_user["account"].GetString();
+    memcpy(data_user->account, account, strlen(account));
+    
+    const char* ID = val_user["id"].GetString();
+    memcpy(data_user->ID, ID, strlen(ID));
+    
+    const char* winningPercent = val_user["winningPercent"].GetString();
+    memcpy(data_user->winningPercent, winningPercent, strlen(winningPercent));
+    
+    const char* inviteCode = val_user["inviteCode"].GetString();
+    memcpy(data_user->inviteCode, inviteCode, strlen(inviteCode));
+    
+    if (val_user.HasMember("diamondGameBit")) {
+        const rapidjson::Value& val_diamondGameBit = val_user["diamondGameBit"];
+        data_user->diamond = val_diamondGameBit["amount"].GetInt();
+    }
+    
+    if (val_user.HasMember("silverGameBit")) {
+        const rapidjson::Value& val_silverGameBit = val_user["silverGameBit"];
+        data_user->silver = val_silverGameBit["amount"].GetInt();
+    }
+    
+    if (val_user.HasMember("goldGameBit")) {
+        const rapidjson::Value& val_goldGameBit = val_user["goldGameBit"];
+        data_user->gold = val_goldGameBit["amount"].GetInt();
+    }
 }
 
 #pragma Socket
@@ -391,7 +395,7 @@ void Global::parseData(char* pbuf, int len){
     CCASSERT(!document.HasParseError(), "Parsing to document failed");
     
     if(document.IsObject()){
-        if(document.HasMember("code") && document.HasMember("id")){
+        if(document.HasMember("code") && document.HasMember("id") && document.HasMember("content")){
             int code = document["code"].GetInt();
             int cmd = document["id"].GetInt();
             if (code == 1) {
@@ -403,39 +407,70 @@ void Global::parseData(char* pbuf, int len){
                     }
                         break;
                         
+                    case cmd_beginCountDownBeforeBureau:{
+                        //牌局开始前倒计时
+                        countDownInSecond = document["content"].GetInt();
+                        const char* tableId = document["tableId"].GetString();
+                        if (0 != strcmp(tableId, table_data.tableId)) {
+                            
+                            return;
+                        }
+                        
+                    }
+                        break;
+                        
+                    case cmd_synPlayerList:{
+                        //同步玩家列表
+                        rapidjson::Value& val_content = document["content"];
+                        
+                        const char* tableId = document["tableId"].GetString();
+                        if (0 != strcmp(tableId, table_data.tableId)) {
+                            
+                            return;
+                        }
+                        
+                        if (val_content.IsArray()) {
+                            memset(playerList, 0, sizeof(UserData) * MAX_PLAYER_NUM);
+                            for (int i = 0; i < val_content.Size(); ++i) {
+                                rapidjson::Value& val_user = val_content[i];
+                                assert(val_user.IsObject());
+                                
+                                UserData user_buf = {0};
+                                parseUserData(val_user, &user_buf);
+                                
+                                playerList[i] = user_buf;
+                            }
+                        }
+                    }
+                        break;
+                        
                     case cmd_enterRoom:{
                         //加入房间
-                        if (document.HasMember("content")) {
-                            rapidjson::Value& val_content = document["content"];
-                            
-                            table_data = {0};
-                            table_data.code = val_content["code"].GetInt();
-                            
-                            const char* tableId = val_content["tableId"].GetString();
-                            memcpy(table_data.tableId, tableId, strlen(tableId));
-                            
-                            const char* roomId = val_content["roomId"].GetString();
-                            memcpy(table_data.roomId, roomId, strlen(roomId));
-                            
-                            const char* description = val_content["description"].GetString();
-                            memcpy(table_data.description, description, strlen(description));
-                            
-                        }
+                        rapidjson::Value& val_content = document["content"];
+                        
+                        table_data = {0};
+                        table_data.code = val_content["code"].GetInt();
+                        
+                        const char* tableId = val_content["tableId"].GetString();
+                        memcpy(table_data.tableId, tableId, strlen(tableId));
+                        
+                        const char* roomId = val_content["roomId"].GetString();
+                        memcpy(table_data.roomId, roomId, strlen(roomId));
+                        
+                        const char* description = val_content["description"].GetString();
+                        memcpy(table_data.description, description, strlen(description));
                     }
                         break;
                         
                     case cmd_leaveRoom:{
                         //退出房间
-                        if (document.HasMember("content")) {
-                            rapidjson::Value& val_content = document["content"];
-                            
-                            table_data = {0};
-                            table_data.code = val_content["code"].GetInt();
-                            
-                            const char* description = val_content["description"].GetString();
-                            memcpy(table_data.description, description, strlen(description));
-                            
-                        }
+                        rapidjson::Value& val_content = document["content"];
+                        
+                        table_data = {0};
+                        table_data.code = val_content["code"].GetInt();
+                        
+                        const char* description = val_content["description"].GetString();
+                        memcpy(table_data.description, description, strlen(description));
                     }
                         break;
                         
