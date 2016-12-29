@@ -27,7 +27,20 @@ using namespace CocosDenshion;
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
 
+//牌局状态
+enum DeskState
+{
+    DeskState_Default = 0,
+    DeskState_Waiting = 1,//等待准备
+    DeskState_Prepared,//已准备
+    DeskState_ChooseDealer,//抢庄
+    DeskState_Bet,//下注
+    DeskState_SendPoker,//发牌
+    DeskState_ChooseStabber,//抢刺
+    DeskState_Settle,//结算
+};
 
+//房间类型
 enum RoomType
 {
     RoomType_Silver = 0,

@@ -14,6 +14,7 @@
 #include "PopAlertDialog.h"
 #include "SettingScene.h"
 #include "HelpScene.h"
+#include "OnlinePokerDeskScene.h"
 
 #define dialogTag      9527
 #define sliderTag      9528
@@ -799,7 +800,7 @@ void Hall::onNotification_Socket(Ref* pSender){
                 m_pMessage->hidden();
             }
             
-            auto scene = PokerDesk::createScene();
+            auto scene = OnlinePokerDesk::createScene();
             PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
             layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
             

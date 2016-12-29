@@ -137,8 +137,10 @@
 		FCCBA4971E026E110072EA7E /* PokerStabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCCBA4941E026E110072EA7E /* PokerStabber.cpp */; };
 		FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */; };
 		FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */; };
-		FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
-		FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */; };
+		FCDA6C5A1E14F892001FCA72 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDA6C581E14F892001FCA72 /* PokerDeskScene.cpp */; };
+		FCDA6C5B1E14F892001FCA72 /* PokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDA6C581E14F892001FCA72 /* PokerDeskScene.cpp */; };
+		FCDA6C5E1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDA6C5C1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp */; };
+		FCDA6C5F1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDA6C5C1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp */; };
 		FCDF45601DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
 		FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
 		FCE9ADF41E0C10E500C97945 /* PasswordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */; };
@@ -312,8 +314,10 @@
 		FCCBA4951E026E110072EA7E /* PokerStabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerStabber.h; sourceTree = "<group>"; };
 		FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BetLimiter.cpp; sourceTree = "<group>"; };
 		FCD0BD771DF2D4C800952CAD /* BetLimiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetLimiter.h; sourceTree = "<group>"; };
-		FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerDeskScene.cpp; sourceTree = "<group>"; };
-		FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerDeskScene.h; sourceTree = "<group>"; };
+		FCDA6C581E14F892001FCA72 /* PokerDeskScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerDeskScene.cpp; sourceTree = "<group>"; };
+		FCDA6C591E14F892001FCA72 /* PokerDeskScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerDeskScene.h; sourceTree = "<group>"; };
+		FCDA6C5C1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OnlinePokerDeskScene.cpp; sourceTree = "<group>"; };
+		FCDA6C5D1E14F8C7001FCA72 /* OnlinePokerDeskScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlinePokerDeskScene.h; sourceTree = "<group>"; };
 		FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonChosenSprite.cpp; sourceTree = "<group>"; };
 		FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonChosenSprite.h; sourceTree = "<group>"; };
 		FCE9ADF21E0C10E500C97945 /* PasswordScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PasswordScene.cpp; sourceTree = "<group>"; };
@@ -478,8 +482,6 @@
 				FCC0226D1E0E615F00A1D6F4 /* SettingScene.h */,
 				FC7E77721E0EBFBC008EBE40 /* HelpScene.cpp */,
 				FC7E77731E0EBFBC008EBE40 /* HelpScene.h */,
-				FCDE4F721DE595FC00FD1221 /* PokerDeskScene.cpp */,
-				FCDE4F731DE595FC00FD1221 /* PokerDeskScene.h */,
 				FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */,
 				FCBDFECE1DE9D8F4001EA2BC /* PopAlertDialog.h */,
 				FC35C0921DEAC741009C3A83 /* GameTimer.cpp */,
@@ -505,6 +507,7 @@
 				FC47C01D1DF4385C00A22F70 /* Player.h */,
 				FC292EE21DF7F0310096B017 /* FrameManager.cpp */,
 				FC292EE31DF7F0310096B017 /* FrameManager.h */,
+				FCDA6C571E14F870001FCA72 /* Game */,
 				FC2BEFFA1E09059A007A3F4E /* Login */,
 				FC2BEFFF1E0905AC007A3F4E /* Public */,
 				FC9EB5421E067F1800EFD14E /* ODSocket */,
@@ -606,6 +609,17 @@
 				FC9EB5481E067F1800EFD14E /* tchar.h */,
 			);
 			path = ODSocket;
+			sourceTree = "<group>";
+		};
+		FCDA6C571E14F870001FCA72 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				FCDA6C581E14F892001FCA72 /* PokerDeskScene.cpp */,
+				FCDA6C591E14F892001FCA72 /* PokerDeskScene.h */,
+				FCDA6C5C1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp */,
+				FCDA6C5D1E14F8C7001FCA72 /* OnlinePokerDeskScene.h */,
+			);
+			path = Game;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -777,8 +791,8 @@
 				FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				FC47C01E1DF4385C00A22F70 /* Player.cpp in Sources */,
+				FCDA6C5A1E14F892001FCA72 /* PokerDeskScene.cpp in Sources */,
 				FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */,
-				FCDE4F741DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FC7E77701E0EAC1F008EBE40 /* YNButton.cpp in Sources */,
 				FC4E35AB1E0B7AB300FCF20F /* NoteTip.cpp in Sources */,
 				FCD0BD781DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
@@ -786,6 +800,7 @@
 				FCC022731E0E6DC100A1D6F4 /* Global.cpp in Sources */,
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
+				FCDA6C5E1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp in Sources */,
 				FC4E35A51E0B71BA00FCF20F /* RegistScene.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FCE9ADF41E0C10E500C97945 /* PasswordScene.cpp in Sources */,
@@ -815,6 +830,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCDA6C5F1E14F8C7001FCA72 /* OnlinePokerDeskScene.cpp in Sources */,
 				FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
 				FCCBA4971E026E110072EA7E /* PokerStabber.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
@@ -838,8 +854,8 @@
 				FC2BEFFE1E09059A007A3F4E /* LoginScene.cpp in Sources */,
 				FC4E35AC1E0B7AB300FCF20F /* NoteTip.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				FCDA6C5B1E14F892001FCA72 /* PokerDeskScene.cpp in Sources */,
 				FC7E77711E0EAC1F008EBE40 /* YNButton.cpp in Sources */,
-				FCDE4F751DE595FC00FD1221 /* PokerDeskScene.cpp in Sources */,
 				FC2BF0031E090608007A3F4E /* RegistInputView.cpp in Sources */,
 				FC4B4B8B1DF1500200E0271B /* QLImageSprite.cpp in Sources */,
 				FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */,

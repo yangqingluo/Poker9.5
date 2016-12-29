@@ -23,19 +23,6 @@ USING_NS_CC_EXT;
 #include "NoteTip.h"
 #include "MessageManager.h"
 
-//牌局状态
-enum DeskState
-{
-    DeskState_Default = 0,
-    DeskState_Waiting = 1,//等待准备
-    DeskState_Prepared,//已准备
-    DeskState_ChooseDealer,//抢庄
-    DeskState_Bet,//下注
-    DeskState_SendPoker,//发牌
-    DeskState_ChooseStabber,//抢刺
-    DeskState_Settle,//结算
-};
-
 class PokerDesk : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
