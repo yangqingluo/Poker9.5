@@ -92,21 +92,22 @@ void PokerChair::onEnter(){
         listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
         getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
         
-        Size size_stabber = Size(0.3 * this->getContentSize().width, this->getContentSize().height - background->getContentSize().height);
+        Size size_stabber = background->getContentSize();
+        
         m_BeStabberSprite = PokerStabberBtn::create(Color4B(0, 0, 0, 0), size_stabber);
-        m_BeStabberSprite->setPosition(this->getContentSize().width - 1.0 * m_BeStabberSprite->getContentSize().width, 0.0);
+        m_BeStabberSprite->setPosition(Vec2(background->getBoundingBox().getMinX(), background->getBoundingBox().getMinY()));
         this->addChild(m_BeStabberSprite);
         m_BeStabberSprite->setVisible(false);
         
         m_Stabber = PokerStabber::create("images/default_head.png", size_stabber);
-        m_Stabber->setPosition(this->getContentSize().width - 1.0 * m_Stabber->getContentSize().width, 0);
+        m_Stabber->setPosition(m_BeStabberSprite->getPosition());
         this->addChild(m_Stabber);
         m_Stabber->setVisible(false);
         
         m_BeStabberSprite->setTag(11);
         //触摸响应注册
         auto stabber_listener = EventListenerTouchOneByOne::create();
-        stabber_listener->setSwallowTouches(true);
+        stabber_listener->setSwallowTouches(false);
         stabber_listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
         getEventDispatcher()->addEventListenerWithSceneGraphPriority(stabber_listener, m_BeStabberSprite);//注册分发器
         

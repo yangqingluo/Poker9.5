@@ -25,6 +25,7 @@ PokerDesk::PokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSin
 
 PokerDesk::~PokerDesk(){
     NotificationCenter::getInstance()->removeAllObservers(this);
+    Global::getInstance()->table_data = {0};
     
     CC_SAFE_RELEASE(gamePlayer);
     CC_SAFE_RELEASE(pcPlayer);
@@ -243,6 +244,7 @@ void PokerDesk::onEnter(){
 void PokerDesk::onExit(){
     Layer::onExit();
     unscheduleUpdate();
+    
 }
 
 void PokerDesk::showSettingChip(){

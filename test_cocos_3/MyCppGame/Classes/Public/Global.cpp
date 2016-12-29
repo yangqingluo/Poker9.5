@@ -493,6 +493,11 @@ void Global::sendEnterRoom(const char* roomTypeId, int capital){
 }
 
 void Global::sendLeaveRoom(){
+    if (strlen(table_data.roomId) == 0 || strlen(table_data.tableId) == 0 ) {
+        postNotification(cmd_leaveRoom);
+        return;
+    }
+    
     rapidjson::Document doc;
     doc.SetObject();
     rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();

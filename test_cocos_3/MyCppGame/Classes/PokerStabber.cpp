@@ -42,9 +42,9 @@ PokerStabber* PokerStabber::create(const char* imageName, Size size){
     layer->head->setPosition(0.5 * size.width, 0.75 * size.height);
     layer->addChild(layer->head);
     
-    layer->infoLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 6);
+    layer->infoLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 8);
     layer->infoLabel->setColor(Color3B(255, 215, 0));
-    layer->infoLabel->setPosition(0.5 * size.width, 0.2 * size.height);
+    layer->infoLabel->setPosition(0.5 * size.width, 0.3 * size.height);
     layer->addChild(layer->infoLabel);
     
     return layer;
