@@ -276,7 +276,7 @@ void PokerDesk::waitForPrepareAction(){
         btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(3);
+        showTimer->start(30);
     }
 }
 
@@ -386,7 +386,7 @@ void PokerDesk::waitForChooseDealerAction(){
         btn_BeBankerItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"抢庄");
-        showTimer->start(1);
+        showTimer->start(10);
     }
 }
 
