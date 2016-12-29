@@ -23,10 +23,12 @@ using namespace CocosDenshion;
 #define cmd_handle                     1000//握手
 #define cmd_beginCountDownBeforeBureau 1001//牌局开始前倒计时通知
 #define cmd_synPlayerList              1002//同步玩家列表
+#define cmd_bureauOpen                 1003//开始牌局
 
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
 
+#define cmd_playerReady                3003//玩家准备
 //牌局状态
 enum DeskState
 {
@@ -56,8 +58,11 @@ public:
     UserData user_data;//用户数据
     TableData table_data;//牌桌数据
     int countDownInSecond;//倒计时读秒数
-    UserData playerList[MAX_PLAYER_NUM];
     
+    int playerListCount = 0;
+    PlayerData playerList[MAX_PLAYER_NUM];
+    
+    void clearPlayerList();
     
     bool isBackgroundMusic();
     void setBackgroundMusic(bool yn);
@@ -87,6 +92,7 @@ public:
     
     void sendHandle();
     void sendEnterRoom(const char* roomTypeId, int capital);
+    void sendPlayerReady();
     void sendLeaveRoom();
 private:
     char m_ucRecvBuffer[MAX_NET_DATA_LEN] = {0};//缓冲区
@@ -108,6 +114,7 @@ private:
     void postNotification(int cmd);
     void parseData(char* pbuf, int len);
     void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
+    void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);
 protected:
     ~Global();
 };

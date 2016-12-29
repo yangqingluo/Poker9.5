@@ -94,6 +94,8 @@ bool PokerDesk::init()
     btn_AnotherdeskItem->setScale(btn_PrepareItem->getScale());
     btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.7 * btn_AnotherdeskItem->getBoundingBox().size.width, btn_PrepareItem->getPositionY()));
     
+    btn_PrepareItem->setVisible(true);
+    btn_AnotherdeskItem->setVisible(true);
     // create menu, it's an autorelease object
     auto menu = Menu::create(btn_BackItem, btn_PrepareItem, btn_AnotherdeskItem, NULL);
     menu->setPosition(Vec2::ZERO);

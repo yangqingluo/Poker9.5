@@ -15,6 +15,8 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+#include "Global.h"
+
 #include "GameTimer.h"
 #include "PokerChair.h"
 #include "BetLimiter.h"
@@ -35,18 +37,17 @@ public:
     virtual bool init();
     CREATE_FUNC(OnlinePokerDesk);
     
-    int deskType;
+    int roomType;
+    char roomTypeId[Max_ID_Length];
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
     
     QLImageSprite* upright_sprite;
-//    QLImageSprite* message_sprite;
     QLImageSprite* bottom_sprite;
     QLImageSprite* playerList_sprite;
     TableView* playerListTableView;
     Label* countLabel;
-    Label* messageLabel;
     Label* gamePlayerInfoLabel;
     BetLimiter* betLimiter;
     Sprite* dealerHead;

@@ -29,6 +29,19 @@ struct TableData {
     char description[Max_String_Length];
 };
 
+struct PlayerData {
+    int amount;
+    int assassin;
+    int bet;
+    int capital;
+    int joinTime;
+    int ready;
+    int remainCap;
+    int role;
+    char room[Max_ID_Length];
+    int seat;
+    UserData user;
+};
 
 
 #endif /* #define __PUBLIC_HEADER_H__ */

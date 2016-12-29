@@ -8,7 +8,6 @@
 
 #include "OnlinePokerDeskScene.h"
 #include "PopAlertDialog.h"
-#include "Global.h"
 
 const float jetton_height_scale = 0.08;
 
@@ -26,6 +25,7 @@ OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0)
 OnlinePokerDesk::~OnlinePokerDesk(){
     NotificationCenter::getInstance()->removeAllObservers(this);
     Global::getInstance()->table_data = {0};
+    Global::getInstance()->clearPlayerList();
     
     CC_SAFE_RELEASE(gamePlayer);
     CC_SAFE_RELEASE(pcPlayer);
@@ -60,7 +60,7 @@ bool OnlinePokerDesk::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     judgementPosition = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.95 * visibleSize.height);
     
-    auto sprite = Sprite::create("images/OnlinePokerDesk_bg.jpg");
+    auto sprite = Sprite::create("images/pokerDesk_bg.jpg");
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     float spx = sprite->getTextureRect().getMaxX();
     float spy = sprite->getTextureRect().getMaxY();
@@ -94,6 +94,8 @@ bool OnlinePokerDesk::init()
     btn_AnotherdeskItem->setScale(btn_PrepareItem->getScale());
     btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.7 * btn_AnotherdeskItem->getBoundingBox().size.width, btn_PrepareItem->getPositionY()));
     
+    btn_PrepareItem->setVisible(true);
+    btn_AnotherdeskItem->setVisible(true);
     // create menu, it's an autorelease object
     auto menu = Menu::create(btn_BackItem, btn_PrepareItem, btn_AnotherdeskItem, NULL);
     menu->setPosition(Vec2::ZERO);
@@ -147,18 +149,6 @@ bool OnlinePokerDesk::init()
     gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(gamePlayerInfoLabel);
     
-//    message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
-//    message_sprite->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
-////    bottom_sprite->addChild(message_sprite);
-//    
-//    messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 10);
-//    messageLabel->setColor(Color3B::BLACK);
-//    messageLabel->setHorizontalAlignment(TextHAlignment::LEFT);
-//    messageLabel->setVerticalAlignment(TextVAlignment::CENTER);
-//    messageLabel->setDimensions(message_sprite->getContentSize().width, message_sprite->getContentSize().height);
-//    messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
-//    message_sprite->addChild(messageLabel);
-    
     int betJettonArray[3] = {10,100,1000};
     betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
     betLimiter->setPosition(2 * bottom_sprite->getContentSize().height, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
@@ -178,6 +168,17 @@ bool OnlinePokerDesk::init()
         this->addChild(chair, 0);
     }
     
+    playerList_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(upright_sprite->getContentSize().width, 0.9 * (upright_sprite->getBoundingBox().getMinY() - bottom_sprite->getBoundingBox().getMaxY())));
+    playerList_sprite->setPosition(upright_sprite->getPositionX(), 0.5 * (upright_sprite->getBoundingBox().getMinY() + bottom_sprite->getBoundingBox().getMaxY()));
+    playerList_sprite->setVisible(false);
+    this->addChild(playerList_sprite);
+    
+    playerListTableView = TableView::create(this, Size(playerList_sprite->getContentSize().width,  playerList_sprite->getContentSize().height));
+    playerListTableView->setPosition(0 , 0);
+    playerListTableView->setDirection(TableView::Direction::VERTICAL);
+    playerListTableView->setDelegate(this);
+    playerList_sprite->addChild(playerListTableView);
+    
     srand((unsigned)time(NULL));//初始化随机种子
     
     return true;
@@ -194,7 +195,10 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
             break;
             
         case 1:{
-            this->preparedAction();
+            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+            
+            Global::getInstance()->sendPlayerReady();
+            
         }
             break;
             
@@ -223,22 +227,12 @@ void OnlinePokerDesk::popButtonCallback(Node* pNode){
 void OnlinePokerDesk::onEnter(){
     Layer::onEnter();
     
-    playerList_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(upright_sprite->getContentSize().width, 0.9 * (upright_sprite->getBoundingBox().getMinY() - bottom_sprite->getBoundingBox().getMaxY())));
-    playerList_sprite->setPosition(upright_sprite->getPositionX(), 0.5 * (upright_sprite->getBoundingBox().getMinY() + bottom_sprite->getBoundingBox().getMaxY()));
-    playerList_sprite->setVisible(false);
-    this->addChild(playerList_sprite);
-    
-    playerListTableView = TableView::create(this, Size(playerList_sprite->getContentSize().width,  playerList_sprite->getContentSize().height));
-    playerListTableView->setPosition(0 , 0);
-    playerListTableView->setDirection(TableView::Direction::VERTICAL);
-    playerListTableView->setDelegate(this);
-    playerList_sprite->addChild(playerListTableView);
-    
     this->showGamePlayerInfo();
     this->showDealerInfo();
     
-    m_deskState = DeskState_Waiting;
-    scheduleUpdate();
+    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+    Global::getInstance()->sendEnterRoom(roomTypeId, gamePlayer->getJettonCount());
+
 }
 
 void OnlinePokerDesk::onExit(){
@@ -281,8 +275,8 @@ void OnlinePokerDesk::waitForPrepareAction(){
 }
 
 void OnlinePokerDesk::preparedAction(){
-    createPokers();
-    reindexPoker();
+//    createPokers();
+//    reindexPoker();
     
     m_deskState = DeskState_Prepared;
     
@@ -468,92 +462,7 @@ void OnlinePokerDesk::showDealerInfo(){
 }
 
 void OnlinePokerDesk::showTimerDoneCallback(Node* pNode){
-    switch (m_deskState) {
-        case DeskState_Waiting:{
-            goBackAction();
-        }
-            break;
-        case DeskState_Prepared:{
-            if (dealerPlayer != NULL) {
-                dealerDidChoosedAction();
-            }
-            else{
-                m_deskState = DeskState_ChooseDealer;
-            }
-        }
-            break;
-            
-        case DeskState_ChooseDealer:{
-            chooseDealerAction();
-            
-            dealerDidChoosedAction();
-        }
-            break;
-            
-        case DeskState_ChooseStabber:{
-            if (stabberPlayer != NULL) {
-                sendPokerAction();
-            }
-            else {
-                for (int i = 0; i < m_arrChairs.size(); i++) {
-                    PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
-                    chair->showBeStabber(false);
-                }
-                
-                m_deskState = DeskState_Bet;
-            }
-        }
-            break;
-            
-        case DeskState_Bet:{
-            sendPokerAction();
-        }
-            break;
-            
-        case DeskState_SendPoker:{
-            if (m_isSendSet) {
-                //发完一把牌
-                m_deskState = DeskState_Settle;
-            }
-            else {
-                //取消动画，强制发完牌
-                
-            }
-        }
-            break;
-            
-        case DeskState_Settle:{
-            for (int i = 0; i < m_arrChairs.size(); i++) {
-                PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
-                chair->clearChair();
-            }
-            if (judgementPokerIndex < m_arrPokers.size()) {
-                PokerSprite* poker = m_arrPokers.at(judgementPokerIndex);
-                poker->setVisible(false);
-            }
-            
-            if (stabberPlayer != NULL) {
-                stabberPlayer = NULL;
-            }
-            
-            //测试
-            if (dealerPlayer->getJettonCount() <= 0) {
-                dealerPlayer->setJettonCount(900);
-                showDealerInfo();
-            }
-            
-            if (m_IndexSend < m_arrPokers.size()) {
-                dealerDidChoosedAction();
-            }
-            else{
-                m_deskState = DeskState_Waiting;
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
+    
 }
 
 
@@ -856,15 +765,10 @@ TableViewCell* OnlinePokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
         
         Label* label = (Label* )cell->getChildByTag(1);
         Sprite* head = (Sprite* )cell->getChildByTag(2);
-        char content[100];
-        if (idx == 0) {
-            sprintf(content, "电脑\n%d",pcPlayer->getJettonCount());
-            head->setTexture(pcPlayer->headImage);
-        }
-        else{
-            sprintf(content, "%s\n%d", gamePlayer->nickName, gamePlayer->getJettonCount());
-            head->setTexture(gamePlayer->headImage);
-        }
+        
+        char content[200];
+        PlayerData player = Global::getInstance()->playerList[idx];
+        sprintf(content, "%s\n%d", player.user.nikename, player.capital);
         
         label->setString(content);
         
@@ -881,7 +785,7 @@ TableViewCell* OnlinePokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
 ssize_t OnlinePokerDesk::numberOfCellsInTableView(TableView* table)
 {
     if (table == playerListTableView) {
-        return 2;
+        return Global::getInstance()->playerListCount;
     }
     
     return 0;
@@ -895,12 +799,45 @@ void OnlinePokerDesk::tableCellTouched(TableView* table, TableViewCell* cell){
 void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     switch (post->cmd) {
+        case cmd_beginCountDownBeforeBureau:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+            }
+            
+            m_deskState = DeskState_Waiting;
+            scheduleUpdate();
+        }
+            break;
+            
         case cmd_leaveRoom:{
             if (m_pMessage != NULL) {
                 m_pMessage->hidden();
             }
             
             Director::getInstance()->popScene();
+        }
+            break;
+            
+        case cmd_enterRoom:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+            }
+            
+            sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
+            showTimer->showPrefix();
+        }
+            break;
+            
+        case cmd_playerReady:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+            }
+            this->preparedAction();
+        }
+            break;
+            
+        case cmd_synPlayerList:{
+            this->playerListTableView->reloadData();
         }
             break;
             

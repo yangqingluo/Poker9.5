@@ -244,6 +244,19 @@ void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user
     }
 }
 
+void Global::parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player){
+    data_player->capital = val_player["capital"].GetInt();
+    
+    if (val_player.HasMember("user")) {
+        parseUserData(val_player["user"], &data_player->user);
+    }
+}
+
+void Global::clearPlayerList(){
+    memset(playerList, 0, sizeof(PlayerData) * MAX_PLAYER_NUM);
+    playerListCount = 0;
+}
+
 #pragma Socket
 void Global::disconnectServer(){
     // 关闭连接
@@ -430,15 +443,17 @@ void Global::parseData(char* pbuf, int len){
                         }
                         
                         if (val_content.IsArray()) {
-                            memset(playerList, 0, sizeof(UserData) * MAX_PLAYER_NUM);
-                            for (int i = 0; i < val_content.Size(); ++i) {
-                                rapidjson::Value& val_user = val_content[i];
-                                assert(val_user.IsObject());
+                            clearPlayerList();
+                            
+                            playerListCount = val_content.Size();
+                            for (int i = 0; i < playerListCount; ++i) {
+                                rapidjson::Value& val_player = val_content[i];
+                                assert(val_player.IsObject());
                                 
-                                UserData user_buf = {0};
-                                parseUserData(val_user, &user_buf);
+                                PlayerData player_buf = {0};
+                                parsePlayerData(val_player, &player_buf);
                                 
-                                playerList[i] = user_buf;
+                                playerList[i] = player_buf;
                             }
                         }
                     }
@@ -518,6 +533,26 @@ void Global::sendEnterRoom(const char* roomTypeId, int capital){
     content.AddMember("capital", capital, allocator);
     
     doc.AddMember("id", cmd_enterRoom, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendPlayerReady(){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
+    content.AddMember("tableId", rapidjson::Value(table_data.tableId, allocator), allocator);
+    
+    doc.AddMember("id", cmd_playerReady, allocator);
     doc.AddMember("content", content, allocator);
     
     rapidjson::StringBuffer buffer;

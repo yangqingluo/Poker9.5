@@ -531,9 +531,15 @@ void Hall::popButtonCallback(Node* pNode){
             case 0:{
                 room = tianItems.at(roomIndexSelected);
                 
-                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                auto scene = OnlinePokerDesk::createScene();
+                OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
+                layer->roomType = room->type;
+                strcpy(layer->roomTypeId, room->typeID);
                 
-                Global::getInstance()->sendEnterRoom(room->typeID, jettonToEnter);
+                layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
+                
+                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+                Director::getInstance()->pushScene(ts);
 
             }
                 break;
@@ -551,7 +557,7 @@ void Hall::popButtonCallback(Node* pNode){
             case 3:{
                 auto scene = PokerDesk::createScene();
                 PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-                layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
+                layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", Global::getInstance()->user_data.silver);
                 
                 TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
                 Director::getInstance()->pushScene(ts);
@@ -793,23 +799,23 @@ void Hall::editBoxReturn(ui::EditBox* editBox){
 
 #pragma notification
 void Hall::onNotification_Socket(Ref* pSender){
-    PostRef* post = (PostRef* )pSender;
-    switch (post->cmd) {
-        case cmd_enterRoom:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-            }
-            
-            auto scene = OnlinePokerDesk::createScene();
-            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-            layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
-            
-            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-            Director::getInstance()->pushScene(ts);
-        }
-            break;
-            
-        default:
-            break;
-    }
+//    PostRef* post = (PostRef* )pSender;
+//    switch (post->cmd) {
+//        case cmd_enterRoom:{
+//            if (m_pMessage != NULL) {
+//                m_pMessage->hidden();
+//            }
+//            
+//            auto scene = OnlinePokerDesk::createScene();
+//            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+//            layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
+//            
+//            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+//            Director::getInstance()->pushScene(ts);
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
 }
