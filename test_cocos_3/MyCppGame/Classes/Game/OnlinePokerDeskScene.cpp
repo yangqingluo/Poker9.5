@@ -195,9 +195,19 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
             break;
             
         case 1:{
+            //准备
             m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
             
             Global::getInstance()->sendPlayerReady();
+            
+        }
+            break;
+            
+        case 3:{
+            //抢庄
+            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+            
+            Global::getInstance()->sendApplyOwner();
             
         }
             break;
@@ -269,8 +279,8 @@ void OnlinePokerDesk::waitForPrepareAction(){
         btn_PrepareItem->setVisible(true);
         btn_AnotherdeskItem->setVisible(true);
         
-        sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(30);
+        sprintf(showTimer->prefixString,"请准备…");
+        showTimer->start(Global::getInstance()->countDownInSecond);
     }
 }
 
@@ -380,7 +390,7 @@ void OnlinePokerDesk::waitForChooseDealerAction(){
         btn_BeBankerItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"抢庄");
-        showTimer->start(10);
+        showTimer->start(Global::getInstance()->countDownInSecond);
     }
 }
 
@@ -449,13 +459,14 @@ void OnlinePokerDesk::showGamePlayerInfo(){
     gamePlayerInfoLabel->setString(mString);
 }
 void OnlinePokerDesk::showDealerInfo(){
+    char mString[100];
     if (dealerPlayer != NULL) {
-        char mString[100];
-        sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
+        sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",dealerPlayer->nickName, dealerPlayer->getJettonCount(), Global::getInstance()->playerListCount);
         countLabel->setString(mString);
     }
     else{
-        countLabel->setString("庄家：无\n玩家总数：2\n");
+        sprintf(mString,"庄家：无\n玩家总数：%d\n", Global::getInstance()->playerListCount);
+        countLabel->setString(mString);
     }
     
     playerListTableView->reloadData();
@@ -796,21 +807,16 @@ void OnlinePokerDesk::tableCellTouched(TableView* table, TableViewCell* cell){
     
 }
 
+#pragma schedule
+void OnlinePokerDesk::stepIn(DeskState state){
+    showTimer->stop();
+    m_deskState = state;
+}
+
 #pragma notification
 void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     switch (post->cmd) {
-        case cmd_beginCountDownBeforeBureau:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
-            
-            m_deskState = DeskState_Waiting;
-            scheduleUpdate();
-        }
-            break;
-            
         case cmd_removePlayer:{
             if (m_pMessage != NULL) {
                 m_pMessage->hidden();
@@ -820,6 +826,39 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             Director::getInstance()->popScene();
         }
             break;
+        case cmd_beginCountDownBeforeBureau:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+                m_pMessage = NULL;
+            }
+            
+            scheduleUpdate();
+            
+            this->stepIn(DeskState_Waiting);
+            
+        }
+            break;
+        case cmd_synPlayerList:{
+            this->playerListTableView->reloadData();
+        }
+            break;
+            
+        case cmd_bureauOpen:{
+            //开始牌局
+            m_deskState = DeskState_Start;
+        }
+            break;
+        case cmd_countDownApplyBureauOwner:{
+            //抢庄
+            this->stepIn(DeskState_ChooseDealer);
+        }
+            break;
+        case cmd_selectedBureauOwner:{
+            //选中庄家通知
+            
+        }
+            break;
+            
             
         case cmd_leaveRoom:{
             if (m_pMessage != NULL) {
@@ -851,10 +890,17 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
             
-        case cmd_synPlayerList:{
-            this->playerListTableView->reloadData();
+        case cmd_applyOwner:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+                m_pMessage = NULL;
+            }
+            
+            
         }
             break;
+            
+        
             
         default:
             break;

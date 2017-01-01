@@ -26,6 +26,9 @@ using namespace CocosDenshion;
 #define cmd_beginCountDownBeforeBureau 1001//牌局开始前倒计时通知
 #define cmd_synPlayerList              1002//同步玩家列表
 #define cmd_bureauOpen                 1003//开始牌局
+#define cmd_countDownApplyBureauOwner  1004//抢庄
+#define cmd_selectedBureauOwner        1005//选中庄家通知
+
 
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
@@ -38,6 +41,7 @@ enum DeskState
     DeskState_Default = 0,
     DeskState_Waiting = 1,//等待准备
     DeskState_Prepared,//已准备
+    DeskState_Start,//开始
     DeskState_ChooseDealer,//抢庄
     DeskState_Bet,//下注
     DeskState_SendPoker,//发牌
@@ -52,6 +56,16 @@ enum RoomType
     RoomType_Gold,
     RoomType_VIP,
     RoomType_Diamond,
+};
+
+
+class PostRef: public Ref{
+public:
+    PostRef();
+    ~PostRef();
+    
+    int cmd;
+    const char* description;
 };
 
 class Global: public Ref{
@@ -96,6 +110,7 @@ public:
     void sendHandle();
     void sendEnterRoom(const char* roomTypeId, int capital);
     void sendPlayerReady();
+    void sendApplyOwner();
     void sendLeaveRoom();
 private:
     char m_ucRecvBuffer[MAX_NET_DATA_LEN] = {0};//缓冲区
@@ -115,6 +130,7 @@ private:
     bool endianBig;//大端判断
     
     void postNotification(int cmd);
+    void postNotification(PostRef* post);
     void parseData(char* pbuf, int len);
     void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
     void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);
@@ -122,14 +138,7 @@ protected:
     ~Global();
 };
 
-class PostRef: public Ref{
-public:
-    PostRef();
-    ~PostRef();
-    
-    int cmd;
-    
-};
+
 
 
 #endif

@@ -21,6 +21,12 @@ bool GameTimer::init(){
     return true;
 }
 
+void GameTimer::stop(){
+    unschedule(schedule_selector(GameTimer::update));
+    //        Global::getInstance()->stopEffect(soundID_timer);
+    m_valid = false;
+}
+
 void GameTimer::start(float time){
     pTime = time;
     m_valid = true;
@@ -48,9 +54,7 @@ void GameTimer::update(float delta){
     }
     
     if (pTime <= 0) {
-        unschedule(schedule_selector(GameTimer::update));
-//        Global::getInstance()->stopEffect(soundID_timer);
-        m_valid = false;
+        this->stop();
         if (m_callback && m_callbackListener) {
             (m_callbackListener->*m_callback)(this);
         }

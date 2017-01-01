@@ -17,6 +17,7 @@ public:
     static GameTimer* createTimer();
     
     void showPrefix();
+    void stop();
     void start(float time);
     void update(float delta);
     

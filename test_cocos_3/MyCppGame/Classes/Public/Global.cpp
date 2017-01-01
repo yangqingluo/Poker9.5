@@ -411,8 +411,11 @@ void Global::parseData(char* pbuf, int len){
         if(document.HasMember("code") && document.HasMember("id") && document.HasMember("content")){
             int code = document["code"].GetInt();
             int cmd = document["id"].GetInt();
+            
+            PostRef* post = new PostRef();
+            post->cmd = cmd;
+            
             if (code == 1) {
-                //成功
                 switch (cmd) {
                     case cmd_handle:{
                         //握手
@@ -449,15 +452,36 @@ void Global::parseData(char* pbuf, int len){
                     }
                         break;
                         
+                    case cmd_playerReady:{
+                        
+                    }
+                        break;
+                        
+                    case cmd_applyOwner:{
+                        
+                    }
+                        break;
+                        
                     default:
                         break;
                 }
-                postNotification(cmd);
             }
+            else {
+                post->description = document["content"].GetString();
+            }
+            
+            postNotification(post);
         }
         else if(document.HasMember("commandId") && document.HasMember("content")){
             int commandId = document["commandId"].GetInt();
             switch (commandId) {
+                case cmd_removePlayer:{
+                    //踢出房间
+                    
+                    
+                }
+                    break;
+                    
                 case cmd_beginCountDownBeforeBureau:{
                     //牌局开始前倒计时
                     countDownInSecond = document["content"].GetInt();
@@ -497,6 +521,46 @@ void Global::parseData(char* pbuf, int len){
                 }
                     break;
                     
+                case cmd_bureauOpen:{
+                    //开始牌局
+                    rapidjson::Value& val_content = document["content"];
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                    const char* bureauId = val_content["bureauId"].GetString();
+                    memcpy(table_data.bureauId, bureauId, strlen(bureauId));
+                }
+                    break;
+                case cmd_countDownApplyBureauOwner:{
+                    //抢庄
+                    countDownInSecond = document["content"].GetInt();
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                    
+                }
+                    break;
+                case cmd_selectedBureauOwner:{
+                    //选中庄家通知
+                    rapidjson::Value& val_content = document["content"];
+                    const char* tableId = document["tableId"].GetString();
+                    const char* bureauId = val_content["bureauId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId) || 0 != strcmp(bureauId, table_data.bureauId)) {
+                        
+                        return;
+                    }
+                    
+                    const char* bureauOwnerId = val_content["bureauOwnerId"].GetString();
+                    memcpy(table_data.bureauOwnerId, bureauOwnerId, strlen(bureauId));
+                }
+                    break;
+                    
                 default:
                     break;
             }
@@ -509,6 +573,10 @@ void Global::postNotification(int cmd){
     PostRef* post = new PostRef();
     post->cmd = cmd;
     
+    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Socket, post);
+}
+
+void Global::postNotification(PostRef* post){
     MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Socket, post);
 }
 
@@ -559,6 +627,26 @@ void Global::sendPlayerReady(){
     content.AddMember("tableId", rapidjson::Value(table_data.tableId, allocator), allocator);
     
     doc.AddMember("id", cmd_playerReady, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendApplyOwner(){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
+    content.AddMember("bureauId", rapidjson::Value(table_data.bureauId, allocator), allocator);
+    
+    doc.AddMember("id", cmd_applyOwner, allocator);
     doc.AddMember("content", content, allocator);
     
     rapidjson::StringBuffer buffer;

@@ -26,6 +26,8 @@ struct TableData {
     int code;
     char tableId[Max_ID_Length];
     char roomId[Max_ID_Length];
+    char bureauId[Max_ID_Length];//牌局ID
+    char bureauOwnerId[Max_ID_Length];//庄家ID
     char description[Max_String_Length];
 };
 

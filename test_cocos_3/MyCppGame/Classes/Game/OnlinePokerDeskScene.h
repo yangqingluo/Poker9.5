@@ -113,6 +113,7 @@ private:
     void tableCellTouched(TableView* table, TableViewCell* cell);
     
     void onNotification_Socket(Ref* pSender);
+    void stepIn(DeskState state);
 };
 
 #endif /* OnlinePokerDeskScene_h */
