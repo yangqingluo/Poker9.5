@@ -21,6 +21,8 @@ using namespace CocosDenshion;
 #define kNotification_Socket "notification_socket"
 
 #define cmd_handle                     1000//握手
+
+#define cmd_removePlayer               1000//踢出房间
 #define cmd_beginCountDownBeforeBureau 1001//牌局开始前倒计时通知
 #define cmd_synPlayerList              1002//同步玩家列表
 #define cmd_bureauOpen                 1003//开始牌局
@@ -29,6 +31,7 @@ using namespace CocosDenshion;
 #define cmd_leaveRoom                  3001//退出房间
 
 #define cmd_playerReady                3003//玩家准备
+#define cmd_applyOwner                 3004//申请上庄
 //牌局状态
 enum DeskState
 {

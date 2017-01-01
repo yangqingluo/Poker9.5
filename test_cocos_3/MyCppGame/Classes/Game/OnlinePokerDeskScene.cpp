@@ -11,7 +11,7 @@
 
 const float jetton_height_scale = 0.08;
 
-OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL){
+OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
     gamePlayer = new Player();
     gamePlayer->retain();
     
@@ -754,17 +754,18 @@ TableViewCell* OnlinePokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
             head->setPosition(0.25 * listCellWidth, 0.5 * height);
             cell->addChild(head, 0 , 2);
             
-            Label* titleLabel = Label::createWithTTF("test", "fonts/STKaiti.ttf", 8);
+            Label* titleLabel = Label::createWithTTF("昵称:", "fonts/STKaiti.ttf", 8);
             titleLabel->setTextColor(Color4B::BLACK);
             titleLabel->setPosition(0.75 * listCellWidth, 0.5 * height);
             titleLabel->setDimensions(0.5 * listCellWidth, height);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
-            cell->addChild(titleLabel, 0 , 1);
+            titleLabel->setTag(1);
+            cell->addChild(titleLabel);
         }
         
         Label* label = (Label* )cell->getChildByTag(1);
-        Sprite* head = (Sprite* )cell->getChildByTag(2);
+//        Sprite* head = (Sprite* )cell->getChildByTag(2);
         
         char content[200];
         PlayerData player = Global::getInstance()->playerList[idx];
@@ -802,6 +803,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_beginCountDownBeforeBureau:{
             if (m_pMessage != NULL) {
                 m_pMessage->hidden();
+                m_pMessage = NULL;
             }
             
             m_deskState = DeskState_Waiting;
@@ -809,9 +811,20 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
             
+        case cmd_removePlayer:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+                m_pMessage = NULL;
+            }
+            
+            Director::getInstance()->popScene();
+        }
+            break;
+            
         case cmd_leaveRoom:{
             if (m_pMessage != NULL) {
                 m_pMessage->hidden();
+                m_pMessage = NULL;
             }
             
             Director::getInstance()->popScene();
@@ -821,6 +834,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_enterRoom:{
             if (m_pMessage != NULL) {
                 m_pMessage->hidden();
+                m_pMessage = NULL;
             }
             
             sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
@@ -831,6 +845,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_playerReady:{
             if (m_pMessage != NULL) {
                 m_pMessage->hidden();
+                m_pMessage = NULL;
             }
             this->preparedAction();
         }

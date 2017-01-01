@@ -2,4 +2,69 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/Public/MessageManager.cpp"
+            timestampString = "504929323.480406"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "7"
+            endingLineNumber = "7"
+            landmarkName = "MessageManager::~MessageManager()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MessageManager::~MessageManager()"
+                  moduleName = "MyCppGame-mobile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangqingluo/Documents/Poker9.5/test_cocos_3/MyCppGame/Classes/Public/MessageManager.cpp"
+                  timestampString = "504929609.81886"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "8"
+                  endingLineNumber = "8"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MessageManager::~MessageManager()"
+                  moduleName = "MyCppGame-mobile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangqingluo/Documents/Poker9.5/test_cocos_3/MyCppGame/Classes/Public/MessageManager.cpp"
+                  timestampString = "504929609.822905"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "8"
+                  endingLineNumber = "8"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MessageManager::~MessageManager()"
+                  moduleName = "MyCppGame-mobile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangqingluo/Documents/Poker9.5/test_cocos_3/MyCppGame/Classes/Public/MessageManager.cpp"
+                  timestampString = "504929609.830781"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "8"
+                  endingLineNumber = "8"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

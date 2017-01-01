@@ -82,6 +82,7 @@ public:
     void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);
     void touchedChairCallback(Node* pSender, void* pTarget);
+    
 private:
     MessageManager* m_pMessage;
     

@@ -16,7 +16,7 @@ bool MessageManager::init()
     return true;
 }
 
-MessageManager* MessageManager::show(Node* nodeParent, int type,const char *msg)
+MessageManager* MessageManager::show(Node* nodeParent, int type, const char *msg)
 {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -78,7 +78,7 @@ void MessageManager::onWarningHidden(Node *node)
 }
 void MessageManager::hidden()
 {
-    removeAllChildren();
+    removeAllChildrenWithCleanup(true);
     removeFromParent();
 }
 

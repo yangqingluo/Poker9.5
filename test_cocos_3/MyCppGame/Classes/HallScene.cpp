@@ -538,8 +538,8 @@ void Hall::popButtonCallback(Node* pNode){
                 
                 layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
                 
-                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-                Director::getInstance()->pushScene(ts);
+//                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+                Director::getInstance()->pushScene(scene);
 
             }
                 break;
@@ -559,8 +559,8 @@ void Hall::popButtonCallback(Node* pNode){
                 PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
                 layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", Global::getInstance()->user_data.silver);
                 
-                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-                Director::getInstance()->pushScene(ts);
+//                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
+                Director::getInstance()->pushScene(scene);
             }
                 break;
             default:
