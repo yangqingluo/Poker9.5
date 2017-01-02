@@ -86,7 +86,7 @@ bool OnlinePokerDesk::init()
     btn_PrepareItem->setScale(0.09 * visibleSize.height / btn_PrepareItem->getContentSize().height);
     btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.25 * visibleSize.height));
     
-    btn_PrepareItem->setVisible(true);
+    btn_PrepareItem->setVisible(false);
     // create menu, it's an autorelease object
     auto menu = Menu::create(btn_BackItem, btn_PrepareItem, NULL);
     menu->setPosition(Vec2::ZERO);
@@ -119,13 +119,13 @@ bool OnlinePokerDesk::init()
     countLabel->setColor(Color3B::BLACK);
 //    countLabel->setHorizontalAlignment(TextHAlignment::LEFT);
 //    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
-    countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.2 * upright_sprite->getContentSize().height);
+    countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.3 * upright_sprite->getContentSize().height);
     upright_sprite->addChild(countLabel);
     
     auto btn_playerList = MenuItemFont::create("点击查看玩家列表", CC_CALLBACK_1(OnlinePokerDesk::buttonCallback, this, 4));
     btn_playerList->setFontSizeObj(8);
     btn_playerList->setColor(Color3B::BLACK);
-    btn_playerList->setPosition(0.5 * upright_sprite->getContentSize().width, 0.5 * btn_playerList->getContentSize().height);
+    btn_playerList->setPosition(0.5 * upright_sprite->getContentSize().width, 0.6 * btn_playerList->getContentSize().height);
     
     auto menu_ur = Menu::create(btn_BeBankerItem, btn_playerList, NULL);
     menu_ur->setPosition(Vec2::ZERO);
@@ -175,6 +175,17 @@ bool OnlinePokerDesk::init()
     return true;
 }
 
+void OnlinePokerDesk::updateDeskState(DeskState state){
+    m_deskState = state;
+    if (m_deskState != DeskState_Waiting) {
+        btn_PrepareItem->setVisible(false);
+    }
+    
+    if (m_deskState != DeskState_ChooseDealer) {
+        btn_BeBankerItem->setVisible(false);
+    }
+}
+
 void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
@@ -217,7 +228,7 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
 
 void OnlinePokerDesk::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
-        m_deskState = DeskState_Waiting;
+        updateDeskState(DeskState_Waiting);
         scheduleUpdate();
     }
     else if(pNode->getTag() == 1) {
@@ -278,8 +289,7 @@ void OnlinePokerDesk::waitForPrepareAction(){
 void OnlinePokerDesk::preparedAction(){
 //    createPokers();
 //    reindexPoker();
-    
-    m_deskState = DeskState_Prepared;
+    updateDeskState(DeskState_Prepared);
     
     btn_PrepareItem->setVisible(false);
     
@@ -290,7 +300,7 @@ void OnlinePokerDesk::preparedAction(){
 void OnlinePokerDesk::waitForBetAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"设置筹码，选择过、天、坎下注");
-        showTimer->start(10);
+        showTimer->start(Global::getInstance()->countDownInSecond);
         
         Global::getInstance()->playEffect_place(false);
     }
@@ -399,11 +409,11 @@ void OnlinePokerDesk::chooseDealerAction(){
 void OnlinePokerDesk::dealerDidChoosedAction(){
     if (dealerPlayer->getJettonCount() * 3 < dealerPlayer->getJettonInitial()) {
         //庄家本金小于初始本金1/3，抢刺
-        m_deskState = DeskState_ChooseStabber;
+        updateDeskState(DeskState_ChooseStabber);
     }
     else {
         //下注
-        m_deskState = DeskState_Bet;
+        updateDeskState(DeskState_Bet);
     }
 }
 
@@ -437,10 +447,10 @@ void OnlinePokerDesk::chooseStabberAction(int index){
 
 void OnlinePokerDesk::sendPokerAction(){
     m_isSendSet = false;
-    m_deskState = DeskState_SendPoker;
+    updateDeskState(DeskState_SendPoker);
     
     sprintf(showTimer->prefixString,"发牌");
-    showTimer->start(10);
+    showTimer->start(Global::getInstance()->countDownInSecond);
 }
 
 void OnlinePokerDesk::showGamePlayerInfo(){
@@ -450,9 +460,14 @@ void OnlinePokerDesk::showGamePlayerInfo(){
 }
 void OnlinePokerDesk::showDealerInfo(){
     char mString[100];
-    if (dealerPlayer != NULL) {
-        sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",dealerPlayer->nickName, dealerPlayer->getJettonCount(), Global::getInstance()->playerListCount);
-        countLabel->setString(mString);
+    if (strlen(Global::getInstance()->table_data.bureauOwnerId) > 0) {
+        for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+            PlayerData player_data = Global::getInstance()->playerList[i];
+            if (0 != strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
+                sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",player_data.user.nikename, player_data.remainCap, Global::getInstance()->playerListCount);
+                countLabel->setString(mString);
+            }
+        }
     }
     else{
         sprintf(mString,"庄家：无\n玩家总数：%d\n", Global::getInstance()->playerListCount);
@@ -463,7 +478,7 @@ void OnlinePokerDesk::showDealerInfo(){
 }
 
 void OnlinePokerDesk::showTimerDoneCallback(Node* pNode){
-    m_deskState = DeskState_Default;
+    updateDeskState(DeskState_Default);
     
     switch (m_deskState) {
         case DeskState_Waiting:{
@@ -534,6 +549,10 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                 JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
                 chair->addJetton(sp);
                 Global::getInstance()->playEffect_add_gold(false);
+                
+//                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                
+                Global::getInstance()->sendBetStake(betLimiter->getSelectedJettonValue(), (int)m_arrChairs.getIndex(chair) + 1);
             }
         }
             break;
@@ -780,7 +799,7 @@ TableViewCell* OnlinePokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
         
         char content[200];
         PlayerData player = Global::getInstance()->playerList[idx];
-        sprintf(content, "%s\n%d", player.user.nikename, player.capital);
+        sprintf(content, "%s\n%d", player.user.nikename, player.remainCap);
         
         label->setString(content);
         
@@ -810,7 +829,7 @@ void OnlinePokerDesk::tableCellTouched(TableView* table, TableViewCell* cell){
 #pragma schedule
 void OnlinePokerDesk::stepIn(DeskState state){
     showTimer->stop();
-    m_deskState = state;
+    updateDeskState(state);
 }
 
 #pragma notification
@@ -845,7 +864,10 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
         case cmd_bureauOpen:{
             //开始牌局
-            m_deskState = DeskState_Start;
+            createPokers();
+            reindexPoker();
+
+            updateDeskState(DeskState_Start);
         }
             break;
         case cmd_countDownApplyBureauOwner:{
@@ -855,7 +877,14 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             break;
         case cmd_selectedBureauOwner:{
             //选中庄家通知
+            btn_BeBankerItem->setVisible(false);
+            showDealerInfo();
+        }
+            break;
             
+        case cmd_countDownBetStake:{
+            //开始下注倒计时
+            this->stepIn(DeskState_Bet);
         }
             break;
             
@@ -901,6 +930,24 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
             
+        case cmd_betStake:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+                m_pMessage = NULL;
+            }
+            
+        }
+            break;
+            
+        case cmd_countDownSendCard:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+                m_pMessage = NULL;
+            }
+            Global::getInstance()->countDownInSecond = 15;
+            sendPokerAction();
+        }
+            break;
         
             
         default:

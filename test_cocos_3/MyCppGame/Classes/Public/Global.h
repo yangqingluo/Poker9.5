@@ -39,6 +39,8 @@ using namespace CocosDenshion;
 
 #define cmd_playerReady                3003//玩家准备
 #define cmd_applyOwner                 3004//申请上庄
+#define cmd_betStake                   3005//下注
+
 //牌局状态
 enum DeskState
 {
@@ -116,9 +118,11 @@ public:
     void sendPlayerReady();
     void sendApplyOwner();
     void sendLeaveRoom();
+    void sendBetStake(int jetton, int gateType);
     
     void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
     void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);
+    
 private:
     char m_ucRecvBuffer[MAX_NET_DATA_LEN] = {0};//缓冲区
     unsigned int m_nRecvLen = 0;

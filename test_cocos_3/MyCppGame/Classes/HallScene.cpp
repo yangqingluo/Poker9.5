@@ -195,9 +195,9 @@ bool Hall::init()
     userNameLabel->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.6));
     userInfoSprite->addChild(userNameLabel);
     
-    userinfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
+    userinfoLabel = Label::create("", "", 7);
     userinfoLabel->setTextColor(Color4B(0xe0, 0xe0, 0xe0, 0xff));
-    userinfoLabel->setPosition(userInfoSprite->getContentSize().width / 2, 0.25 * userInfoSprite->getContentSize().height);
+    userinfoLabel->setPosition(0.55 * userInfoSprite->getContentSize().width, 0.25 * userInfoSprite->getContentSize().height);
     userinfoLabel->setDimensions(0.95 * userInfoSprite->getContentSize().width, 0.5 * userInfoSprite->getContentSize().height);
     userInfoSprite->addChild(userinfoLabel);
     

@@ -246,7 +246,7 @@ void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user
 
 void Global::parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player){
     data_player->capital = val_player["capital"].GetInt();
-    
+    data_player->remainCap = val_player["remainCap"].GetInt();
     if (val_player.HasMember("user")) {
         parseUserData(val_player["user"], &data_player->user);
     }
@@ -467,6 +467,15 @@ void Global::parseData(char* pbuf, int len){
                     }
                         break;
                         
+                    case cmd_betStake:{
+                        //下注
+                        rapidjson::Value& val_content = document["content"];
+                        
+                        const char* description = val_content["description"].GetString();
+                        memcpy(post->description, description, strlen(description));
+                    }
+                        break;
+                        
                     default:
                         break;
                 }
@@ -564,6 +573,28 @@ void Global::parseData(char* pbuf, int len){
                     
                     const char* bureauOwnerId = val_content["bureauOwnerId"].GetString();
                     memcpy(table_data.bureauOwnerId, bureauOwnerId, strlen(bureauId));
+                }
+                    break;
+                    
+                case cmd_countDownBetStake:{
+                    //开始下注倒计时
+                    rapidjson::Value& val_content = document["content"];
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                    countDownInSecond = val_content["countDown"].GetInt();
+                    memset(table_data.roundId, 0, sizeof(table_data.roundId));
+                    
+                    const char* roundId = val_content["roundId"].GetString();
+                    memcpy(table_data.roundId, roundId, strlen(roundId));
+                }
+                    break;
+                    
+                case cmd_countDownSendCard:{
+                    
                 }
                     break;
                     
@@ -678,6 +709,27 @@ void Global::sendLeaveRoom(){
     content.AddMember("tableId", rapidjson::Value(table_data.tableId, allocator), allocator);
     
     doc.AddMember("id", cmd_leaveRoom, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendBetStake(int jetton, int gateType){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roundId", rapidjson::Value(table_data.roundId, allocator), allocator);
+    content.AddMember("count", jetton, allocator);
+    content.AddMember("gateType", gateType, allocator);
+    
+    doc.AddMember("id", cmd_betStake, allocator);
     doc.AddMember("content", content, allocator);
     
     rapidjson::StringBuffer buffer;

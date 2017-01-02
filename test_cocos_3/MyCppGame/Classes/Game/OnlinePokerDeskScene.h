@@ -105,6 +105,8 @@ private:
     void addJetton(PokerChair* chair,JettonSprite* jetton);//添加筹码
     virtual void update(float delta);//系统scheduleupdate回调函数
     
+    void updateDeskState(DeskState state);
+    
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);
