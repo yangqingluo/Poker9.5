@@ -30,6 +30,10 @@ using namespace CocosDenshion;
 #define cmd_selectedBureauOwner        1005//选中庄家通知
 
 
+#define cmd_countDownBetStake          1008//下注倒计时
+#define cmd_countDownSendCard          1009//发牌
+#define cmd_trunIndexCard              1010//翻开判定牌决定发牌顺序
+
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
 
@@ -65,7 +69,7 @@ public:
     ~PostRef();
     
     int cmd;
-    const char* description;
+    char description[1024];
 };
 
 class Global: public Ref{

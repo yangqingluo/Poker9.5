@@ -54,7 +54,6 @@ public:
     MenuItemImage* btn_BeBankerItem;
     
     MenuItemImage* btn_PrepareItem;
-    MenuItemImage* btn_AnotherdeskItem;
     
     GameTimer* showTimer;
     void showTimerDoneCallback(Node* pNode);

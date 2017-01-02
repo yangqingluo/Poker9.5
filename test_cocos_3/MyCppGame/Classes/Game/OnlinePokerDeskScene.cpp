@@ -84,20 +84,11 @@ bool OnlinePokerDesk::init()
                                               CC_CALLBACK_1(OnlinePokerDesk::buttonCallback, this, 1));
     
     btn_PrepareItem->setScale(0.09 * visibleSize.height / btn_PrepareItem->getContentSize().height);
-    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.7 * btn_PrepareItem->getBoundingBox().size.width, origin.y + 0.25 * visibleSize.height));
-    
-    btn_AnotherdeskItem = MenuItemImage::create(
-                                                 "images/btn_anotherdesk.png",
-                                                 "images/btn_anotherdesk.png",
-                                                 CC_CALLBACK_1(OnlinePokerDesk::buttonCallback, this, 2));
-    
-    btn_AnotherdeskItem->setScale(btn_PrepareItem->getScale());
-    btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.7 * btn_AnotherdeskItem->getBoundingBox().size.width, btn_PrepareItem->getPositionY()));
+    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.25 * visibleSize.height));
     
     btn_PrepareItem->setVisible(true);
-    btn_AnotherdeskItem->setVisible(true);
     // create menu, it's an autorelease object
-    auto menu = Menu::create(btn_BackItem, btn_PrepareItem, btn_AnotherdeskItem, NULL);
+    auto menu = Menu::create(btn_BackItem, btn_PrepareItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
@@ -106,7 +97,7 @@ bool OnlinePokerDesk::init()
     lotus->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - lotus->getBoundingBox().size.height / 2);
     this->addChild(lotus);
     
-    upright_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(0.15 * visibleSize.width, 0.15 * visibleSize.width));
+    upright_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(0.15 * visibleSize.width, 0.20 * visibleSize.width));
     upright_sprite->setPosition(origin.x + visibleSize.width - upright_sprite->getContentSize().width * 0.6, origin.y + visibleSize.height - upright_sprite->getContentSize().height * 0.6);
     this->addChild(upright_sprite);
     
@@ -196,19 +187,20 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
             
         case 1:{
             //准备
-            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-            
-            Global::getInstance()->sendPlayerReady();
+            if (m_deskState == DeskState_Waiting) {
+                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                Global::getInstance()->sendPlayerReady();
+            }
             
         }
             break;
             
         case 3:{
             //抢庄
-            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-            
-            Global::getInstance()->sendApplyOwner();
-            
+            if (m_deskState == DeskState_ChooseDealer) {
+                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                Global::getInstance()->sendApplyOwner();
+            }
         }
             break;
             
@@ -277,7 +269,6 @@ void OnlinePokerDesk::waitForPrepareAction(){
         m_IndexSend = 0;
         
         btn_PrepareItem->setVisible(true);
-        btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"请准备…");
         showTimer->start(Global::getInstance()->countDownInSecond);
@@ -291,7 +282,6 @@ void OnlinePokerDesk::preparedAction(){
     m_deskState = DeskState_Prepared;
     
     btn_PrepareItem->setVisible(false);
-    btn_AnotherdeskItem->setVisible(false);
     
     sprintf(showTimer->prefixString,"等待开始…");
     showTimer->showPrefix();
@@ -473,7 +463,17 @@ void OnlinePokerDesk::showDealerInfo(){
 }
 
 void OnlinePokerDesk::showTimerDoneCallback(Node* pNode){
+    m_deskState = DeskState_Default;
     
+    switch (m_deskState) {
+        case DeskState_Waiting:{
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
@@ -896,7 +896,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 m_pMessage = NULL;
             }
             
-            
+            btn_BeBankerItem->setVisible(false);
+            NoteTip::show(post->description);
         }
             break;
             

@@ -414,6 +414,7 @@ void Global::parseData(char* pbuf, int len){
             
             PostRef* post = new PostRef();
             post->cmd = cmd;
+            memset(post->description, 0, sizeof(post->description));
             
             if (code == 1) {
                 switch (cmd) {
@@ -458,7 +459,11 @@ void Global::parseData(char* pbuf, int len){
                         break;
                         
                     case cmd_applyOwner:{
+                        //抢庄
+                        rapidjson::Value& val_content = document["content"];
                         
+                        const char* description = val_content["description"].GetString();
+                        memcpy(post->description, description, strlen(description));
                     }
                         break;
                         
@@ -467,7 +472,8 @@ void Global::parseData(char* pbuf, int len){
                 }
             }
             else {
-                post->description = document["content"].GetString();
+                const char* description = document["content"].GetString();
+                memcpy(post->description, description, strlen(description));
             }
             
             postNotification(post);
@@ -535,7 +541,7 @@ void Global::parseData(char* pbuf, int len){
                 }
                     break;
                 case cmd_countDownApplyBureauOwner:{
-                    //抢庄
+                    //开始抢庄倒计时
                     countDownInSecond = document["content"].GetInt();
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {

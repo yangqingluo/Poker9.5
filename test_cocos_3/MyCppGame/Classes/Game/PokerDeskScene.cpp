@@ -84,20 +84,12 @@ bool PokerDesk::init()
                                               CC_CALLBACK_1(PokerDesk::buttonCallback, this, 1));
     
     btn_PrepareItem->setScale(0.09 * visibleSize.height / btn_PrepareItem->getContentSize().height);
-    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 0.7 * btn_PrepareItem->getBoundingBox().size.width, origin.y + 0.25 * visibleSize.height));
+    btn_PrepareItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.25 * visibleSize.height));
     
-    btn_AnotherdeskItem = MenuItemImage::create(
-                                                 "images/btn_anotherdesk.png",
-                                                 "images/btn_anotherdesk.png",
-                                                 CC_CALLBACK_1(PokerDesk::buttonCallback, this, 2));
-    
-    btn_AnotherdeskItem->setScale(btn_PrepareItem->getScale());
-    btn_AnotherdeskItem->setPosition(Vec2(origin.x + visibleSize.width / 2 - 0.7 * btn_AnotherdeskItem->getBoundingBox().size.width, btn_PrepareItem->getPositionY()));
     
     btn_PrepareItem->setVisible(true);
-    btn_AnotherdeskItem->setVisible(true);
     // create menu, it's an autorelease object
-    auto menu = Menu::create(btn_BackItem, btn_PrepareItem, btn_AnotherdeskItem, NULL);
+    auto menu = Menu::create(btn_BackItem, btn_PrepareItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
@@ -275,7 +267,6 @@ void PokerDesk::waitForPrepareAction(){
         m_IndexSend = 0;
         
         btn_PrepareItem->setVisible(true);
-        btn_AnotherdeskItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
         showTimer->start(30);
@@ -289,7 +280,6 @@ void PokerDesk::preparedAction(){
     m_deskState = DeskState_Prepared;
     
     btn_PrepareItem->setVisible(false);
-    btn_AnotherdeskItem->setVisible(false);
     
     sprintf(showTimer->prefixString,"等待开始…");
     showTimer->showPrefix();
