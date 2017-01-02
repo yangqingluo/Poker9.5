@@ -285,7 +285,8 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                         NoteTip::show("请输入赠送的钻石数目");
                     }
                     else {
-                        NoteTip::show("精彩功能敬请期待");
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        onHttpRequest_DonateUser(userIDBox->getText(), giveCountBox->getText());
                     }
                 }
                     break;
@@ -402,6 +403,29 @@ void ShopScene::onHttpRequest_SearchUser(const char* account){
     // 释放链接
     request->release();
 }
+
+void ShopScene::onHttpRequest_DonateUser(const char* account, const char* count){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/gamebit/donategoldbit");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "userId=%s&account=%s&count=%s", Global::getInstance()->user_data.ID,account, count);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
+    request->setTag("donate");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
 // HTTP响应请求函数
 void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
     m_pMessage->hidden();
@@ -483,6 +507,9 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             MessageBox(msg, "用户信息");
                         }
                         
+                    }
+                    else if (tag == "donate") {
+                        MessageBox("赠送成功", "赠送");
                     }
                 }
             }
