@@ -112,6 +112,9 @@ public:
     void sendPlayerReady();
     void sendApplyOwner();
     void sendLeaveRoom();
+    
+    void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
+    void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);
 private:
     char m_ucRecvBuffer[MAX_NET_DATA_LEN] = {0};//缓冲区
     unsigned int m_nRecvLen = 0;
@@ -132,8 +135,7 @@ private:
     void postNotification(int cmd);
     void postNotification(PostRef* post);
     void parseData(char* pbuf, int len);
-    void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
-    void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);
+    
 protected:
     ~Global();
 };

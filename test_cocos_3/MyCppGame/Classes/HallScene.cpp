@@ -47,6 +47,10 @@ Scene* Hall::createScene()
 void Hall::onEnter(){
     Layer::onEnter();
     
+    this->showUserInfo();
+}
+
+void Hall::showUserInfo(){
     UserData user_data = Global::getInstance()->user_data;
     userNameLabel->setString(user_data.nikename);
     
@@ -54,6 +58,7 @@ void Hall::onEnter(){
     sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
     userinfoLabel->setString(userInfoString);
 }
+
 void Hall::onExit(){
     Layer::onExit();
     
@@ -196,13 +201,14 @@ bool Hall::init()
     userinfoLabel->setDimensions(0.95 * userInfoSprite->getContentSize().width, 0.5 * userInfoSprite->getContentSize().height);
     userInfoSprite->addChild(userinfoLabel);
     
-    auto refresh_UserInfoItem = MenuItemImage::create(
-                                                      "images/btn_fresh.png",
-                                                      "images/btn_fresh.png",
-                                                      CC_CALLBACK_1(Hall::buttonCallback, this, 0));
-    refresh_UserInfoItem->setScale(0.3 * userInfoSprite->getContentSize().width / refresh_UserInfoItem->getContentSize().width);
-    refresh_UserInfoItem->setPosition(0.85 * userInfoSprite->getContentSize().width, refresh_UserInfoItem->getBoundingBox().size.height * 0.6);
-    userInfoSprite->addChild(refresh_UserInfoItem);
+    
+    auto btn_refresh_UserInfo = Button::create("images/btn_fresh.png");
+    btn_refresh_UserInfo->setScale9Enabled(true);//打开scale9 可以拉伸图片
+    btn_refresh_UserInfo->setContentSize(Size(0.3 * userInfoSprite->getContentSize().width, 0.3 * userInfoSprite->getContentSize().width));
+    btn_refresh_UserInfo->setPosition(Vec2(0.85 * userInfoSprite->getContentSize().width, btn_refresh_UserInfo->getBoundingBox().size.height * 0.6));
+    btn_refresh_UserInfo->setTag(1);
+    btn_refresh_UserInfo->addTouchEventListener(CC_CALLBACK_2(Hall::touchEvent, this));
+    userInfoSprite->addChild(btn_refresh_UserInfo);
     
     
     auto roomListSprite = Sprite::create();
@@ -378,6 +384,12 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
                         });
                         msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
                     }
+                }
+                    break;
+                    
+                case 1:{
+                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                    onHttpRequest_SearchUser(Global::getInstance()->user_data.account);
                 }
                     break;
                     
@@ -795,6 +807,98 @@ void Hall::editBoxTextChanged(ui::EditBox* editBox, const std::string& text){
 //触发return返回
 void Hall::editBoxReturn(ui::EditBox* editBox){
     
+}
+
+#pragma http
+// 发送HTTP请求
+void Hall::onHttpRequest_SearchUser(const char* account){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/userinfo");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "account=%s", account);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(Hall::onHttpResponse, this));
+    request->setTag("searchuser");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
+// HTTP响应请求函数
+void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
+    if (m_pMessage != NULL) {
+        m_pMessage->hidden();
+        m_pMessage = NULL;
+    }
+    
+    // 没有收到响应
+    if (!response){
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    long statusCode = response->getResponseCode();
+    char statusString[64] = {};
+    sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    CCLOG("response code: %s", statusString);
+    
+    if (statusCode > 200) {
+        NoteTip::show("网络错误");
+        return;
+    }
+    // 链接失败
+    if (!response->isSucceed())
+    {
+        CCLOG("response failed");
+        CCLOG("error buffer: %s", response->getErrorBuffer());
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    std::vector<char>* responseData = response -> getResponseData();
+    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
+    log("%s\n", responseStr.c_str());
+    rapidjson::Document document;
+    document.Parse<0>(responseStr.c_str());
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code")){
+            const rapidjson::Value& val_code = document["code"];
+            int code = val_code.GetInt();
+            if (code == 1) {
+                if (0 != strlen(response->getHttpRequest()->getTag())){
+                    std::string tag = response->getHttpRequest()->getTag();
+                    if (tag == "searchuser") {
+                        if (document.HasMember("content")) {
+                            const rapidjson::Value& val_content = document["content"];
+                            
+                            Global::getInstance()->user_data = {0};
+                            Global::getInstance()->parseUserData(val_content, &Global::getInstance()->user_data);
+                            this->showUserInfo();
+                        }
+                        
+                    }
+                }
+            }
+            else {
+                const rapidjson::Value& val_content = document["content"];
+                const char* content = val_content.GetString();
+                NoteTip::show(content);
+            }
+        }
+        
+        
+    }
 }
 
 #pragma notification

@@ -371,8 +371,6 @@ void Global::socketdidConnect(){
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");
     
-    Director::getInstance()->popToRootScene();
-    
 }
 
 void Global::onReceiveData(char *buffer, int len){

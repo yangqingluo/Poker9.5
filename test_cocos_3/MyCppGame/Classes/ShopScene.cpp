@@ -121,7 +121,7 @@ bool ShopScene::init()
                 break;
                 
             case 1:{
-                char giveContent[2][50] = {"赠送的用户账号ID","赠送的钻石数目"};
+                char giveContent[2][50] = {"赠送的用户账号ID","赠送的金币数目"};
                 for (int j = 0; j < 2; j++) {
                     auto inputBox = ui::EditBox::create(Size(0.9 * layer->getContentSize().width, 0.8 * inputHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
                     inputBox->setPosition(Vec2(0.5 * layer->getContentSize().width, layer->getContentSize().height - (j * 1.0 + 0.8) * inputHeight));
@@ -282,7 +282,7 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                 case 12:{
                     //赠送
                     if (strlen(giveCountBox->getText()) == 0) {
-                        NoteTip::show("请输入赠送的钻石数目");
+                        NoteTip::show("请输入赠送的数目");
                     }
                     else {
                         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
@@ -428,7 +428,10 @@ void ShopScene::onHttpRequest_DonateUser(const char* account, const char* count)
 
 // HTTP响应请求函数
 void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
-    m_pMessage->hidden();
+    if (m_pMessage != NULL) {
+        m_pMessage->hidden();
+        m_pMessage = NULL;
+    }
     
     // 没有收到响应
     if (!response){
@@ -473,34 +476,7 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             const rapidjson::Value& val_content = document["content"];
                             
                             UserData user_data = {0};
-                            user_data.gameTimes = val_content["gameTimes"].GetInt();
-                            
-                            const char* nikename = val_content["nikename"].GetString();
-                            memcpy(user_data.nikename, nikename, strlen(nikename));
-                            
-                            const char* account = val_content["account"].GetString();
-                            memcpy(user_data.account, account, strlen(account));
-                            
-                            const char* winningPercent = val_content["winningPercent"].GetString();
-                            memcpy(user_data.winningPercent, winningPercent, strlen(winningPercent));
-                            
-                            const char* inviteCode = val_content["inviteCode"].GetString();
-                            memcpy(user_data.inviteCode, inviteCode, strlen(inviteCode));
-                            
-                            if (val_content.HasMember("diamondGameBit")) {
-                                const rapidjson::Value& val_diamondGameBit = val_content["diamondGameBit"];
-                                user_data.diamond = val_diamondGameBit["amount"].GetInt();
-                            }
-                            
-                            if (val_content.HasMember("silverGameBit")) {
-                                const rapidjson::Value& val_silverGameBit = val_content["silverGameBit"];
-                                user_data.silver = val_silverGameBit["amount"].GetInt();
-                            }
-                            
-                            if (val_content.HasMember("goldGameBit")) {
-                                const rapidjson::Value& val_goldGameBit = val_content["goldGameBit"];
-                                user_data.gold = val_goldGameBit["amount"].GetInt();
-                            }
+                            Global::getInstance()->parseUserData(val_content, &user_data);
                             
                             char msg[200] = {0};
                             sprintf(msg, "ID：%s\n昵称：%s", user_data.account, user_data.nikename);
@@ -509,7 +485,7 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         
                     }
                     else if (tag == "donate") {
-                        MessageBox("赠送成功", "赠送");
+                        MessageBox("赠送成功", "赠送金币");
                     }
                 }
             }
