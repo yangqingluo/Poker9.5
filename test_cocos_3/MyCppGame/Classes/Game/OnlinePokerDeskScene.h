@@ -37,8 +37,10 @@ public:
     virtual bool init();
     CREATE_FUNC(OnlinePokerDesk);
     
-    int roomType;
-    char roomTypeId[Max_ID_Length];
+    int roomType;//房间类型
+    char roomTypeId[Max_ID_Length];//房间类型Id
+    int jettonToEnter;//带入的筹码数量
+    
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
@@ -60,7 +62,7 @@ public:
     
     Player* dealerPlayer;//庄家
     Player* pcPlayer;//电脑玩家
-    Player* gamePlayer;//玩家
+//    Player* gamePlayer;//玩家
     Player* stabberPlayer;//刺
     
     void goBackAction();

@@ -12,9 +12,6 @@
 const float jetton_height_scale = 0.08;
 
 OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
-    gamePlayer = new Player();
-    gamePlayer->retain();
-    
     pcPlayer = new Player();
     pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
@@ -27,7 +24,6 @@ OnlinePokerDesk::~OnlinePokerDesk(){
     Global::getInstance()->table_data = {0};
     Global::getInstance()->clearPlayerList();
     
-    CC_SAFE_RELEASE(gamePlayer);
     CC_SAFE_RELEASE(pcPlayer);
 //    CC_SAFE_RELEASE(stabberPlayer);
 //    CC_SAFE_RELEASE(dealerPlayer);
@@ -244,7 +240,7 @@ void OnlinePokerDesk::onEnter(){
     this->showDealerInfo();
     
     m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-    Global::getInstance()->sendEnterRoom(roomTypeId, gamePlayer->getJettonCount());
+    Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
 
 }
 
@@ -341,8 +337,8 @@ void OnlinePokerDesk::settleAction(){
             }
             
             if (zeroCount < 3) {
-                dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
-                gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
+//                dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
+//                gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
             }
             else {
                 //跳过结算
@@ -361,10 +357,10 @@ void OnlinePokerDesk::settleAction(){
                     chair->showSettlementForStabber();
                     
                     if (chair->m_Stabber->isVisible()) {
-                        if (stabberPlayer == gamePlayer) {
-                            accountDealer -= chair->m_settlement.accounts;
-                            accountPlayer += chair->m_settlement.accounts;
-                        }
+//                        if (stabberPlayer == gamePlayer) {
+//                            accountDealer -= chair->m_settlement.accounts;
+//                            accountPlayer += chair->m_settlement.accounts;
+//                        }
                     }
                 }
                 
@@ -377,7 +373,7 @@ void OnlinePokerDesk::settleAction(){
             }
             
             dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
-            gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
+//            gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
         }
         
         showDealerInfo();
@@ -419,30 +415,21 @@ void OnlinePokerDesk::dealerDidChoosedAction(){
 
 void OnlinePokerDesk::waitForChooseStabberAction(){
     if (!showTimer->getIsValid()) {
-        if (gamePlayer->getJettonCount() >= dealerPlayer->getJettonCount()) {
-            for (int i = 0; i < m_arrChairs.size(); i++) {
-                PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
-                chair->showBeStabber(true);
-            }
-            sprintf(showTimer->prefixString,"抢刺");
-        }
-        else {
-            sprintf(showTimer->prefixString,"等待其他玩家抢刺");
-        }
+        sprintf(showTimer->prefixString,"抢刺");
         
         showTimer->start(10);
     }
 }
 
 void OnlinePokerDesk::chooseStabberAction(int index){
-    stabberPlayer = gamePlayer;
-    for (int i = 0; i < m_arrChairs.size(); i++) {
-        PokerChair* chair = m_arrChairs.at(i);
-        chair->showBeStabber(false);
-        if (i == index) {
-            chair->showStabber(gamePlayer->headImage, gamePlayer->nickName, gamePlayer->getJettonCount());
-        }
-    }
+//    stabberPlayer = gamePlayer;
+//    for (int i = 0; i < m_arrChairs.size(); i++) {
+//        PokerChair* chair = m_arrChairs.at(i);
+//        chair->showBeStabber(false);
+//        if (i == index) {
+//            chair->showStabber(gamePlayer->headImage, gamePlayer->nickName, gamePlayer->getJettonCount());
+//        }
+//    }
 }
 
 void OnlinePokerDesk::sendPokerAction(){
@@ -454,9 +441,18 @@ void OnlinePokerDesk::sendPokerAction(){
 }
 
 void OnlinePokerDesk::showGamePlayerInfo(){
+    this->playerListTableView->reloadData();
+    
     char mString[100];
-    sprintf(mString,"%s\n筹码：%d",gamePlayer->nickName, gamePlayer->getJettonCount());
-    gamePlayerInfoLabel->setString(mString);
+    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+        PlayerData player_data = Global::getInstance()->playerList[i];
+        if (0 != strcmp(Global::getInstance()->user_data.account, player_data.user.ID)) {
+            sprintf(mString,"%s\n筹码：%d",player_data.user.nikename, player_data.remainCap);
+            gamePlayerInfoLabel->setString(mString);
+            
+            return;
+        }
+    }
 }
 void OnlinePokerDesk::showDealerInfo(){
     char mString[100];
@@ -669,9 +665,6 @@ void OnlinePokerDesk::sendPoker(){
     
     int index = m_IndexSend % 9;
     if (index == 0 && m_isSendSingle) {
-//        sprintf(showTimer->prefixString,"翻牌决定发牌顺序");
-//        showTimer->showPrefix();
-        
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         pk->showPokerAnimated(true, true, 0.5);
         
@@ -687,9 +680,6 @@ void OnlinePokerDesk::sendPoker(){
         }
     }
     else if (index > 0 && index <= 8 && m_isSendSingle) {
-//        sprintf(showTimer->prefixString,"发牌");
-//        showTimer->showPrefix();
-        
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         PokerChair* chair = m_arrChairs.at(((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
         movePoker(chair, pk);
@@ -858,7 +848,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
         case cmd_synPlayerList:{
-            this->playerListTableView->reloadData();
+            this->showGamePlayerInfo();
+            
         }
             break;
             
