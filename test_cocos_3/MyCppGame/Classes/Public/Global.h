@@ -84,8 +84,10 @@ public:
     
     int playerListCount = 0;
     PlayerData playerList[MAX_PLAYER_NUM];
+    PokerPair pokerSendedList[4];
     
     void clearPlayerList();
+    void clearPokerSendedList();
     
     bool isBackgroundMusic();
     void setBackgroundMusic(bool yn);

@@ -446,20 +446,23 @@ void OnlinePokerDesk::showGamePlayerInfo(){
     char mString[100];
     for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
         PlayerData player_data = Global::getInstance()->playerList[i];
-        if (0 != strcmp(Global::getInstance()->user_data.account, player_data.user.ID)) {
+        if (0 == strcmp(Global::getInstance()->user_data.account, player_data.user.account)) {
             sprintf(mString,"%s\n筹码：%d",player_data.user.nikename, player_data.remainCap);
             gamePlayerInfoLabel->setString(mString);
             
             return;
         }
     }
+    
+    sprintf(mString,"%s\n筹码：%d", Global::getInstance()->user_data.nikename, jettonToEnter);
+    gamePlayerInfoLabel->setString(mString);
 }
 void OnlinePokerDesk::showDealerInfo(){
     char mString[100];
     if (strlen(Global::getInstance()->table_data.bureauOwnerId) > 0) {
         for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
             PlayerData player_data = Global::getInstance()->playerList[i];
-            if (0 != strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
+            if (0 == strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
                 sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",player_data.user.nikename, player_data.remainCap, Global::getInstance()->playerListCount);
                 countLabel->setString(mString);
             }
@@ -474,15 +477,22 @@ void OnlinePokerDesk::showDealerInfo(){
 }
 
 void OnlinePokerDesk::showTimerDoneCallback(Node* pNode){
-    updateDeskState(DeskState_Default);
-    
     switch (m_deskState) {
-        case DeskState_Waiting:{
-            
+        case DeskState_SendPoker:{
+            if (m_isSendSet) {
+                //发完一把牌
+                updateDeskState(DeskState_Settle);
+            }
+            else {
+                //取消动画，强制发完牌
+                
+            }
         }
             break;
             
-        default:
+        default:{
+            updateDeskState(DeskState_Default);
+        }
             break;
     }
 }
@@ -612,7 +622,7 @@ bool OnlinePokerDesk::createPokers(){
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
             for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
-                PokerSprite* pk = createPoker((PokerColor)i, PokerPoint_Ace);
+                PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
                 m_arrPokers.pushBack(pk);
                 this->addChild(pk);
                 pk->setCallBackFunc(this, callfuncN_selector(OnlinePokerDesk::turnedSinglePokerCallback));
@@ -636,12 +646,12 @@ bool OnlinePokerDesk::createPokers(){
 }
 
 bool OnlinePokerDesk::reindexPoker(){
-//    for(int i = 0; i < m_arrPokers.size(); ++i){
-//        PokerSprite* pk1 = m_arrPokers.getRandomObject();
-//        PokerSprite* pk2 = m_arrPokers.getRandomObject();
-//        m_arrPokers.swap(pk1, pk2);
-//    }
-//    
+    for(int i = 0; i < m_arrPokers.size(); ++i){
+        PokerSprite* pk1 = m_arrPokers.getRandomObject();
+        PokerSprite* pk2 = m_arrPokers.getRandomObject();
+        m_arrPokers.swap(pk1, pk2);
+    }
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
@@ -666,6 +676,12 @@ void OnlinePokerDesk::sendPoker(){
     int index = m_IndexSend % 9;
     if (index == 0 && m_isSendSingle) {
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+        
+        //强制为黑桃A 因为服务器没有翻牌接口
+        pk->setPoker_color(PokerColor_Spade);
+        pk->setPoker_point(PokerPoint_Ace);
+        
+        
         pk->showPokerAnimated(true, true, 0.5);
         
         judgementPokerIndex = m_IndexSend;
@@ -681,6 +697,20 @@ void OnlinePokerDesk::sendPoker(){
     }
     else if (index > 0 && index <= 8 && m_isSendSingle) {
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+
+        PokerPair pair = Global::getInstance()->pokerSendedList[(index - 1) % 4];
+        PokerData card = pair.poker[(index - 1) / 4];
+        
+        int color = card.color;
+        int num = card.num;
+        
+        if (color == 0 && (num == 14 || num == 15)) {
+            color = (num == 14) ? PokerColor_JokerJunior : PokerColor_JokerSenior;
+            num = PokerPoint_Joker;
+        }
+        pk->setPoker_color((PokerColor)color);
+        pk->setPoker_point((PokerPoint)num);
+        
         PokerChair* chair = m_arrChairs.at(((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
         movePoker(chair, pk);
         

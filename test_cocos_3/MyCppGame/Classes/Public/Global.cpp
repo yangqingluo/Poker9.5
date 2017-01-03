@@ -257,6 +257,11 @@ void Global::clearPlayerList(){
     playerListCount = 0;
 }
 
+void Global::clearPokerSendedList(){
+    memset(pokerSendedList, 0, sizeof(PokerPair) * 4);
+    
+}
+
 #pragma Socket
 void Global::disconnectServer(){
     // 关闭连接
@@ -572,7 +577,7 @@ void Global::parseData(char* pbuf, int len){
                     }
                     
                     const char* bureauOwnerId = val_content["bureauOwnerId"].GetString();
-                    memcpy(table_data.bureauOwnerId, bureauOwnerId, strlen(bureauId));
+                    memcpy(table_data.bureauOwnerId, bureauOwnerId, strlen(bureauOwnerId));
                 }
                     break;
                     
@@ -594,7 +599,49 @@ void Global::parseData(char* pbuf, int len){
                     break;
                     
                 case cmd_countDownSendCard:{
+                    //发牌
+                    rapidjson::Value& val_content = document["content"];
                     
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+//                    {"commandId":1009,"content":[{"cards":[{"color":3,"count":7,"num":7},{"color":1,"count":3,"num":3}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efe7","point":0,"pointDes":"没点","round":"586b9e9b0cf26c9e1ca9efe6","type":1},{"cards":[{"color":3,"count":2,"num":2},{"color":3,"count":3,"num":13}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efe8","point":5,"pointDes":"五点","round":"586b9e9b0cf26c9e1ca9efe6","type":2},{"cards":[{"color":2,"count":0,"num":10},{"color":3,"count":8,"num":8}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efe9","point":8,"pointDes":"八点","round":"586b9e9b0cf26c9e1ca9efe6","type":3},{"cards":[{"color":3,"count":5,"num":5},{"color":3,"count":3,"num":3}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efea","point":8,"pointDes":"八点","round":"586b9e9b0cf26c9e1ca9efe6","type":4}],"tableId":"585e133f8186648cd732ef64"}
+                    
+                    
+                    if (val_content.IsArray()) {
+                        clearPokerSendedList();
+                        
+                        if (val_content.Size() != 4) {
+                            return;
+                        }
+                        for (int i = 0; i < val_content.Size(); ++i) {
+                            rapidjson::Value& val_pair = val_content[i];
+                            
+                            PokerPair pair = {0};
+                            pair.point = val_pair["point"].GetDouble();
+                            
+                            const char* pointDes = val_pair["pointDes"].GetString();
+                            memcpy(pair.pointDes, pointDes, strlen(pointDes));
+                            
+                            rapidjson::Value& val_cards = val_pair["cards"];
+                            if (val_cards.Size() == 2) {
+                                for (int j = 0; j < val_cards.Size(); ++j) {
+                                    rapidjson::Value& card = val_cards[j];
+                                    
+                                    pair.poker[j].color = card["color"].GetInt();
+                                    pair.poker[j].count = card["count"].GetDouble();
+                                    pair.poker[j].num = card["num"].GetInt();
+                                }
+                            }
+                            
+                            int gateType = val_pair["type"].GetInt();
+                            
+                            pokerSendedList[gateType % 4] = pair;
+                        }
+                    }
                 }
                     break;
                     

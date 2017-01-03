@@ -3,6 +3,7 @@
 
 #define Max_ID_Length 40
 #define Max_String_Length 1024
+#define Min_String_Length 100
 
 struct UserData {
     char ID[Max_ID_Length];
@@ -45,6 +46,18 @@ struct PlayerData {
     char room[Max_ID_Length];
     int seat;
     UserData user;
+};
+
+struct PokerData {
+    int color;
+    int num;
+    double count;
+};
+
+struct PokerPair {
+    PokerData poker[2];
+    double point;
+    char pointDes[Min_String_Length];
 };
 
 
