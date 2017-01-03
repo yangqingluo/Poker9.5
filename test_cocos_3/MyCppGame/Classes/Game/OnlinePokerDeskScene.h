@@ -85,6 +85,7 @@ public:
     void touchedChairCallback(Node* pSender, void* pTarget);
     
 private:
+    bool isDealer;//是否是庄家
     MessageManager* m_pMessage;
     
     bool m_isSendSingle;//是否发完一张牌

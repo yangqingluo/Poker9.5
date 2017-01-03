@@ -11,7 +11,7 @@
 
 const float jetton_height_scale = 0.08;
 
-OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
+OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL),isDealer(false){
     pcPlayer = new Player();
     pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
@@ -295,7 +295,7 @@ void OnlinePokerDesk::preparedAction(){
 
 void OnlinePokerDesk::waitForBetAction(){
     if (!showTimer->getIsValid()) {
-        sprintf(showTimer->prefixString,"设置筹码，选择过、天、坎下注");
+        sprintf(showTimer->prefixString, isDealer ? "等待闲家下注..." : "设置筹码，选择过、天、坎下注");
         showTimer->start(Global::getInstance()->countDownInSecond);
         
         Global::getInstance()->playEffect_place(false);
@@ -465,8 +465,13 @@ void OnlinePokerDesk::showDealerInfo(){
             if (0 == strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
                 sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",player_data.user.nikename, player_data.remainCap, Global::getInstance()->playerListCount);
                 countLabel->setString(mString);
+                
+                isDealer = true;
+                return;
             }
         }
+        
+        isDealer = false;
     }
     else{
         sprintf(mString,"庄家：无\n玩家总数：%d\n", Global::getInstance()->playerListCount);
@@ -547,6 +552,10 @@ void OnlinePokerDesk::update(float delta){
 
 #pragma chair
 void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
+    if (isDealer) {
+        return;
+    }
+    
     PokerChair* chair = (PokerChair* )pSender;
     Node* node = (Node* )pTarget;
     switch (node->getTag()) {
@@ -900,6 +909,10 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             //选中庄家通知
             btn_BeBankerItem->setVisible(false);
             showDealerInfo();
+            
+            if (isDealer) {
+                MessageBox("抢庄成功 !", "恭喜！");
+            }
         }
             break;
             
