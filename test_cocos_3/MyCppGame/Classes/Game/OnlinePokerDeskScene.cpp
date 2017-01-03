@@ -612,7 +612,7 @@ bool OnlinePokerDesk::createPokers(){
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
             for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
-                PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
+                PokerSprite* pk = createPoker((PokerColor)i, PokerPoint_Ace);
                 m_arrPokers.pushBack(pk);
                 this->addChild(pk);
                 pk->setCallBackFunc(this, callfuncN_selector(OnlinePokerDesk::turnedSinglePokerCallback));
@@ -636,12 +636,12 @@ bool OnlinePokerDesk::createPokers(){
 }
 
 bool OnlinePokerDesk::reindexPoker(){
-    for(int i = 0; i < m_arrPokers.size(); ++i){
-        PokerSprite* pk1 = m_arrPokers.getRandomObject();
-        PokerSprite* pk2 = m_arrPokers.getRandomObject();
-        m_arrPokers.swap(pk1, pk2);
-    }
-    
+//    for(int i = 0; i < m_arrPokers.size(); ++i){
+//        PokerSprite* pk1 = m_arrPokers.getRandomObject();
+//        PokerSprite* pk2 = m_arrPokers.getRandomObject();
+//        m_arrPokers.swap(pk1, pk2);
+//    }
+//    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
