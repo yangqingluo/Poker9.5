@@ -608,9 +608,6 @@ void Global::parseData(char* pbuf, int len){
                         return;
                     }
                     
-//                    {"commandId":1009,"content":[{"cards":[{"color":3,"count":7,"num":7},{"color":1,"count":3,"num":3}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efe7","point":0,"pointDes":"没点","round":"586b9e9b0cf26c9e1ca9efe6","type":1},{"cards":[{"color":3,"count":2,"num":2},{"color":3,"count":3,"num":13}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efe8","point":5,"pointDes":"五点","round":"586b9e9b0cf26c9e1ca9efe6","type":2},{"cards":[{"color":2,"count":0,"num":10},{"color":3,"count":8,"num":8}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efe9","point":8,"pointDes":"八点","round":"586b9e9b0cf26c9e1ca9efe6","type":3},{"cards":[{"color":3,"count":5,"num":5},{"color":3,"count":3,"num":3}],"createTime":1483447963451,"id":"586b9e9b0cf26c9e1ca9efea","point":8,"pointDes":"八点","round":"586b9e9b0cf26c9e1ca9efe6","type":4}],"tableId":"585e133f8186648cd732ef64"}
-                    
-                    
                     if (val_content.IsArray()) {
                         clearPokerSendedList();
                         
@@ -639,7 +636,7 @@ void Global::parseData(char* pbuf, int len){
                             
                             int gateType = val_pair["type"].GetInt();
                             
-                            pokerSendedList[gateType % 4] = pair;
+                            pokerSendedList[(gateType - 1) % 4] = pair;
                         }
                     }
                 }

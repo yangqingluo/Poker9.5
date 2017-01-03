@@ -86,6 +86,8 @@ public:
     
 private:
     bool isDealer;//是否是庄家
+    int totalBet;//下注总额
+    int currentBet;//当前筹码
     MessageManager* m_pMessage;
     
     bool m_isSendSingle;//是否发完一张牌
