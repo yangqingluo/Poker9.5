@@ -409,6 +409,7 @@ void PokerChair::calculateSettlementForStabber(PokerChair* dealerChair, int jett
 void PokerChair::showSettlement(){
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
+        pokerTypeLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
         char mString[100];
         if (m_settlement.accounts == 0) {
             settlementLabel->setColor(Color3B::WHITE);
@@ -426,7 +427,6 @@ void PokerChair::showSettlement(){
             }
         }
         
-        pokerTypeLabel->setColor(m_settlement.winned ? Color3B::RED : Color3B::GREEN);
         settlementLabel->setString(mString);
         settlementLabel->setVisible(true);
     }

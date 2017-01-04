@@ -312,6 +312,7 @@ void OnlinePokerDesk::settleAction(){
         
         if (stabberPlayer == NULL) {
             PokerChair* chair0 = m_arrChairs.at(0);
+            int accountPlayer = 0;
             for (int i = 0; i < m_arrChairs.size(); i++) {
                 PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
                 chair->calculatePokerType();
@@ -320,7 +321,10 @@ void OnlinePokerDesk::settleAction(){
                     chair->m_settlement.accounts = Global::getInstance()->settleList[i];
                     chair->m_settlement.winned = (chair->m_settlement.accounts > 0);
                     chair->showSettlement();
+                    
+                    accountPlayer += chair->m_settlement.accounts;
                 }
+                
                 
                 
                 chair->showPokerType();
@@ -331,8 +335,12 @@ void OnlinePokerDesk::settleAction(){
                 }
             }
             
-//            dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
-//            gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
+            for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+                PlayerData player_data = Global::getInstance()->playerList[i];
+                if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
+                    player_data.remainCap += accountPlayer;
+                }
+            }
 
         }
         else {
@@ -436,7 +444,7 @@ void OnlinePokerDesk::showGamePlayerInfo(){
     char mString[100];
     for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
         PlayerData player_data = Global::getInstance()->playerList[i];
-        if (0 == strcmp(Global::getInstance()->user_data.account, player_data.user.account)) {
+        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
             sprintf(mString,"%s\n筹码：%d",player_data.user.nikename, player_data.remainCap);
             gamePlayerInfoLabel->setString(mString);
             
