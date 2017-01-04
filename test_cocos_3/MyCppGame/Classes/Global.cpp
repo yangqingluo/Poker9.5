@@ -578,6 +578,9 @@ void Global::parseData(char* pbuf, int len){
                     
                     const char* bureauOwnerId = val_content["bureauOwnerId"].GetString();
                     memcpy(table_data.bureauOwnerId, bureauOwnerId, strlen(bureauOwnerId));
+                    
+                    //判断当前玩家是否是庄家
+                    isDealer = (0 == strcmp(table_data.bureauOwnerId, user_data.ID));
                 }
                     break;
                     
@@ -600,6 +603,8 @@ void Global::parseData(char* pbuf, int len){
                     
                 case cmd_countDownSendCard:{
                     //发牌
+                    countDownInSecond = 10;
+                    
                     rapidjson::Value& val_content = document["content"];
                     
                     const char* tableId = document["tableId"].GetString();
@@ -639,6 +644,64 @@ void Global::parseData(char* pbuf, int len){
                             pokerSendedList[(gateType - 1) % 4] = pair;
                         }
                     }
+                }
+                    break;
+                    
+                case cmd_trunIndexCard:{
+                    //翻牌决定发牌顺序
+                    
+                }
+                    break;
+                    
+                case cmd_settle:{
+                    //结算
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        return;
+                    }
+                    
+                    rapidjson::Value& val_content = document["content"];
+                    if (val_content.IsArray()) {
+                        memset(settleList, 0, sizeof(int) * 4);
+                        
+                        for (int i = 0; i < val_content.Size(); ++i) {
+                            rapidjson::Value& val_settle = val_content[i];
+                            
+                            int isOwner = val_settle["isOwner"].GetInt();
+                            if (isOwner == 0) {
+                                if (isDealer) {
+                                    rapidjson::Value& val_resultMap = val_settle["resultMap"];
+                                    
+                                    for (int j = 2; j <= 4; ++j) {
+                                        char gate_settle[10] = {0};
+                                        sprintf(gate_settle, "%d", j);
+                                        if (val_resultMap.HasMember(gate_settle)) {
+                                            rapidjson::Value& val_gate = val_resultMap[gate_settle];
+                                            int count = val_gate["count"].GetInt();
+                                            this->settleList[j - 1] -= count;
+                                        }
+                                    }
+                                }
+                                else {
+                                    const char* userId = val_settle["userId"].GetString();
+                                    if (0 == strcmp(userId, user_data.ID)) {
+                                        rapidjson::Value& val_resultMap = val_settle["resultMap"];
+                                        
+                                        for (int j = 2; j <= 4; ++j) {
+                                            char gate_settle[10] = {0};
+                                            sprintf(gate_settle, "%d", j);
+                                            if (val_resultMap.HasMember(gate_settle)) {
+                                                rapidjson::Value& val_gate = val_resultMap[gate_settle];
+                                                int count = val_gate["count"].GetInt();
+                                                this->settleList[j - 1] += count;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                 }
                     break;
                     

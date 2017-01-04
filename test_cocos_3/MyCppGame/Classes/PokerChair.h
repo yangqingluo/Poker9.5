@@ -43,6 +43,7 @@ public:
     void updatePokerPosition();//更新牌的位置
     void removeAllPokers();//移除扑克
     void addJetton(JettonSprite* jetton);//添加筹码
+    void updateJetton(JettonSprite* jetton);//直接设置筹码
     void removeAllJettons();//移除筹码
     void calculatePokerType();//计算牌型
     void showPokerType();//显示牌型

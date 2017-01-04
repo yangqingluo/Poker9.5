@@ -33,6 +33,8 @@ using namespace CocosDenshion;
 #define cmd_countDownBetStake          1008//下注倒计时
 #define cmd_countDownSendCard          1009//发牌
 #define cmd_trunIndexCard              1010//翻开判定牌决定发牌顺序
+#define cmd_settle                     1011//结算
+
 
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
@@ -40,6 +42,7 @@ using namespace CocosDenshion;
 #define cmd_playerReady                3003//玩家准备
 #define cmd_applyOwner                 3004//申请上庄
 #define cmd_betStake                   3005//下注
+
 
 //牌局状态
 enum DeskState
@@ -81,10 +84,12 @@ public:
     UserData user_data;//用户数据
     TableData table_data;//牌桌数据
     int countDownInSecond;//倒计时读秒数
+    bool isDealer;//是否是庄家
     
     int playerListCount = 0;
     PlayerData playerList[MAX_PLAYER_NUM];
     PokerPair pokerSendedList[4];
+    int settleList[4];
     
     void clearPlayerList();
     void clearPokerSendedList();

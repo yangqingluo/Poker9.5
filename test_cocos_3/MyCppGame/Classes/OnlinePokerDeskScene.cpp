@@ -11,7 +11,7 @@
 
 const float jetton_height_scale = 0.08;
 
-OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL),isDealer(false){
+OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
     totalBet = 0;
     
     pcPlayer = new Player();
@@ -138,9 +138,10 @@ bool OnlinePokerDesk::init()
     gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(gamePlayerInfoLabel);
     
-    int betJettonArray[3] = {10,100,1000};
-    betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
+    int betJettonArray[9] = {10,20,50,100,200,500,1000,2000,5000};
+    betLimiter = BetLimiter::create(betJettonArray, 9, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
     betLimiter->setPosition(2 * bottom_sprite->getContentSize().height, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
+    betLimiter->setVisible(false);
     bottom_sprite->addChild(betLimiter);
     
     showTimer = GameTimer::createTimer();
@@ -297,7 +298,7 @@ void OnlinePokerDesk::preparedAction(){
 
 void OnlinePokerDesk::waitForBetAction(){
     if (!showTimer->getIsValid()) {
-        sprintf(showTimer->prefixString, isDealer ? "等待闲家下注..." : "设置筹码，选择过、天、坎下注");
+        sprintf(showTimer->prefixString, Global::getInstance()->isDealer ? "等待闲家下注..." : "设置筹码，选择过、天、坎下注");
         showTimer->start(Global::getInstance()->countDownInSecond);
         
         Global::getInstance()->playEffect_place(false);
@@ -310,25 +311,17 @@ void OnlinePokerDesk::settleAction(){
         showTimer->start(15);
         
         if (stabberPlayer == NULL) {
-            int zeroCount = 0;//牌型为0点的座位计数
-            int accountDealer = 0;
-            int accountPlayer = 0;
             PokerChair* chair0 = m_arrChairs.at(0);
             for (int i = 0; i < m_arrChairs.size(); i++) {
                 PokerChair* chair = m_arrChairs.at(i % m_arrChairs.size());
                 chair->calculatePokerType();
                 if (i > 0) {
                     chair->calculateSettlement(chair0);
-                    accountDealer -= chair->m_settlement.accounts;
-                    if (chair->betPlayer > 0) {
-                        accountPlayer += chair->m_settlement.accounts;
-                    }
+                    chair->m_settlement.accounts = Global::getInstance()->settleList[i];
+                    chair->m_settlement.winned = (chair->m_settlement.accounts > 0);
                     chair->showSettlement();
                 }
                 
-                if (chair->m_PokerType == PokerType_0) {
-                    zeroCount++;
-                }
                 
                 chair->showPokerType();
                 
@@ -338,14 +331,9 @@ void OnlinePokerDesk::settleAction(){
                 }
             }
             
-            if (zeroCount < 3) {
-//                dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
-//                gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
-            }
-            else {
-                //跳过结算
-                
-            }
+//            dealerPlayer->setJettonCount(dealerPlayer->getJettonCount() + accountDealer);
+//            gamePlayer->setJettonCount(gamePlayer->getJettonCount() + accountPlayer);
+
         }
         else {
             int accountDealer = 0;
@@ -481,17 +469,17 @@ void OnlinePokerDesk::showDealerInfo(){
 
 void OnlinePokerDesk::showTimerDoneCallback(Node* pNode){
     switch (m_deskState) {
-        case DeskState_SendPoker:{
-            if (m_isSendSet) {
-                //发完一把牌
-                updateDeskState(DeskState_Settle);
-            }
-            else {
-                //取消动画，强制发完牌
-                
-            }
-        }
-            break;
+//        case DeskState_SendPoker:{
+//            if (m_isSendSet) {
+//                //发完一把牌
+//                updateDeskState(DeskState_Settle);
+//            }
+//            else {
+//                //取消动画，强制发完牌
+//                
+//            }
+//        }
+//            break;
             
         default:{
             updateDeskState(DeskState_Default);
@@ -550,7 +538,7 @@ void OnlinePokerDesk::update(float delta){
 
 #pragma chair
 void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
-    if (isDealer) {
+    if (Global::getInstance()->isDealer) {
         return;
     }
     
@@ -563,16 +551,16 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                 for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
                     PlayerData player_data = Global::getInstance()->playerList[i];
                     if (0 == strcmp(Global::getInstance()->user_data.account, player_data.user.account)) {
-                        if ((betLimiter->getSelectedJettonValue() + totalBet) * 3 > player_data.remainCap) {
+                        if ((betLimiter->getSelectedJettonValue()) * 3 > player_data.remainCap) {
                             NoteTip::show("下注不能超过本金1/3");
                         }
                         else {
                             JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
-                            chair->addJetton(sp);
+                            chair->updateJetton(sp);
                             Global::getInstance()->playEffect_add_gold(false);
                             
                             //                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                            totalBet += betLimiter->getSelectedJettonValue();
+                            totalBet = betLimiter->getSelectedJettonValue();
                             Global::getInstance()->sendBetStake(betLimiter->getSelectedJettonValue(), (int)m_arrChairs.getIndex(chair) + 1);
                         }
                     }
@@ -922,10 +910,11 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             btn_BeBankerItem->setVisible(false);
             showDealerInfo();
             
-            isDealer = (0 == strcmp(Global::getInstance()->table_data.bureauOwnerId, Global::getInstance()->user_data.ID));
-            if (isDealer) {
+            if (Global::getInstance()->isDealer) {
                 NoteTip::show("恭喜，抢庄成功！");
             }
+            
+            betLimiter->setVisible(!Global::getInstance()->isDealer);
         }
             break;
             
@@ -992,11 +981,20 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 m_pMessage->hidden();
                 m_pMessage = NULL;
             }
-            Global::getInstance()->countDownInSecond = 15;
+            
             sendPokerAction();
         }
             break;
         
+        case cmd_settle:{
+            if (m_pMessage != NULL) {
+                m_pMessage->hidden();
+                m_pMessage = NULL;
+            }
+            
+            this->stepIn(DeskState_Settle);
+        }
+            break;
             
         default:
             break;

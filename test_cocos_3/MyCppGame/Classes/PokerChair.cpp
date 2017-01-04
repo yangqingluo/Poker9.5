@@ -207,12 +207,19 @@ void PokerChair::addJetton(JettonSprite* jetton){
     jettonArray.pushBack(jetton);
 }
 
+void PokerChair::updateJetton(JettonSprite* jetton){
+    this->removeAllJettons();
+    this->addJetton(jetton);
+}
+
 void PokerChair::removeAllJettons(){
     for (JettonSprite* jetton : jettonArray) {
         jetton->removeFromParentAndCleanup(true);
     }
     
     jettonArray.clear();
+    betTotal = 0;
+    betPlayer = 0;
 }
 
 void PokerChair::calculatePokerType(){
@@ -403,8 +410,9 @@ void PokerChair::showSettlement(){
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
         char mString[100];
-        if (betPlayer <= 0) {
+        if (m_settlement.accounts == 0) {
             settlementLabel->setColor(Color3B::WHITE);
+            pokerTypeLabel->setColor(Color3B::WHITE);
             sprintf(mString,"无成绩");
         }
         else{
@@ -490,8 +498,6 @@ void PokerChair::clearChair(){
         }
         pokerTypeLabel->setColor(Color3B::WHITE);
         settlementLabel->setColor(Color3B::WHITE);
-        betTotal = 0;
-        betPlayer = 0;
         removeAllJettons();
     }
 }
