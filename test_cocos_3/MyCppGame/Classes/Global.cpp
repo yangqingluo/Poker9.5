@@ -57,10 +57,10 @@ Global* Global::getInstance(){
         share = new (std::nothrow) Global();
         
         Director::getInstance()->getScheduler()->scheduleSelector(
-                                                                       schedule_selector(MTNotificationQueue::postNotifications),
-                                                                       MTNotificationQueue::sharedNotificationQueue(),
-                                                                       1.0 / 60.0,  
-                                                                       false);
+                                                                  schedule_selector(MTNotificationQueue::postNotifications),
+                                                                  MTNotificationQueue::sharedNotificationQueue(),
+                                                                  1.0 / 60.0,
+                                                                  false);
         
         //预加载音乐音效
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(MUSIC_FILE);
@@ -87,9 +87,9 @@ void Global::setBackgroundMusic(bool yn){
 
 void Global::playBackgroundMusic(bool yn){
     if (yn) {
-//        if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()) {
-//            
-//        }
+        //        if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()) {
+        //
+        //        }
         bool canPlay = isBackgroundMusic();
         if (canPlay) {
             SimpleAudioEngine::getInstance()->playBackgroundMusic(MUSIC_FILE, true);//播放音乐，循环
@@ -273,27 +273,27 @@ void Global::receiveData(){
 }
 
 void Global::sendData(const char* value){
-//    rapidjson::Document d1;
-//    d1.SetObject();
-//    rapidjson::Document::AllocatorType& allocator = d1.GetAllocator();
-//    rapidjson::Value array(rapidjson::kArrayType);
-//    rapidjson::Value object(rapidjson::kObjectType);
-//    
-//    object.AddMember("id", 1000, allocator);
-//    object.AddMember("name", "234", allocator);
-//    object.AddMember("年龄", "111", allocator);
-//    //            array.PushBack(object, allocator);
-//    
-//    d1.AddMember("propety", "PLAYER-TO", allocator);
-//    d1.AddMember("id", 3000, allocator);
-//    d1.AddMember("player", object, allocator);
-//    
-//    rapidjson::StringBuffer buffer;
-//    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
-//    d1.Accept(write);
-//    
-//    //            StringUtils::format("%s",buffer.GetString());
-//    log("******%s",buffer.GetString());
+    //    rapidjson::Document d1;
+    //    d1.SetObject();
+    //    rapidjson::Document::AllocatorType& allocator = d1.GetAllocator();
+    //    rapidjson::Value array(rapidjson::kArrayType);
+    //    rapidjson::Value object(rapidjson::kObjectType);
+    //
+    //    object.AddMember("id", 1000, allocator);
+    //    object.AddMember("name", "234", allocator);
+    //    object.AddMember("年龄", "111", allocator);
+    //    //            array.PushBack(object, allocator);
+    //
+    //    d1.AddMember("propety", "PLAYER-TO", allocator);
+    //    d1.AddMember("id", 3000, allocator);
+    //    d1.AddMember("player", object, allocator);
+    //
+    //    rapidjson::StringBuffer buffer;
+    //    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    //    d1.Accept(write);
+    //
+    //    //            StringUtils::format("%s",buffer.GetString());
+    //    log("******%s",buffer.GetString());
     
     
     
@@ -317,25 +317,25 @@ void Global::socketdidConnect(){
     recvThread.detach(); // 从主线程分离
     
     sendHandle();
-//    //发送数据 Send
-//    SEND_PACKAGE package = {0};
-//    char handle[200];
-//    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":\"%s\"}}", user_data.ID);
-//    
-//    int length = (int)strlen(handle);
-//    if (!endianBig) {
-//        package.valueLength = reversebytes_uint32t(length);
-//    }
-//    else {
-//        package.valueLength = length;
-//    }
-//    
-//    memcpy(package.value, handle, length);
-//    
-//    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
-//    if (result_send > 0) {
-//        log("Socket::send->%s",package.value);
-//    }
+    //    //发送数据 Send
+    //    SEND_PACKAGE package = {0};
+    //    char handle[200];
+    //    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":\"%s\"}}", user_data.ID);
+    //
+    //    int length = (int)strlen(handle);
+    //    if (!endianBig) {
+    //        package.valueLength = reversebytes_uint32t(length);
+    //    }
+    //    else {
+    //        package.valueLength = length;
+    //    }
+    //
+    //    memcpy(package.value, handle, length);
+    //
+    //    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
+    //    if (result_send > 0) {
+    //        log("Socket::send->%s",package.value);
+    //    }
 }
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");

@@ -12,6 +12,7 @@
 #include "RegistScene.h"
 #include "PasswordScene.h"
 #include "HallScene.h"
+#include "Global.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -388,8 +389,8 @@ void LoginScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
 
 #pragma notification
 void LoginScene::onNotification_NoteTip(Ref* pSender){
-    auto msg = (String*)pSender;
-    NoteTip::show(this, msg->getCString());
+    PostRef* post = (PostRef* )pSender;
+    NoteTip::show(this, post->description);
 }
 
 //#pragma tableview

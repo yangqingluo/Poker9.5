@@ -8,6 +8,7 @@
 
 #include "PasswordScene.h"
 #include "QLImageSprite.h"
+#include "Global.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -325,8 +326,11 @@ void PasswordScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                     }
                     else if (tag == "changepassword"){
                         Director::getInstance()->popScene();
-                        auto sData = String::create("密码修改成功");
-                        NotificationCenter::getInstance()->postNotification(showNoteTipTag, sData);
+                        
+                        PostRef* post = new PostRef();
+                        sprintf(post->description, "密码修改成功");
+                        
+                        MTNotificationQueue::sharedNotificationQueue()->postNotification(showNoteTipTag, post);
                     }
                 }
             }

@@ -54,7 +54,7 @@ bool PokerChair::onTouchBegan(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
-    pokerTypeLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
+    pokerTypeLabel = Label::createWithTTF("", "fonts/microsoftSong.ttf", 12);
     pokerTypeLabel->setVisible(false);
     pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.08 * this->getContentSize().height);
     this->addChild(pokerTypeLabel);
@@ -81,7 +81,7 @@ void PokerChair::onEnter(){
         betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
         this->addChild(betPlayerLabel);
         
-        settlementLabel = Label::createWithTTF("", "fonts/微软简标宋.ttf", 12);
+        settlementLabel = Label::createWithTTF("", "fonts/microsoftSong.ttf", 12);
         settlementLabel->setVisible(false);
         settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.24 * this->getContentSize().height);
         this->addChild(settlementLabel);
