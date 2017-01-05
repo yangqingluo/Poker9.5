@@ -6,14 +6,6 @@
 #include "json/writer.h"
 #include "json/stringbuffer.h"
 
-#include <iconv.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <string.h>
-#include <sys/stat.h>
-
 #define key_BackgroundMusic "background_music_game"
 #define key_Effect          "effect_game"
 
