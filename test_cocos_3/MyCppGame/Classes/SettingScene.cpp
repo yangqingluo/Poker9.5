@@ -314,14 +314,9 @@ void SettingScene::onHttpRequest_SettingNikename(const char* nikename){
     request->setRequestType(HttpRequest::Type::POST);
     request->setUrl("http://115.28.109.174:8181/game/user/updateinfo");
     
-    
-    size_t inlen = strlen(nikename);
-    char * outbuf = new char[inlen * 2 + 2];
-    Global::getInstance()->g2u((char* )nikename, inlen, outbuf, inlen * 2 + 2);
-    
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "account=%s&nikename=%s", Global::getInstance()->user_data.account, outbuf);
+    sprintf(param, "account=%s&nikename=%s", Global::getInstance()->user_data.account, nikename);
     request->setRequestData(param, strlen(param));
     
     // HTTP响应函数

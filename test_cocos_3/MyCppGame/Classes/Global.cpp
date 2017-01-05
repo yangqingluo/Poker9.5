@@ -161,34 +161,6 @@ int Global::playEffect_button(bool loop){
 }
 
 
-int Global::code_convert(const char *from_charset, const char *to_charset, const char *inbuf, size_t inlen, char *outbuf, size_t outlen)
-{
-    iconv_t cd;
-    const char *temp = inbuf;
-    const char **pin = &temp;
-    char **pout = &outbuf;
-    memset(outbuf, 0, outlen);
-    
-    cd = iconv_open(to_charset, from_charset);
-    if (cd == 0) {
-        return -1;
-    }
-    if (iconv(cd, (char **)pin, &inlen, pout, &outlen) == -1) {
-        return -1;
-    }
-    iconv_close(cd);
-    return 0;
-}
-
-int Global::u2g(char *inbuf, size_t inlen, char *outbuf, size_t outlen) {
-    return code_convert("UTF-8", "GBK", inbuf, inlen, outbuf, outlen);
-}
-
-int Global::g2u(char *inbuf, size_t inlen, char *outbuf, size_t outlen) {
-    return code_convert("GBK", "UTF-8", inbuf, inlen, outbuf, outlen);
-}
-
-
 void Global::saveLoginData(const rapidjson::Value& val_content){
     user_data = {0};
     parseUserData(val_content, &user_data);
