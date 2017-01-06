@@ -10,6 +10,7 @@
 #include "QLImageSprite.h"
 #include "Global.h"
 #include "InviterScene.h"
+#include "CppToOCFunction.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -151,6 +152,11 @@ void InviteScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
             
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
+                case 1:{
+                    CppToOCFunction::getInstance()->doCopyAction();
+                }
+                    break;
+                    
                 case 3:{
                     auto scene = InviterScene::createScene();
                     Director::getInstance()->pushScene(scene);
