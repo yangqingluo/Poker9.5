@@ -7,7 +7,7 @@
 //
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "OCPublic.h"
+#include "OCFunction.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
 #endif
@@ -34,7 +34,7 @@ CppToOCFunction* CppToOCFunction::getInstance(){
 void CppToOCFunction::doCopyAction(){
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     //iOS代码
-    [[OCPublic getInstance] doCopyString:@"yangqingluo"];
+    nsCopy("yangqingluo_cpp_oc");
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     //Android代码
     
