@@ -577,42 +577,50 @@ void Global::parseData(char* pbuf, int len){
                         return;
                     }
                     
-                    if (val_content.IsArray()) {
-                        clearPokerSendedList();
+                    if (val_content.IsObject()) {
+                        rapidjson::Value& val_gateCards = val_content["gateCards"];
+                        rapidjson::Value& val_startCard = val_content["startCard"];
                         
-                        if (val_content.Size() != 4) {
-                            return;
-                        }
-                        for (int i = 0; i < val_content.Size(); ++i) {
-                            rapidjson::Value& val_pair = val_content[i];
+                        if (val_gateCards.IsArray()) {
+                            clearPokerSendedList();
                             
-                            PokerPair pair = {0};
-                            pair.point = val_pair["point"].GetDouble();
-                            
-                            const char* pointDes = val_pair["pointDes"].GetString();
-                            memcpy(pair.pointDes, pointDes, strlen(pointDes));
-                            
-                            rapidjson::Value& val_cards = val_pair["cards"];
-                            if (val_cards.Size() == 2) {
-                                for (int j = 0; j < val_cards.Size(); ++j) {
-                                    rapidjson::Value& card = val_cards[j];
-                                    
-                                    pair.poker[j].color = card["color"].GetInt();
-                                    pair.poker[j].count = card["count"].GetDouble();
-                                    pair.poker[j].num = card["num"].GetInt();
-                                }
+                            if (val_gateCards.Size() != 4) {
+                                return;
                             }
+                            for (int i = 0; i < val_gateCards.Size(); ++i) {
+                                rapidjson::Value& val_pair = val_gateCards[i];
+                                
+                                PokerPair pair = {0};
+                                pair.point = val_pair["point"].GetDouble();
+                                
+                                const char* pointDes = val_pair["pointDes"].GetString();
+                                memcpy(pair.pointDes, pointDes, strlen(pointDes));
+                                
+                                rapidjson::Value& val_cards = val_pair["cards"];
+                                if (val_cards.Size() == 2) {
+                                    for (int j = 0; j < val_cards.Size(); ++j) {
+                                        rapidjson::Value& card = val_cards[j];
+                                        
+                                        pair.poker[j].color = card["color"].GetInt();
+                                        pair.poker[j].count = card["count"].GetDouble();
+                                        pair.poker[j].num = card["num"].GetInt();
+                                    }
+                                }
+                                
+                                int gateType = val_pair["type"].GetInt();
+                                
+                                pokerSendedList[(gateType - 1) % 4] = pair;
+                            }
+                        }
+                        if (val_startCard.IsObject()) {
+                            memset(&pokerJudgement, 0, sizeof(PokerData));
                             
-                            int gateType = val_pair["type"].GetInt();
-                            
-                            pokerSendedList[(gateType - 1) % 4] = pair;
+                            pokerJudgement.color = val_startCard["color"].GetInt();
+                            pokerJudgement.count = val_startCard["count"].GetDouble();
+                            pokerJudgement.num = val_startCard["num"].GetInt();
                         }
                     }
-                }
-                    break;
                     
-                case cmd_trunIndexCard:{
-                    //翻牌决定发牌顺序
                     
                 }
                     break;
@@ -623,7 +631,7 @@ void Global::parseData(char* pbuf, int len){
                     if (0 != strcmp(tableId, table_data.tableId)) {
                         return;
                     }
-                    
+//                    {"commandId":1011,"content":{"accountResult":[{"code":0,"isOwner":0,"resultMap":{},"userId":"afbd90424e764390b20e3f8621fb837b"},{"code":0,"isOwner":0,"resultMap":{"2":{"count":-30,"reult":"-3倍","times":-3},"3":{"count":-300,"reult":"-3倍","times":-3}},"userId":"443e2d43704a4cf8ae837f296012081c"}],"countDown":15},"tableId":"585e14958186c9518d46a5c3"}
                     rapidjson::Value& val_content = document["content"];
                     if (val_content.IsArray()) {
                         memset(settleList, 0, sizeof(int) * 4);

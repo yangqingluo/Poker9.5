@@ -28,7 +28,7 @@ struct TableData {
     char tableId[Max_ID_Length];
     char roomId[Max_ID_Length];
     char bureauId[Max_ID_Length];//牌局ID
-    char roundId[Max_ID_Length];//牌局ID
+    char roundId[Max_ID_Length];//牌把ID
     char bureauOwnerId[Max_ID_Length];//庄家ID
     char description[Max_String_Length];
     

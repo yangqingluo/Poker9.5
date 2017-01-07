@@ -175,6 +175,18 @@ bool OnlinePokerDesk::init()
 }
 
 void OnlinePokerDesk::updateDeskState(DeskState state){
+    switch (state) {
+        case DeskState_Start:{
+            //牌局开始
+            sprintf(showTimer->prefixString,"开始！");
+            showTimer->showPrefix();
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
     m_deskState = state;
     if (m_deskState != DeskState_Waiting) {
         btn_PrepareItem->setVisible(false);
@@ -183,6 +195,8 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
     if (m_deskState != DeskState_ChooseDealer) {
         btn_BeBankerItem->setVisible(false);
     }
+    
+    
 }
 
 void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
@@ -697,10 +711,15 @@ void OnlinePokerDesk::sendPoker(){
     if (index == 0 && m_isSendSingle) {
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         
-        //强制为黑桃A 因为服务器没有翻牌接口
-        pk->setPoker_color(PokerColor_Spade);
-        pk->setPoker_point(PokerPoint_Ace);
+        int color = Global::getInstance()->pokerJudgement.color;
+        int num = Global::getInstance()->pokerJudgement.num;
         
+        if (color == 0 && (num == 14 || num == 15)) {
+            color = (num == 14) ? PokerColor_JokerJunior : PokerColor_JokerSenior;
+            num = PokerPoint_Joker;
+        }
+        pk->setPoker_color((PokerColor)color);
+        pk->setPoker_point((PokerPoint)num);
         
         pk->showPokerAnimated(true, true, 0.5);
         
@@ -891,8 +910,6 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 m_pMessage = NULL;
             }
             
-            scheduleUpdate();
-            
             this->stepIn(DeskState_Waiting);
             
         }
@@ -907,8 +924,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             //开始牌局
             createPokers();
             reindexPoker();
-
-            updateDeskState(DeskState_Start);
+            
+            this->stepIn(DeskState_Start);
         }
             break;
         case cmd_countDownApplyBureauOwner:{
@@ -955,6 +972,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
             sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
             showTimer->showPrefix();
+            
+            scheduleUpdate();
         }
             break;
             

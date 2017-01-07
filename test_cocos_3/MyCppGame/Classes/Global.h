@@ -23,18 +23,18 @@ using namespace CocosDenshion;
 
 #define cmd_handle                     1000//握手
 
-#define cmd_removePlayer               1000//踢出房间
+#define cmd_removePlayer               1000//踢出房间通知
 #define cmd_beginCountDownBeforeBureau 1001//牌局开始前倒计时通知
-#define cmd_synPlayerList              1002//同步玩家列表
-#define cmd_bureauOpen                 1003//开始牌局
-#define cmd_countDownApplyBureauOwner  1004//抢庄
+#define cmd_synPlayerList              1002//同步玩家列表通知
+#define cmd_bureauOpen                 1003//开始牌局通知
+#define cmd_countDownApplyBureauOwner  1004//抢庄通知
 #define cmd_selectedBureauOwner        1005//选中庄家通知
+#define cmd_countDownApplyStabber      1006//抢刺通知
 
-
-#define cmd_countDownBetStake          1008//下注倒计时
-#define cmd_countDownSendCard          1009//发牌
-#define cmd_trunIndexCard              1010//翻开判定牌决定发牌顺序
-#define cmd_settle                     1011//结算
+#define cmd_countDownBetStake          1008//下注通知
+#define cmd_countDownSendCard          1009//发牌通知
+//#define cmd_trunIndexCard              1010//翻开判定牌决定发牌顺序
+#define cmd_settle                     1011//结算通知
 
 
 #define cmd_enterRoom                  3000//加入普通金币房间
@@ -43,7 +43,11 @@ using namespace CocosDenshion;
 #define cmd_playerReady                3003//玩家准备
 #define cmd_applyOwner                 3004//申请上庄
 #define cmd_betStake                   3005//下注
+#define cmd_supplyBit                  3006//补充本金
 
+#define cmd_applyStabber               3040//抢刺
+
+#define cmd_enterRoomByPassword        4000//加入需要密码的指定房间
 
 //牌局状态
 enum DeskState
@@ -89,6 +93,7 @@ public:
     
     int playerListCount = 0;
     PlayerData playerList[MAX_PLAYER_NUM];
+    PokerData pokerJudgement;//判定牌(决定发牌顺序的牌)
     PokerPair pokerSendedList[4];
     int settleList[4];
     
