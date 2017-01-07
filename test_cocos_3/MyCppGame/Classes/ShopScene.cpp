@@ -121,7 +121,7 @@ bool ShopScene::init()
                 break;
                 
             case 1:{
-                char giveContent[2][50] = {"赠送的用户账号ID","赠送的金币数目"};
+                char giveContent[2][50] = {"赠送的用户账号ID","赠送的数目"};
                 for (int j = 0; j < 2; j++) {
                     auto inputBox = ui::EditBox::create(Size(0.9 * layer->getContentSize().width, 0.8 * inputHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
                     inputBox->setPosition(Vec2(0.5 * layer->getContentSize().width, layer->getContentSize().height - (j * 1.0 + 0.8) * inputHeight));
@@ -169,13 +169,23 @@ bool ShopScene::init()
                             
                             auto btn_give = Button::create("images/btn_green.png","images/btn_green_selected.png");
                             btn_give->setScale9Enabled(true);//打开scale9 可以拉伸图片
-                            btn_give->setTitleText("确认赠送");
+                            btn_give->setTitleText("赠送金币");
                             btn_give->setTitleFontSize(16);
                             btn_give->setContentSize(inputBox->getContentSize());
                             btn_give->setPosition(Vec2(inputBox->getPositionX(), inputBox->getBoundingBox().getMinY() - btn_give->getContentSize().height));
                             btn_give->addTouchEventListener(CC_CALLBACK_2(ShopScene::touchEvent, this));
                             btn_give->setTag(12);
                             layer->addChild(btn_give);
+                            
+                            auto btn_give_diamond = Button::create("images/btn_green.png","images/btn_green_selected.png");
+                            btn_give_diamond->setScale9Enabled(true);//打开scale9 可以拉伸图片
+                            btn_give_diamond->setTitleText("赠送钻石");
+                            btn_give_diamond->setTitleFontSize(16);
+                            btn_give_diamond->setContentSize(inputBox->getContentSize());
+                            btn_give_diamond->setPosition(Vec2(inputBox->getPositionX(), btn_give->getBoundingBox().getMinY() - btn_give->getContentSize().height));
+                            btn_give_diamond->addTouchEventListener(CC_CALLBACK_2(ShopScene::touchEvent, this));
+                            btn_give_diamond->setTag(13);
+                            layer->addChild(btn_give_diamond);
                         }
                             break;
                             
@@ -286,7 +296,19 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     }
                     else {
                         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-                        onHttpRequest_DonateUser(userIDBox->getText(), giveCountBox->getText());
+                        onHttpRequest_DonateUserGold(userIDBox->getText(), giveCountBox->getText());
+                    }
+                }
+                    break;
+                    
+                case 13:{
+                    //赠送
+                    if (strlen(giveCountBox->getText()) == 0) {
+                        NoteTip::show("请输入赠送的数目");
+                    }
+                    else {
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        onHttpRequest_DonateUserDiamond(userIDBox->getText(), giveCountBox->getText());
                     }
                 }
                     break;
@@ -404,12 +426,12 @@ void ShopScene::onHttpRequest_SearchUser(const char* account){
     request->release();
 }
 
-void ShopScene::onHttpRequest_DonateUser(const char* account, const char* count){
+void ShopScene::onHttpRequest_DonateUserGold(const char* account, const char* count){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/gamebit/donategoldbit");
+    request->setUrl("http://115.28.109.174:8181/game/gamebit/donateGoldBit");
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -418,7 +440,29 @@ void ShopScene::onHttpRequest_DonateUser(const char* account, const char* count)
     
     // HTTP响应函数
     request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
-    request->setTag("donate");
+    request->setTag("donateGold");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
+void ShopScene::onHttpRequest_DonateUserDiamond(const char* account, const char* count){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/gamebit/donateDiamondBit");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "userId=%s&account=%s&count=%s", Global::getInstance()->user_data.ID,account, count);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
+    request->setTag("donateDiamond");
     // 发送请求
     HttpClient::getInstance()->send(request);
     
@@ -484,8 +528,25 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         }
                         
                     }
-                    else if (tag == "donate") {
+                    else if (tag == "donateGold") {
                         MessageBox("赠送成功", "赠送金币");
+                        rapidjson::Value& val_content = document["content"];
+                        if (val_content.IsObject()) {
+                            int amount = val_content["amount"].GetInt();
+                            Global::getInstance()->user_data.gold = amount;
+                            
+                            MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
+                        }
+                    }
+                    else if (tag == "donateDiamond") {
+                        MessageBox("赠送成功", "赠送钻石");
+                        rapidjson::Value& val_content = document["content"];
+                        if (val_content.IsObject()) {
+                            int amount = val_content["amount"].GetInt();
+                            Global::getInstance()->user_data.diamond = amount;
+                            
+                            MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
+                        }
                     }
                 }
             }

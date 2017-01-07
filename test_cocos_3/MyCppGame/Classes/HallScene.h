@@ -106,6 +106,7 @@ private:
     void onHttpRequest_SearchUser(const char* account);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Socket(Ref* pSender);
+    void onNotification_RefreshUserinfo(Ref* pSender);
 };
 
 class RoomListCell : public TableViewCell

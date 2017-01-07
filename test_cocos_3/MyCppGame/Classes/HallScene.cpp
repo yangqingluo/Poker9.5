@@ -24,6 +24,7 @@ static int chipTypeCount = 5;
 
 Hall::Hall():m_pMessage(NULL){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_Socket), kNotification_Socket, NULL);
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_RefreshUserinfo), kNotification_RefreshUserInfo, NULL);
 }
 Hall::~Hall(){
     NotificationCenter::getInstance()->removeAllObservers(this);
@@ -922,4 +923,8 @@ void Hall::onNotification_Socket(Ref* pSender){
 //        default:
 //            break;
 //    }
+}
+
+void Hall::onNotification_RefreshUserinfo(Ref* pSender){
+    this->showUserInfo();
 }

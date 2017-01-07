@@ -44,7 +44,8 @@ private:
     ui::EditBox* giveCountBox;
     MessageManager* m_pMessage;
     
-    void onHttpRequest_DonateUser(const char* account, const char* count);
+    void onHttpRequest_DonateUserGold(const char* account, const char* count);
+    void onHttpRequest_DonateUserDiamond(const char* account, const char* count);
     void onHttpRequest_SearchUser(const char* account);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     
