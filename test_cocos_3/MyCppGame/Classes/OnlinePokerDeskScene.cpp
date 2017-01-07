@@ -559,7 +559,8 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                 for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
                     PlayerData player_data = Global::getInstance()->playerList[i];
                     if (0 == strcmp(Global::getInstance()->user_data.account, player_data.user.account)) {
-                        if ((betLimiter->getSelectedJettonValue()) * 3 > player_data.remainCap) {
+                        
+                        if ((totalBet + betLimiter->getSelectedJettonValue()) * 3 > player_data.remainCap) {
                             NoteTip::show("下注不能超过本金1/3");
                         }
                         else {
@@ -568,9 +569,11 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                             Global::getInstance()->playEffect_add_gold(false);
                             
                             //                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                            totalBet = betLimiter->getSelectedJettonValue();
+                            totalBet += betLimiter->getSelectedJettonValue();
                             Global::getInstance()->sendBetStake(betLimiter->getSelectedJettonValue(), (int)m_arrChairs.getIndex(chair) + 1);
                         }
+                        
+                        break;
                     }
                 }
                 
@@ -896,7 +899,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             break;
         case cmd_synPlayerList:{
             this->showGamePlayerInfo();
-            
+            this->showDealerInfo();
         }
             break;
             
