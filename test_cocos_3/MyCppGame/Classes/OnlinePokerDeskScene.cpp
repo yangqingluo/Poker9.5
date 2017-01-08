@@ -12,8 +12,6 @@
 const float jetton_height_scale = 0.08;
 
 OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
-    totalBet = 0;
-    
     pcPlayer = new Player();
     pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
@@ -101,7 +99,7 @@ bool OnlinePokerDesk::init()
     
     dealerHead = Sprite::create("images/default_head.png");
     dealerHead->setScale(0.4 * upright_sprite->getContentSize().width / dealerHead->getContentSize().width);
-    dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 0.95 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
+    dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 1.0 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
     upright_sprite->addChild(dealerHead);
     dealerHead->setVisible(false);
     
@@ -574,7 +572,18 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                     PlayerData player_data = Global::getInstance()->playerList[i];
                     if (0 == strcmp(Global::getInstance()->user_data.account, player_data.user.account)) {
                         
-                        if ((totalBet + betLimiter->getSelectedJettonValue()) * 3 > player_data.remainCap) {
+                        int totalBet = 0;
+                        for (int j = 1; j < m_arrChairs.size(); j++) {
+                            PokerChair* chairBuffer = m_arrChairs.at(j);
+                            if (chairBuffer == chair) {
+                                totalBet += betLimiter->getSelectedJettonValue();
+                            }
+                            else {
+                                totalBet += chairBuffer->betPlayer;
+                            }
+                        }
+                        
+                        if (totalBet * 3 > player_data.remainCap) {
                             NoteTip::show("下注不能超过本金1/3");
                         }
                         else {
@@ -590,8 +599,6 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                         break;
                     }
                 }
-                
-                
                 
             }
         }
@@ -948,7 +955,6 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
         case cmd_countDownBetStake:{
             //开始下注倒计时
-            totalBet = 0;
             this->stepIn(DeskState_Bet);
         }
             break;

@@ -104,7 +104,7 @@ bool PokerDesk::init()
     
     dealerHead = Sprite::create("images/default_head.png");
     dealerHead->setScale(0.4 * upright_sprite->getContentSize().width / dealerHead->getContentSize().width);
-    dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 0.95 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
+    dealerHead->setPosition(0.5 * upright_sprite->getContentSize().width, 1.0 * upright_sprite->getContentSize().height - 0.5 * dealerHead->getBoundingBox().size.height);
     upright_sprite->addChild(dealerHead);
     dealerHead->setVisible(false);
     
@@ -120,7 +120,7 @@ bool PokerDesk::init()
     countLabel->setColor(Color3B::BLACK);
 //    countLabel->setHorizontalAlignment(TextHAlignment::LEFT);
 //    countLabel->setVerticalAlignment(TextVAlignment::CENTER);
-    countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.2 * upright_sprite->getContentSize().height);
+    countLabel->setPosition(0.5 * upright_sprite->getContentSize().width, 0.3 * upright_sprite->getContentSize().height);
     upright_sprite->addChild(countLabel);
     
     auto btn_playerList = MenuItemFont::create("点击查看玩家列表", CC_CALLBACK_1(PokerDesk::buttonCallback, this, 4));
@@ -153,8 +153,8 @@ bool PokerDesk::init()
 //    messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
 //    message_sprite->addChild(messageLabel);
     
-    int betJettonArray[3] = {10,100,1000};
-    betLimiter = BetLimiter::create(betJettonArray, 3, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
+    int betJettonArray[9] = {10,20,50,100,200,500,1000,2000,5000};
+    betLimiter = BetLimiter::create(betJettonArray, 9, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
     betLimiter->setPosition(2 * bottom_sprite->getContentSize().height, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
     bottom_sprite->addChild(betLimiter);
     
@@ -603,9 +603,26 @@ void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
     switch (node->getTag()) {
         case 10:{
             if (m_deskState == DeskState_Bet) {
-                JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
-                chair->addJetton(sp);
-                Global::getInstance()->playEffect_add_gold(false);
+                int totalBet = 0;
+                for (int j = 1; j < m_arrChairs.size(); j++) {
+                    PokerChair* chairBuffer = m_arrChairs.at(j);
+                    if (chairBuffer == chair) {
+                        totalBet += betLimiter->getSelectedJettonValue();
+                    }
+                    else {
+                        totalBet += chairBuffer->betPlayer;
+                    }
+                }
+                
+                if (totalBet * 3 > gamePlayer->getJettonCount()) {
+                    NoteTip::show("下注不能超过本金1/3");
+                }
+                else {
+                    JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
+                    chair->updateJetton(sp);
+                    Global::getInstance()->playEffect_add_gold(false);
+                }
+                
             }
         }
             break;

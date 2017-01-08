@@ -85,9 +85,6 @@ public:
     void touchedChairCallback(Node* pSender, void* pTarget);
     
 private:
-    
-    int totalBet;//下注总额
-    int currentBet;//当前筹码
     MessageManager* m_pMessage;
     
     bool m_isSendSingle;//是否发完一张牌

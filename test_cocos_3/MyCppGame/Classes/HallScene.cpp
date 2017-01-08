@@ -143,8 +143,8 @@ bool Hall::init()
     for (int i = 0; i < 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
-        item->chipMin = -1;
-        item->perMin = -1;
+        item->chipMin = 1000;
+        item->perMin = 20;
         item->type = 0;
         switch (i) {
             case 0:{
@@ -433,6 +433,11 @@ void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
                 }
                     break;
                     
+                case 3:{
+                    sprintf(content, "请设置带入的银币数目:%d", jettonToEnter);
+                }
+                    break;
+                    
                 default:
                     break;
             }
@@ -472,7 +477,7 @@ void Hall::showSettingChip(){
         case 0:{
             room = tianItems.at(roomIndexSelected);
             canEnter = Global::getInstance()->user_data.gold >= room->chipMin;
-            if (Global::getInstance()->user_data.gold < room->chipMin) {
+            if (!canEnter) {
                 popup->setContentTextShowed("您的金币不够");
             }
             else {
@@ -490,6 +495,19 @@ void Hall::showSettingChip(){
             
         case 2:{
             
+        }
+            break;
+            
+        case 3:{
+            room = huangItems.at(roomIndexSelected);
+            canEnter = Global::getInstance()->user_data.silver >= room->chipMin;
+            if (!canEnter) {
+                popup->setContentTextShowed("您的银币不够");
+            }
+            else {
+                myslider->setMaximumValue(Global::getInstance()->user_data.silver);
+                
+            }
         }
             break;
             
@@ -568,9 +586,12 @@ void Hall::popButtonCallback(Node* pNode){
                 break;
                 
             case 3:{
+                room = huangItems.at(roomIndexSelected);
+                
                 auto scene = PokerDesk::createScene();
                 PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-                layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", Global::getInstance()->user_data.silver);
+                layer->roomType = room->type;
+                layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
                 
 //                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
                 Director::getInstance()->pushScene(scene);

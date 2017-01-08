@@ -35,7 +35,7 @@ public:
     virtual bool init();
     CREATE_FUNC(PokerDesk);
     
-    int deskType;
+    int roomType;
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
