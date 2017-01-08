@@ -631,13 +631,16 @@ void Global::parseData(char* pbuf, int len){
                     if (0 != strcmp(tableId, table_data.tableId)) {
                         return;
                     }
-//                    {"commandId":1011,"content":{"accountResult":[{"code":0,"isOwner":0,"resultMap":{},"userId":"afbd90424e764390b20e3f8621fb837b"},{"code":0,"isOwner":0,"resultMap":{"2":{"count":-30,"reult":"-3倍","times":-3},"3":{"count":-300,"reult":"-3倍","times":-3}},"userId":"443e2d43704a4cf8ae837f296012081c"}],"countDown":15},"tableId":"585e14958186c9518d46a5c3"}
+                    
                     rapidjson::Value& val_content = document["content"];
-                    if (val_content.IsArray()) {
+                    
+                    countDownInSecond = val_content["countDown"].GetInt();
+                    rapidjson::Value& val_accountResult = val_content["accountResult"];
+                    if (val_accountResult.IsArray()) {
                         memset(settleList, 0, sizeof(int) * 4);
                         
-                        for (int i = 0; i < val_content.Size(); ++i) {
-                            rapidjson::Value& val_settle = val_content[i];
+                        for (int i = 0; i < val_accountResult.Size(); ++i) {
+                            rapidjson::Value& val_settle = val_accountResult[i];
                             
                             int isOwner = val_settle["isOwner"].GetInt();
                             if (isOwner == 0) {
