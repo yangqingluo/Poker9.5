@@ -173,11 +173,29 @@ bool OnlinePokerDesk::init()
 }
 
 void OnlinePokerDesk::updateDeskState(DeskState state){
+    if (m_deskState == state) {
+        return;
+    }
+    
     switch (state) {
         case DeskState_Start:{
             //牌局开始
             sprintf(showTimer->prefixString,"开始！");
             showTimer->showPrefix();
+        }
+            break;
+            
+        case DeskState_Settle:{
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+                chair->clearChair();
+            }
+            if (judgementPokerIndex < m_arrPokers.size()) {
+                PokerSprite* poker = m_arrPokers.at(judgementPokerIndex);
+                poker->setVisible(false);
+            }
+            
+            
         }
             break;
             
