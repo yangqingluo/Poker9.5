@@ -10,7 +10,7 @@
 #include "QLImageSprite.h"
 #include "Global.h"
 #include "InviterScene.h"
-#include "CppToOCFunction.h"
+#include "CppToFunction.h"
 
 
 #include "Cocos2dx/Common/CCUMSocialSDK.h"
@@ -158,7 +158,7 @@ void InviteScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
                 case 1:{
-                    CppToOCFunction::getInstance()->doCopyAction(Global::getInstance()->user_data.inviteCode);
+                    CppToFunction::getInstance()->doCopyAction(Global::getInstance()->user_data.inviteCode);
                     NoteTip::show("复制成功");
                 }
                     break;

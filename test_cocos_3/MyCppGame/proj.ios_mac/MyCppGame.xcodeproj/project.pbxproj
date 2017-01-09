@@ -133,8 +133,8 @@
 		FCA0AD891DF54F4600DA1515 /* poker.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA0AD881DF54F4600DA1515 /* poker.png */; };
 		FCA0AD8A1DF54F4600DA1515 /* poker.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA0AD881DF54F4600DA1515 /* poker.png */; };
 		FCA383ED1E1F3C52006E073C /* OCPublic.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EC1E1F3C52006E073C /* OCPublic.mm */; };
-		FCA383F11E1F406E006E073C /* CppToOCFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToOCFunction.cpp */; };
-		FCA383F21E1F406E006E073C /* CppToOCFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToOCFunction.cpp */; };
+		FCA383F11E1F406E006E073C /* CppToFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToFunction.cpp */; };
+		FCA383F21E1F406E006E073C /* CppToFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToFunction.cpp */; };
 		FCA383F51E1F42C5006E073C /* OCFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA383F41E1F42C5006E073C /* OCFunction.m */; };
 		FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
 		FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
@@ -340,8 +340,8 @@
 		FCA0AD881DF54F4600DA1515 /* poker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poker.png; sourceTree = "<group>"; };
 		FCA383EB1E1F3C52006E073C /* OCPublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OCPublic.h; path = ios/OCPublic.h; sourceTree = SOURCE_ROOT; };
 		FCA383EC1E1F3C52006E073C /* OCPublic.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OCPublic.mm; path = ios/OCPublic.mm; sourceTree = SOURCE_ROOT; };
-		FCA383EF1E1F406E006E073C /* CppToOCFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CppToOCFunction.cpp; sourceTree = "<group>"; };
-		FCA383F01E1F406E006E073C /* CppToOCFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CppToOCFunction.h; sourceTree = "<group>"; };
+		FCA383EF1E1F406E006E073C /* CppToFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CppToFunction.cpp; sourceTree = "<group>"; };
+		FCA383F01E1F406E006E073C /* CppToFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CppToFunction.h; sourceTree = "<group>"; };
 		FCA383F31E1F42C5006E073C /* OCFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OCFunction.h; path = ios/OCFunction.h; sourceTree = SOURCE_ROOT; };
 		FCA383F41E1F42C5006E073C /* OCFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OCFunction.m; path = ios/OCFunction.m; sourceTree = SOURCE_ROOT; };
 		FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonSprite.cpp; sourceTree = "<group>"; };
@@ -568,8 +568,8 @@
 				FC331E031E23907E00174856 /* iOS */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
-				FCA383EF1E1F406E006E073C /* CppToOCFunction.cpp */,
-				FCA383F01E1F406E006E073C /* CppToOCFunction.h */,
+				FCA383EF1E1F406E006E073C /* CppToFunction.cpp */,
+				FCA383F01E1F406E006E073C /* CppToFunction.h */,
 				46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */,
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
 				FCC339CF1DDFB45E00E71685 /* HallScene.cpp */,
@@ -951,7 +951,7 @@
 				FC4B4B8A1DF1500200E0271B /* QLImageSprite.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */,
-				FCA383F11E1F406E006E073C /* CppToOCFunction.cpp in Sources */,
+				FCA383F11E1F406E006E073C /* CppToFunction.cpp in Sources */,
 				FCED08E31E1C0750004BDFD6 /* PasswordScene.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				FCED08E11E1C0750004BDFD6 /* OnlinePokerDeskScene.cpp in Sources */,
@@ -1003,7 +1003,7 @@
 				FC7E77751E0EBFBC008EBE40 /* HelpScene.cpp in Sources */,
 				FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,
-				FCA383F21E1F406E006E073C /* CppToOCFunction.cpp in Sources */,
+				FCA383F21E1F406E006E073C /* CppToFunction.cpp in Sources */,
 				FC331E071E23907E00174856 /* CCUMSocialSDK.cpp in Sources */,
 				FCC0226F1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */,
 				FC8FEF7A1E038D63009D907E /* PokerStabberBtn.cpp in Sources */,

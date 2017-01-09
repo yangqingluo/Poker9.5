@@ -1,5 +1,5 @@
 //
-//  CppToOCFunction.cpp
+//  CppToFunction.cpp
 //  MyCppGame
 //
 //  Created by yangqingluo on 2016/11/20.
@@ -12,17 +12,17 @@
 
 #endif
 
-#include "CppToOCFunction.h"
+#include "CppToFunction.h"
 
-static CppToOCFunction* share = nullptr;
+static CppToFunction* share = nullptr;
 
-CppToOCFunction::~CppToOCFunction(void){
+CppToFunction::~CppToFunction(void){
     
 }
 
-CppToOCFunction* CppToOCFunction::getInstance(){
+CppToFunction* CppToFunction::getInstance(){
     if(!share){
-        share = new (std::nothrow) CppToOCFunction();
+        share = new (std::nothrow) CppToFunction();
         
     }
     
@@ -31,7 +31,7 @@ CppToOCFunction* CppToOCFunction::getInstance(){
 
 
 #pragma public
-void CppToOCFunction::doCopyAction(const char* m_string){
+void CppToFunction::doCopyAction(const char* m_string){
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     //iOS代码
     nsCopy(m_string);
