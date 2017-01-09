@@ -228,7 +228,7 @@ void InviteScene::boardShare(Ref* pSender) {
     platforms->push_back(WEIXIN);
     platforms->push_back(WEIXIN_CIRCLE);
     
-    sdk->openShare(platforms, Global::getInstance()->user_data.inviteCode, "邀请加入九点半邀" ,"https://dev.umeng.com/images/tab2_1.png","https://www.fushoulu95.com",share_selector(shareCallback));
+    sdk->openShare(platforms, Global::getInstance()->user_data.inviteCode, "邀请加入九点半" ,"https://dev.umeng.com/images/tab2_1.png","https://www.fushoulu95.com",share_selector(shareCallback));
 }
 
 

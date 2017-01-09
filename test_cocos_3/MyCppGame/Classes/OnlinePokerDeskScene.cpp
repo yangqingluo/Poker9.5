@@ -177,14 +177,7 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
         return;
     }
     
-    switch (state) {
-        case DeskState_Start:{
-            //牌局开始
-            sprintf(showTimer->prefixString,"开始！");
-            showTimer->showPrefix();
-        }
-            break;
-            
+    switch (m_deskState) {
         case DeskState_Settle:{
             for (int i = 0; i < m_arrChairs.size(); i++) {
                 PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
@@ -196,6 +189,18 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
             }
             
             
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    switch (state) {
+        case DeskState_Start:{
+            //牌局开始
+            sprintf(showTimer->prefixString,"开始！");
+            showTimer->showPrefix();
         }
             break;
             

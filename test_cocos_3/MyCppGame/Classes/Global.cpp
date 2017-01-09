@@ -213,6 +213,11 @@ void Global::parsePlayerData(const rapidjson::Value& val_player, PlayerData* dat
     data_player->remainCap = val_player["remainCap"].GetInt();
     if (val_player.HasMember("user")) {
         parseUserData(val_player["user"], &data_player->user);
+        if (0 == strcmp(data_player->user.account, user_data.account)) {
+            user_data.gold = data_player->user.gold;
+            user_data.diamond = data_player->user.diamond;
+            user_data.silver = data_player->user.silver;
+        }
     }
 }
 
