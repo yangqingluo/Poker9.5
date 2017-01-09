@@ -12,6 +12,11 @@
 #include "InviterScene.h"
 #include "CppToOCFunction.h"
 
+
+#include "Cocos2dx/Common/CCUMSocialSDK.h"
+
+USING_NS_UM_SOCIAL;
+
 USING_NS_CC;
 using namespace ui;
 
@@ -153,7 +158,13 @@ void InviteScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
                 case 1:{
-                    CppToOCFunction::getInstance()->doCopyAction();
+                    CppToOCFunction::getInstance()->doCopyAction(Global::getInstance()->user_data.inviteCode);
+                    NoteTip::show("复制成功");
+                }
+                    break;
+                    
+                case 2:{
+                    this->boardShare(pSender);
                 }
                     break;
                     
@@ -177,3 +188,47 @@ void InviteScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
             break;
     }
 }
+
+/*
+ * 分享回调
+ * @param platform 要分享到的目标平台
+ * @param stCode 返回码, 200代表分享成功, 100代表开始分享
+ * @param errorMsg 分享失败时的错误信息,android平台没有错误信息
+ */
+void shareCallback(int platform, int stCode, string& errorMsg) {
+    
+
+    string result = "";
+    if (stCode == 200) {
+        result = "分享成功";
+        log("#### HelloWorld 分享成功 --> Cocos2d-x SDK ");
+    } else if (stCode == -1) {
+        result = "分享取消";
+    	   log("#### HelloWorld 分享取消 --> Cocos2d-x SDK ");
+    }
+    else {
+        result = "分享失败";
+        log("#### HelloWorld 分享出错 --> Cocos2d-x SDK ");
+    }
+    
+    istringstream is;
+    is >> platform;
+    result.append(is.str());
+    log("#### callback!!!!!! %s\n",result.c_str());
+    
+    log("platform num is : %d, %d", platform, stCode);
+    
+}
+
+void InviteScene::boardShare(Ref* pSender) {
+    CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
+    vector<int>* platforms = new vector<int>();
+    platforms->push_back(QZONE);
+    platforms->push_back(QQ);
+    platforms->push_back(WEIXIN);
+    platforms->push_back(WEIXIN_CIRCLE);
+    
+    sdk->openShare(platforms, Global::getInstance()->user_data.inviteCode, "邀请加入九点半邀" ,"https://dev.umeng.com/images/tab2_1.png","https://www.fushoulu95.com",share_selector(shareCallback));
+}
+
+

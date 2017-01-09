@@ -31,10 +31,10 @@ CppToOCFunction* CppToOCFunction::getInstance(){
 
 
 #pragma public
-void CppToOCFunction::doCopyAction(){
+void CppToOCFunction::doCopyAction(const char* m_string){
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     //iOS代码
-    nsCopy("yangqingluo_cpp_oc");
+    nsCopy(m_string);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     //Android代码
     

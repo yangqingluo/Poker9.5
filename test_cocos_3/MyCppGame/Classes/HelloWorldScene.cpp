@@ -2,6 +2,8 @@
 #include "SimpleAudioEngine.h"
 #include "LoginScene.h"
 #include "HallScene.h"
+#include "Cocos2dx/Common/CCUMSocialSDK.h"
+USING_NS_UM_SOCIAL;
 
 USING_NS_CC;
 
@@ -147,16 +149,53 @@ bool HelloWorld::init()
     
     return true;
 }
+/*
+ *授权回调
+ * @param platform 要授权的平台
+ * @param stCode 返回码, 200代表授权成功, 100代表开始授权, 0代表授权出错, -1代表取消授权
+ * @param data 授权时返回的数据
+ */
+void authCallback(int platform, int stCode, map<string, string>& data) {
+    log("#### 授权回调");
+    string result = "";
+    if (stCode == 200) {
+        log("#### 授权完成");
+        result = "授权完成";
+        
+        map<string, string>::iterator it = data.begin();
+        
+        for (; it != data.end(); ++it) {
+            log("#### data  %s -> %s.", it->first.c_str(), it->second.c_str());
+            
+        }
+        
+        //           	item->setString("auth or delete success");
+    } else if (stCode == 0) {
+        //    	item->setString("auth or delete fail");
+        result = "授权出错";
+        log("#### 授权出错");
+    } else if (stCode == -1) {
+        //    	item->setString("auth or delete cancel");
+        result = "取消授权";
+        log("#### 取消授权");
+    }else {
+    	   log("#### 未知类型");
+    }
+}
 
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            NoteTip::show("精彩功能敬请期待");
+//            NoteTip::show("精彩功能敬请期待");
+            CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
+            sdk->authorize(WEIXIN, auth_selector(authCallback));
         }
             break;
             
         case 1:{
-            NoteTip::show("精彩功能敬请期待");
+//            NoteTip::show("精彩功能敬请期待");
+            CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
+            sdk->authorize(QQ, auth_selector(authCallback));
         }
             break;
             

@@ -27,6 +27,8 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
+#import <UMSocialCore/UMSocialCore.h>
+
 @implementation AppController
 
 @synthesize window;
@@ -38,8 +40,21 @@
 static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-    // Override point for customization after application launch.
+    [[UMSocialManager defaultManager] openLog:YES];
+    
+    // 获取友盟social版本号
+    NSLog(@"UMeng social version: %@", [UMSocialGlobal umSocialSDKVersion]);
+    [UMSocialGlobal shareInstance].type = @"Cocos2d-x";
+    //设置友盟appkey
+    [[UMSocialManager defaultManager] setUmSocialAppkey:@"5795aff8e0f55aca2f002a19"];
+    
+    //设置微信的appKey和appSecret
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wxe3be7fd52334734f" appSecret:@"3baf1193c85774b3fd9d18447d76cab0" redirectURL:@"http://mobile.umeng.com/social"];
+    
+    //设置分享到QQ互联的appID
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"100424460"/*设置QQ平台的appID*/  appSecret:nil redirectURL:@"http://mobile.umeng.com/social"];
 
+    
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
 
@@ -106,6 +121,24 @@ static AppDelegate s_sharedApplication;
      Called when the application is about to terminate.
      See also applicationDidEnterBackground:.
      */
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
 }
 
 

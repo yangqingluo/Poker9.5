@@ -16,7 +16,7 @@ class CppToOCFunction : public Ref{
 public:
     static CppToOCFunction* getInstance();
     
-    void doCopyAction();
+    void doCopyAction(const char* m_string);
 private:
     
 protected:

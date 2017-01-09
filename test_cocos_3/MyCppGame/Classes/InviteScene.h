@@ -21,6 +21,7 @@ public:
     virtual bool init();
     CREATE_FUNC(InviteScene);
     
+    void boardShare(Ref* pSender);
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
 };
