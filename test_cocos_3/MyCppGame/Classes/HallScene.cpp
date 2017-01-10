@@ -591,6 +591,7 @@ void Hall::popButtonCallback(Node* pNode){
                 auto scene = PokerDesk::createScene();
                 PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
                 layer->roomType = room->type;
+                layer->perMin = room->perMin;
                 layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
                 
 //                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);

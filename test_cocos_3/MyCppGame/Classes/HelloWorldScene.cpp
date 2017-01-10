@@ -186,14 +186,12 @@ void authCallback(int platform, int stCode, map<string, string>& data) {
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-//            NoteTip::show("精彩功能敬请期待");
             CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
             sdk->authorize(WEIXIN, auth_selector(authCallback));
         }
             break;
             
         case 1:{
-//            NoteTip::show("精彩功能敬请期待");
             CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
             sdk->authorize(QQ, auth_selector(authCallback));
         }

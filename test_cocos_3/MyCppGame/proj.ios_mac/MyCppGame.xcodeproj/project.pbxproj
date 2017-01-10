@@ -138,6 +138,8 @@
 		FCA383F51E1F42C5006E073C /* OCFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA383F41E1F42C5006E073C /* OCFunction.m */; };
 		FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
 		FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
+		FCB667D51E250F6100B5F2CD /* BetSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB667D31E250F6100B5F2CD /* BetSlider.cpp */; };
+		FCB667D61E250F6100B5F2CD /* BetSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB667D31E250F6100B5F2CD /* BetSlider.cpp */; };
 		FCBDFECF1DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
 		FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */; };
 		FCC0226E1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */; };
@@ -346,6 +348,8 @@
 		FCA383F41E1F42C5006E073C /* OCFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OCFunction.m; path = ios/OCFunction.m; sourceTree = SOURCE_ROOT; };
 		FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonSprite.cpp; sourceTree = "<group>"; };
 		FCB5E04B1DF017D300EDB420 /* JettonSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonSprite.h; sourceTree = "<group>"; };
+		FCB667D31E250F6100B5F2CD /* BetSlider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BetSlider.cpp; sourceTree = "<group>"; };
+		FCB667D41E250F6100B5F2CD /* BetSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetSlider.h; sourceTree = "<group>"; };
 		FCBDFECD1DE9D8F4001EA2BC /* PopAlertDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PopAlertDialog.cpp; sourceTree = "<group>"; };
 		FCBDFECE1DE9D8F4001EA2BC /* PopAlertDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopAlertDialog.h; sourceTree = "<group>"; };
 		FCC0226C1E0E615F00A1D6F4 /* SettingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingScene.cpp; sourceTree = "<group>"; };
@@ -603,6 +607,8 @@
 				FC4B4B891DF1500200E0271B /* QLImageSprite.h */,
 				FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */,
 				FCD0BD771DF2D4C800952CAD /* BetLimiter.h */,
+				FCB667D31E250F6100B5F2CD /* BetSlider.cpp */,
+				FCB667D41E250F6100B5F2CD /* BetSlider.h */,
 				FCCBA4941E026E110072EA7E /* PokerStabber.cpp */,
 				FCCBA4951E026E110072EA7E /* PokerStabber.h */,
 				FC8FEF771E038D63009D907E /* PokerStabberBtn.cpp */,
@@ -965,6 +971,7 @@
 				FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */,
 				FCED08D71E1C0750004BDFD6 /* LoginScene.cpp in Sources */,
 				FC8FEF791E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
+				FCB667D51E250F6100B5F2CD /* BetSlider.cpp in Sources */,
 				FCED08E51E1C0750004BDFD6 /* PokerDeskScene.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
@@ -999,6 +1006,7 @@
 			files = (
 				FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */,
 				FCCBA4971E026E110072EA7E /* PokerStabber.cpp in Sources */,
+				FCB667D61E250F6100B5F2CD /* BetSlider.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC7E77751E0EBFBC008EBE40 /* HelpScene.cpp in Sources */,
 				FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */,

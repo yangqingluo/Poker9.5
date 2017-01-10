@@ -17,7 +17,7 @@ USING_NS_CC_EXT;
 
 #include "GameTimer.h"
 #include "PokerChair.h"
-#include "BetLimiter.h"
+#include "BetSlider.h"
 #include "Player.h"
 
 #include "NoteTip.h"
@@ -36,6 +36,8 @@ public:
     CREATE_FUNC(PokerDesk);
     
     int roomType;
+    int perMin;
+    
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
@@ -48,7 +50,7 @@ public:
     Label* countLabel;
     Label* messageLabel;
     Label* gamePlayerInfoLabel;
-    BetLimiter* betLimiter;
+    BetSlider* betLimiter;
     Sprite* dealerHead;
     MenuItemImage* btn_BeBankerItem;
     

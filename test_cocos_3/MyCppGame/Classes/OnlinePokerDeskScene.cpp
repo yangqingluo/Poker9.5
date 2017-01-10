@@ -343,7 +343,7 @@ void OnlinePokerDesk::waitForBetAction(){
 void OnlinePokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(15);
+        showTimer->start(Global::getInstance()->countDownInSecond);
         
         if (stabberPlayer == NULL) {
             PokerChair* chair0 = m_arrChairs.at(0);

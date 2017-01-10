@@ -583,6 +583,8 @@ void Global::parseData(char* pbuf, int len){
                     }
                     
                     if (val_content.IsObject()) {
+                        countDownInSecond = val_content["countDown"].GetInt();
+                        
                         rapidjson::Value& val_gateCards = val_content["gateCards"];
                         rapidjson::Value& val_startCard = val_content["startCard"];
                         

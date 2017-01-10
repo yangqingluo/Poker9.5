@@ -153,8 +153,7 @@ bool PokerDesk::init()
 //    messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
 //    message_sprite->addChild(messageLabel);
     
-    int betJettonArray[9] = {10,20,50,100,200,500,1000,2000,5000};
-    betLimiter = BetLimiter::create(betJettonArray, 9, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
+    betLimiter = BetSlider::create(0, 0, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
     betLimiter->setPosition(2 * bottom_sprite->getContentSize().height, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
     bottom_sprite->addChild(betLimiter);
     
@@ -216,6 +215,8 @@ void PokerDesk::popButtonCallback(Node* pNode){
 
 void PokerDesk::onEnter(){
     Layer::onEnter();
+    
+    betLimiter->updateMinMax(perMin, gamePlayer->getJettonCount());
     
     playerList_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(upright_sprite->getContentSize().width, 0.9 * (upright_sprite->getBoundingBox().getMinY() - bottom_sprite->getBoundingBox().getMaxY())));
     playerList_sprite->setPosition(upright_sprite->getPositionX(), 0.5 * (upright_sprite->getBoundingBox().getMinY() + bottom_sprite->getBoundingBox().getMaxY()));
@@ -664,7 +665,7 @@ PokerChair* PokerDesk::createChair(const char* backgroudImage, float xScale, flo
 #pragma jetton
 JettonSprite* PokerDesk::createjetton(int value){
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    JettonSprite* sp = JettonSprite::create(value, Size(jetton_height_scale * visibleSize.height, jetton_height_scale * visibleSize.height));
+    JettonSprite* sp = JettonSprite::createWithEmpty(value, Size(jetton_height_scale * visibleSize.height, jetton_height_scale * visibleSize.height));
     sp->isPlayer = true;
     return sp;
 }
