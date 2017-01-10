@@ -33,7 +33,7 @@ using namespace CocosDenshion;
 
 #define cmd_countDownBetStake          1008//下注通知
 #define cmd_countDownSendCard          1009//发牌通知
-//#define cmd_trunIndexCard              1010//翻开判定牌决定发牌顺序
+#define cmd_sysBetStake                1010//同步下注数据通知
 #define cmd_settle                     1011//结算通知
 
 
@@ -96,6 +96,7 @@ public:
     PokerData pokerJudgement;//判定牌(决定发牌顺序的牌)
     PokerPair pokerSendedList[4];
     int settleList[4];
+    int betList[4];
     
     void clearPlayerList();
     void clearPokerSendedList();

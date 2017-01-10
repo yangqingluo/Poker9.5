@@ -44,6 +44,7 @@ public:
     void removeAllPokers();//移除扑克
     void addJetton(JettonSprite* jetton);//添加筹码
     void updateJetton(JettonSprite* jetton);//直接设置筹码
+    void updateTotal(int value);//直接设置下注总和
     void removeAllJettons();//移除筹码
     void calculatePokerType();//计算牌型
     void showPokerType();//显示牌型

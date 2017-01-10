@@ -632,6 +632,23 @@ void Global::parseData(char* pbuf, int len){
                 }
                     break;
                     
+                case cmd_sysBetStake:{
+                    //同步下注数据
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        return;
+                    }
+                    
+                    memset(betList, 0, sizeof(int) * 4);
+                    rapidjson::Value& val_content = document["content"];
+                    if (val_content.IsObject()) {
+                        betList[1] = val_content["2"].GetInt();
+                        betList[2] = val_content["3"].GetInt();
+                        betList[3] = val_content["4"].GetInt();
+                    }
+                }
+                    break;
+                    
                 case cmd_settle:{
                     //结算
                     const char* tableId = document["tableId"].GetString();

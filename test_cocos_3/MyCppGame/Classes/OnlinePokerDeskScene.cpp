@@ -1044,6 +1044,14 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             sendPokerAction();
         }
             break;
+            
+        case cmd_sysBetStake:{
+            for (int j = 1; j < m_arrChairs.size(); j++) {
+                PokerChair* chairBuffer = m_arrChairs.at(j);
+                chairBuffer->updateTotal(Global::getInstance()->betList[j]);
+            }
+        }
+            break;
         
         case cmd_settle:{
             if (m_pMessage != NULL) {

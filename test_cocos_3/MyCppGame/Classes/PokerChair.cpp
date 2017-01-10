@@ -182,16 +182,10 @@ void PokerChair::removeAllPokers(){
 }
 
 void PokerChair::addJetton(JettonSprite* jetton){
-    betTotal += jetton->getJettonValue();
-    
-    if (!betTotalLabel->isVisible()) {
-        betTotalLabel->setVisible(true);
-    }
+    updateTotal(betTotal + jetton->getJettonValue());
     
     char mString[100];
-    this->stringFromBetValue(mString, betTotal);
     
-    betTotalLabel->setString(mString);
     if (jetton->isPlayer) {
         betPlayer += jetton->getJettonValue();
         if (!betPlayerLabel->isVisible()) {
@@ -210,6 +204,21 @@ void PokerChair::addJetton(JettonSprite* jetton){
 void PokerChair::updateJetton(JettonSprite* jetton){
     this->removeAllJettons();
     this->addJetton(jetton);
+}
+
+void PokerChair::updateTotal(int value){
+    if (value != betTotal) {
+        betTotal = value;
+        
+        if (!betTotalLabel->isVisible()) {
+            betTotalLabel->setVisible(true);
+        }
+        
+        char mString[100];
+        this->stringFromBetValue(mString, betTotal);
+        
+        betTotalLabel->setString(mString);
+    }
 }
 
 void PokerChair::removeAllJettons(){
