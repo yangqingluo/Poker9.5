@@ -233,8 +233,24 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
         case 1:{
             //准备
             if (m_deskState == DeskState_Waiting) {
-                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                Global::getInstance()->sendPlayerReady();
+                bool canPrepare = true;
+//                if (Global::getInstance()->playerListCount > 0) {
+//                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+//                        PlayerData player_data = Global::getInstance()->playerList[i];
+//                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
+//                            canPrepare = (player_data.remainCap >= this->chipMin);
+//                            break;
+//                        }
+//                    }
+//                }
+                
+                if (canPrepare) {
+                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                    Global::getInstance()->sendPlayerReady();
+                }
+                else {
+                    NoteTip::show("本金不足，不能准备");
+                }
             }
             
         }
@@ -423,34 +439,60 @@ void OnlinePokerDesk::waitForChooseDealerAction(){
     }
 }
 
-void OnlinePokerDesk::chooseDealerAction(){
-    //单机模拟强制选择电脑为庄家
-    if (dealerPlayer == NULL) {
-        dealerPlayer = pcPlayer;
-        dealerHead->setTexture(dealerPlayer->headImage);
-        btn_BeBankerItem->setVisible(false);
-        dealerHead->setVisible(true);
-    }
-    
-    showDealerInfo();
-}
+//void OnlinePokerDesk::chooseDealerAction(){
+//    //单机模拟强制选择电脑为庄家
+//    if (dealerPlayer == NULL) {
+//        dealerPlayer = pcPlayer;
+//        dealerHead->setTexture(dealerPlayer->headImage);
+//        btn_BeBankerItem->setVisible(false);
+//        dealerHead->setVisible(true);
+//    }
+//    
+//    showDealerInfo();
+//}
 
-void OnlinePokerDesk::dealerDidChoosedAction(){
-    if (dealerPlayer->getJettonCount() * 3 < dealerPlayer->getJettonInitial()) {
-        //庄家本金小于初始本金1/3，抢刺
-        updateDeskState(DeskState_ChooseStabber);
-    }
-    else {
-        //下注
-        updateDeskState(DeskState_Bet);
-    }
-}
+//void OnlinePokerDesk::dealerDidChoosedAction(){
+//    if (dealerPlayer->getJettonCount() * 3 < dealerPlayer->getJettonInitial()) {
+//        //庄家本金小于初始本金1/3，抢刺
+//        updateDeskState(DeskState_ChooseStabber);
+//    }
+//    else {
+//        //下注
+//        updateDeskState(DeskState_Bet);
+//    }
+//}
 
 void OnlinePokerDesk::waitForChooseStabberAction(){
     if (!showTimer->getIsValid()) {
-        sprintf(showTimer->prefixString,"抢刺");
+        sprintf(showTimer->prefixString,"等待其他玩家抢刺");
+        if (!Global::getInstance()->isDealer) {
+            int playerIndex = -1;
+            int dealerIndex = -1;
+            
+            for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+                PlayerData player_data = Global::getInstance()->playerList[i];
+                if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
+                    playerIndex = i;
+                }
+                if (0 == strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
+                    dealerIndex = i;
+                }
+            }
+            
+            if (playerIndex >= 0 && dealerIndex >=0) {
+                PlayerData player = Global::getInstance()->playerList[playerIndex];
+                PlayerData dealer = Global::getInstance()->playerList[dealerIndex];
+                if (player.remainCap > dealer.remainCap) {
+                    for (int i = 0; i < m_arrChairs.size(); i++) {
+                        PokerChair* chair = m_arrChairs.at((i + m_IndexStart) % m_arrChairs.size());
+                        chair->showBeStabber(true);
+                    }
+                    sprintf(showTimer->prefixString,"抢刺");
+                }
+            }
+        }
         
-        showTimer->start(10);
+        showTimer->start(Global::getInstance()->countDownInSecond);
     }
 }
 
@@ -629,7 +671,15 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
             
         case 11:{
             if (m_deskState == DeskState_ChooseStabber) {
-                chooseStabberAction((int)m_arrChairs.getIndex(chair));
+//                chooseStabberAction((int)m_arrChairs.getIndex(chair));
+                //发送抢刺
+                for (int i = 0; i < m_arrChairs.size(); i++) {
+                    PokerChair* chairBuffer = m_arrChairs.at(i);
+                    chairBuffer->showBeStabber(false);
+                }
+
+                Global::getInstance()->sendApplyStabber((int)m_arrChairs.getIndex(chair) + 1);
+                
             }
         }
             break;
@@ -976,6 +1026,33 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             }
             
             betLimiter->setVisible(!Global::getInstance()->isDealer);
+        }
+            break;
+            
+        case cmd_countDownApplyStabber:{
+            //抢刺
+            this->stepIn(DeskState_ChooseStabber);
+        }
+            break;
+            
+        case cmd_notifyStabber:{
+            //选中刺通知
+            for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+                PlayerData player_data = Global::getInstance()->playerList[i];
+                if (0 == strcmp(Global::getInstance()->table_data.stabberId, player_data.user.ID)) {
+                    for (int i = 0; i < m_arrChairs.size(); i++) {
+                        PokerChair* chairBuffer = m_arrChairs.at(i);
+                        chairBuffer->showBeStabber(false);
+                        if (i + 1 == Global::getInstance()->table_data.stabberIndex) {
+                            chairBuffer->showStabber("images/default_head.png", player_data.user.nikename, player_data.remainCap);
+                        }
+                    }
+
+                    
+                    break;
+                }
+            }
+            
         }
             break;
             

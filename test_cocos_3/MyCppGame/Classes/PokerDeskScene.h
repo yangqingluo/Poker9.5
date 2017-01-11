@@ -36,7 +36,8 @@ public:
     CREATE_FUNC(PokerDesk);
     
     int roomType;
-    int perMin;
+    int chipMin;//带入筹码最小值
+    int perMin;//单注下注最小值
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);

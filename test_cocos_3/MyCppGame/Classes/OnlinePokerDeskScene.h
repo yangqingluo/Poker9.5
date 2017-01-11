@@ -40,6 +40,8 @@ public:
     int roomType;//房间类型
     char roomTypeId[Max_ID_Length];//房间类型Id
     int jettonToEnter;//带入的筹码数量
+    int chipMin;//带入筹码最小值
+    int perMin;//单注下注最小值
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
@@ -70,9 +72,9 @@ public:
     void preparedAction();
     void waitForBetAction();
     void settleAction();
-    void chooseDealerAction();//选择庄家
+//    void chooseDealerAction();//选择庄家
     void waitForChooseDealerAction();//等待选择庄家
-    void dealerDidChoosedAction();//庄家已选择
+//    void dealerDidChoosedAction();//庄家已选择
     void waitForChooseStabberAction();//等待抢刺
     void chooseStabberAction(int index);//抢刺
     void sendPokerAction();//发牌

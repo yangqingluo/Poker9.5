@@ -345,6 +345,7 @@ void Global::socketdidConnect(){
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");
     
+//    postNotification(cmd_disconnect);
 }
 
 void Global::onReceiveData(char *buffer, int len){
@@ -401,7 +402,8 @@ void Global::parseData(char* pbuf, int len){
                         //加入房间
                         rapidjson::Value& val_content = document["content"];
                         
-                        table_data = {0};
+                        memset(&table_data, 0, sizeof(TableData));
+                        
                         table_data.code = val_content["code"].GetInt();
                         
                         const char* tableId = val_content["tableId"].GetString();
@@ -419,7 +421,8 @@ void Global::parseData(char* pbuf, int len){
                         //退出房间
                         rapidjson::Value& val_content = document["content"];
                         
-                        table_data = {0};
+                        memset(&table_data, 0, sizeof(TableData));
+                        
                         table_data.code = val_content["code"].GetInt();
                         
                         const char* description = val_content["description"].GetString();
@@ -434,6 +437,15 @@ void Global::parseData(char* pbuf, int len){
                         
                     case cmd_applyOwner:{
                         //抢庄
+                        rapidjson::Value& val_content = document["content"];
+                        
+                        const char* description = val_content["description"].GetString();
+                        memcpy(post->description, description, strlen(description));
+                    }
+                        break;
+                        
+                    case cmd_applyStabber:{
+                        //抢刺
                         rapidjson::Value& val_content = document["content"];
                         
                         const char* description = val_content["description"].GetString();
@@ -550,6 +562,34 @@ void Global::parseData(char* pbuf, int len){
                     
                     //判断当前玩家是否是庄家
                     isDealer = (0 == strcmp(table_data.bureauOwnerId, user_data.ID));
+                }
+                    break;
+                    
+                case cmd_countDownApplyStabber:{
+                    //开始抢刺倒计时
+                    rapidjson::Value& val_content = document["content"];
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                    countDownInSecond = val_content["countDown"].GetInt();
+                    memset(table_data.roundId, 0, sizeof(table_data.roundId));
+                    
+                    const char* roundId = val_content["roundId"].GetString();
+                    memcpy(table_data.roundId, roundId, strlen(roundId));
+                }
+                    break;
+                    
+                case cmd_notifyStabber:{
+                    //抢中刺通知
+                    rapidjson::Value& val_content = document["content"];
+                    
+                    const char* stabberId = val_content["userId"].GetString();
+                    memcpy(table_data.stabberId, stabberId, strlen(stabberId));
+                    
+                    table_data.stabberIndex = val_content["type"].GetInt();
                 }
                     break;
                     
@@ -790,6 +830,26 @@ void Global::sendApplyOwner(){
     content.AddMember("bureauId", rapidjson::Value(table_data.bureauId, allocator), allocator);
     
     doc.AddMember("id", cmd_applyOwner, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendApplyStabber(int gateType){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roundId", rapidjson::Value(table_data.roundId, allocator), allocator);
+    content.AddMember("type", gateType, allocator);
+    
+    doc.AddMember("id", cmd_applyStabber, allocator);
     doc.AddMember("content", content, allocator);
     
     rapidjson::StringBuffer buffer;

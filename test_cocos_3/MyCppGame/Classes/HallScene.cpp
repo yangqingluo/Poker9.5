@@ -565,6 +565,8 @@ void Hall::popButtonCallback(Node* pNode){
                 auto scene = OnlinePokerDesk::createScene();
                 OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
                 layer->roomType = room->type;
+                layer->perMin = room->perMin;
+                layer->chipMin = room->chipMin;
                 strcpy(layer->roomTypeId, room->typeID);
                 layer->jettonToEnter = jettonToEnter;
 //                layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
@@ -592,6 +594,7 @@ void Hall::popButtonCallback(Node* pNode){
                 PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
                 layer->roomType = room->type;
                 layer->perMin = room->perMin;
+                layer->chipMin = room->chipMin;
                 layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
                 
 //                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);

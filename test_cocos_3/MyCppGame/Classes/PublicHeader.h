@@ -32,6 +32,8 @@ struct TableData {
     char bureauOwnerId[Max_ID_Length];//庄家ID
     char description[Max_String_Length];
     
+    char stabberId[Max_ID_Length];//刺ID
+    int stabberIndex;//刺序
 };
 
 struct PlayerData {

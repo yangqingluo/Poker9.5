@@ -21,6 +21,8 @@ using namespace CocosDenshion;
 #define kNotification_Socket           "notification_socket"
 #define kNotification_RefreshUserInfo  "notification_refreshUserInfo"
 
+#define cmd_disconnect                 0021//断开连接
+
 #define cmd_handle                     1000//握手
 
 #define cmd_removePlayer               1000//踢出房间通知
@@ -30,7 +32,7 @@ using namespace CocosDenshion;
 #define cmd_countDownApplyBureauOwner  1004//抢庄通知
 #define cmd_selectedBureauOwner        1005//选中庄家通知
 #define cmd_countDownApplyStabber      1006//抢刺通知
-
+#define cmd_notifyStabber              1007//抢中刺通知
 #define cmd_countDownBetStake          1008//下注通知
 #define cmd_countDownSendCard          1009//发牌通知
 #define cmd_sysBetStake                1010//同步下注数据通知
@@ -127,6 +129,7 @@ public:
     void sendEnterRoom(const char* roomTypeId, int capital);
     void sendPlayerReady();
     void sendApplyOwner();
+    void sendApplyStabber(int gateType);
     void sendLeaveRoom();
     void sendBetStake(int jetton, int gateType);
     
