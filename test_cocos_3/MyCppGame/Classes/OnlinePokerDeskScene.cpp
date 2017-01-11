@@ -765,9 +765,13 @@ void OnlinePokerDesk::sendPoker(){
         }
     }
     else if (index > 0 && index <= 8 && m_isSendSingle) {
+        int chair_index = ((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
+        
+        PokerChair* chair = m_arrChairs.at(chair_index);
+        
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
 
-        PokerPair pair = Global::getInstance()->pokerSendedList[(index - 1) % 4];
+        PokerPair pair = Global::getInstance()->pokerSendedList[chair_index];
         PokerData card = pair.poker[(index - 1) / 4];
         
         int color = card.color;
@@ -780,7 +784,6 @@ void OnlinePokerDesk::sendPoker(){
         pk->setPoker_color((PokerColor)color);
         pk->setPoker_point((PokerPoint)num);
         
-        PokerChair* chair = m_arrChairs.at(((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size());
         movePoker(chair, pk);
         
         m_isSendSingle = false;

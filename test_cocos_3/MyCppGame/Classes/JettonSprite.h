@@ -14,6 +14,7 @@ public:
     static JettonSprite* createWithEmpty(int value, Size size);
     bool isValidValue(int value);
     int validValueInEmpty(int value);
+    void stringFromJettonValue(char* mString, int value);
 private:
     CC_SYNTHESIZE_READONLY(int,m_value,JettonValue);//筹码值
     Sprite* valueSprite;

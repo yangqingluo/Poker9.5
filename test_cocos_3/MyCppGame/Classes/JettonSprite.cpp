@@ -49,11 +49,13 @@ JettonSprite* JettonSprite::createWithEmpty(int value, Size size){
         
         
         char m_string[30] = {0};
-        sprintf(m_string, "%d", value);
-        auto ltf = Label::createWithTTF(m_string, "fonts/STKaiti.ttf", 8);
+        sp->stringFromJettonValue(m_string, value);
+        auto ltf = Label::createWithTTF(m_string, "fonts/STKaiti.ttf", 6);
         ltf->setColor(Color3B::WHITE);
         ltf->setPosition(sp->valueSprite->getPosition());
-//        ltf->setDimensions(<#float width#>, <#float height#>)
+        ltf->setDimensions(sp->getContentSize().width, sp->getContentSize().height);
+        ltf->setHorizontalAlignment(TextHAlignment::CENTER);
+        ltf->setVerticalAlignment(TextVAlignment::CENTER);
         sp->addChild(ltf);
         
         return sp;
@@ -87,4 +89,13 @@ int JettonSprite::validValueInEmpty(int value){
     
     
     return valid;
+}
+
+void JettonSprite::stringFromJettonValue(char* mString, int value){
+    if (value / 10000 > 0) {
+        sprintf(mString,"%.2fw",value / 10000.0);
+    }
+    else{
+        sprintf(mString,"%d",value);
+    }
 }

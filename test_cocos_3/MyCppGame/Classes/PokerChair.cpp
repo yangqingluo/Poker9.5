@@ -184,7 +184,7 @@ void PokerChair::removeAllPokers(){
 void PokerChair::addJetton(JettonSprite* jetton){
     updateTotal(betTotal + jetton->getJettonValue());
     
-    char mString[100];
+    char mString[100] = {0};
     
     if (jetton->isPlayer) {
         betPlayer += jetton->getJettonValue();
@@ -210,14 +210,16 @@ void PokerChair::updateTotal(int value){
     if (value != betTotal) {
         betTotal = value;
         
-        if (!betTotalLabel->isVisible()) {
+        if (betTotal > 0) {
             betTotalLabel->setVisible(true);
+            char mString[100];
+            this->stringFromBetValue(mString, betTotal);
+            
+            betTotalLabel->setString(mString);
         }
-        
-        char mString[100];
-        this->stringFromBetValue(mString, betTotal);
-        
-        betTotalLabel->setString(mString);
+        else {
+            betTotalLabel->setVisible(false);
+        }
     }
 }
 
@@ -518,7 +520,7 @@ void PokerChair::setTouchCallBackFunc(Ref* target,SEL_CallFuncND callfun){
 
 void PokerChair::stringFromBetValue(char* mString, int betValue){
     if (betValue / 10000 > 0) {
-        sprintf(mString,"%.2f万",betValue / 10000.0);
+        sprintf(mString,"%.2fw",betValue / 10000.0);
     }
     else{
         sprintf(mString,"%d",betValue);
