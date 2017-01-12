@@ -293,8 +293,16 @@ void OnlinePokerDesk::onEnter(){
     this->showGamePlayerInfo();
     this->showDealerInfo();
     
-    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-    Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
+    this->showMessageManager(true);
+    if (this->roomType == RoomType_Gold) {
+        Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
+    }
+    else if (this->roomType == RoomType_VIP || this->roomType == RoomType_Diamond) {
+        Global::getInstance()->sendEnterRoomByPassword(this->roomPassword, jettonToEnter);
+    }
+    else {
+        this->showMessageManager(false);
+    }
 
 }
 
@@ -302,6 +310,18 @@ void OnlinePokerDesk::onExit(){
     Layer::onExit();
     unscheduleUpdate();
     
+}
+
+void OnlinePokerDesk::showMessageManager(bool isShow){
+    if (isShow) {
+        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+    }
+    else {
+        if (m_pMessage != NULL) {
+            m_pMessage->hidden();
+            m_pMessage = NULL;
+        }
+    }
 }
 
 void OnlinePokerDesk::showSettingChip(){
@@ -979,19 +999,13 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     switch (post->cmd) {
         case cmd_removePlayer:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             
             Director::getInstance()->popScene();
         }
             break;
         case cmd_beginCountDownBeforeBureau:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             
             this->stepIn(DeskState_Waiting);
             
@@ -1064,42 +1078,47 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
             
         case cmd_leaveRoom:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             
             Director::getInstance()->popScene();
         }
             break;
             
-        case cmd_enterRoom:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
+        case cmd_enterRoom:
+        case cmd_enterRoomByPassword:{
+            this->showMessageManager(false);
+            
+            switch (Global::getInstance()->table_data.code) {
+                case state_enterRoom_success_wait:
+                case state_enterRoom_success_prepare:{
+                    sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
+                    showTimer->showPrefix();
+                    
+                    scheduleUpdate();
+                }
+                    break;
+
+                case state_enterRoom_fail_no_money:
+                case state_enterRoom_fail_full:{
+                    NoteTip::show(Global::getInstance()->table_data.description);
+                }
+                    break;
+
+                default:
+                    break;
             }
             
-            sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
-            showTimer->showPrefix();
-            
-            scheduleUpdate();
         }
             break;
             
         case cmd_playerReady:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             this->preparedAction();
         }
             break;
             
         case cmd_applyOwner:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             
             btn_BeBankerItem->setVisible(false);
             NoteTip::show(post->description);
@@ -1107,19 +1126,13 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             break;
             
         case cmd_betStake:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             
         }
             break;
             
         case cmd_countDownSendCard:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             
             sendPokerAction();
         }
@@ -1134,10 +1147,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             break;
         
         case cmd_settle:{
-            if (m_pMessage != NULL) {
-                m_pMessage->hidden();
-                m_pMessage = NULL;
-            }
+            this->showMessageManager(false);
             
             this->stepIn(DeskState_Settle);
         }

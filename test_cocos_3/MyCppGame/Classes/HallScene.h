@@ -103,6 +103,7 @@ private:
     virtual void editBoxTextChanged(ui::EditBox* editBox, const std::string& text);//编辑框文字改变
     virtual void editBoxReturn(ui::EditBox* editBox); //触发return后的回调函数
     
+    void onHttpRequest_CreateRoom(const char* roomTypeId);
     void onHttpRequest_SearchUser(const char* account);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Socket(Ref* pSender);

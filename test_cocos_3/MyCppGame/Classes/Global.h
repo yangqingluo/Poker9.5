@@ -14,7 +14,8 @@ using namespace CocosDenshion;
 #include "MTNotificationQueue.h"
 
 #define MAX_NET_DATA_LEN (10 * 1024)
-#define MAX_PLAYER_NUM       7
+#define MAX_PLAYER_NUM             7
+#define length_room_password       8
 
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
@@ -51,6 +52,14 @@ using namespace CocosDenshion;
 
 #define cmd_enterRoomByPassword        4000//加入需要密码的指定房间
 
+
+
+#define state_enterRoom_success_wait             1000//加入房间成功，房间人数不足以开始游戏
+#define state_enterRoom_fail_no_money            1001//携带游戏币不足
+#define state_enterRoom_fail_full                1002//房间满员
+#define state_enterRoom_success_prepare          1003//加入房间成功，准备开始
+
+
 //牌局状态
 enum DeskState
 {
@@ -68,7 +77,8 @@ enum DeskState
 //房间类型
 enum RoomType
 {
-    RoomType_Silver = 0,
+    RoomType_Default = 0,
+    RoomType_Silver,
     RoomType_Gold,
     RoomType_VIP,
     RoomType_Diamond,
@@ -127,6 +137,7 @@ public:
     
     void sendHandle();
     void sendEnterRoom(const char* roomTypeId, int capital);
+    void sendEnterRoomByPassword(const char* roomPassword, int capital);
     void sendPlayerReady();
     void sendApplyOwner();
     void sendApplyStabber(int gateType);

@@ -89,7 +89,7 @@ bool Hall::init()
         item->autorelease();
         item->chipMin = chip[0][i];
         item->perMin = chip[1][i];
-        item->type = 1;
+        item->type = RoomType_Gold;
         item->status = i % 3;
         sprintf(item->content, "≥%d\n底注%d", item->chipMin, item->perMin);
         memcpy(item->title, goldTitle[i], strlen(goldTitle[i]));
@@ -103,7 +103,7 @@ bool Hall::init()
         item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
-        item->type = 2;
+        item->type = RoomType_VIP;
         memcpy(item->typeID, vipRoomID[i], roomIDLength);
         if (i < chipTypeCount) {
             item->chipMin = chip[0][i];
@@ -124,7 +124,7 @@ bool Hall::init()
         item->autorelease();
         item->chipMin = -1;
         item->perMin = -1;
-        item->type = 3;
+        item->type = RoomType_Diamond;
         memcpy(item->typeID, diamondRoomID[i], roomIDLength);
         if (i < chipTypeCount) {
             item->chipMin = chip[0][i];
@@ -145,7 +145,7 @@ bool Hall::init()
         item->autorelease();
         item->chipMin = 1000;
         item->perMin = 20;
-        item->type = 0;
+        item->type = RoomType_Silver;
         switch (i) {
             case 0:{
                 sprintf(item->title, "练习房");
@@ -424,12 +424,12 @@ void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
                     break;
                     
                 case 1:{
-                    
+                    sprintf(content, "请设置带入的金币数目:%d", jettonToEnter);
                 }
                     break;
                     
                 case 2:{
-                    
+                    sprintf(content, "请设置带入的钻石数目:%d", jettonToEnter);
                 }
                     break;
                     
@@ -489,11 +489,18 @@ void Hall::showSettingChip(){
             break;
             
         case 1:{
-            
+            if (roomIndexSelected + 1 == diItems.size()) {
+                passwordEnter = true;
+                myslider->setMaximumValue(Global::getInstance()->user_data.gold);
+            }
         }
             break;
             
         case 2:{
+            if (roomIndexSelected + 1 == xuanItems.size()) {
+                passwordEnter = true;
+                myslider->setMaximumValue(Global::getInstance()->user_data.diamond);
+            }
             
         }
             break;
@@ -550,13 +557,14 @@ void Hall::showSettingChip(){
         inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
         inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
         
-        inputBox->setPlaceHolder("请输入房间密码");
-        inputBox->setMaxLength(6);
+        inputBox->setPlaceHolder("房间密码");
+        inputBox->setMaxLength(length_room_password);
     }
 }
 
 void Hall::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
+        PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
         RoomItem* room = NULL;
         switch (roomTypeSelected) {
             case 0:{
@@ -569,21 +577,68 @@ void Hall::popButtonCallback(Node* pNode){
                 layer->chipMin = room->chipMin;
                 strcpy(layer->roomTypeId, room->typeID);
                 layer->jettonToEnter = jettonToEnter;
-//                layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
                 
-//                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
                 Director::getInstance()->pushScene(scene);
 
             }
                 break;
                 
             case 1:{
-                
+                if (roomIndexSelected + 1 == diItems.size()) {
+                    if (popup) {
+                        cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
+                        if (box) {
+                            if (strlen(box->getText()) != length_room_password) {
+                                NoteTip::show("密码输入有误");
+                            }
+                            else {
+                                auto scene = OnlinePokerDesk::createScene();
+                                OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
+                                layer->roomType = RoomType_VIP;
+                                layer->jettonToEnter = jettonToEnter;
+                                strcpy(layer->roomPassword, box->getText());
+                                
+                                Director::getInstance()->pushScene(scene);
+                            }
+                        }
+                    }
+                    
+                    
+                }
+                else {
+                    room = diItems.at(roomIndexSelected);
+                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                    onHttpRequest_CreateRoom(room->typeID);
+                }
             }
                 break;
                 
             case 2:{
-                
+                if (roomIndexSelected + 1 == xuanItems.size()) {
+                    if (popup) {
+                        cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
+                        if (box) {
+                            if (strlen(box->getText()) != length_room_password) {
+                                NoteTip::show("密码输入有误");
+                            }
+                            else {
+                                auto scene = OnlinePokerDesk::createScene();
+                                OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
+                                layer->roomType = RoomType_Diamond;
+                                layer->jettonToEnter = jettonToEnter;
+                                strcpy(layer->roomPassword, box->getText());
+                                
+                                Director::getInstance()->pushScene(scene);
+                            }
+                        }
+                    }
+                    
+                }
+                else {
+                    room = xuanItems.at(roomIndexSelected);
+                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                    onHttpRequest_CreateRoom(room->typeID);
+                }
             }
                 break;
                 
@@ -836,7 +891,30 @@ void Hall::editBoxReturn(ui::EditBox* editBox){
 }
 
 #pragma http
-// 发送HTTP请求
+//创建房间
+void Hall::onHttpRequest_CreateRoom(const char* roomTypeId){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/room/createRoom");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "roomTypeId=%s&userId=%s", roomTypeId, Global::getInstance()->user_data.ID);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(Hall::onHttpResponse, this));
+    request->setTag("createRoom");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
+// 搜索用户信息
 void Hall::onHttpRequest_SearchUser(const char* account){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
@@ -913,6 +991,11 @@ void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             this->showUserInfo();
                         }
                         
+                    }
+                    else if (tag == "createRoom"){
+                        char msg[200] = {0};
+                        sprintf(msg, "请牢记您的密码：%s", document["content"].GetString());
+                        MessageBox(msg, "创建房间成功");
                     }
                 }
             }

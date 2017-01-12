@@ -400,9 +400,28 @@ void Global::parseData(char* pbuf, int len){
                         
                     case cmd_enterRoom:{
                         //加入房间
+                        memset(&table_data, 0, sizeof(TableData));
+                        
                         rapidjson::Value& val_content = document["content"];
                         
+                        table_data.code = val_content["code"].GetInt();
+                        
+                        const char* tableId = val_content["tableId"].GetString();
+                        memcpy(table_data.tableId, tableId, strlen(tableId));
+                        
+                        const char* roomId = val_content["roomId"].GetString();
+                        memcpy(table_data.roomId, roomId, strlen(roomId));
+                        
+                        const char* description = val_content["description"].GetString();
+                        memcpy(table_data.description, description, strlen(description));
+                    }
+                        break;
+                        
+                    case cmd_enterRoomByPassword:{
+                        //加入密码房间
                         memset(&table_data, 0, sizeof(TableData));
+                        
+                        rapidjson::Value& val_content = document["content"];
                         
                         table_data.code = val_content["code"].GetInt();
                         
@@ -790,6 +809,26 @@ void Global::sendEnterRoom(const char* roomTypeId, int capital){
     content.AddMember("capital", capital, allocator);
     
     doc.AddMember("id", cmd_enterRoom, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendEnterRoomByPassword(const char* roomPassword, int capital){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("password", rapidjson::Value(roomPassword, allocator), allocator);
+    content.AddMember("capital", capital, allocator);
+    
+    doc.AddMember("id", cmd_enterRoomByPassword, allocator);
     doc.AddMember("content", content, allocator);
     
     rapidjson::StringBuffer buffer;

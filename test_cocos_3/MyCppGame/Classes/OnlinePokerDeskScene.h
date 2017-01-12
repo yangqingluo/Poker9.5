@@ -42,6 +42,7 @@ public:
     int jettonToEnter;//带入的筹码数量
     int chipMin;//带入筹码最小值
     int perMin;//单注下注最小值
+    char roomPassword[length_room_password + 1];
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void popButtonCallback(Node* pNode);
@@ -88,6 +89,7 @@ public:
     
 private:
     MessageManager* m_pMessage;
+    void showMessageManager(bool isShow);
     
     bool m_isSendSingle;//是否发完一张牌
     bool m_isSendSet;//是否发完一把牌(8张)
