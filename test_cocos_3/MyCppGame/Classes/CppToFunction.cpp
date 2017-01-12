@@ -31,7 +31,7 @@ CppToFunction* CppToFunction::getInstance(){
 
 
 #pragma public
-void CppToFunction::doCopyAction(const char* m_string){
+void CppToFunction::doCopyAction(char* m_string){
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     //iOS代码
     nsCopy(m_string);

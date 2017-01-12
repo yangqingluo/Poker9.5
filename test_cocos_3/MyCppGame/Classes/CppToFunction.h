@@ -16,7 +16,7 @@ class CppToFunction : public Ref{
 public:
     static CppToFunction* getInstance();
     
-    void doCopyAction(const char* m_string);
+    void doCopyAction(char* m_string);
 private:
     
 protected:
