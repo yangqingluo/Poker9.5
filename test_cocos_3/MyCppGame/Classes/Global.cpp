@@ -825,7 +825,7 @@ void Global::sendEnterRoomByPassword(const char* roomPassword, int capital){
     rapidjson::Value content(rapidjson::kObjectType);
     
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
-    content.AddMember("password", rapidjson::Value(roomPassword, allocator), allocator);
+    content.AddMember("roomPassword", rapidjson::Value(roomPassword, allocator), allocator);
     content.AddMember("capital", capital, allocator);
     
     doc.AddMember("id", cmd_enterRoomByPassword, allocator);
