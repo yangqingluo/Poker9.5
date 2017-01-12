@@ -11,7 +11,7 @@
 
 const float jetton_height_scale = 0.08;
 
-OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
+OnlinePokerDesk::OnlinePokerDesk():chipMin(0),perMin(0),m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
     pcPlayer = new Player();
     pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
@@ -554,21 +554,24 @@ void OnlinePokerDesk::showGamePlayerInfo(){
 }
 void OnlinePokerDesk::showDealerInfo(){
     char mString[100];
+    
+    bool hasDealer = false;
     if (strlen(Global::getInstance()->table_data.bureauOwnerId) > 0) {
         for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
             PlayerData player_data = Global::getInstance()->playerList[i];
             if (0 == strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
+                hasDealer = true;
                 sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",player_data.user.nikename, player_data.remainCap, Global::getInstance()->playerListCount);
-                countLabel->setString(mString);
             }
         }
         
     }
-    else{
+    
+    if (!hasDealer) {
         sprintf(mString,"庄家：无\n玩家总数：%d\n", Global::getInstance()->playerListCount);
-        countLabel->setString(mString);
     }
     
+    countLabel->setString(mString);
     playerListTableView->reloadData();
 }
 

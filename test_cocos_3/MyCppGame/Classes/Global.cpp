@@ -170,6 +170,20 @@ void Global::logout(){
     this->disconnectServer();
 }
 
+int Global::calculateVIPLevel(int introCount){
+    int level = 0;
+    
+    int levelArray[8] = {4,10,15,20,25,30,35,40};
+    for (int i = 8; i > 0; i--) {
+        if (introCount >= levelArray[i - 1]) {
+            level = i;
+            break;
+        }
+    }
+    
+    return level;
+}
+
 int Global::getInt(char *buffer, int offset) {
     return buffer[offset + 0] << 24 | (buffer[offset + 1] & 0xff) << 16 | (buffer[offset + 2] & 0xff) << 8 | (buffer[offset + 3] & 0xff);
 }
@@ -191,6 +205,10 @@ void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user
     
     const char* inviteCode = val_user["inviteCode"].GetString();
     memcpy(data_user->inviteCode, inviteCode, strlen(inviteCode));
+    
+    if (val_user.HasMember("introCount")) {
+        data_user->introCount = val_user["introCount"].GetInt();
+    }
     
     if (val_user.HasMember("diamondGameBit")) {
         const rapidjson::Value& val_diamondGameBit = val_user["diamondGameBit"];
@@ -398,38 +416,25 @@ void Global::parseData(char* pbuf, int len){
                     }
                         break;
                         
-                    case cmd_enterRoom:{
                         //加入房间
-                        memset(&table_data, 0, sizeof(TableData));
-                        
-                        rapidjson::Value& val_content = document["content"];
-                        
-                        table_data.code = val_content["code"].GetInt();
-                        
-                        const char* tableId = val_content["tableId"].GetString();
-                        memcpy(table_data.tableId, tableId, strlen(tableId));
-                        
-                        const char* roomId = val_content["roomId"].GetString();
-                        memcpy(table_data.roomId, roomId, strlen(roomId));
-                        
-                        const char* description = val_content["description"].GetString();
-                        memcpy(table_data.description, description, strlen(description));
-                    }
-                        break;
-                        
-                    case cmd_enterRoomByPassword:{
+                    case cmd_enterRoom:
                         //加入密码房间
+                    case cmd_enterRoomByPassword:{
                         memset(&table_data, 0, sizeof(TableData));
                         
                         rapidjson::Value& val_content = document["content"];
                         
                         table_data.code = val_content["code"].GetInt();
                         
-                        const char* tableId = val_content["tableId"].GetString();
-                        memcpy(table_data.tableId, tableId, strlen(tableId));
+                        if (val_content.HasMember("tableId")) {
+                            const char* tableId = val_content["tableId"].GetString();
+                            memcpy(table_data.tableId, tableId, strlen(tableId));
+                        }
                         
-                        const char* roomId = val_content["roomId"].GetString();
-                        memcpy(table_data.roomId, roomId, strlen(roomId));
+                        if (val_content.HasMember("roomId")) {
+                            const char* roomId = val_content["roomId"].GetString();
+                            memcpy(table_data.roomId, roomId, strlen(roomId));
+                        }
                         
                         const char* description = val_content["description"].GetString();
                         memcpy(table_data.description, description, strlen(description));

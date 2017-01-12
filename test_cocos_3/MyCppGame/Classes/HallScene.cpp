@@ -56,7 +56,16 @@ void Hall::showUserInfo(){
     userNameLabel->setString(user_data.nikename);
     
     char userInfoString[300];
-    sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
+    
+    
+    int vip_level = Global::getInstance()->calculateVIPLevel(user_data.introCount);
+    if (vip_level > 0) {
+        sprintf(userInfoString, "ID:%s\nVIP:vip%d\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, vip_level , user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
+    }
+    else {
+        sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
+    }
+    
     userinfoLabel->setString(userInfoString);
 }
 
@@ -101,8 +110,14 @@ bool Hall::init()
     for (int i = 0; i < chipTypeCount + 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
-        item->chipMin = -1;
-        item->perMin = -1;
+        if (i < chipTypeCount) {
+            item->chipMin = chip[0][i];
+            item->perMin = chip[1][i];
+        }
+        else {
+            item->chipMin = chip[0][0];
+            item->perMin = chip[1][0];
+        }
         item->type = RoomType_VIP;
         memcpy(item->typeID, vipRoomID[i], roomIDLength);
         if (i < chipTypeCount) {
@@ -122,8 +137,14 @@ bool Hall::init()
     for (int i = 0; i < chipTypeCount + 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
-        item->chipMin = -1;
-        item->perMin = -1;
+        if (i < chipTypeCount) {
+            item->chipMin = chip[0][i];
+            item->perMin = chip[1][i];
+        }
+        else {
+            item->chipMin = chip[0][0];
+            item->perMin = chip[1][0];
+        }
         item->type = RoomType_Diamond;
         memcpy(item->typeID, diamondRoomID[i], roomIDLength);
         if (i < chipTypeCount) {
@@ -143,8 +164,8 @@ bool Hall::init()
     for (int i = 0; i < 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
-        item->chipMin = 1000;
-        item->perMin = 20;
+        item->chipMin = chip[0][0];
+        item->perMin = chip[1][0];
         item->type = RoomType_Silver;
         switch (i) {
             case 0:{
@@ -455,10 +476,18 @@ void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
 void Hall::showSettingChip(){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     
-    PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
-    popup->setTag(dialogTag);
-    popup->setTitle("");
+    PopAlertDialog* popup = NULL;
     
+    if ((roomTypeSelected == 1 && roomIndexSelected < diItems.size() - 1) || (roomTypeSelected == 2 && roomIndexSelected < xuanItems.size() - 1)) {
+        popup = PopAlertDialog::create("images/bg_dialog_empty.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+        popup->setTitle("创建房间");
+    }
+    else {
+        popup = PopAlertDialog::create("images/set_chip_bg.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+        popup->setTitle("");
+    }
+    
+    popup->setTag(dialogTag);
     popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
     
     auto contentPosition = Vec2(0.1 * popup->m_dialogContentSize.width, (120.0 / 190.0) * popup->m_dialogContentSize.height);
@@ -466,42 +495,68 @@ void Hall::showSettingChip(){
     
     auto myslider = ControlSlider::create("images/slider_jd.png", "images/slider_bg.png", "images/slider_hk.png");
     myslider->setPosition(popup->getContentSize().width / 2, 0.50 * popup->getContentSize().height);
-    //    myslider->setScale(0.2 * popup->m_dialogContentSize.width / myslider->getContentSize().width);
     myslider->setMinimumValue(0);
     myslider->setTag(sliderTag);
     
     bool canEnter = true;
     bool passwordEnter = false;
+    bool showSlider = true;
     RoomItem* room = NULL;
     switch (roomTypeSelected) {
         case 0:{
             room = tianItems.at(roomIndexSelected);
             canEnter = Global::getInstance()->user_data.gold >= room->chipMin;
             if (!canEnter) {
-                popup->setContentTextShowed("您的金币不够");
+                popup->setContentTextShowed("您的金币不足");
             }
             else {
                 myslider->setMaximumValue(Global::getInstance()->user_data.gold);
-                
             }
             
         }
             break;
             
         case 1:{
+            room = diItems.at(roomIndexSelected);
             if (roomIndexSelected + 1 == diItems.size()) {
                 passwordEnter = true;
                 myslider->setMaximumValue(Global::getInstance()->user_data.gold);
+            }
+            else {
+                canEnter = Global::getInstance()->user_data.gold >= room->chipMin;
+                if (!canEnter) {
+                    popup->setContentTextShowed("您的金币不足");
+                }
+                else {
+                    char m_creat_string[200] = {0};
+                    sprintf(m_creat_string, "创建%d金币的房间", room->chipMin);
+                    popup->setContentTextShowed(m_creat_string);
+                    
+                    showSlider = false;
+                }
             }
         }
             break;
             
         case 2:{
+            room = xuanItems.at(roomIndexSelected);
             if (roomIndexSelected + 1 == xuanItems.size()) {
                 passwordEnter = true;
                 myslider->setMaximumValue(Global::getInstance()->user_data.diamond);
             }
-            
+            else {
+                canEnter = Global::getInstance()->user_data.diamond >= room->chipMin;
+                if (!canEnter) {
+                    popup->setContentTextShowed("您的钻石不足");
+                }
+                else {
+                    char m_creat_string[200] = {0};
+                    sprintf(m_creat_string, "创建%d钻石的房间", room->chipMin);
+                    popup->setContentTextShowed(m_creat_string);
+                    
+                    showSlider = false;
+                }
+            }
         }
             break;
             
@@ -509,7 +564,7 @@ void Hall::showSettingChip(){
             room = huangItems.at(roomIndexSelected);
             canEnter = Global::getInstance()->user_data.silver >= room->chipMin;
             if (!canEnter) {
-                popup->setContentTextShowed("您的银币不够");
+                popup->setContentTextShowed("您的银币不足");
             }
             else {
                 myslider->setMaximumValue(Global::getInstance()->user_data.silver);
@@ -530,8 +585,11 @@ void Hall::showSettingChip(){
     this->addChild(popup, 2);
     
     if (canEnter) {
-        popup->addChild(myslider);
-        myslider->addTargetWithActionForControlEvents(this, cccontrol_selector(Hall::sliderChangerCallBack), Control::EventType::VALUE_CHANGED);
+        if (showSlider) {
+            popup->addChild(myslider);
+            myslider->addTargetWithActionForControlEvents(this, cccontrol_selector(Hall::sliderChangerCallBack), Control::EventType::VALUE_CHANGED);
+        }
+        
         if (room != NULL) {
             myslider->setMinimumAllowedValue(room->chipMin);
             myslider->setValue(room->chipMin);
@@ -539,7 +597,7 @@ void Hall::showSettingChip(){
     }
     
     if (passwordEnter) {
-        auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, MIN(0.1 * popup->m_dialogContentSize.height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+        auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, MIN(0.15 * popup->m_dialogContentSize.height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
         inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.40 * popup->getContentSize().height));
         inputBox->setTag(passwordBoxTag);
         popup->addChild(inputBox);
@@ -606,9 +664,21 @@ void Hall::popButtonCallback(Node* pNode){
                     
                 }
                 else {
-                    room = diItems.at(roomIndexSelected);
-                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-                    onHttpRequest_CreateRoom(room->typeID);
+                    int vip_level = Global::getInstance()->calculateVIPLevel(Global::getInstance()->user_data.introCount);
+                    if (vip_level > 0) {
+                        room = diItems.at(roomIndexSelected);
+                        
+                        if (room->chipMin > Global::getInstance()->user_data.gold) {
+                            NoteTip::show("金币不足，不能创建");
+                        }
+                        else {
+                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                            onHttpRequest_CreateRoom(room->typeID);
+                        }
+                    }
+                    else {
+                        NoteTip::show("抱歉，您还不是VIP会员");
+                    }
                 }
             }
                 break;
@@ -636,8 +706,14 @@ void Hall::popButtonCallback(Node* pNode){
                 }
                 else {
                     room = xuanItems.at(roomIndexSelected);
-                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-                    onHttpRequest_CreateRoom(room->typeID);
+                    if (room->chipMin > Global::getInstance()->user_data.diamond) {
+                        NoteTip::show("钻石不足，不能创建");
+                    }
+                    else {
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        onHttpRequest_CreateRoom(room->typeID);
+                    }
+                    
                 }
             }
                 break;

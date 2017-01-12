@@ -130,6 +130,7 @@ public:
     int playEffect_select(bool loop);
     int playEffect_button(bool loop);
     
+    int calculateVIPLevel(int introCount);//通过邀请人数计算vip等级
     int getInt(char *buffer, int offset);
     
     void saveLoginData(const rapidjson::Value& val_content);

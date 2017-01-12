@@ -15,7 +15,7 @@ struct UserData {
 //    "headImgUrl": null,
     char inviteCode[20];
     char winningPercent[20];
-//    "introCount": 0,
+    int introCount;
     int gameTimes;
     int diamond;
     int gold;
