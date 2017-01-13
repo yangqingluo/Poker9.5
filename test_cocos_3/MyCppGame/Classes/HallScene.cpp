@@ -631,8 +631,6 @@ void Hall::popButtonCallback(Node* pNode){
                 auto scene = OnlinePokerDesk::createScene();
                 OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
                 layer->roomType = room->type;
-                layer->perMin = room->perMin;
-                layer->chipMin = room->chipMin;
                 strcpy(layer->roomTypeId, room->typeID);
                 layer->jettonToEnter = jettonToEnter;
                 

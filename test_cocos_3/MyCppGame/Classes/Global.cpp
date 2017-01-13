@@ -431,9 +431,18 @@ void Global::parseData(char* pbuf, int len){
                             memcpy(table_data.tableId, tableId, strlen(tableId));
                         }
                         
-                        if (val_content.HasMember("roomId")) {
-                            const char* roomId = val_content["roomId"].GetString();
-                            memcpy(table_data.roomId, roomId, strlen(roomId));
+                        if (val_content.HasMember("room")) {
+                            rapidjson::Value& val_room = val_content["room"];
+                            
+                            if (val_room.IsObject()) {
+                                table_data.minStack = atoi(val_room["minStack"].GetString());
+                                table_data.minPerStack= atoi(val_room["minPerStack"].GetString());
+                                const char* roomId = val_room["id"].GetString();
+                                memcpy(table_data.roomId, roomId, strlen(roomId));
+                                
+                                const char* roomType = val_room["roomType"].GetString();
+                                memcpy(table_data.roomType, roomType, strlen(roomType));
+                            }
                         }
                         
                         const char* description = val_content["description"].GetString();

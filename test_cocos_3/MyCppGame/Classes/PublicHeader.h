@@ -25,6 +25,9 @@ struct UserData {
 
 struct TableData {
     int code;
+    int minPerStack;//最小下注额
+    int minStack;//房间金额
+    char roomType[Min_String_Length];//房间类型
     char tableId[Max_ID_Length];
     char roomId[Max_ID_Length];
     char bureauId[Max_ID_Length];//牌局ID

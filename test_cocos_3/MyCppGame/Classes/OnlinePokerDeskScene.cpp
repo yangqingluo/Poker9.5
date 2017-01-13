@@ -11,7 +11,7 @@
 
 const float jetton_height_scale = 0.08;
 
-OnlinePokerDesk::OnlinePokerDesk():chipMin(0),perMin(0),m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
+OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
     pcPlayer = new Player();
     pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
@@ -135,6 +135,11 @@ bool OnlinePokerDesk::init()
     gamePlayerInfoLabel->setColor(Color3B::WHITE);
     gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(gamePlayerInfoLabel);
+    
+    roomInfoLabel = Label::createWithTTF("    房间名    ", "fonts/STKaiti.ttf", 10);
+    roomInfoLabel->setPosition(0.5 * roomInfoLabel->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
+    roomInfoLabel->setTextColor(Color4B::WHITE);
+    bottom_sprite->addChild(roomInfoLabel);
     
     int betJettonArray[9] = {10,20,50,100,200,500,1000,2000,5000};
     betLimiter = BetLimiter::create(betJettonArray, 9, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
@@ -671,7 +676,12 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                             }
                         }
                         
-                        if (totalBet * 3 > player_data.remainCap) {
+                        if (betLimiter->getSelectedJettonValue() < Global::getInstance()->table_data.minPerStack) {
+                            char m_PerStack[100] = {0};
+                            sprintf(m_PerStack, "本房间下注额不能小于%d",Global::getInstance()->table_data.minPerStack);
+                            NoteTip::show(m_PerStack);
+                        }
+                        else if (totalBet * 3 > player_data.remainCap) {
                             NoteTip::show("下注不能超过本金1/3");
                         }
                         else {
@@ -680,7 +690,8 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                             Global::getInstance()->playEffect_add_gold(false);
                             
                             //                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                            totalBet += betLimiter->getSelectedJettonValue();
+                            
+                            
                             Global::getInstance()->sendBetStake(betLimiter->getSelectedJettonValue(), (int)m_arrChairs.getIndex(chair) + 1);
                         }
                         
@@ -1090,6 +1101,10 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_enterRoom:
         case cmd_enterRoomByPassword:{
             this->showMessageManager(false);
+            
+//            if (strlen(Global::getInstance()->table_data.roomType) > 0) {
+//                roomInfoLabel->setString(Global::getInstance()->table_data.roomType);
+//            }
             
             switch (Global::getInstance()->table_data.code) {
                 case state_enterRoom_success_wait:

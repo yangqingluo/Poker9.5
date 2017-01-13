@@ -40,8 +40,8 @@ public:
     int roomType;//房间类型
     char roomTypeId[Max_ID_Length];//房间类型Id
     int jettonToEnter;//带入的筹码数量
-    int chipMin;//带入筹码最小值
-    int perMin;//单注下注最小值
+//    int chipMin;//带入筹码最小值
+//    int perMin;//单注下注最小值
     char roomPassword[length_room_password + 1];
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
@@ -54,6 +54,7 @@ public:
     TableView* playerListTableView;
     Label* countLabel;
     Label* gamePlayerInfoLabel;
+    Label* roomInfoLabel;
     BetLimiter* betLimiter;
     Sprite* dealerHead;
     MenuItemImage* btn_BeBankerItem;
