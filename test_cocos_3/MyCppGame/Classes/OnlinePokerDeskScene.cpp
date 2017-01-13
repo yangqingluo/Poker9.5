@@ -9,6 +9,10 @@
 #include "OnlinePokerDeskScene.h"
 #include "PopAlertDialog.h"
 
+#define dialogTag      9527
+
+#define inputMoneyBoxTag   9529
+
 #define pokerMoveTime 0.5
 const float jetton_height_scale = 0.08;
 
@@ -140,7 +144,7 @@ bool OnlinePokerDesk::init()
     auto btn_addJetton = Button::create("images/btn_add.png","images/btn_add.png");
     btn_addJetton->setScale9Enabled(true);//打开scale9 可以拉伸图片
     btn_addJetton->setContentSize(Size(0.8 * bottom_sprite->getContentSize().height, 0.8 * bottom_sprite->getContentSize().height));
-    btn_addJetton->setPosition(Vec2(bottom_sprite->getContentSize().width - 0.5 * btn_addJetton->getContentSize().width, gamePlayerInfoLabel->getPositionY()));
+    btn_addJetton->setPosition(Vec2(bottom_sprite->getContentSize().width - 0.5 * btn_addJetton->getContentSize().width, bottom_sprite->getContentSize().width - 0.6 * btn_addJetton->getContentSize().width));
     btn_addJetton->addTouchEventListener(CC_CALLBACK_2(OnlinePokerDesk::touchEvent, this));
     btn_addJetton->setTag(10);
     bottom_sprite->addChild(btn_addJetton);
@@ -257,15 +261,15 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
             //准备
             if (m_deskState == DeskState_Waiting) {
                 bool canPrepare = true;
-//                if (Global::getInstance()->playerListCount > 0) {
-//                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
-//                        PlayerData player_data = Global::getInstance()->playerList[i];
-//                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
-//                            canPrepare = (player_data.remainCap >= this->chipMin);
-//                            break;
-//                        }
-//                    }
-//                }
+                if (Global::getInstance()->playerListCount > 0) {
+                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+                        PlayerData player_data = Global::getInstance()->playerList[i];
+                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
+                            canPrepare = (player_data.remainCap >= 3 * Global::getInstance()->table_data.minPerStack);
+                            break;
+                        }
+                    }
+                }
                 
                 if (canPrepare) {
                     m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
@@ -312,7 +316,15 @@ void OnlinePokerDesk::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventTy
             
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
-                    
+                case 10:{
+                    if (Global::getInstance()->isDealer) {
+                        NoteTip::show("庄家不能补充本金");
+                    }
+                    else {
+                        this->showSettingChip();
+                    }
+                }
+                    break;
                     
                 default:
                     break;
@@ -331,13 +343,23 @@ void OnlinePokerDesk::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventTy
 
 void OnlinePokerDesk::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
-        updateDeskState(DeskState_Waiting);
-        scheduleUpdate();
+        PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
+        if (popup) {
+            cocos2d::ui::EditBox* editBox = (cocos2d::ui::EditBox* )popup->getChildByTag(inputMoneyBoxTag);
+            if (editBox) {
+                int jettonToAdd = atoi(editBox->getText());
+                if (jettonToAdd <= 0) {
+                    NoteTip::show("请输入正确的数目");
+                }
+                else if (Global::getInstance()->isDealer) {
+                    NoteTip::show("庄家不能补充本金");
+                }
+                else {
+                    Global::getInstance()->sendSupplyBit(jettonToAdd);
+                }
+            }
+        }
     }
-    else if(pNode->getTag() == 1) {
-        this->goBackAction();
-    }
-    pNode->removeFromParent();
 }
 
 void OnlinePokerDesk::onEnter(){
@@ -378,20 +400,38 @@ void OnlinePokerDesk::showMessageManager(bool isShow){
 }
 
 void OnlinePokerDesk::showSettingChip(){
-    PopAlertDialog* popup = PopAlertDialog::create("images/set_chip_bg.png",Size(312,190));
-    popup->setTitle("");
-    popup->setContentText("请设置本金数目",12,50,130);
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    PopAlertDialog* popup = PopAlertDialog::create("images/bg_dialog_empty.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+    popup->setTitle("补充本金");
+    popup->setTag(dialogTag);
     popup->setCallBackFunc(this,callfuncN_selector(OnlinePokerDesk::popButtonCallback));
-    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+    
     popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
+    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
     
     this->addChild(popup);
     
-    ControlSlider* myslider = ControlSlider::create("images/slider_bg.png","images/slider_jd.png","images/slider_hk.png");
-    myslider->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height * 0.45);
-    myslider->setMaximumValue(100);
-    myslider->setMinimumValue(0);
-    popup->addChild(myslider);
+    auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, MIN(0.15 * popup->m_dialogContentSize.height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+    inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.50 * popup->getContentSize().height));
+    inputBox->setTag(inputMoneyBoxTag);
+    popup->addChild(inputBox);
+    
+    //属性设置
+    //    inputBox->setFontName("fonts/STKaiti.ttf");
+    inputBox->setFontSize(12);
+    inputBox->setFontColor(Color4B::BLACK);
+    //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+    inputBox->setPlaceholderFontSize(12);
+    inputBox->setPlaceholderFontColor(Color4B::GRAY);
+    
+    //模式类型设置
+    inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
+//    inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::SENSITIVE);
+//    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
+    
+    inputBox->setPlaceHolder("补充本金的数目");
+    inputBox->setMaxLength(6);
+    
 }
 
 void OnlinePokerDesk::goBackAction(){
