@@ -282,6 +282,12 @@ bool Hall::init()
     this->addChild(noteListSprite, 2);
     
     noteListCellHeight = noteListSprite->getBoundingBox().size.height * 0.5;
+    
+    auto noteNoticeBG = Sprite::create("images/notice_no_gamble.png");
+    noteNoticeBG->setScale(0.3 * noteListSprite->getContentSize().width / noteNoticeBG->getContentSize().width);
+    noteNoticeBG->setPosition(noteListSprite->getContentSize().width - 0.5 * noteNoticeBG->getBoundingBox().size.width - 1.5 * edge, 0.5 * noteListCellHeight);
+    noteListSprite->addChild(noteNoticeBG);
+    
     noteListTableView = TableView::create(this, Size(noteListSprite->getBoundingBox().size.width * 0.96,  noteListCellHeight));
     noteListTableView->setPosition(noteListSprite->getBoundingBox().size.width * 0.02, 0.0 * noteListSprite->getBoundingBox().size.height);
     noteListTableView->setDirection(TableView::Direction::HORIZONTAL);
