@@ -137,13 +137,16 @@ bool OnlinePokerDesk::init()
     bottom_sprite->addChild(gamePlayerInfoLabel);
     
     roomInfoLabel = Label::createWithTTF("    房间名    ", "fonts/STKaiti.ttf", 10);
-    roomInfoLabel->setPosition(0.5 * roomInfoLabel->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
+    roomInfoLabel->setDimensions(MAX(2 * bottom_sprite->getContentSize().height, 100), bottom_sprite->getContentSize().height);
+    roomInfoLabel->setPosition(0.5 * roomInfoLabel->getDimensions().width, 0.5 * bottom_sprite->getContentSize().height);
+    roomInfoLabel->setHorizontalAlignment(TextHAlignment::CENTER);
+    roomInfoLabel->setVerticalAlignment(TextVAlignment::CENTER);
     roomInfoLabel->setTextColor(Color4B::WHITE);
     bottom_sprite->addChild(roomInfoLabel);
     
     int betJettonArray[9] = {10,20,50,100,200,500,1000,2000,5000};
     betLimiter = BetLimiter::create(betJettonArray, 9, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
-    betLimiter->setPosition(2 * bottom_sprite->getContentSize().height, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
+    betLimiter->setPosition(roomInfoLabel->getDimensions().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
     betLimiter->setVisible(false);
     bottom_sprite->addChild(betLimiter);
     
@@ -1102,9 +1105,9 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_enterRoomByPassword:{
             this->showMessageManager(false);
             
-//            if (strlen(Global::getInstance()->table_data.roomType) > 0) {
-//                roomInfoLabel->setString(Global::getInstance()->table_data.roomType);
-//            }
+            if (strlen(Global::getInstance()->table_data.roomType) > 0) {
+                roomInfoLabel->setString(Global::getInstance()->table_data.roomType);
+            }
             
             switch (Global::getInstance()->table_data.code) {
                 case state_enterRoom_success_wait:

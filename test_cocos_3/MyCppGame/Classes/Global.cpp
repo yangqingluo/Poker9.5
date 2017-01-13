@@ -729,34 +729,21 @@ void Global::parseData(char* pbuf, int len){
                         return;
                     }
                     
+                    memset(settleList, 0, sizeof(int) * 4);
+                    
                     rapidjson::Value& val_content = document["content"];
                     
                     countDownInSecond = val_content["countDown"].GetInt();
-                    rapidjson::Value& val_accountResult = val_content["accountResult"];
-                    if (val_accountResult.IsArray()) {
-                        memset(settleList, 0, sizeof(int) * 4);
-                        
-                        for (int i = 0; i < val_accountResult.Size(); ++i) {
-                            rapidjson::Value& val_settle = val_accountResult[i];
-                            
-                            int isOwner = val_settle["isOwner"].GetInt();
-                            if (isOwner == 0) {
-                                if (isDealer) {
-                                    rapidjson::Value& val_resultMap = val_settle["resultMap"];
-                                    
-                                    for (int j = 2; j <= 4; ++j) {
-                                        char gate_settle[10] = {0};
-                                        sprintf(gate_settle, "%d", j);
-                                        if (val_resultMap.HasMember(gate_settle)) {
-                                            rapidjson::Value& val_gate = val_resultMap[gate_settle];
-                                            int count = val_gate["count"].GetInt();
-                                            this->settleList[j - 1] -= count;
-                                        }
-                                    }
-                                }
-                                else {
-                                    const char* userId = val_settle["userId"].GetString();
-                                    if (0 == strcmp(userId, user_data.ID)) {
+                    
+                    if (val_content.HasMember("accountResult")) {
+                        rapidjson::Value& val_accountResult = val_content["accountResult"];
+                        if (val_accountResult.IsArray()) {
+                            for (int i = 0; i < val_accountResult.Size(); ++i) {
+                                rapidjson::Value& val_settle = val_accountResult[i];
+                                
+                                int isOwner = val_settle["isOwner"].GetInt();
+                                if (isOwner == 0) {
+                                    if (isDealer) {
                                         rapidjson::Value& val_resultMap = val_settle["resultMap"];
                                         
                                         for (int j = 2; j <= 4; ++j) {
@@ -765,7 +752,23 @@ void Global::parseData(char* pbuf, int len){
                                             if (val_resultMap.HasMember(gate_settle)) {
                                                 rapidjson::Value& val_gate = val_resultMap[gate_settle];
                                                 int count = val_gate["count"].GetInt();
-                                                this->settleList[j - 1] += count;
+                                                this->settleList[j - 1] -= count;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        const char* userId = val_settle["userId"].GetString();
+                                        if (0 == strcmp(userId, user_data.ID)) {
+                                            rapidjson::Value& val_resultMap = val_settle["resultMap"];
+                                            
+                                            for (int j = 2; j <= 4; ++j) {
+                                                char gate_settle[10] = {0};
+                                                sprintf(gate_settle, "%d", j);
+                                                if (val_resultMap.HasMember(gate_settle)) {
+                                                    rapidjson::Value& val_gate = val_resultMap[gate_settle];
+                                                    int count = val_gate["count"].GetInt();
+                                                    this->settleList[j - 1] += count;
+                                                }
                                             }
                                         }
                                     }
@@ -773,6 +776,7 @@ void Global::parseData(char* pbuf, int len){
                             }
                         }
                     }
+                    
                     
                 }
                     break;
