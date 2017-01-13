@@ -495,6 +495,27 @@ void Global::parseData(char* pbuf, int len){
                     }
                         break;
                         
+                    case cmd_supplyBit:{
+                        //补充本金
+                        rapidjson::Value& val_content = document["content"];
+                        
+                        post->sub_cmd = val_content["code"].GetInt();
+                        
+                        if (val_content.HasMember("userId") && val_content.HasMember("remindCap")) {
+                            const char* userId = val_content["userId"].GetString();
+                            int remindCap = val_content["remindCap"].GetInt();
+                            
+                            for (int i = 0; i < playerListCount; i++) {
+                                PlayerData player_data = playerList[i];
+                                if (0 == strcmp(userId, player_data.user.ID)) {
+                                    player_data.remainCap = remindCap;
+                                }
+                            }
+                        }
+                        
+                    }
+                        break;
+                        
                     default:
                         break;
                 }
@@ -781,6 +802,26 @@ void Global::parseData(char* pbuf, int len){
                 }
                     break;
                     
+                case cmd_bureauOwnerOff:{
+                    //庄家强制下庄
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        return;
+                    }
+                    
+                    isDealer = false;
+                    memset(table_data.bureauOwnerId, 0, sizeof(table_data.bureauOwnerId));
+                    
+                    rapidjson::Value& val_content = document["content"];
+                    if (val_content.IsObject()) {
+                        if (val_content.HasMember("ownerLossReason") && val_content.HasMember("ownerUserId") && val_content.HasMember("bureauId")) {
+                            
+                            
+                        }
+                    }
+                }
+                    break;
+                    
                 default:
                     break;
             }
@@ -953,6 +994,26 @@ void Global::sendBetStake(int jetton, int gateType){
     content.AddMember("gateType", gateType, allocator);
     
     doc.AddMember("id", cmd_betStake, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
+void Global::sendSupplyBit(int count){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
+    content.AddMember("count", count, allocator);
+    
+    doc.AddMember("id", cmd_supplyBit, allocator);
     doc.AddMember("content", content, allocator);
     
     rapidjson::StringBuffer buffer;

@@ -107,9 +107,11 @@ private:
     
     bool createPokers();//创建一副扑克牌
     bool reindexPoker();//洗牌
+    void updatePokerWithData(PokerSprite* poker, PokerData data);
     void sendPoker();//发牌
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
     void addJetton(PokerChair* chair,JettonSprite* jetton);//添加筹码
+    
     virtual void update(float delta);//系统scheduleupdate回调函数
     
     void updateDeskState(DeskState state);

@@ -38,7 +38,7 @@ using namespace CocosDenshion;
 #define cmd_countDownSendCard          1009//发牌通知
 #define cmd_sysBetStake                1010//同步下注数据通知
 #define cmd_settle                     1011//结算通知
-
+#define cmd_bureauOwnerOff             1012//庄家强制下庄通知
 
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
@@ -91,6 +91,7 @@ public:
     ~PostRef();
     
     int cmd;
+    int sub_cmd;
     char description[1024];
 };
 
@@ -144,6 +145,7 @@ public:
     void sendApplyStabber(int gateType);
     void sendLeaveRoom();
     void sendBetStake(int jetton, int gateType);
+    void sendSupplyBit(int count);//补充本金
     
     void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
     void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);

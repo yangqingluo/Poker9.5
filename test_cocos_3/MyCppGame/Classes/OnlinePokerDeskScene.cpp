@@ -9,6 +9,7 @@
 #include "OnlinePokerDeskScene.h"
 #include "PopAlertDialog.h"
 
+#define pokerMoveTime 0.5
 const float jetton_height_scale = 0.08;
 
 OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
@@ -195,8 +196,14 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
                 PokerSprite* poker = m_arrPokers.at(judgementPokerIndex);
                 poker->setVisible(false);
             }
+        }
+            break;
             
-            
+        case DeskState_SendPoker:{
+            if (!m_isSendSet) {
+                //发牌动画未完成
+                
+            }
         }
             break;
             
@@ -819,6 +826,18 @@ bool OnlinePokerDesk::reindexPoker(){
     return true;
 }
 
+void OnlinePokerDesk::updatePokerWithData(PokerSprite* poker, PokerData data){
+    int color = data.color;
+    int num = data.num;
+    
+    if (color == 0 && (num == 14 || num == 15)) {
+        color = (num == 14) ? PokerColor_JokerJunior : PokerColor_JokerSenior;
+        num = PokerPoint_Joker;
+    }
+    poker->setPoker_color((PokerColor)color);
+    poker->setPoker_point((PokerPoint)num);
+}
+
 void OnlinePokerDesk::sendPoker(){
     if (m_IndexSend >= m_arrPokers.size()) {
         return;
@@ -827,49 +846,15 @@ void OnlinePokerDesk::sendPoker(){
     int index = m_IndexSend % 9;
     if (index == 0 && m_isSendSingle) {
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+        pk->showPokerAnimated(true, true, pokerMoveTime);
         
-        int color = Global::getInstance()->pokerJudgement.color;
-        int num = Global::getInstance()->pokerJudgement.num;
-        
-        if (color == 0 && (num == 14 || num == 15)) {
-            color = (num == 14) ? PokerColor_JokerJunior : PokerColor_JokerSenior;
-            num = PokerPoint_Joker;
-        }
-        pk->setPoker_color((PokerColor)color);
-        pk->setPoker_point((PokerPoint)num);
-        
-        pk->showPokerAnimated(true, true, 0.5);
-        
-        judgementPokerIndex = m_IndexSend;
         ++m_IndexSend;
         m_isSendSingle = false;
-        
-        if (pk->getPoker_point() == PokerPoint_Joker) {
-            m_IndexStart = 0;
-        }
-        else{
-            m_IndexStart = pk->getPoker_point() - 1;
-        }
     }
     else if (index > 0 && index <= 8 && m_isSendSingle) {
         int chair_index = ((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
-        
         PokerChair* chair = m_arrChairs.at(chair_index);
-        
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
-
-        PokerPair pair = Global::getInstance()->pokerSendedList[chair_index];
-        PokerData card = pair.poker[(index - 1) / 4];
-        
-        int color = card.color;
-        int num = card.num;
-        
-        if (color == 0 && (num == 14 || num == 15)) {
-            color = (num == 14) ? PokerColor_JokerJunior : PokerColor_JokerSenior;
-            num = PokerPoint_Joker;
-        }
-        pk->setPoker_color((PokerColor)color);
-        pk->setPoker_point((PokerPoint)num);
         
         movePoker(chair, pk);
         
@@ -879,11 +864,10 @@ void OnlinePokerDesk::sendPoker(){
 }
 
 void OnlinePokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
-    float time = 0.5;
     poker->chairIndex = m_arrChairs.getIndex(chair);
     chair->pokerArray.pushBack(poker);
-    MoveTo* move = MoveTo::create(time, chair->getPoint());
-    RotateBy* rotate = RotateBy::create(time, 360);
+    MoveTo* move = MoveTo::create(pokerMoveTime, chair->getPoint());
+    RotateBy* rotate = RotateBy::create(pokerMoveTime, 360);
     CallFuncN* func = CallFuncN::create(CC_CALLBACK_1(OnlinePokerDesk::sendedSinglePoker, this, chair));
     Sequence* sequence = Sequence::create(Spawn::create(rotate,move, NULL),func,NULL);
     poker->runAction(sequence);
@@ -915,7 +899,7 @@ void OnlinePokerDesk::turnedSinglePokerCallback(Node* pSender){
                 PokerChair* chair = m_arrChairs.at(i);
                 chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
             }
-            MoveTo* move = MoveTo::create(0.5, judgementPosition);
+            MoveTo* move = MoveTo::create(pokerMoveTime, judgementPosition);
             Sequence* sequence = Sequence::create(move,NULL);
             poker->runAction(sequence);
             m_isSendSingle = true;
@@ -1152,8 +1136,50 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
             
-        case cmd_countDownSendCard:{
+        case cmd_supplyBit:{
+            //补充本金
             this->showMessageManager(false);
+            
+            if (post->sub_cmd == 1000) {
+                NoteTip::show("补充本金成功");
+                this->showGamePlayerInfo();
+                this->showDealerInfo();
+            }
+            else {
+                NoteTip::show("补充本金失败");
+            }
+        }
+            break;
+            
+        case cmd_countDownSendCard:{
+            //发牌
+            this->showMessageManager(false);
+            
+            if (m_arrPokers.size() >= 9 + m_IndexSend) {
+                judgementPokerIndex = m_IndexSend;
+                for (int i = 0; i < 9; i++) {
+                    PokerSprite *pk = m_arrPokers.at(m_IndexSend + i);
+                    if (i == 0) {
+                        this->updatePokerWithData(pk, Global::getInstance()->pokerJudgement);
+                        if (pk->getPoker_point() == PokerPoint_Joker) {
+                            m_IndexStart = 0;
+                        }
+                        else{
+                            m_IndexStart = pk->getPoker_point() - 1;
+                        }
+                    }
+                    else {
+                        int chair_index = ((i - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
+                        
+                        PokerPair pair = Global::getInstance()->pokerSendedList[chair_index];
+                        PokerData card = pair.poker[(i - 1) / 4];
+                        
+                        this->updatePokerWithData(pk, card);
+                    }
+                }
+            }
+            
+            
             
             sendPokerAction();
         }
@@ -1171,6 +1197,14 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             this->showMessageManager(false);
             
             this->stepIn(DeskState_Settle);
+        }
+            break;
+            
+        case cmd_bureauOwnerOff:{
+            //下庄通知
+            showDealerInfo();
+            
+            NoteTip::show("庄家下庄");
         }
             break;
             
