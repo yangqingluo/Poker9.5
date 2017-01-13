@@ -1073,8 +1073,25 @@ void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         
                     }
                     else if (tag == "createRoom"){
+                        RoomItem* room = NULL;
+                        char m_roomString[50] = {0};
+                        if (roomTypeSelected == 1) {
+                            room = diItems.at(roomIndexSelected);
+                            sprintf(m_roomString, "VIP房间：≥%d\n底注%d", room->chipMin, room->perMin);
+                        }
+                        else if (roomTypeSelected == 2) {
+                            room = xuanItems.at(roomIndexSelected);
+                            sprintf(m_roomString, "钻石房间：≥%d\n底注%d", room->chipMin, room->perMin);
+                        }
+                        
                         char msg[200] = {0};
-                        sprintf(msg, "请牢记您的密码：%s", document["content"].GetString());
+                        if (strlen(m_roomString) > 0) {
+                            sprintf(msg, "%s\n请牢记您的密码：%s", m_roomString, document["content"].GetString());
+                        }
+                        else {
+                            sprintf(msg, "请牢记您的密码：%s", document["content"].GetString());
+                        }
+                        
                         MessageBox(msg, "创建房间成功");
                     }
                 }
