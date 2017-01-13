@@ -141,12 +141,13 @@ bool OnlinePokerDesk::init()
     gamePlayerInfoLabel->setPosition(0.85 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(gamePlayerInfoLabel);
     
-    auto btn_addJetton = Button::create("images/btn_add.png","images/btn_add.png");
+    btn_addJetton = Button::create("images/btn_add.png","images/btn_add.png");
     btn_addJetton->setScale9Enabled(true);//打开scale9 可以拉伸图片
     btn_addJetton->setContentSize(Size(0.8 * bottom_sprite->getContentSize().height, 0.8 * bottom_sprite->getContentSize().height));
-    btn_addJetton->setPosition(Vec2(bottom_sprite->getContentSize().width - 0.5 * btn_addJetton->getContentSize().width, bottom_sprite->getContentSize().width - 0.6 * btn_addJetton->getContentSize().width));
+    btn_addJetton->setPosition(Vec2(bottom_sprite->getContentSize().width - 0.6 * btn_addJetton->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height));
     btn_addJetton->addTouchEventListener(CC_CALLBACK_2(OnlinePokerDesk::touchEvent, this));
     btn_addJetton->setTag(10);
+    btn_addJetton->setVisible(false);
     bottom_sprite->addChild(btn_addJetton);
     
     roomInfoLabel = Label::createWithTTF("    房间名    ", "fonts/STKaiti.ttf", 10);
@@ -409,7 +410,7 @@ void OnlinePokerDesk::showSettingChip(){
     popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
     popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
     
-    this->addChild(popup);
+    this->addChild(popup, 60);
     
     auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, MIN(0.15 * popup->m_dialogContentSize.height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
     inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.50 * popup->getContentSize().height));
@@ -1176,13 +1177,15 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 case state_enterRoom_success_prepare:{
                     sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
                     showTimer->showPrefix();
+                    btn_addJetton->setVisible(true);
                     
                     scheduleUpdate();
                 }
                     break;
 
                 case state_enterRoom_fail_no_money:
-                case state_enterRoom_fail_full:{
+                case state_enterRoom_fail_full:
+                case state_enterRoom_fail_password:{
                     NoteTip::show(Global::getInstance()->table_data.description);
                 }
                     break;
@@ -1224,7 +1227,12 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 this->showDealerInfo();
             }
             else {
-                NoteTip::show("补充本金失败");
+                if (strlen(post->description)) {
+                    NoteTip::show(post->description);
+                }
+                else {
+                    NoteTip::show("补充本金失败");
+                }
             }
         }
             break;

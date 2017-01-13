@@ -51,6 +51,7 @@ public:
     void popButtonCallback(Node* pNode);
     void showSettingChip();
     
+    Button* btn_addJetton;
     QLImageSprite* upright_sprite;
     QLImageSprite* bottom_sprite;
     QLImageSprite* playerList_sprite;

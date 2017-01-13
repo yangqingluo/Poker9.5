@@ -500,6 +500,10 @@ void Global::parseData(char* pbuf, int len){
                         rapidjson::Value& val_content = document["content"];
                         
                         post->sub_cmd = val_content["code"].GetInt();
+                        if (val_content.HasMember("description")) {
+                            const char* description = val_content["description"].GetString();
+                            memcpy(post->description, description, strlen(description));
+                        }
                         
                         if (val_content.HasMember("userId") && val_content.HasMember("remindCap")) {
                             const char* userId = val_content["userId"].GetString();
@@ -989,6 +993,7 @@ void Global::sendBetStake(int jetton, int gateType){
     rapidjson::Value content(rapidjson::kObjectType);
     
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
     content.AddMember("roundId", rapidjson::Value(table_data.roundId, allocator), allocator);
     content.AddMember("count", jetton, allocator);
     content.AddMember("gateType", gateType, allocator);
@@ -1010,6 +1015,7 @@ void Global::sendSupplyBit(int count){
     rapidjson::Value content(rapidjson::kObjectType);
     
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("tableId", rapidjson::Value(table_data.tableId, allocator), allocator);
     content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
     content.AddMember("count", count, allocator);
     
