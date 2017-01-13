@@ -133,9 +133,17 @@ bool OnlinePokerDesk::init()
     this->addChild(bottom_sprite);
     
     gamePlayerInfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
-    gamePlayerInfoLabel->setColor(Color3B::WHITE);
-    gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
+    gamePlayerInfoLabel->setTextColor(Color4B::WHITE);
+    gamePlayerInfoLabel->setPosition(0.85 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(gamePlayerInfoLabel);
+    
+    auto btn_addJetton = Button::create("images/btn_add.png","images/btn_add.png");
+    btn_addJetton->setScale9Enabled(true);//打开scale9 可以拉伸图片
+    btn_addJetton->setContentSize(Size(0.8 * bottom_sprite->getContentSize().height, 0.8 * bottom_sprite->getContentSize().height));
+    btn_addJetton->setPosition(Vec2(bottom_sprite->getContentSize().width - 0.5 * btn_addJetton->getContentSize().width, gamePlayerInfoLabel->getPositionY()));
+    btn_addJetton->addTouchEventListener(CC_CALLBACK_2(OnlinePokerDesk::touchEvent, this));
+    btn_addJetton->setTag(10);
+    bottom_sprite->addChild(btn_addJetton);
     
     roomInfoLabel = Label::createWithTTF("    房间名    ", "fonts/STKaiti.ttf", 10);
     roomInfoLabel->setDimensions(MAX(2 * bottom_sprite->getContentSize().height, 100), bottom_sprite->getContentSize().height);
@@ -283,6 +291,36 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
         case 4:{
             //玩家列表
             playerList_sprite->setVisible(!playerList_sprite->isVisible());
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void OnlinePokerDesk::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
+    Button* button = (Button* )pSender;
+    switch (type){
+        case Widget::TouchEventType::BEGAN:
+            
+            break;
+            
+        case Widget::TouchEventType::MOVED:
+            
+            break;
+            
+        case Widget::TouchEventType::ENDED:
+            switch (button->getTag()) {
+                    
+                    
+                default:
+                    break;
+            }
+            break;
+            
+        case Widget::TouchEventType::CANCELED:{
+            
         }
             break;
             

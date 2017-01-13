@@ -15,6 +15,8 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+using namespace ui;
+
 #include "Global.h"
 
 #include "GameTimer.h"
@@ -45,6 +47,7 @@ public:
     char roomPassword[length_room_password + 1];
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
+    void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
     void popButtonCallback(Node* pNode);
     void showSettingChip();
     
