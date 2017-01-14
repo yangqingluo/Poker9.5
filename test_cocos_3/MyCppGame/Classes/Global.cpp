@@ -510,9 +510,9 @@ void Global::parseData(char* pbuf, int len){
                             int remindCap = val_content["remindCap"].GetInt();
                             
                             for (int i = 0; i < playerListCount; i++) {
-                                PlayerData player_data = playerList[i];
-                                if (0 == strcmp(userId, player_data.user.ID)) {
-                                    player_data.remainCap = remindCap;
+                                PlayerData* player_data = &playerList[i];
+                                if (0 == strcmp(userId, player_data->user.ID)) {
+                                    player_data->remainCap = remindCap;
                                 }
                             }
                         }
