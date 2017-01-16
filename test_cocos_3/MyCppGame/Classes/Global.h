@@ -114,9 +114,11 @@ public:
     void clearRoomData();//清除房间数据
     void clearTableData();//清除桌子数据
     void clearBureauData();//清除局数据
+    void clearBureauDataWithoutOwner();//清除局数据（庄家数据除外）
     void clearRoundData();//清除把数据
     void clearBetData();//清除下注数据
     void clearBureauOwnerData();//清除庄家数据
+    void resetRoundIndex();//把数重置
     
     
     bool isBackgroundMusic();

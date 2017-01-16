@@ -259,9 +259,20 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
 void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-            
-            Global::getInstance()->sendLeaveRoom();
+            switch (m_deskState) {
+                case DeskState_Default:
+                case DeskState_Prepared:
+                case DeskState_Waiting:{
+                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                    Global::getInstance()->sendLeaveRoom();
+                }
+                    break;
+                    
+                default:{
+                    NoteTip::show("当前阶段不能退出");
+                }
+                    break;
+            }
             
         }
             break;
@@ -643,18 +654,25 @@ void OnlinePokerDesk::sendPokerAction(){
 void OnlinePokerDesk::showGamePlayerInfo(){
     this->playerListTableView->reloadData();
     
-    char mString[100];
+    char mString[100] = {0};
     for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
         PlayerData player_data = Global::getInstance()->playerList[i];
         if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
             sprintf(mString,"%s\n筹码：%d",player_data.user.nikename, player_data.remainCap);
             gamePlayerInfoLabel->setString(mString);
-            
-            return;
         }
     }
     
-    sprintf(mString,"%s\n筹码：%d", Global::getInstance()->user_data.nikename, jettonToEnter);
+    if (strlen(mString) == 0) {
+        sprintf(mString,"%s\n筹码：%d", Global::getInstance()->user_data.nikename, jettonToEnter);
+    }
+    
+    if (Global::getInstance()->table_data.round.roundIndex > 0) {
+        char m_indexString[10] = {0};
+        sprintf(m_indexString, "\n第%d把", Global::getInstance()->table_data.round.roundIndex);
+        strcat(mString, m_indexString);
+    }
+    
     gamePlayerInfoLabel->setString(mString);
 }
 void OnlinePokerDesk::showDealerInfo(){
@@ -1098,6 +1116,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_beginCountDownBeforeBureau:{
             this->showMessageManager(false);
             
+            this->showGamePlayerInfo();
+            
             this->stepIn(DeskState_Waiting);
             
         }
@@ -1136,7 +1156,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
         case cmd_countDownApplyStabber:{
             //抢刺
-            log("抢刺 把数:%d",Global::getInstance()->table_data.round.roundIndex);
+            this->showGamePlayerInfo();
             this->stepIn(DeskState_ChooseStabber);
         }
             break;
@@ -1163,7 +1183,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
         case cmd_countDownBetStake:{
             //开始下注倒计时
-            log("下注 把数:%d",Global::getInstance()->table_data.round.roundIndex);
+            this->showGamePlayerInfo();
             this->stepIn(DeskState_Bet);
         }
             break;
@@ -1206,6 +1226,9 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                     break;
             }
             
+            if (strlen(post->description)) {
+                NoteTip::show(post->description);
+            }
         }
             break;
             

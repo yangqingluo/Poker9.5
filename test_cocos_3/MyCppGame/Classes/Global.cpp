@@ -276,6 +276,11 @@ void Global::clearBureauData(){
     memset(&table_data.bureau, 0, sizeof(BureauData));
 }
 
+//清除局数据（庄家数据除外）
+void Global::clearBureauDataWithoutOwner(){
+    memset(table_data.bureau.bureauId, 0, sizeof(table_data.bureau.bureauId));
+}
+
 //清除把数据
 void Global::clearRoundData(){
     memset(&table_data.round, 0, sizeof(RoundData));
@@ -289,6 +294,11 @@ void Global::clearBetData(){
 //清除庄家数据
 void Global::clearBureauOwnerData(){
     memset(table_data.bureau.bureauOwnerId, 0, sizeof(table_data.bureau.bureauOwnerId));
+}
+
+//把数重置
+void Global::resetRoundIndex(){
+    table_data.round.roundIndex = 0;
 }
 
 #pragma Socket
@@ -585,6 +595,8 @@ void Global::parseData(char* pbuf, int len){
                     
                 case cmd_beginCountDownBeforeBureau:{
                     //牌局开始前倒计时
+                    this->resetRoundIndex();
+                    
                     countDownInSecond = document["content"].GetInt();
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
@@ -624,7 +636,7 @@ void Global::parseData(char* pbuf, int len){
                     
                 case cmd_bureauOpen:{
                     //开始牌局
-                    this->clearBureauData();
+                    this->clearBureauDataWithoutOwner();
                     
                     rapidjson::Value& val_content = document["content"];
                     const char* tableId = document["tableId"].GetString();

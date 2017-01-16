@@ -59,6 +59,7 @@ public:
     Label* countLabel;
     Label* gamePlayerInfoLabel;
     Label* roomInfoLabel;
+    Label* roundInfoLabel;
     BetLimiter* betLimiter;
     Sprite* dealerHead;
     MenuItemImage* btn_BeBankerItem;
