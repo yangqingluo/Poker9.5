@@ -212,17 +212,29 @@ void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user
     
     if (val_user.HasMember("diamondGameBit")) {
         const rapidjson::Value& val_diamondGameBit = val_user["diamondGameBit"];
-        data_user->diamond = val_diamondGameBit["amount"].GetInt();
+        if (val_diamondGameBit.IsObject()) {
+            if (val_diamondGameBit.HasMember("amount")) {
+                data_user->diamond = val_diamondGameBit["amount"].GetInt();
+            }
+        }
     }
     
     if (val_user.HasMember("silverGameBit")) {
         const rapidjson::Value& val_silverGameBit = val_user["silverGameBit"];
-        data_user->silver = val_silverGameBit["amount"].GetInt();
+        if (val_silverGameBit.IsObject()) {
+            if (val_silverGameBit.HasMember("amount")) {
+                data_user->silver = val_silverGameBit["amount"].GetInt();
+            }
+        }
     }
     
     if (val_user.HasMember("goldGameBit")) {
         const rapidjson::Value& val_goldGameBit = val_user["goldGameBit"];
-        data_user->gold = val_goldGameBit["amount"].GetInt();
+        if (val_goldGameBit.IsObject()) {
+            if (val_goldGameBit.HasMember("amount")) {
+                data_user->gold = val_goldGameBit["amount"].GetInt();
+            }
+        }
     }
 }
 

@@ -45,7 +45,7 @@ private:
     virtual void editBoxTextChanged(ui::EditBox* editBox, const std::string& text);//编辑框文字改变
     virtual void editBoxReturn(ui::EditBox* editBox); //触发return后的回调函数
     
-    void onHttpRequest_Inviter(string username);
+    void onHttpRequest_Inviter(const char* code);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     
     void onNotification_NoteTip(Ref* pSender);

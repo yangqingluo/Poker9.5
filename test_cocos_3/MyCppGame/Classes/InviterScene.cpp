@@ -8,6 +8,7 @@
 
 #include "InviterScene.h"
 #include "QLImageSprite.h"
+#include "Global.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -95,7 +96,7 @@ bool InviterScene::init()
         switch (i) {
             case 0:{
                 inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::EMAIL_ADDRESS);
-                inputBox->setMaxLength(8);
+                inputBox->setMaxLength(length_invite_code);
                 usernameBox = inputBox;
             }
                 break;
@@ -157,15 +158,13 @@ void InviterScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
                 case 1:{
-                    if (strlen(usernameBox->getText()) != 8) {
+                    if (strlen(usernameBox->getText()) != length_invite_code) {
                         NoteTip::show("邀请码输入有误");
                     }
 
                     else {
-                        NoteTip::show("精彩功能敬请期待");
-//                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-//                        
-//                        onHttpRequest_Inviter(usernameBox->getText());
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示                        
+                        onHttpRequest_Inviter(usernameBox->getText());
                     }
                 }
                     break;
@@ -204,15 +203,17 @@ void InviterScene::editBoxReturn(ui::EditBox* editBox){
 
 #pragma http
 // 发送HTTP请求
-void InviterScene::onHttpRequest_Inviter(string username){
+void InviterScene::onHttpRequest_Inviter(const char* code){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
     
-    request->setRequestType(HttpRequest::Type::GET);
-    // url后面附加数据信息
-    char url[200] = {0};
-    sprintf(url, "http://115.28.109.174:8181/game/user/login?username=%s", username.c_str());
-    request->setUrl(url);
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/updateInviteCode");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "userId=%s&inviteCode=%s", Global::getInstance()->user_data.ID, code);
+    request->setRequestData(param, strlen(param));
     
     // HTTP响应函数
     request->setResponseCallback(CC_CALLBACK_2(InviterScene::onHttpResponse, this));
@@ -227,7 +228,10 @@ void InviterScene::onHttpRequest_Inviter(string username){
 
 // HTTP响应请求函数
 void InviterScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
-    m_pMessage->hidden();
+    if (m_pMessage != NULL) {
+        m_pMessage->hidden();
+        m_pMessage = NULL;
+    }
     
     // 没有收到响应
     if (!response){
@@ -265,7 +269,16 @@ void InviterScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
             const rapidjson::Value& val_code = document["code"];
             int code = val_code.GetInt();
             if (code == 1) {
-                
+                const rapidjson::Value& val_content = document["content"];
+                if (val_content.IsObject()) {
+                    if (val_content.HasMember("nickname")) {
+                        const char* nickname = val_content["nickname"].GetString();
+                        
+                        char msg[200] = {0};
+                        sprintf(msg, "您的邀请人：%s", nickname);
+                        MessageBox(msg, "绑定邀请人成功");
+                    }
+                }
             }
             else {
                 const rapidjson::Value& val_content = document["content"];
