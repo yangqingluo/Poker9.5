@@ -139,7 +139,7 @@ public:
     
     void sendHandle();
     void sendEnterRoom(const char* roomTypeId, int capital);
-    void sendEnterRoomByPassword(const char* roomPassword, int capital);
+    void sendEnterRoomByPassword(const char* roomPassword, int capital, int type);
     void sendPlayerReady();
     void sendApplyOwner();
     void sendApplyStabber(int gateType);

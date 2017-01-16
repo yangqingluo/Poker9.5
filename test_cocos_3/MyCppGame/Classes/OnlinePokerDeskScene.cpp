@@ -373,8 +373,11 @@ void OnlinePokerDesk::onEnter(){
     if (this->roomType == RoomType_Gold) {
         Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
     }
-    else if (this->roomType == RoomType_VIP || this->roomType == RoomType_Diamond) {
-        Global::getInstance()->sendEnterRoomByPassword(this->roomPassword, jettonToEnter);
+    else if (this->roomType == RoomType_VIP) {
+        Global::getInstance()->sendEnterRoomByPassword(this->roomPassword, jettonToEnter, 1);
+    }
+    else if (this->roomType == RoomType_Diamond) {
+        Global::getInstance()->sendEnterRoomByPassword(this->roomPassword, jettonToEnter, 2);
     }
     else {
         this->showMessageManager(false);

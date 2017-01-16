@@ -447,8 +447,8 @@ void Global::parseData(char* pbuf, int len){
                             rapidjson::Value& val_room = val_content["room"];
                             
                             if (val_room.IsObject()) {
-                                table_data.minStack = atoi(val_room["minStack"].GetString());
-                                table_data.minPerStack= atoi(val_room["minPerStack"].GetString());
+                                table_data.minStack = val_room["minStack"].GetInt();
+                                table_data.minPerStack= val_room["minPerStack"].GetInt();
                                 const char* roomId = val_room["id"].GetString();
                                 memcpy(table_data.roomId, roomId, strlen(roomId));
                                 
@@ -893,7 +893,7 @@ void Global::sendEnterRoom(const char* roomTypeId, int capital){
     sendData(buffer.GetString());
 }
 
-void Global::sendEnterRoomByPassword(const char* roomPassword, int capital){
+void Global::sendEnterRoomByPassword(const char* roomPassword, int capital, int type){
     rapidjson::Document doc;
     doc.SetObject();
     rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
@@ -902,6 +902,7 @@ void Global::sendEnterRoomByPassword(const char* roomPassword, int capital){
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
     content.AddMember("roomPassword", rapidjson::Value(roomPassword, allocator), allocator);
     content.AddMember("capital", capital, allocator);
+    content.AddMember("type", type, allocator);
     
     doc.AddMember("id", cmd_enterRoomByPassword, allocator);
     doc.AddMember("content", content, allocator);

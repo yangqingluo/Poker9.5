@@ -375,7 +375,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
             cell = new TableViewCell();
             cell->autorelease();
             
-            Label* titleLabel = Label::createWithTTF("test", "fonts/STKaiti.ttf", 12);
+            Label* titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 12);
             titleLabel->setTextColor(Color4B::BLACK);
             titleLabel->setPosition(recordListCellWidth / 2, 15);
             titleLabel->setDimensions(recordListCellWidth, 30);
