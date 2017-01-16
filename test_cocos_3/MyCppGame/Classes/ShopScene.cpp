@@ -24,6 +24,14 @@ Scene* ShopScene::createScene()
     return scene;
 }
 
+void ShopScene::onEnter(){
+    Layer::onEnter();
+    
+}
+void ShopScene::onExit(){
+    Layer::onExit();
+}
+
 bool ShopScene::init()
 {
     // super init first
@@ -263,6 +271,12 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                 case 1:
                 case 2:{
                     showSettingWithIndex(button->getTag());
+                    if (button->getTag() == 2) {
+                        if (!hasGetRecordList) {
+                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                            this->onHttpRequest_RechargeRecords();
+                        }
+                    }
                 }
                     break;
                     
@@ -371,13 +385,10 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
         }
         
         Label* label = (Label* )cell->getChildByTag(1);
+        
+        RechargeItem* item = rechargeItems.at(idx);
         char content[100];
-        if (idx%2 == 0) {
-            sprintf(content, "2016-10-%d\t+25金币\tVIP奖励",(int)idx);
-        }
-        else{
-            sprintf(content, "2016-10-%d\t+1000金币\t充值",(int)idx);
-        }
+        sprintf(content, "%s\t+%d金币\t%s", item->date, item->amount, (item->rechargeWay == 2) ? "VIP奖励" : "充值");
         
         label->setString(content);
         
@@ -392,7 +403,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
 ssize_t ShopScene::numberOfCellsInTableView(TableView* table)
 {
     if (table == recordListTableView) {
-        return 20;
+        return rechargeItems.size();
     }
     
     return 0;
@@ -404,6 +415,27 @@ void ShopScene::tableCellTouched(TableView* table, TableViewCell* cell){
 
 #pragma http
 // 发送HTTP请求
+void ShopScene::onHttpRequest_RechargeRecords(){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/gamebit/rechargeRecords");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "account=%s", Global::getInstance()->user_data.account);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
+    request->setTag("rechargeRecords");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
 void ShopScene::onHttpRequest_SearchUser(const char* account){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
@@ -547,6 +579,33 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             
                             MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
                         }
+                    }
+                    else if (tag == "rechargeRecords") {
+                        hasGetRecordList = true;
+                        rechargeItems.clear();
+                        
+                        const rapidjson::Value& val_content = document["content"];
+                        if (val_content.IsArray()) {
+                            for (int i = 0; i < val_content.Size(); ++i) {
+                                const rapidjson::Value& val_record = val_content[i];
+                                assert(val_record.IsObject());
+                                
+                                if (val_record.HasMember("rechargeWay") && val_record.HasMember("amount") && val_record.HasMember("date")) {
+                                    RechargeItem* item = new RechargeItem();
+                                    item->autorelease();
+                                    
+                                    item->rechargeWay = atoi(val_record["rechargeWay"].GetString());
+                                    item->amount = val_record["amount"].GetInt();
+                                    sprintf(item->date, "%s", val_record["date"].GetString());
+                                    
+                                    rechargeItems.pushBack(item);
+                                }
+                                
+                                
+                            }
+                        }
+                        
+                        recordListTableView->reloadData();
                     }
                 }
             }

@@ -23,11 +23,20 @@ using namespace std;
 #include "MessageManager.h"
 #include "YNButton.h"
 
+class RechargeItem : public Ref{
+public:
+    int rechargeWay;
+    int amount;
+    char date[40];
+};
+
 class ShopScene : public Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
     static cocos2d::Scene* createScene();
     virtual bool init();
+    virtual void onEnter();
+    virtual void onExit();
     CREATE_FUNC(ShopScene);
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
@@ -37,6 +46,8 @@ private:
     Vector<YNButton* > listButtons;
     Vector<LayerColor* > listLayers;
     float recordListCellWidth = 0;
+    Vector<RechargeItem* > rechargeItems;
+    bool hasGetRecordList = false;
     TableView* recordListTableView;
     
     ui::EditBox* buyCountBox;
@@ -44,6 +55,7 @@ private:
     ui::EditBox* giveCountBox;
     MessageManager* m_pMessage;
     
+    void onHttpRequest_RechargeRecords();
     void onHttpRequest_DonateUserGold(const char* account, const char* count);
     void onHttpRequest_DonateUserDiamond(const char* account, const char* count);
     void onHttpRequest_SearchUser(const char* account);
