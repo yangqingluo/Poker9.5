@@ -106,13 +106,18 @@ public:
     
     int playerListCount = 0;
     PlayerData playerList[MAX_PLAYER_NUM];
-    PokerData pokerJudgement;//判定牌(决定发牌顺序的牌)
-    PokerPair pokerSendedList[4];
-    int settleList[4];
-    int betList[4];
     
-    void clearPlayerList();
-    void clearPokerSendedList();
+    
+    void clearPlayerList();//清除玩家列表
+    void clearPokerSendedList();//清除发牌数据
+    
+    void clearRoomData();//清除房间数据
+    void clearTableData();//清除桌子数据
+    void clearBureauData();//清除局数据
+    void clearRoundData();//清除把数据
+    void clearBetData();//清除下注数据
+    void clearBureauOwnerData();//清除庄家数据
+    
     
     bool isBackgroundMusic();
     void setBackgroundMusic(bool yn);

@@ -220,6 +220,14 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
         }
             break;
             
+        case DeskState_ChooseStabber:{
+            for (int i = 0; i < m_arrChairs.size(); i++) {
+                PokerChair* chairBuffer = m_arrChairs.at(i);
+                chairBuffer->showBeStabber(false);
+            }
+        }
+            break;
+            
         default:
             break;
     }
@@ -486,7 +494,7 @@ void OnlinePokerDesk::settleAction(){
                 chair->calculatePokerType();
                 if (i > 0) {
                     chair->calculateSettlement(chair0);
-                    chair->m_settlement.accounts = Global::getInstance()->settleList[i];
+                    chair->m_settlement.accounts = Global::getInstance()->table_data.round.settleList[i];
                     chair->m_settlement.winned = (chair->m_settlement.accounts > 0);
                     chair->showSettlement();
                     
@@ -591,7 +599,7 @@ void OnlinePokerDesk::waitForChooseStabberAction(){
                 if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
                     playerIndex = i;
                 }
-                if (0 == strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
+                if (0 == strcmp(Global::getInstance()->table_data.bureau.bureauOwnerId, player_data.user.ID)) {
                     dealerIndex = i;
                 }
             }
@@ -653,10 +661,10 @@ void OnlinePokerDesk::showDealerInfo(){
     char mString[100];
     
     bool hasDealer = false;
-    if (strlen(Global::getInstance()->table_data.bureauOwnerId) > 0) {
+    if (strlen(Global::getInstance()->table_data.bureau.bureauOwnerId) > 0) {
         for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
             PlayerData player_data = Global::getInstance()->playerList[i];
-            if (0 == strcmp(Global::getInstance()->table_data.bureauOwnerId, player_data.user.ID)) {
+            if (0 == strcmp(Global::getInstance()->table_data.bureau.bureauOwnerId, player_data.user.ID)) {
                 hasDealer = true;
                 sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",player_data.user.nikename, player_data.remainCap, Global::getInstance()->playerListCount);
             }
@@ -1128,6 +1136,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
         case cmd_countDownApplyStabber:{
             //抢刺
+            log("抢刺 把数:%d",Global::getInstance()->table_data.round.roundIndex);
             this->stepIn(DeskState_ChooseStabber);
         }
             break;
@@ -1136,15 +1145,14 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             //选中刺通知
             for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
                 PlayerData player_data = Global::getInstance()->playerList[i];
-                if (0 == strcmp(Global::getInstance()->table_data.stabberId, player_data.user.ID)) {
+                if (0 == strcmp(Global::getInstance()->table_data.round.stabberId, player_data.user.ID)) {
                     for (int i = 0; i < m_arrChairs.size(); i++) {
                         PokerChair* chairBuffer = m_arrChairs.at(i);
                         chairBuffer->showBeStabber(false);
-                        if (i + 1 == Global::getInstance()->table_data.stabberIndex) {
+                        if (i + 1 == Global::getInstance()->table_data.round.stabberIndex) {
                             chairBuffer->showStabber("images/default_head.png", player_data.user.nikename, player_data.remainCap);
                         }
                     }
-
                     
                     break;
                 }
@@ -1155,6 +1163,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
         case cmd_countDownBetStake:{
             //开始下注倒计时
+            log("下注 把数:%d",Global::getInstance()->table_data.round.roundIndex);
             this->stepIn(DeskState_Bet);
         }
             break;
@@ -1249,7 +1258,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 for (int i = 0; i < 9; i++) {
                     PokerSprite *pk = m_arrPokers.at(m_IndexSend + i);
                     if (i == 0) {
-                        this->updatePokerWithData(pk, Global::getInstance()->pokerJudgement);
+                        this->updatePokerWithData(pk, Global::getInstance()->table_data.round.pokerJudgement);
                         if (pk->getPoker_point() == PokerPoint_Joker) {
                             m_IndexStart = 0;
                         }
@@ -1260,7 +1269,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                     else {
                         int chair_index = ((i - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
                         
-                        PokerPair pair = Global::getInstance()->pokerSendedList[chair_index];
+                        PokerPair pair = Global::getInstance()->table_data.round.pokerSendedList[chair_index];
                         PokerData card = pair.poker[(i - 1) / 4];
                         
                         this->updatePokerWithData(pk, card);
@@ -1277,7 +1286,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_sysBetStake:{
             for (int j = 1; j < m_arrChairs.size(); j++) {
                 PokerChair* chairBuffer = m_arrChairs.at(j);
-                chairBuffer->updateTotal(Global::getInstance()->betList[j]);
+                chairBuffer->updateTotal(Global::getInstance()->table_data.round.betList[j]);
             }
         }
             break;

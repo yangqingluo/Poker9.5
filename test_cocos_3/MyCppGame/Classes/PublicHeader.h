@@ -26,22 +26,6 @@ struct UserData {
 //    "token": null,
 };
 
-struct TableData {
-    int code;
-    int minPerStack;//最小下注额
-    int minStack;//房间金额
-    char roomType[Min_String_Length];//房间类型
-    char tableId[Max_ID_Length];
-    char roomId[Max_ID_Length];
-    char bureauId[Max_ID_Length];//牌局ID
-    char roundId[Max_ID_Length];//牌把ID
-    char bureauOwnerId[Max_ID_Length];//庄家ID
-    char description[Max_String_Length];
-    
-    char stabberId[Max_ID_Length];//刺ID
-    int stabberIndex;//刺序
-};
-
 struct PlayerData {
     int amount;
     int assassin;
@@ -67,6 +51,40 @@ struct PokerPair {
     double point;
     char pointDes[Min_String_Length];
 };
+
+struct RoundData {
+    char stabberId[Max_ID_Length];//刺ID
+    int stabberIndex;//刺序
+    char roundId[Max_ID_Length];//牌把ID
+    int roundIndex;
+    
+    PokerData pokerJudgement;//判定牌(决定发牌顺序的牌)
+    PokerPair pokerSendedList[4];
+    int settleList[4];
+    int betList[4];
+};
+
+struct BureauData {
+    char bureauId[Max_ID_Length];//牌局ID
+    char bureauOwnerId[Max_ID_Length];//庄家ID
+};
+
+
+struct TableData {
+    int minPerStack;//最小下注额
+    int minStack;//房间金额
+    char roomType[Min_String_Length];//房间类型
+    char roomId[Max_ID_Length];
+    
+    int code;
+    char tableId[Max_ID_Length];
+    char description[Max_String_Length];
+    
+    BureauData bureau;
+    RoundData round;
+};
+
+
 
 
 #endif /* #define __PUBLIC_HEADER_H__ */

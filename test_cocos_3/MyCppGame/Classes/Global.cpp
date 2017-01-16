@@ -256,9 +256,39 @@ void Global::clearPlayerList(){
     playerListCount = 0;
 }
 
+
 void Global::clearPokerSendedList(){
-    memset(pokerSendedList, 0, sizeof(PokerPair) * 4);
+    memset(table_data.round.pokerSendedList, 0, sizeof(PokerPair) * 4);
+}
+
+//清除房间数据
+void Global::clearRoomData(){
     
+}
+
+//清除桌子数据
+void Global::clearTableData(){
+    memset(&table_data, 0, sizeof(TableData));
+}
+
+//清除局数据
+void Global::clearBureauData(){
+    memset(&table_data.bureau, 0, sizeof(BureauData));
+}
+
+//清除把数据
+void Global::clearRoundData(){
+    memset(&table_data.round, 0, sizeof(RoundData));
+}
+
+//清除下注数据
+void Global::clearBetData(){
+    memset(table_data.round.betList, 0, sizeof(table_data.round.betList));
+}
+
+//清除庄家数据
+void Global::clearBureauOwnerData(){
+    memset(table_data.bureau.bureauOwnerId, 0, sizeof(table_data.bureau.bureauOwnerId));
 }
 
 #pragma Socket
@@ -432,7 +462,7 @@ void Global::parseData(char* pbuf, int len){
                     case cmd_enterRoom:
                         //加入密码房间
                     case cmd_enterRoomByPassword:{
-                        memset(&table_data, 0, sizeof(TableData));
+                        this->clearTableData();
                         
                         rapidjson::Value& val_content = document["content"];
                         
@@ -594,6 +624,8 @@ void Global::parseData(char* pbuf, int len){
                     
                 case cmd_bureauOpen:{
                     //开始牌局
+                    this->clearBureauData();
+                    
                     rapidjson::Value& val_content = document["content"];
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
@@ -602,7 +634,7 @@ void Global::parseData(char* pbuf, int len){
                     }
                     
                     const char* bureauId = val_content["bureauId"].GetString();
-                    memcpy(table_data.bureauId, bureauId, strlen(bureauId));
+                    memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
                 }
                     break;
                 case cmd_countDownApplyBureauOwner:{
@@ -622,21 +654,23 @@ void Global::parseData(char* pbuf, int len){
                     rapidjson::Value& val_content = document["content"];
                     const char* tableId = document["tableId"].GetString();
                     const char* bureauId = val_content["bureauId"].GetString();
-                    if (0 != strcmp(tableId, table_data.tableId) || 0 != strcmp(bureauId, table_data.bureauId)) {
+                    if (0 != strcmp(tableId, table_data.tableId) || 0 != strcmp(bureauId, table_data.bureau.bureauId)) {
                         
                         return;
                     }
                     
                     const char* bureauOwnerId = val_content["bureauOwnerId"].GetString();
-                    memcpy(table_data.bureauOwnerId, bureauOwnerId, strlen(bureauOwnerId));
+                    memcpy(table_data.bureau.bureauOwnerId, bureauOwnerId, strlen(bureauOwnerId));
                     
                     //判断当前玩家是否是庄家
-                    isDealer = (0 == strcmp(table_data.bureauOwnerId, user_data.ID));
+                    isDealer = (0 == strcmp(table_data.bureau.bureauOwnerId, user_data.ID));
                 }
                     break;
                     
                 case cmd_countDownApplyStabber:{
                     //开始抢刺倒计时
+                    this->clearRoundData();
+                    
                     rapidjson::Value& val_content = document["content"];
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
@@ -645,10 +679,14 @@ void Global::parseData(char* pbuf, int len){
                     }
                     
                     countDownInSecond = val_content["countDown"].GetInt();
-                    memset(table_data.roundId, 0, sizeof(table_data.roundId));
+                    memset(table_data.round.roundId, 0, sizeof(table_data.round.roundId));
                     
                     const char* roundId = val_content["roundId"].GetString();
-                    memcpy(table_data.roundId, roundId, strlen(roundId));
+                    memcpy(table_data.round.roundId, roundId, strlen(roundId));
+                    
+                    if (val_content.HasMember("roundIndex")) {
+                        table_data.round.roundIndex = val_content["roundIndex"].GetInt();
+                    }
                 }
                     break;
                     
@@ -657,14 +695,16 @@ void Global::parseData(char* pbuf, int len){
                     rapidjson::Value& val_content = document["content"];
                     
                     const char* stabberId = val_content["userId"].GetString();
-                    memcpy(table_data.stabberId, stabberId, strlen(stabberId));
+                    memcpy(table_data.round.stabberId, stabberId, strlen(stabberId));
                     
-                    table_data.stabberIndex = val_content["type"].GetInt();
+                    table_data.round.stabberIndex = val_content["type"].GetInt();
                 }
                     break;
                     
                 case cmd_countDownBetStake:{
                     //开始下注倒计时
+                    this->clearRoundData();
+                    
                     rapidjson::Value& val_content = document["content"];
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
@@ -673,10 +713,14 @@ void Global::parseData(char* pbuf, int len){
                     }
                     
                     countDownInSecond = val_content["countDown"].GetInt();
-                    memset(table_data.roundId, 0, sizeof(table_data.roundId));
+                    memset(table_data.round.roundId, 0, sizeof(table_data.round.roundId));
                     
                     const char* roundId = val_content["roundId"].GetString();
-                    memcpy(table_data.roundId, roundId, strlen(roundId));
+                    memcpy(table_data.round.roundId, roundId, strlen(roundId));
+                    
+                    if (val_content.HasMember("roundIndex")) {
+                        table_data.round.roundIndex = val_content["roundIndex"].GetInt();
+                    }
                 }
                     break;
                     
@@ -726,15 +770,13 @@ void Global::parseData(char* pbuf, int len){
                                 
                                 int gateType = val_pair["type"].GetInt();
                                 
-                                pokerSendedList[(gateType - 1) % 4] = pair;
+                                table_data.round.pokerSendedList[(gateType - 1) % 4] = pair;
                             }
                         }
                         if (val_startCard.IsObject()) {
-                            memset(&pokerJudgement, 0, sizeof(PokerData));
-                            
-                            pokerJudgement.color = val_startCard["color"].GetInt();
-                            pokerJudgement.count = val_startCard["count"].GetDouble();
-                            pokerJudgement.num = val_startCard["num"].GetInt();
+                            table_data.round.pokerJudgement.color = val_startCard["color"].GetInt();
+                            table_data.round.pokerJudgement.count = val_startCard["count"].GetDouble();
+                            table_data.round.pokerJudgement.num = val_startCard["num"].GetInt();
                         }
                     }
                     
@@ -749,12 +791,12 @@ void Global::parseData(char* pbuf, int len){
                         return;
                     }
                     
-                    memset(betList, 0, sizeof(int) * 4);
+                    this->clearBetData();
                     rapidjson::Value& val_content = document["content"];
                     if (val_content.IsObject()) {
-                        betList[1] = val_content["2"].GetInt();
-                        betList[2] = val_content["3"].GetInt();
-                        betList[3] = val_content["4"].GetInt();
+                        table_data.round.betList[1] = val_content["2"].GetInt();
+                        table_data.round.betList[2] = val_content["3"].GetInt();
+                        table_data.round.betList[3] = val_content["4"].GetInt();
                     }
                 }
                     break;
@@ -765,8 +807,6 @@ void Global::parseData(char* pbuf, int len){
                     if (0 != strcmp(tableId, table_data.tableId)) {
                         return;
                     }
-                    
-                    memset(settleList, 0, sizeof(int) * 4);
                     
                     rapidjson::Value& val_content = document["content"];
                     
@@ -789,7 +829,7 @@ void Global::parseData(char* pbuf, int len){
                                             if (val_resultMap.HasMember(gate_settle)) {
                                                 rapidjson::Value& val_gate = val_resultMap[gate_settle];
                                                 int count = val_gate["count"].GetInt();
-                                                this->settleList[j - 1] -= count;
+                                                table_data.round.settleList[j - 1] -= count;
                                             }
                                         }
                                     }
@@ -804,7 +844,7 @@ void Global::parseData(char* pbuf, int len){
                                                 if (val_resultMap.HasMember(gate_settle)) {
                                                     rapidjson::Value& val_gate = val_resultMap[gate_settle];
                                                     int count = val_gate["count"].GetInt();
-                                                    this->settleList[j - 1] += count;
+                                                    table_data.round.settleList[j - 1] += count;
                                                 }
                                             }
                                         }
@@ -826,7 +866,7 @@ void Global::parseData(char* pbuf, int len){
                     }
                     
                     isDealer = false;
-                    memset(table_data.bureauOwnerId, 0, sizeof(table_data.bureauOwnerId));
+                    this->clearBureauOwnerData();
                     
                     rapidjson::Value& val_content = document["content"];
                     if (val_content.IsObject()) {
@@ -942,7 +982,7 @@ void Global::sendApplyOwner(){
     
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
     content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
-    content.AddMember("bureauId", rapidjson::Value(table_data.bureauId, allocator), allocator);
+    content.AddMember("bureauId", rapidjson::Value(table_data.bureau.bureauId, allocator), allocator);
     
     doc.AddMember("id", cmd_applyOwner, allocator);
     doc.AddMember("content", content, allocator);
@@ -961,7 +1001,7 @@ void Global::sendApplyStabber(int gateType){
     rapidjson::Value content(rapidjson::kObjectType);
     
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
-    content.AddMember("roundId", rapidjson::Value(table_data.roundId, allocator), allocator);
+    content.AddMember("roundId", rapidjson::Value(table_data.round.roundId, allocator), allocator);
     content.AddMember("type", gateType, allocator);
     
     doc.AddMember("id", cmd_applyStabber, allocator);
@@ -1007,7 +1047,7 @@ void Global::sendBetStake(int jetton, int gateType){
     
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
     content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
-    content.AddMember("roundId", rapidjson::Value(table_data.roundId, allocator), allocator);
+    content.AddMember("roundId", rapidjson::Value(table_data.round.roundId, allocator), allocator);
     content.AddMember("count", jetton, allocator);
     content.AddMember("gateType", gateType, allocator);
     
