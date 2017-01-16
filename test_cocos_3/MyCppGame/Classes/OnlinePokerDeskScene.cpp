@@ -215,7 +215,9 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
         case DeskState_SendPoker:{
             if (!m_isSendSet) {
                 //发牌动画未完成
-                
+//                m_isSendSet = true;
+//                
+//                sendPokerWithoutAnimation();
             }
         }
             break;
@@ -700,17 +702,6 @@ void OnlinePokerDesk::showDealerInfo(){
 
 void OnlinePokerDesk::showTimerDoneCallback(Node* pNode){
     switch (m_deskState) {
-//        case DeskState_SendPoker:{
-//            if (m_isSendSet) {
-//                //发完一把牌
-//                updateDeskState(DeskState_Settle);
-//            }
-//            else {
-//                //取消动画，强制发完牌
-//                
-//            }
-//        }
-//            break;
             
         default:{
             updateDeskState(DeskState_Default);
@@ -956,8 +947,8 @@ void OnlinePokerDesk::sendPoker(){
         PokerSprite *pk = m_arrPokers.at(m_IndexSend);
         pk->showPokerAnimated(true, true, pokerMoveTime);
         
-        ++m_IndexSend;
         m_isSendSingle = false;
+        ++m_IndexSend;
     }
     else if (index > 0 && index <= 8 && m_isSendSingle) {
         int chair_index = ((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
@@ -971,6 +962,30 @@ void OnlinePokerDesk::sendPoker(){
     }
 }
 
+//发牌(没有动画)
+void OnlinePokerDesk::sendPokerWithoutAnimation(){
+    if (m_IndexSend >= m_arrPokers.size()) {
+        return;
+    }
+    
+    int countToSend = 9 - m_IndexSend % 9;
+    for (int index = 0; index < countToSend; ++index) {
+        if (index == 0) {
+            PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+            pk->showPokerAnimated(true, false, pokerMoveTime);
+            ++m_IndexSend;
+        }
+        else if (index > 0 && index <= 8) {
+            int chair_index = ((index - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
+            PokerChair* chair = m_arrChairs.at(chair_index);
+            PokerSprite *pk = m_arrPokers.at(m_IndexSend);
+            
+            movePokerWithoutAnimation(chair, pk);
+            ++m_IndexSend;
+        }
+    }
+}
+
 void OnlinePokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
     poker->chairIndex = m_arrChairs.getIndex(chair);
     chair->pokerArray.pushBack(poker);
@@ -979,6 +994,15 @@ void OnlinePokerDesk::movePoker(PokerChair* chair,PokerSprite* poker){
     CallFuncN* func = CallFuncN::create(CC_CALLBACK_1(OnlinePokerDesk::sendedSinglePoker, this, chair));
     Sequence* sequence = Sequence::create(Spawn::create(rotate,move, NULL),func,NULL);
     poker->runAction(sequence);
+}
+
+//发牌移动(没有动画)
+void OnlinePokerDesk::movePokerWithoutAnimation(PokerChair* chair,PokerSprite* poker){
+    poker->chairIndex = m_arrChairs.getIndex(chair);
+    chair->pokerArray.pushBack(poker);
+    
+    poker->setPosition(chair->getPoint());
+    this->sendedSinglePoker(poker, chair);
 }
 
 void OnlinePokerDesk::sendedSinglePoker(Node* pSender, void* pData){

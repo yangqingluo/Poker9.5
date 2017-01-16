@@ -98,7 +98,7 @@ private:
     void showMessageManager(bool isShow);
     
     bool m_isSendSingle;//是否发完一张牌
-    bool m_isSendSet;//是否发完一把牌(8张)
+    bool m_isSendSet;//是否发完一把牌(8+1张)
     int m_deskState;//当前状态
     int m_IndexSend;//已发出第几张牌
     int m_IndexStart;//发牌起始顺序
@@ -114,7 +114,9 @@ private:
     bool reindexPoker();//洗牌
     void updatePokerWithData(PokerSprite* poker, PokerData data);
     void sendPoker();//发牌
+    void sendPokerWithoutAnimation();//发牌(没有动画)
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
+    void movePokerWithoutAnimation(PokerChair* chair,PokerSprite* poker);//发牌移动(没有动画)
     void addJetton(PokerChair* chair,JettonSprite* jetton);//添加筹码
     
     virtual void update(float delta);//系统scheduleupdate回调函数
