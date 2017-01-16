@@ -89,15 +89,17 @@ bool InviteScene::init()
     inviteSprite->setPosition(origin.x + 0.95 * visibleSize.width - inviteSprite->getContentSize().width / 2, origin.y + (625.0 / 640.0 ) * visibleSize.height - inviteSprite->getContentSize().height / 2);
     this->addChild(inviteSprite, 1);
     
-    auto inviteBG = QLImageSprite::create("images/share_bg_share.png", Size((720.0 / 609.0) * inviteSprite->getContentSize().height, inviteSprite->getContentSize().height));
+    
+    
+    auto inviteBG = QLImageSprite::create("images/share_bg_share.png", Size(MIN((720.0 / 609.0) * inviteSprite->getContentSize().height, inviteSprite->getContentSize().width), inviteSprite->getContentSize().height));
     inviteBG->setPosition(Vec2(inviteSprite->getBoundingBox().size.width / 2, inviteSprite->getBoundingBox().size.height / 2));
     inviteSprite->addChild(inviteBG);
     
     auto btn_copy = Button::create("images/share_btn_s_copy.png", "images/share_btn_s_copy_hover.png");
 //    btn_copy->setScale9Enabled(true);//打开scale9 可以拉伸图片
-    btn_copy->setScale(0.2 * inviteBG->getContentSize().width / btn_copy->getContentSize().width);
+    btn_copy->setScale(0.18 * inviteBG->getContentSize().width / btn_copy->getContentSize().width);
 //    btn_copy->setContentSize(Size(0.2 * inviteBG->getContentSize().width, (68.0 / 149.0) * 0.2 * inviteBG->getContentSize().width));
-    btn_copy->setPosition(Vec2((690.0 / 720.0) * inviteBG->getContentSize().width - 0.5 * btn_copy->getContentSize().width, (450.0 / 609.0) * inviteBG->getContentSize().height));
+    btn_copy->setPosition(Vec2((680.0 / 720.0) * inviteBG->getContentSize().width - 0.5 * btn_copy->getContentSize().width, (450.0 / 609.0) * inviteBG->getContentSize().height));
     btn_copy->addTouchEventListener(CC_CALLBACK_2(InviteScene::touchEvent, this));
     btn_copy->setTag(1);
     inviteBG->addChild(btn_copy);
@@ -112,7 +114,7 @@ bool InviteScene::init()
     
     auto btn_inviter = Button::create("images/share_btn_invite.png", "images/share_btn_invite_hover.png");
     btn_inviter->setScale(btn_copy->getScale());
-    btn_inviter->setPosition(Vec2(btn_copy->getBoundingBox().getMaxX() - 0.5 * btn_inviter->getContentSize().width, (560.0 / 609.0) * inviteBG->getContentSize().height));
+    btn_inviter->setPosition(Vec2(btn_copy->getBoundingBox().getMaxX() - 0.5 * btn_inviter->getBoundingBox().size.width, (560.0 / 609.0) * inviteBG->getContentSize().height));
     btn_inviter->addTouchEventListener(CC_CALLBACK_2(InviteScene::touchEvent, this));
     btn_inviter->setTag(3);
     inviteBG->addChild(btn_inviter);

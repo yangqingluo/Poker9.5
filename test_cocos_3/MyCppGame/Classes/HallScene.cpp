@@ -225,8 +225,9 @@ bool Hall::init()
     
     
     auto btn_refresh_UserInfo = Button::create("images/btn_fresh.png");
-    btn_refresh_UserInfo->setScale9Enabled(true);//打开scale9 可以拉伸图片
-    btn_refresh_UserInfo->setContentSize(Size(0.3 * userInfoSprite->getContentSize().width, 0.3 * userInfoSprite->getContentSize().width));
+//    btn_refresh_UserInfo->setScale9Enabled(true);//打开scale9 可以拉伸图片
+//    btn_refresh_UserInfo->setContentSize(Size(0.3 * userInfoSprite->getContentSize().width, 0.3 * userInfoSprite->getContentSize().width));
+    btn_refresh_UserInfo->cocos2d::Node::setScale(0.3 * userInfoSprite->getContentSize().width / btn_refresh_UserInfo->getContentSize().width);
     btn_refresh_UserInfo->setPosition(Vec2(0.85 * userInfoSprite->getContentSize().width, btn_refresh_UserInfo->getBoundingBox().size.height * 0.6));
     btn_refresh_UserInfo->setTag(1);
     btn_refresh_UserInfo->addTouchEventListener(CC_CALLBACK_2(Hall::touchEvent, this));

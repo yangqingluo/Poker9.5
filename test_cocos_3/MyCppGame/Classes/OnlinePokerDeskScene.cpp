@@ -13,7 +13,7 @@
 
 #define inputMoneyBoxTag   9529
 
-#define pokerMoveTime 0.3
+#define pokerMoveTime 0.5
 const float jetton_height_scale = 0.08;
 
 OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
@@ -142,9 +142,10 @@ bool OnlinePokerDesk::init()
     bottom_sprite->addChild(gamePlayerInfoLabel);
     
     btn_addJetton = Button::create("images/btn_add.png","images/btn_add.png");
-    btn_addJetton->setScale9Enabled(true);//打开scale9 可以拉伸图片
-    btn_addJetton->setContentSize(Size(0.8 * bottom_sprite->getContentSize().height, 0.8 * bottom_sprite->getContentSize().height));
-    btn_addJetton->setPosition(Vec2(bottom_sprite->getContentSize().width - 0.6 * btn_addJetton->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height));
+//    btn_addJetton->setScale9Enabled(true);//打开scale9 可以拉伸图片
+//    btn_addJetton->setContentSize(Size(0.8 * bottom_sprite->getContentSize().height, 0.8 * bottom_sprite->getContentSize().height));
+    btn_addJetton->setScale(0.8 * bottom_sprite->getContentSize().height / btn_addJetton->getContentSize().height);
+    btn_addJetton->setPosition(Vec2(bottom_sprite->getContentSize().width - 0.6 * btn_addJetton->getBoundingBox().size.width, 0.5 * bottom_sprite->getContentSize().height));
     btn_addJetton->addTouchEventListener(CC_CALLBACK_2(OnlinePokerDesk::touchEvent, this));
     btn_addJetton->setTag(10);
     btn_addJetton->setVisible(false);
@@ -650,7 +651,7 @@ void OnlinePokerDesk::sendPokerAction(){
     updateDeskState(DeskState_SendPoker);
     
     sprintf(showTimer->prefixString,"发牌");
-    showTimer->start(0.1);
+    showTimer->start(Global::getInstance()->countDownInSecond);
 }
 
 void OnlinePokerDesk::showGamePlayerInfo(){
