@@ -13,7 +13,7 @@
 
 #define inputMoneyBoxTag   9529
 
-#define pokerMoveTime 0.5
+#define pokerMoveTime 0.3
 const float jetton_height_scale = 0.08;
 
 OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
@@ -215,9 +215,9 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
         case DeskState_SendPoker:{
             if (!m_isSendSet) {
                 //发牌动画未完成
-//                m_isSendSet = true;
-//                
-//                sendPokerWithoutAnimation();
+                m_isSendSet = true;
+                
+                sendPokerWithoutAnimation();
             }
         }
             break;
@@ -650,7 +650,7 @@ void OnlinePokerDesk::sendPokerAction(){
     updateDeskState(DeskState_SendPoker);
     
     sprintf(showTimer->prefixString,"发牌");
-    showTimer->start(Global::getInstance()->countDownInSecond);
+    showTimer->start(0.1);
 }
 
 void OnlinePokerDesk::showGamePlayerInfo(){
@@ -969,10 +969,12 @@ void OnlinePokerDesk::sendPokerWithoutAnimation(){
     }
     
     int countToSend = 9 - m_IndexSend % 9;
-    for (int index = 0; index < countToSend; ++index) {
+    for (int i= 0; i < countToSend; ++i) {
+        int index = m_IndexSend % 9;
         if (index == 0) {
             PokerSprite *pk = m_arrPokers.at(m_IndexSend);
             pk->showPokerAnimated(true, false, pokerMoveTime);
+            pk->setPosition(judgementPosition);
             ++m_IndexSend;
         }
         else if (index > 0 && index <= 8) {
@@ -1025,18 +1027,25 @@ void OnlinePokerDesk::sendedSinglePoker(Node* pSender, void* pData){
 void OnlinePokerDesk::turnedSinglePokerCallback(Node* pSender){
     PokerSprite* poker = (PokerSprite* )pSender;
     
-    if (m_deskState == DeskState_SendPoker) {
-        if (m_arrPokers.getIndex(poker) % 9 == 0) {
-            for (int i = 0; i < m_arrChairs.size(); i++) {
-                PokerChair* chair = m_arrChairs.at(i);
-                chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
-            }
+    if (m_arrPokers.getIndex(poker) % 9 == 0) {
+        for (int i = 0; i < m_arrChairs.size(); i++) {
+            PokerChair* chair = m_arrChairs.at(i);
+            chair->setHighlighted(i == (m_IndexStart % m_arrChairs.size()));
+        }
+        
+        if (m_deskState == DeskState_SendPoker) {
             MoveTo* move = MoveTo::create(pokerMoveTime, judgementPosition);
             Sequence* sequence = Sequence::create(move,NULL);
             poker->runAction(sequence);
-            m_isSendSingle = true;
         }
+        else {
+            poker->setPosition(judgementPosition);
+        }
+        
+        m_isSendSingle = true;
     }
+    
+    
     else if (m_deskState == DeskState_Settle){
 //        if (poker->chairIndex < m_arrChairs.size()) {
 //            PokerChair* chair = m_arrChairs.at(poker->chairIndex);
