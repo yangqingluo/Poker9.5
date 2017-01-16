@@ -8,10 +8,8 @@
 
 #include "InviteScene.h"
 #include "QLImageSprite.h"
-#include "Global.h"
 #include "InviterScene.h"
 #include "CppToFunction.h"
-
 
 #include "Cocos2dx/Common/CCUMSocialSDK.h"
 
@@ -33,6 +31,17 @@ Scene* InviteScene::createScene()
     
     // return the scene
     return scene;
+}
+
+void InviteScene::onEnter(){
+    Layer::onEnter();
+    if (!hasGetInviteList) {
+        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+        this->onHttpRequest_GetInviteList();
+    }
+}
+void InviteScene::onExit(){
+    Layer::onExit();
 }
 
 bool InviteScene::init()
@@ -117,6 +126,13 @@ bool InviteScene::init()
     btn_code->setPosition(Vec2(btn_copy->getBoundingBox().getMinX() - 0.6 * btn_code->getContentSize().width, btn_copy->getPositionY()));
     btn_code->setEnabled(false);
     inviteBG->addChild(btn_code);
+    
+    recordListCellWidth = (667.0 / 720.0) * inviteBG->getContentSize().width;
+    recordListTableView = TableView::create(this, Size(recordListCellWidth,  (90.0 / 609.0) * inviteBG->getContentSize().height));
+    recordListTableView->setPosition((30.0 / 720.0) * inviteBG->getContentSize().width , (20.0 / 609.0 ) * inviteBG->getContentSize().height);
+    recordListTableView->setDirection(TableView::Direction::VERTICAL);
+    recordListTableView->setDelegate(this);
+    inviteBG->addChild(recordListTableView);
     
     return true;
 }
@@ -231,9 +247,81 @@ void InviteScene::boardShare(Ref* pSender) {
     sdk->openShare(platforms, Global::getInstance()->user_data.inviteCode, "邀请加入九点半" ,"https://dev.umeng.com/images/tab2_1.png","https://www.fushoulu95.com",share_selector(shareCallback));
 }
 
+#pragma tableview
+Size InviteScene::tableCellSizeForIndex(TableView* table, ssize_t idx){
+    if (table == recordListTableView) {
+        return Size(recordListCellWidth, 20);
+    }
+    
+    return Size::ZERO;
+}
+
+//定制每个cell的内容
+TableViewCell* InviteScene::tableCellAtIndex(TableView* table, ssize_t idx){
+    if (table == recordListTableView) {
+        TableViewCell* cell = table->dequeueCell();
+        
+        if(!cell){
+            cell = new TableViewCell();
+            cell->autorelease();
+            
+            Label* titleLabel = Label::create("", "", 10);
+            titleLabel->setTextColor(Color4B::BLACK);
+            titleLabel->setPosition(recordListCellWidth / 2, 10);
+            titleLabel->setDimensions(recordListCellWidth, 20);
+            titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+            titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            cell->addChild(titleLabel, 0 , 1);
+        }
+        
+        Label* label = (Label* )cell->getChildByTag(1);
+        char content[100] = {0};
+        InviteItem* item = inviteItems.at(idx);
+        sprintf(content, "%d.\t%s\t%s", (int)idx + 1, item->account, item->nikename);
+        label->setString(content);
+        
+        return cell;
+    }
+    
+    return NULL;
+}
+
+//确定这个tableview的cell行数
+ssize_t InviteScene::numberOfCellsInTableView(TableView* table){
+    if (table == recordListTableView) {
+        return inviteItems.size();
+    }
+    
+    return 0;
+}
+
+void InviteScene::tableCellTouched(TableView* table, TableViewCell* cell){
+    
+}
 
 #pragma http
 // 发送HTTP请求
+void InviteScene::onHttpRequest_GetInviteList(){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/getInviteUsers");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "userId=%s", Global::getInstance()->user_data.ID);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(InviteScene::onHttpResponse, this));
+    request->setTag("GetInviteList");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
 void InviteScene::onHttpRequest_GetInviter(){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
@@ -317,6 +405,32 @@ void InviteScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             auto scene = InviterScene::createScene();
                             Director::getInstance()->pushScene(scene);
                         }
+                    }
+                    else if (tag == "GetInviteList") {
+                        hasGetInviteList = true;
+                        inviteItems.clear();
+                        
+                        const rapidjson::Value& val_content = document["content"];
+                        if (val_content.IsArray()) {
+                            for (int i = 0; i < val_content.Size(); ++i) {
+                                const rapidjson::Value& val_user = val_content[i];
+                                assert(val_user.IsObject());
+                                
+                                if (val_user.HasMember("nickname") && val_user.HasMember("account")) {
+                                    InviteItem* item = new InviteItem();
+                                    item->autorelease();
+                                    
+                                    sprintf(item->account, "%s", val_user["account"].GetString());
+                                    sprintf(item->nikename, "%s", val_user["nickname"].GetString());
+                                    
+                                    inviteItems.pushBack(item);
+                                }
+                                
+                                
+                            }
+                        }
+                        
+                        recordListTableView->reloadData();
                     }
                 }
             }

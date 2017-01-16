@@ -52,7 +52,6 @@ private:
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);
-    
     void tableCellTouched(TableView* table, TableViewCell* cell);
 };
 
