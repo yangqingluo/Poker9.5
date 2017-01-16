@@ -169,8 +169,8 @@ void InviteScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     break;
                     
                 case 3:{
-                    auto scene = InviterScene::createScene();
-                    Director::getInstance()->pushScene(scene);
+                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                    onHttpRequest_GetInviter();
                 }
                     break;
                     
@@ -232,3 +232,100 @@ void InviteScene::boardShare(Ref* pSender) {
 }
 
 
+#pragma http
+// 发送HTTP请求
+void InviteScene::onHttpRequest_GetInviter(){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/getInvitedUser");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "userId=%s", Global::getInstance()->user_data.ID);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(InviteScene::onHttpResponse, this));
+    request->setTag("GetInviter");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
+
+// HTTP响应请求函数
+void InviteScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
+    if (m_pMessage != NULL) {
+        m_pMessage->hidden();
+        m_pMessage = NULL;
+    }
+    
+    // 没有收到响应
+    if (!response){
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    long statusCode = response->getResponseCode();
+    char statusString[64] = {};
+    sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    CCLOG("response code: %s", statusString);
+    
+    if (statusCode > 200) {
+        NoteTip::show("网络错误");
+        return;
+    }
+    // 链接失败
+    if (!response->isSucceed())
+    {
+        CCLOG("response failed");
+        CCLOG("error buffer: %s", response->getErrorBuffer());
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    std::vector<char>* responseData = response -> getResponseData();
+    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
+    log("%s\n", responseStr.c_str());
+    rapidjson::Document document;
+    document.Parse<0>(responseStr.c_str());
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code")){
+            const rapidjson::Value& val_code = document["code"];
+            int code = val_code.GetInt();
+            if (code == 1) {
+                if (0 != strlen(response->getHttpRequest()->getTag())){
+                    std::string tag = response->getHttpRequest()->getTag();
+                    if (tag == "GetInviter") {
+                        const rapidjson::Value& val_content = document["content"];
+                        if (val_content.IsObject()) {
+                            char msg[200] = {0};
+                            if (val_content.HasMember("nickname") && val_content.HasMember("account")) {
+                                const char* nickname = val_content["nickname"].GetString();
+                                const char* account = val_content["account"].GetString();
+                                sprintf(msg, "账号：%s\n昵称：%s", account, nickname);
+                            }
+                            MessageBox(msg, "您的邀请人");
+                        }
+                        else {
+                            auto scene = InviterScene::createScene();
+                            Director::getInstance()->pushScene(scene);
+                        }
+                    }
+                }
+            }
+            else {
+                const rapidjson::Value& val_content = document["content"];
+                const char* content = val_content.GetString();
+                NoteTip::show(content);
+            }
+        }
+        
+    }
+}

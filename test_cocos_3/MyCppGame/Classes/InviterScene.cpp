@@ -271,13 +271,13 @@ void InviterScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
             if (code == 1) {
                 const rapidjson::Value& val_content = document["content"];
                 if (val_content.IsObject()) {
-                    if (val_content.HasMember("nickname")) {
+                    char msg[200] = {0};
+                    if (val_content.HasMember("nickname") && val_content.HasMember("account")) {
                         const char* nickname = val_content["nickname"].GetString();
-                        
-                        char msg[200] = {0};
-                        sprintf(msg, "您的邀请人：%s", nickname);
-                        MessageBox(msg, "绑定邀请人成功");
+                        const char* account = val_content["account"].GetString();
+                        sprintf(msg, "账号：%s\n昵称：%s", account, nickname);
                     }
+                    MessageBox(msg, "绑定邀请人成功");
                 }
             }
             else {

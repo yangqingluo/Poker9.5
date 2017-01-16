@@ -47,8 +47,6 @@ private:
     
     void onHttpRequest_Inviter(const char* code);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
-    
-    void onNotification_NoteTip(Ref* pSender);
 };
 
 #endif /* InviterScene_h */

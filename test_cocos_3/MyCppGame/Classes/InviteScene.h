@@ -14,6 +14,13 @@
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+#include "network/HttpClient.h"
+using namespace cocos2d::network;
+using namespace std;
+
+#include "NoteTip.h"
+#include "MessageManager.h"
+
 class InviteScene : public cocos2d::Layer
 {
 public:
@@ -24,6 +31,12 @@ public:
     void boardShare(Ref* pSender);
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
+    
+private:
+    MessageManager* m_pMessage;
+    
+    void onHttpRequest_GetInviter();
+    void onHttpResponse(HttpClient* sender, HttpResponse* response);
 };
 
 #endif /* InviteScene_h */
