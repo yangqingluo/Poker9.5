@@ -70,8 +70,8 @@ PopAlertDialog* PopAlertDialog::create(const char* backgoundImage,Size dialogSiz
 }
 
 void PopAlertDialog::setTitle(const char* title,int fontsize /*=20*/){
-    Label* label=Label::createWithTTF(title, "fonts/STKaiti.ttf", fontsize);
-    label->setColor(Color3B::RED);
+    Label* label = Label::createWithTTF(title, "fonts/STKaiti.ttf", fontsize);
+    label->setColor(Color3B::WHITE);
     setLabelTitle(label);
 }
 

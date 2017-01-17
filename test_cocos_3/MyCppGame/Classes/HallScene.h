@@ -72,7 +72,6 @@ public:
     
     void buttonCallback(Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
-    void sliderChangerCallBack(Ref* pSender, Control::EventType type);
     
     float roomListCellHeight = 0;
     float roomListCellScale = 0.66;

@@ -438,7 +438,7 @@ void OnlinePokerDesk::showSettingChip(){
     this->addChild(popup, 60);
     
     auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, MIN(0.15 * popup->m_dialogContentSize.height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
-    inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.50 * popup->getContentSize().height));
+    inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.55 * popup->getContentSize().height));
     inputBox->setTag(inputMoneyBoxTag);
     popup->addChild(inputBox);
     
@@ -456,7 +456,7 @@ void OnlinePokerDesk::showSettingChip(){
 //    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
     
     inputBox->setPlaceHolder("补充本金的数目");
-    inputBox->setMaxLength(6);
+    inputBox->setMaxLength(length_room_capital);
     
 }
 

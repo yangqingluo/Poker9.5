@@ -16,9 +16,10 @@
 #include "HelpScene.h"
 #include "OnlinePokerDeskScene.h"
 
-#define dialogTag      9527
-#define sliderTag      9528
-#define passwordBoxTag   9529
+#define dialogTag         9527
+#define sliderTag         9528
+#define passwordBoxTag    9529
+#define capitalBoxTag     9530
 
 static int chipTypeCount = 5;
 
@@ -437,89 +438,22 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
     }
 }
 
-void Hall::sliderChangerCallBack(Ref* pSender, Control::EventType type){
-    ControlSlider* slider = (ControlSlider* )pSender;
-    switch (slider->getTag()) {
-        case sliderTag:{
-            jettonToEnter = (int)slider->getValue();
-            PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
-            
-            char content[200];
-            switch (roomTypeSelected) {
-                case 0:{
-                    sprintf(content, "请设置带入的金币数目:%d", jettonToEnter);
-                }
-                    break;
-                    
-                case 1:{
-                    sprintf(content, "请设置带入的金币数目:%d", jettonToEnter);
-                }
-                    break;
-                    
-                case 2:{
-                    sprintf(content, "请设置带入的钻石数目:%d", jettonToEnter);
-                }
-                    break;
-                    
-                case 3:{
-                    sprintf(content, "请设置带入的银币数目:%d", jettonToEnter);
-                }
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-            
-            popup->setContentTextShowed(content);
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
 #pragma alert
 void Hall::showSettingChip(){
-    auto visibleSize = Director::getInstance()->getVisibleSize();
+    bool passwordEnter = false;//是否需要密码输入
+    bool capitalEnter = true;//是否需要本金输入
     
-    PopAlertDialog* popup = NULL;
-    
-    if ((roomTypeSelected == 1 && roomIndexSelected < diItems.size() - 1) || (roomTypeSelected == 2 && roomIndexSelected < xuanItems.size() - 1)) {
-        popup = PopAlertDialog::create("images/bg_dialog_empty.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
-        popup->setTitle("创建房间");
-    }
-    else {
-        popup = PopAlertDialog::create("images/set_chip_bg.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
-        popup->setTitle("");
-    }
-    
-    popup->setTag(dialogTag);
-    popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
-    
-    auto contentPosition = Vec2(0.1 * popup->m_dialogContentSize.width, (120.0 / 190.0) * popup->m_dialogContentSize.height);
-    popup->setContentText("", 12, contentPosition.x, contentPosition.y);
-    
-    auto myslider = ControlSlider::create("images/slider_jd.png", "images/slider_bg.png", "images/slider_hk.png");
-    myslider->setPosition(popup->getContentSize().width / 2, 0.50 * popup->getContentSize().height);
-    myslider->setMinimumValue(0);
-    myslider->setTag(sliderTag);
-    
-    bool canEnter = true;
-    bool passwordEnter = false;
-    bool showSlider = true;
     RoomItem* room = NULL;
+    char m_show_string[200] = {0};
+    
     switch (roomTypeSelected) {
         case 0:{
             room = tianItems.at(roomIndexSelected);
-            canEnter = Global::getInstance()->user_data.gold >= room->chipMin;
-            if (!canEnter) {
-                popup->setContentTextShowed("您的金币不足");
+            if (Global::getInstance()->user_data.gold < room->chipMin) {
+                NoteTip::show("您的金币不足");
+                return;
             }
-            else {
-                myslider->setMaximumValue(Global::getInstance()->user_data.gold);
-            }
-            
+            sprintf(m_show_string, "加入%d金币的房间", room->chipMin);
         }
             break;
             
@@ -527,20 +461,15 @@ void Hall::showSettingChip(){
             room = diItems.at(roomIndexSelected);
             if (roomIndexSelected + 1 == diItems.size()) {
                 passwordEnter = true;
-                myslider->setMaximumValue(Global::getInstance()->user_data.gold);
+                sprintf(m_show_string, "加入VIP房间");
             }
             else {
-                canEnter = Global::getInstance()->user_data.gold >= room->chipMin;
-                if (!canEnter) {
-                    popup->setContentTextShowed("您的金币不足");
+                if (Global::getInstance()->user_data.gold < room->chipMin) {
+                    NoteTip::show("您的金币不足");
+                    return;
                 }
-                else {
-                    char m_creat_string[200] = {0};
-                    sprintf(m_creat_string, "创建%d金币的房间", room->chipMin);
-                    popup->setContentTextShowed(m_creat_string);
-                    
-                    showSlider = false;
-                }
+                capitalEnter = false;
+                sprintf(m_show_string, "创建%d金币的VIP房间", room->chipMin);
             }
         }
             break;
@@ -549,34 +478,26 @@ void Hall::showSettingChip(){
             room = xuanItems.at(roomIndexSelected);
             if (roomIndexSelected + 1 == xuanItems.size()) {
                 passwordEnter = true;
-                myslider->setMaximumValue(Global::getInstance()->user_data.diamond);
+                sprintf(m_show_string, "加入钻石房间");
             }
             else {
-                canEnter = Global::getInstance()->user_data.diamond >= room->chipMin;
-                if (!canEnter) {
-                    popup->setContentTextShowed("您的钻石不足");
+                if (Global::getInstance()->user_data.diamond < room->chipMin) {
+                    NoteTip::show("您的钻石不足");
+                    return;
                 }
-                else {
-                    char m_creat_string[200] = {0};
-                    sprintf(m_creat_string, "创建%d钻石的房间", room->chipMin);
-                    popup->setContentTextShowed(m_creat_string);
-                    
-                    showSlider = false;
-                }
+                capitalEnter = false;
+                sprintf(m_show_string, "创建%d钻石的房间", room->chipMin);
             }
         }
             break;
             
         case 3:{
             room = huangItems.at(roomIndexSelected);
-            canEnter = Global::getInstance()->user_data.silver >= room->chipMin;
-            if (!canEnter) {
-                popup->setContentTextShowed("您的银币不足");
+            if (Global::getInstance()->user_data.silver < room->chipMin) {
+                NoteTip::show("您的银币不足");
+                return;
             }
-            else {
-                myslider->setMaximumValue(Global::getInstance()->user_data.silver);
-                
-            }
+            sprintf(m_show_string, "加入练习房(银币>=%d)", room->chipMin);
         }
             break;
             
@@ -584,28 +505,43 @@ void Hall::showSettingChip(){
             break;
     }
     
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    PopAlertDialog* popup = PopAlertDialog::create("images/bg_dialog_empty.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+    popup->setTitle(m_show_string);
+    
+    popup->setTag(dialogTag);
+    popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
+    
     popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
-    if (canEnter) {
-        popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
-    }
+    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
     
     this->addChild(popup, 2);
     
-    if (canEnter) {
-        if (showSlider) {
-            popup->addChild(myslider);
-            myslider->addTargetWithActionForControlEvents(this, cccontrol_selector(Hall::sliderChangerCallBack), Control::EventType::VALUE_CHANGED);
-        }
+    float boxHeight = MIN(0.15 * popup->m_dialogContentSize.height, 32);
+    if (capitalEnter) {
+        auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, boxHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+        inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.55 * popup->getContentSize().height));
+        inputBox->setTag(capitalBoxTag);
+        popup->addChild(inputBox);
         
-        if (room != NULL) {
-            myslider->setMinimumAllowedValue(room->chipMin);
-            myslider->setValue(room->chipMin);
-        }
+        //属性设置
+        //    inputBox->setFontName("fonts/STKaiti.ttf");
+        inputBox->setFontSize(12);
+        inputBox->setFontColor(Color4B::BLACK);
+        //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+        inputBox->setPlaceholderFontSize(12);
+        inputBox->setPlaceholderFontColor(Color4B::GRAY);
+        
+        //模式类型设置
+        inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
+        
+        inputBox->setPlaceHolder("带入房间的本金");
+        inputBox->setMaxLength(length_room_capital);
     }
     
     if (passwordEnter) {
-        auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, MIN(0.15 * popup->m_dialogContentSize.height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
-        inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.40 * popup->getContentSize().height));
+        auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, boxHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+        inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.45 * popup->getContentSize().height));
         inputBox->setTag(passwordBoxTag);
         popup->addChild(inputBox);
         
@@ -630,43 +566,59 @@ void Hall::showSettingChip(){
 void Hall::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
         PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
+        if (popup == NULL) {
+            return;
+        }
+        cocos2d::ui::EditBox* capitalBox = (cocos2d::ui::EditBox* )popup->getChildByTag(capitalBoxTag);
+        if (capitalBox == NULL) {
+            return;
+        }
+        jettonToEnter = atoi(capitalBox->getText());
+        if (jettonToEnter <= 0) {
+            NoteTip::show("本金输入有误");
+            return;
+        }
+        
         RoomItem* room = NULL;
         switch (roomTypeSelected) {
             case 0:{
                 room = tianItems.at(roomIndexSelected);
                 
-                auto scene = OnlinePokerDesk::createScene();
-                OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
-                layer->roomType = room->type;
-                strcpy(layer->roomTypeId, room->typeID);
-                layer->jettonToEnter = jettonToEnter;
-                
-                Director::getInstance()->pushScene(scene);
-
+                if (jettonToEnter > Global::getInstance()->user_data.gold) {
+                    NoteTip::show("金币不足");
+                }
+                else if (room->chipMin > jettonToEnter) {
+                    NoteTip::show("带入金币不足，不能加入");
+                }
+                else {
+                    auto scene = OnlinePokerDesk::createScene();
+                    OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
+                    layer->roomType = room->type;
+                    strcpy(layer->roomTypeId, room->typeID);
+                    layer->jettonToEnter = jettonToEnter;
+                    
+                    Director::getInstance()->pushScene(scene);
+                }
             }
                 break;
                 
             case 1:{
                 if (roomIndexSelected + 1 == diItems.size()) {
-                    if (popup) {
-                        cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
-                        if (box) {
-                            if (strlen(box->getText()) != length_room_password) {
-                                NoteTip::show("密码输入有误");
-                            }
-                            else {
-                                auto scene = OnlinePokerDesk::createScene();
-                                OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
-                                layer->roomType = RoomType_VIP;
-                                layer->jettonToEnter = jettonToEnter;
-                                strcpy(layer->roomPassword, box->getText());
-                                
-                                Director::getInstance()->pushScene(scene);
-                            }
+                    cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
+                    if (box) {
+                        if (strlen(box->getText()) != length_room_password) {
+                            NoteTip::show("密码输入有误");
+                        }
+                        else {
+                            auto scene = OnlinePokerDesk::createScene();
+                            OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
+                            layer->roomType = RoomType_VIP;
+                            layer->jettonToEnter = jettonToEnter;
+                            strcpy(layer->roomPassword, box->getText());
+                            
+                            Director::getInstance()->pushScene(scene);
                         }
                     }
-                    
-                    
                 }
                 else {
                     int vip_level = Global::getInstance()->calculateVIPLevel(Global::getInstance()->user_data.introCount);
@@ -690,24 +642,21 @@ void Hall::popButtonCallback(Node* pNode){
                 
             case 2:{
                 if (roomIndexSelected + 1 == xuanItems.size()) {
-                    if (popup) {
-                        cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
-                        if (box) {
-                            if (strlen(box->getText()) != length_room_password) {
-                                NoteTip::show("密码输入有误");
-                            }
-                            else {
-                                auto scene = OnlinePokerDesk::createScene();
-                                OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
-                                layer->roomType = RoomType_Diamond;
-                                layer->jettonToEnter = jettonToEnter;
-                                strcpy(layer->roomPassword, box->getText());
-                                
-                                Director::getInstance()->pushScene(scene);
-                            }
+                    cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
+                    if (box) {
+                        if (strlen(box->getText()) != length_room_password) {
+                            NoteTip::show("密码输入有误");
+                        }
+                        else {
+                            auto scene = OnlinePokerDesk::createScene();
+                            OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
+                            layer->roomType = RoomType_Diamond;
+                            layer->jettonToEnter = jettonToEnter;
+                            strcpy(layer->roomPassword, box->getText());
+                            
+                            Director::getInstance()->pushScene(scene);
                         }
                     }
-                    
                 }
                 else {
                     room = xuanItems.at(roomIndexSelected);
@@ -718,7 +667,6 @@ void Hall::popButtonCallback(Node* pNode){
                         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
                         onHttpRequest_CreateRoom(room->typeID);
                     }
-                    
                 }
             }
                 break;
@@ -726,15 +674,22 @@ void Hall::popButtonCallback(Node* pNode){
             case 3:{
                 room = huangItems.at(roomIndexSelected);
                 
-                auto scene = PokerDesk::createScene();
-                PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-                layer->roomType = room->type;
-                layer->perMin = room->perMin;
-                layer->chipMin = room->chipMin;
-                layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
-                
-//                TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-                Director::getInstance()->pushScene(scene);
+                if (jettonToEnter > Global::getInstance()->user_data.silver) {
+                    NoteTip::show("银币不足");
+                }
+                else if (room->chipMin > jettonToEnter) {
+                    NoteTip::show("带入银币不足，不能加入");
+                }
+                else {
+                    auto scene = PokerDesk::createScene();
+                    PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
+                    layer->roomType = room->type;
+                    layer->perMin = room->perMin;
+                    layer->chipMin = room->chipMin;
+                    layer->gamePlayer->infoConfig(Global::getInstance()->user_data.nikename, "images/default_head.png", jettonToEnter);
+                    
+                    Director::getInstance()->pushScene(scene);
+                }
             }
                 break;
             default:
