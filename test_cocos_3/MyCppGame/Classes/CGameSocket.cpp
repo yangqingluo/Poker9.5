@@ -224,146 +224,144 @@ bool CGameSocket::hasError()
         }
         
         return false;
+}
+
+// 从网络中读取尽可能多的数据，实际向服务器请求数据的地方
+bool CGameSocket::recvFromSock(void){
+    if (m_nInbufLen >= INBUFSIZE || m_sockClient == INVALID_SOCKET) {
+        return false;
     }
     
-    // 从网络中读取尽可能多的数据，实际向服务器请求数据的地方
-    bool CGameSocket::recvFromSock(void)
-    {
-        if (m_nInbufLen >= INBUFSIZE || m_sockClient == INVALID_SOCKET) {
+    // 接收第一段数据
+    int savelen, savepos;           // 数据要保存的长度和位置
+    if(m_nInbufStart + m_nInbufLen < INBUFSIZE)  {   // INBUF中的剩余空间有回绕
+        savelen = INBUFSIZE - (m_nInbufStart + m_nInbufLen);        // 后部空间长度，最大接收数据的长度
+    } else {
+        savelen = INBUFSIZE - m_nInbufLen;
+    }
+    
+    // 缓冲区数据的末尾
+    savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
+    CHECKF(savepos + savelen <= INBUFSIZE);
+    int inlen = recv(m_sockClient, m_bufInput + savepos, savelen, 0);
+    if(inlen > 0) {
+        // 有接收到数据
+        m_nInbufLen += inlen;
+        
+        if (m_nInbufLen > INBUFSIZE) {
             return false;
         }
         
-        // 接收第一段数据
-        int savelen, savepos;           // 数据要保存的长度和位置
-        if(m_nInbufStart + m_nInbufLen < INBUFSIZE)  {   // INBUF中的剩余空间有回绕
-            savelen = INBUFSIZE - (m_nInbufStart + m_nInbufLen);        // 后部空间长度，最大接收数据的长度
-        } else {
-            savelen = INBUFSIZE - m_nInbufLen;
-        }
-        
-        // 缓冲区数据的末尾
-        savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
-        CHECKF(savepos + savelen <= INBUFSIZE);
-        int inlen = recv(m_sockClient, m_bufInput + savepos, savelen, 0);
-        if(inlen > 0) {
-            // 有接收到数据
-            m_nInbufLen += inlen;
-            
-            if (m_nInbufLen > INBUFSIZE) {
+        // 接收第二段数据(一次接收没有完成，接收第二段数据)
+        if(inlen == savelen && m_nInbufLen < INBUFSIZE) {
+            int savelen = INBUFSIZE - m_nInbufLen;
+            int savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
+            CHECKF(savepos + savelen <= INBUFSIZE);
+            inlen = recv(m_sockClient, m_bufInput + savepos, savelen, 0);
+            if(inlen > 0) {
+                m_nInbufLen += inlen;
+                if (m_nInbufLen > INBUFSIZE) {
+                    return false;
+                }
+            } else if(inlen == 0) {
+                Destroy();
                 return false;
-            }
-            
-            // 接收第二段数据(一次接收没有完成，接收第二段数据)
-            if(inlen == savelen && m_nInbufLen < INBUFSIZE) {
-                int savelen = INBUFSIZE - m_nInbufLen;
-                int savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
-                CHECKF(savepos + savelen <= INBUFSIZE);
-                inlen = recv(m_sockClient, m_bufInput + savepos, savelen, 0);
-                if(inlen > 0) {
-                    m_nInbufLen += inlen;
-                    if (m_nInbufLen > INBUFSIZE) {
-                        return false;
-                    }
-                } else if(inlen == 0) {
+            } else {
+                // 连接已断开或者错误（包括阻塞）
+                if (hasError()) {
                     Destroy();
                     return false;
-                } else {
-                    // 连接已断开或者错误（包括阻塞）
-                    if (hasError()) {
-                        Destroy();
-                        return false;
-                    }
                 }
             }
-        } else if(inlen == 0) {
+        }
+    } else if(inlen == 0) {
+        Destroy();
+        return false;
+    } else {
+        // 连接已断开或者错误（包括阻塞）
+        if (hasError()) {
             Destroy();
             return false;
-        } else {
-            // 连接已断开或者错误（包括阻塞）
-            if (hasError()) {
-                Destroy();
-                return false;
-            }
         }
-        
+    }
+    
+    return true;
+}
+    
+//? 如果 OUTBUF > SENDBUF 则需要多次SEND（）
+bool CGameSocket::Flush(void){
+    if (m_sockClient == INVALID_SOCKET) {
+        return false;
+    }
+    
+    if(m_nOutbufLen <= 0) {
         return true;
     }
     
-    bool CGameSocket::Flush(void)       //? 如果 OUTBUF > SENDBUF 则需要多次SEND（）
-    {
-        if (m_sockClient == INVALID_SOCKET) {
+    // 发送一段数据
+    int outsize;
+    outsize = send(m_sockClient, m_bufOutput, m_nOutbufLen, 0);
+    if(outsize > 0) {
+        // 删除已发送的部分
+        if(m_nOutbufLen - outsize > 0) {
+            memcpy(m_bufOutput, m_bufOutput + outsize, m_nOutbufLen - outsize);
+        }
+        
+        m_nOutbufLen -= outsize;
+        
+        if (m_nOutbufLen < 0) {
             return false;
         }
-        
-        if(m_nOutbufLen <= 0) {
-            return true;
-        }
-        
-        // 发送一段数据
-        int outsize;
-        outsize = send(m_sockClient, m_bufOutput, m_nOutbufLen, 0);
-        if(outsize > 0) {
-            // 删除已发送的部分
-            if(m_nOutbufLen - outsize > 0) {
-                memcpy(m_bufOutput, m_bufOutput + outsize, m_nOutbufLen - outsize);
-            }
-            
-            m_nOutbufLen -= outsize;
-            
-            if (m_nOutbufLen < 0) {
-                return false;
-            }
-        } else {
-            if (hasError()) {
-                Destroy();
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
-    bool CGameSocket::Check(void)
-    {
-        // 检查状态
-        if (m_sockClient == INVALID_SOCKET) {
-            return false;
-        }
-        
-        char buf[1];
-        int ret = recv(m_sockClient, buf, 1, MSG_PEEK);
-        if(ret == 0) {
+    } else {
+        if (hasError()) {
             Destroy();
             return false;
-        } else if(ret < 0) {
-            if (hasError()) {
-                Destroy();
-                return false;
-            } else {    // 阻塞
-                return true;
-            }
-        } else {    // 有数据
+        }
+    }
+    
+    return true;
+}
+    
+bool CGameSocket::Check(void){
+    // 检查状态
+    if (m_sockClient == INVALID_SOCKET) {
+        return false;
+    }
+    
+    char buf[1];
+    int ret = recv(m_sockClient, buf, 1, MSG_PEEK);
+    if(ret == 0) {
+        Destroy();
+        return false;
+    } else if(ret < 0) {
+        if (hasError()) {
+            Destroy();
+            return false;
+        } else {    // 阻塞
             return true;
         }
-        
+    } else {    // 有数据
         return true;
     }
     
-    void CGameSocket::Destroy(void)
-    {
-        // 关闭
-        struct linger so_linger;
-        so_linger.l_onoff = 1;
-        so_linger.l_linger = 500;
-        int ret = setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
-        
-        closeSocket();
-        
-        m_sockClient = INVALID_SOCKET;
-        m_nInbufLen = 0;
-        m_nInbufStart = 0;
-        m_nOutbufLen = 0;
-        
-        memset(m_bufOutput, 0, sizeof(m_bufOutput));
-        memset(m_bufInput, 0, sizeof(m_bufInput));
-    }
+    return true;
+}
+    
+void CGameSocket::Destroy(void){
+    // 关闭
+    struct linger so_linger;
+    so_linger.l_onoff = 1;
+    so_linger.l_linger = 500;
+    int ret = setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
+    
+    closeSocket();
+    
+    m_sockClient = INVALID_SOCKET;
+    m_nInbufLen = 0;
+    m_nInbufStart = 0;
+    m_nOutbufLen = 0;
+    
+    memset(m_bufOutput, 0, sizeof(m_bufOutput));
+    memset(m_bufInput, 0, sizeof(m_bufInput));
+    
+}

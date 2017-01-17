@@ -10,7 +10,7 @@ USING_NS_CC_EXT;
 using namespace CocosDenshion;
 
 #include "PublicHeader.h"
-#include "ODSocket.h"
+#include "CGameSocket.h"
 #include "MTNotificationQueue.h"
 
 #define MAX_NET_DATA_LEN (10 * 1024)
@@ -163,7 +163,7 @@ private:
     unsigned int m_nRecvLen = 0;
     unsigned int m_nRecvFrameLen = 0;
     
-    ODSocket socket;
+    CGameSocket socket;
     void connectServer();
     void disconnectServer();
     void receiveData();

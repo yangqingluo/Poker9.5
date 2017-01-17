@@ -304,20 +304,12 @@ void Global::resetRoundIndex(){
 #pragma Socket
 void Global::disconnectServer(){
     // 关闭连接
-    socket.Close();
-    socket.Clean();
+    socket.Destroy();
 }
 void Global::connectServer(){
     // 初始化
-    // ODSocket socket;
-    socket.Init();
-    socket.Create(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    
-    // 设置服务器的IP地址，端口号
-    // 并连接服务器 Connect
-    const char* ip = "115.28.109.174";
-    int port = 8888;
-    bool result = socket.Connect(ip, port);
+    socket = *new CGameSocket();
+    bool result = socket.Create("115.28.109.174", 8888, BLOCKSECONDS, true);
     
     if (result) {
         this->socketdidConnect();
@@ -333,9 +325,15 @@ void Global::receiveData(){
     // 因为是强联网
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
+        if (!socket.Check()) {
+            socketDidDisconnect();
+            break;
+        }
+        
         // 接收数据 Recv
-        char data[MAX_NET_DATA_LEN] = "";
-        int result = socket.Recv(data, MAX_NET_DATA_LEN, 0);
+        char data[MAX_NET_DATA_LEN] = {0};
+        int nSize = MAX_NET_DATA_LEN;
+        int result = socket.ReceiveMsg(data, nSize);
         // 与服务器的连接断开了
         if (result <= 0){
             socketDidDisconnect();
@@ -378,7 +376,7 @@ void Global::sendData(const char* value){
     memcpy(send_data, &reverseLen, 4);
     memcpy(send_data + 4, value, value_len);
     
-    int result_send = socket.Send(send_data, 4 + value_len);
+    int result_send = socket.SendMsg(send_data, 4 + value_len);
     if (result_send > 0) {
         log("Socket::send->%s",value);
     }
