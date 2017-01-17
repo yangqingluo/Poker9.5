@@ -1058,8 +1058,6 @@ void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
                 NoteTip::show(content);
             }
         }
-        
-        
     }
 }
 

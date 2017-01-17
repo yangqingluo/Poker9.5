@@ -103,6 +103,8 @@
 		FC331E6A1E23C65A00174856 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC331E691E23C65A00174856 /* GameController.framework */; };
 		FC35C0941DEAC741009C3A83 /* GameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0921DEAC741009C3A83 /* GameTimer.cpp */; };
 		FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC35C0961DEAE239009C3A83 /* PokerChair.cpp */; };
+		FC3A21241E2E19F0000C67F0 /* CGameSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC3A21221E2E19F0000C67F0 /* CGameSocket.cpp */; };
+		FC3A21251E2E19F0000C67F0 /* CGameSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC3A21221E2E19F0000C67F0 /* CGameSocket.cpp */; };
 		FC47C01E1DF4385C00A22F70 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C01C1DF4385C00A22F70 /* Player.cpp */; };
 		FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC47C01C1DF4385C00A22F70 /* Player.cpp */; };
 		FC4B4B8A1DF1500200E0271B /* QLImageSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */; };
@@ -318,6 +320,8 @@
 		FC35C0931DEAC741009C3A83 /* GameTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTimer.h; sourceTree = "<group>"; };
 		FC35C0961DEAE239009C3A83 /* PokerChair.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerChair.cpp; sourceTree = "<group>"; };
 		FC35C0971DEAE239009C3A83 /* PokerChair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerChair.h; sourceTree = "<group>"; };
+		FC3A21221E2E19F0000C67F0 /* CGameSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CGameSocket.cpp; sourceTree = "<group>"; };
+		FC3A21231E2E19F0000C67F0 /* CGameSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGameSocket.h; sourceTree = "<group>"; };
 		FC47C01C1DF4385C00A22F70 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		FC47C01D1DF4385C00A22F70 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		FC4B4B881DF1500200E0271B /* QLImageSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QLImageSprite.cpp; sourceTree = "<group>"; };
@@ -629,6 +633,8 @@
 				FCED08C01E1C0750004BDFD6 /* NoteTip.h */,
 				FCED08C11E1C0750004BDFD6 /* ODSocket.cpp */,
 				FCED08C21E1C0750004BDFD6 /* ODSocket.h */,
+				FC3A21221E2E19F0000C67F0 /* CGameSocket.cpp */,
+				FC3A21231E2E19F0000C67F0 /* CGameSocket.h */,
 				FCED08C31E1C0750004BDFD6 /* OnlinePokerDeskScene.cpp */,
 				FCED08C41E1C0750004BDFD6 /* OnlinePokerDeskScene.h */,
 				FCED08C51E1C0750004BDFD6 /* PasswordScene.cpp */,
@@ -992,6 +998,7 @@
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				FCED08E71E1C0750004BDFD6 /* RegistInputView.cpp in Sources */,
 				FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
+				FC3A21241E2E19F0000C67F0 /* CGameSocket.cpp in Sources */,
 				FC7E77781E0F6C94008EBE40 /* InviterScene.cpp in Sources */,
 				FCC339D11DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC983D651DE171F9006C2616 /* ExchangeScene.cpp in Sources */,
@@ -1018,6 +1025,7 @@
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */,
+				FC3A21251E2E19F0000C67F0 /* CGameSocket.cpp in Sources */,
 				FCED08DC1E1C0750004BDFD6 /* MTNotificationQueue.cpp in Sources */,
 				FCC339D21DDFB45E00E71685 /* HallScene.cpp in Sources */,
 				FC7FC24C1DF00F90007A6D25 /* GameTimer.cpp in Sources */,
