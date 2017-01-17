@@ -30,10 +30,12 @@ public:
     virtual bool init();
     virtual void onEnter();
     virtual void onExit();
-    
     CREATE_FUNC(BetLimiter);
-    static BetLimiter* create(const int* jettonValueArray, size_t count, Size size, BetType type = BetType_Default);
     
+    static BetLimiter* create(const int* jettonValueArray, size_t count, Size size, BetType type = BetType_Default);
+    void updateValue(int value);
+    int minValue = 0;
+    void reset();
 private:
     CC_SYNTHESIZE_READONLY(int,m_value,SelectedJettonValue);//当前选中筹码面值
     BetType m_type;

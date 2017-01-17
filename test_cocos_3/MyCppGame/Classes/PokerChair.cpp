@@ -207,19 +207,17 @@ void PokerChair::updateJetton(JettonSprite* jetton){
 }
 
 void PokerChair::updateTotal(int value){
-    if (value != betTotal) {
-        betTotal = value;
+    betTotal = value;
+    
+    if (betTotal > 0) {
+        betTotalLabel->setVisible(true);
+        char mString[100];
+        this->stringFromBetValue(mString, betTotal);
         
-        if (betTotal > 0) {
-            betTotalLabel->setVisible(true);
-            char mString[100];
-            this->stringFromBetValue(mString, betTotal);
-            
-            betTotalLabel->setString(mString);
-        }
-        else {
-            betTotalLabel->setVisible(false);
-        }
+        betTotalLabel->setString(mString);
+    }
+    else {
+        betTotalLabel->setVisible(false);
     }
 }
 

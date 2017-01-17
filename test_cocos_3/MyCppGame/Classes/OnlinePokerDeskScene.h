@@ -58,7 +58,7 @@ public:
     TableView* playerListTableView;
     Label* countLabel;
     Label* gamePlayerInfoLabel;
-    Label* roomInfoLabel;
+//    Label* roomInfoLabel;
     Label* roundInfoLabel;
     BetLimiter* betLimiter;
     Sprite* dealerHead;

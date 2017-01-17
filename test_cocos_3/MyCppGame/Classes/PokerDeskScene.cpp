@@ -217,6 +217,9 @@ void PokerDesk::popButtonCallback(Node* pNode){
 void PokerDesk::onEnter(){
     Layer::onEnter();
     
+//    betLimiter->minValue = this->perMin;
+    betLimiter->reset();
+    
     playerList_sprite = QLImageSprite::create("images/window_upright_bg.png", Size(upright_sprite->getContentSize().width, 0.9 * (upright_sprite->getBoundingBox().getMinY() - bottom_sprite->getBoundingBox().getMaxY())));
     playerList_sprite->setPosition(upright_sprite->getPositionX(), 0.5 * (upright_sprite->getBoundingBox().getMinY() + bottom_sprite->getBoundingBox().getMaxY()));
     playerList_sprite->setVisible(false);
@@ -443,13 +446,13 @@ void PokerDesk::sendPokerAction(){
 
 void PokerDesk::showGamePlayerInfo(){
     char mString[100];
-    sprintf(mString,"%s\n筹码：%d",gamePlayer->nickName, gamePlayer->getJettonCount());
+    sprintf(mString,"%s\n%d",gamePlayer->nickName, gamePlayer->getJettonCount());
     gamePlayerInfoLabel->setString(mString);
 }
 void PokerDesk::showDealerInfo(){
     if (dealerPlayer != NULL) {
         char mString[100];
-        sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
+        sprintf(mString,"庄家：%s\n本金：%d\n玩家总数：2\n",dealerPlayer->nickName, dealerPlayer->getJettonCount());
         countLabel->setString(mString);
     }
     else{
@@ -616,6 +619,7 @@ void PokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                 
                 if (totalBet * 3 > gamePlayer->getJettonCount()) {
                     NoteTip::show("下注不能超过本金1/3");
+//                    betLimiter->reset();
                 }
                 else {
                     JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());

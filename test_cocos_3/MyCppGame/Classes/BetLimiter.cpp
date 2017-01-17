@@ -46,11 +46,11 @@ BetLimiter* BetLimiter::create(const int* jettonValueArray, size_t count, Size s
     float xOrigin = 0.0;
     
     if (type == BetType_Addition) {
-        positionY = 0.4 * layer->getContentSize().height;
-        xOrigin = 0.5 * (size.width - ((count + 2) + (count + 1) * edgeScale) * radius);
+        positionY = 0.5 * layer->getContentSize().height;
+//        xOrigin = 0.5 * (size.width - ((count + 2) + (count + 1) * edgeScale) * radius);
         
-        auto ltf = Label::create("", "", 8);
-        ltf->setColor(Color3B::WHITE);
+        auto ltf = Label::createWithTTF("", "fonts/STKaiti.ttf", 12);
+        ltf->setTextColor(Color4B::WHITE);
         ltf->setPosition(0.5 * size.width, size.height - 0.8 * ltf->getContentSize().height);
         layer->addChild(ltf);
         layer->m_label = ltf;
@@ -63,16 +63,16 @@ BetLimiter* BetLimiter::create(const int* jettonValueArray, size_t count, Size s
         jetton->setCanTouch(true);
         jetton->setTouchCallBackFunc(layer, callfuncN_selector(BetLimiter::touchedJettonCallback));
         layer->addChild(jetton, 0, 10 + i);
-        if (i == 0) {
+        if (i == 0 && type != BetType_Addition) {
             layer->touchedJettonCallback(jetton);
         }
         else if (i == count - 1) {
             if (type == BetType_Addition) {
-                layer->m_label->setPosition(xOrigin + (0.5 + (1 + edgeScale) * (i + 1)) * jetton->getContentSize().width, positionY);
+                layer->m_label->setPosition(xOrigin + (0.5 + (1 + edgeScale) * (i + 2)) * jetton->getContentSize().width, positionY);
                 
                 auto btn_clearJetton = Button::create("jetton/jetton_clear.png","jetton/jetton_clear.png");
                 btn_clearJetton->setScale(radius / btn_clearJetton->getContentSize().height);
-                btn_clearJetton->setPosition(Vec2(xOrigin + (0.5 + (1 + edgeScale) * (i + 2)) * jetton->getContentSize().width, positionY));
+                btn_clearJetton->setPosition(Vec2(xOrigin + (0.5 + (1 + edgeScale) * (i + 4)) * jetton->getContentSize().width, positionY));
                 btn_clearJetton->addTouchEventListener(CC_CALLBACK_2(BetLimiter::touchEvent, layer));
                 btn_clearJetton->setTag(10);
                 layer->addChild(btn_clearJetton);
@@ -85,7 +85,6 @@ BetLimiter* BetLimiter::create(const int* jettonValueArray, size_t count, Size s
 
 void BetLimiter::touchedJettonCallback(Node* pSender){
     auto jetton = (JettonChosenSprite* )pSender;
-    
     if (selectedJetton != NULL) {
         selectedJetton->setSelected(false);
     }
@@ -94,17 +93,27 @@ void BetLimiter::touchedJettonCallback(Node* pSender){
     selectedJetton = jetton;
     
     if (m_type == BetType_Addition) {
-        m_value += jetton->getJettonValue();
-        this->showValueLabel();
+        this->updateValue(m_value + jetton->getJettonValue());
     }
     else {
-        m_value = jetton->getJettonValue();
+        this->updateValue(jetton->getJettonValue());
     }
+}
+
+void BetLimiter::updateValue(int value){
+    m_value = value;
+    if (m_type == BetType_Addition) {
+        this->showValueLabel();
+    }
+}
+
+void BetLimiter::reset(){
+    this->updateValue(minValue);
 }
 
 void BetLimiter::showValueLabel(){
     char m_string[50] = {0};
-    sprintf(m_string, "=%d", m_value);
+    sprintf(m_string, "筹码= %d", m_value);
     
     m_label->setString(m_string);
 }
@@ -123,8 +132,7 @@ void BetLimiter::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType ty
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
                 case 10:{
-                    m_value = 0;
-                    this->showValueLabel();
+                    reset();
                 }
                     break;
                     

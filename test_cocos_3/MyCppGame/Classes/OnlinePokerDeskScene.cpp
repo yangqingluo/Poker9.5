@@ -151,13 +151,13 @@ bool OnlinePokerDesk::init()
     btn_addJetton->setVisible(false);
     bottom_sprite->addChild(btn_addJetton);
     
-    roomInfoLabel = Label::createWithTTF("    房间名    ", "fonts/STKaiti.ttf", 10);
-    roomInfoLabel->setDimensions(MAX(2 * bottom_sprite->getContentSize().height, 100), bottom_sprite->getContentSize().height);
-    roomInfoLabel->setPosition(0.5 * roomInfoLabel->getDimensions().width, 0.5 * bottom_sprite->getContentSize().height);
-    roomInfoLabel->setHorizontalAlignment(TextHAlignment::CENTER);
-    roomInfoLabel->setVerticalAlignment(TextVAlignment::CENTER);
-    roomInfoLabel->setTextColor(Color4B::WHITE);
-    bottom_sprite->addChild(roomInfoLabel);
+//    roomInfoLabel = Label::createWithTTF("    房间名    ", "fonts/STKaiti.ttf", 10);
+//    roomInfoLabel->setDimensions(MAX(2 * bottom_sprite->getContentSize().height, 100), bottom_sprite->getContentSize().height);
+//    roomInfoLabel->setPosition(0.5 * roomInfoLabel->getDimensions().width, 0.5 * bottom_sprite->getContentSize().height);
+//    roomInfoLabel->setHorizontalAlignment(TextHAlignment::CENTER);
+//    roomInfoLabel->setVerticalAlignment(TextVAlignment::CENTER);
+//    roomInfoLabel->setTextColor(Color4B::WHITE);
+//    bottom_sprite->addChild(roomInfoLabel);
     
     int betJettonArray[6] = {10,50,100,500,1000,5000};
     betLimiter = BetLimiter::create(betJettonArray, 6, Size(0.8 * bottom_sprite->getContentSize().width, 1.0 * bottom_sprite->getContentSize().height), BetType_Addition);
@@ -657,22 +657,32 @@ void OnlinePokerDesk::sendPokerAction(){
 void OnlinePokerDesk::showGamePlayerInfo(){
     this->playerListTableView->reloadData();
     
-    char mString[100] = {0};
+    char mString[200] = {0};
+    
+    if (strlen(Global::getInstance()->table_data.roomType) > 0) {
+        sprintf(mString, "%s\n", Global::getInstance()->table_data.roomType);
+    }
+    else {
+        sprintf(mString, "%s\n", "房间信息未知");
+    }
+    
+    bool hasUser = false;
     for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
         PlayerData player_data = Global::getInstance()->playerList[i];
         if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
-            sprintf(mString,"%s\n筹码：%d",player_data.user.nikename, player_data.remainCap);
+            sprintf(mString + strlen(mString),"玩家：%s\n本金：%d",player_data.user.nikename, player_data.remainCap);
             gamePlayerInfoLabel->setString(mString);
+            hasUser = true;
         }
     }
     
-    if (strlen(mString) == 0) {
-        sprintf(mString,"%s\n筹码：%d", Global::getInstance()->user_data.nikename, jettonToEnter);
+    if (!hasUser) {
+        sprintf(mString + strlen(mString),"玩家：%s\n本金：%d", Global::getInstance()->user_data.nikename, jettonToEnter);
     }
     
     if (Global::getInstance()->table_data.round.roundIndex > 0) {
         char m_indexString[10] = {0};
-        sprintf(m_indexString, "\n第%d把", Global::getInstance()->table_data.round.roundIndex);
+        sprintf(m_indexString, " 第%d把", Global::getInstance()->table_data.round.roundIndex);
         strcat(mString, m_indexString);
     }
     
@@ -687,7 +697,7 @@ void OnlinePokerDesk::showDealerInfo(){
             PlayerData player_data = Global::getInstance()->playerList[i];
             if (0 == strcmp(Global::getInstance()->table_data.bureau.bureauOwnerId, player_data.user.ID)) {
                 hasDealer = true;
-                sprintf(mString,"庄家：%s\n筹码：%d\n玩家总数：%d\n",player_data.user.nikename, player_data.remainCap, Global::getInstance()->playerListCount);
+                sprintf(mString,"庄家：%s\n本金：%d\n玩家总数：%d\n",player_data.user.nikename, player_data.remainCap, Global::getInstance()->playerListCount);
             }
         }
         
@@ -793,6 +803,7 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
                         }
                         else if (totalBet * 3 > player_data.remainCap) {
                             NoteTip::show("下注不能超过本金1/3");
+//                            betLimiter->reset();
                         }
                         else {
                             JettonSprite* sp = this->createjetton(betLimiter->getSelectedJettonValue());
@@ -904,11 +915,11 @@ bool OnlinePokerDesk::createPokers(){
 }
 
 bool OnlinePokerDesk::reindexPoker(){
-    for(int i = 0; i < m_arrPokers.size(); ++i){
-        PokerSprite* pk1 = m_arrPokers.getRandomObject();
-        PokerSprite* pk2 = m_arrPokers.getRandomObject();
-        m_arrPokers.swap(pk1, pk2);
-    }
+//    for(int i = 0; i < m_arrPokers.size(); ++i){
+//        PokerSprite* pk1 = m_arrPokers.getRandomObject();
+//        PokerSprite* pk2 = m_arrPokers.getRandomObject();
+//        m_arrPokers.swap(pk1, pk2);
+//    }
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -1184,6 +1195,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 NoteTip::show("恭喜，抢庄成功！");
             }
             
+//            betLimiter->minValue = Global::getInstance()->table_data.minPerStack;
+            betLimiter->reset();
             betLimiter->setVisible(!Global::getInstance()->isDealer);
         }
             break;
@@ -1233,10 +1246,10 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_enterRoom:
         case cmd_enterRoomByPassword:{
             this->showMessageManager(false);
-            
-            if (strlen(Global::getInstance()->table_data.roomType) > 0) {
-                roomInfoLabel->setString(Global::getInstance()->table_data.roomType);
-            }
+            this->showGamePlayerInfo();
+//            if (strlen(Global::getInstance()->table_data.roomType) > 0) {
+//                roomInfoLabel->setString(Global::getInstance()->table_data.roomType);
+//            }
             
             switch (Global::getInstance()->table_data.code) {
                 case state_enterRoom_success_wait:
