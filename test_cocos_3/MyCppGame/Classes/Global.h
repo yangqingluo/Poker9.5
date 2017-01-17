@@ -58,6 +58,7 @@ using namespace CocosDenshion;
 #define state_enterRoom_fail_full                1002//房间满员
 #define state_enterRoom_success_prepare          1003//加入房间成功，准备开始
 #define state_enterRoom_fail_password            1004//密码错误
+#define state_enterRoom_fail_type                1005//类型错误
 
 
 //牌局状态

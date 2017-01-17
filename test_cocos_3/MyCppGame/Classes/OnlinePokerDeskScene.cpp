@@ -1251,7 +1251,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
 
                 case state_enterRoom_fail_no_money:
                 case state_enterRoom_fail_full:
-                case state_enterRoom_fail_password:{
+                case state_enterRoom_fail_password:
+                case state_enterRoom_fail_type:{
                     NoteTip::show(Global::getInstance()->table_data.description);
                 }
                     break;
