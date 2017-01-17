@@ -41,6 +41,7 @@ private:
     
     void showValueLabel();
     
+    void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
     void touchedJettonCallback(Node* pSender);
     JettonChosenSprite* selectedJetton;
 };

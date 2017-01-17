@@ -17,7 +17,7 @@ USING_NS_CC_EXT;
 
 #include "GameTimer.h"
 #include "PokerChair.h"
-#include "BetSlider.h"
+#include "BetLimiter.h"
 #include "Player.h"
 
 #include "NoteTip.h"
@@ -51,7 +51,7 @@ public:
     Label* countLabel;
     Label* messageLabel;
     Label* gamePlayerInfoLabel;
-    BetSlider* betLimiter;
+    BetLimiter* betLimiter;
     Sprite* dealerHead;
     MenuItemImage* btn_BeBankerItem;
     

@@ -159,9 +159,9 @@ bool OnlinePokerDesk::init()
     roomInfoLabel->setTextColor(Color4B::WHITE);
     bottom_sprite->addChild(roomInfoLabel);
     
-    int betJettonArray[9] = {10,20,50,100,200,500,1000,2000,5000};
-    betLimiter = BetLimiter::create(betJettonArray, 9, Size(bottom_sprite->getContentSize().width, 0.8 * bottom_sprite->getContentSize().height));
-    betLimiter->setPosition(roomInfoLabel->getDimensions().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
+    int betJettonArray[6] = {10,50,100,500,1000,5000};
+    betLimiter = BetLimiter::create(betJettonArray, 6, Size(0.8 * bottom_sprite->getContentSize().width, 1.0 * bottom_sprite->getContentSize().height), BetType_Addition);
+    betLimiter->setPosition(0.5 * bottom_sprite->getContentSize().width - 0.5 * betLimiter->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
     betLimiter->setVisible(false);
     bottom_sprite->addChild(betLimiter);
     
