@@ -51,6 +51,8 @@ public:
     bool    Check(void);
     void    Destroy(void);
     SOCKET  GetSocket(void) const { return m_sockClient; }
+    // Recv socket
+    int Recv(char* buf, int len, int flags = 0);
 private:
     bool    recvFromSock(void);     // 从网络中读取尽可能多的数据
     bool    hasError();         // 是否发生错误，注意，异步模式未完成非错误

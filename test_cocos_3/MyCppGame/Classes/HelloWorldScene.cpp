@@ -8,10 +8,10 @@ USING_NS_UM_SOCIAL;
 USING_NS_CC;
 
 HelloWorld::HelloWorld(){
-    
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(HelloWorld::onNotification_Socket), kNotification_Socket, NULL);
 }
 HelloWorld::~HelloWorld(){
-    
+    NotificationCenter::getInstance()->removeAllObservers(this);
 }
 
 Scene* HelloWorld::createScene()
@@ -280,5 +280,19 @@ void HelloWorld::onHttpResponse(HttpClient* sender, HttpResponse* response)
         printf("%c", v->at(i));
     }
     printf("\n");
+}
+
+#pragma notification
+void HelloWorld::onNotification_Socket(Ref* pSender){
+    PostRef* post = (PostRef* )pSender;
+    switch (post->cmd) {
+        case cmd_disconnect:{
+            NoteTip::show(this, "与服务器连接已断开，请重新登录");
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 

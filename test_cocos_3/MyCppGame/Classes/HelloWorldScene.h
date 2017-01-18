@@ -26,7 +26,7 @@ private:
     
     void onHttpRequest(std::string type);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
-
+    void onNotification_Socket(Ref* pSender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

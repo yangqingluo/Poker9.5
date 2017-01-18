@@ -420,7 +420,8 @@ void Global::socketdidConnect(){
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");
     
-//    postNotification(cmd_disconnect);
+    Director::getInstance()->popToRootScene();
+    postNotification(cmd_disconnect);
 }
 
 void Global::onReceiveData(char *buffer, int len){

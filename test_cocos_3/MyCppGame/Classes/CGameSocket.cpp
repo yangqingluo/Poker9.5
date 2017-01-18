@@ -1,15 +1,12 @@
 #include "stdafx.h"
 #include "CGameSocket.h"
 
-CGameSocket::CGameSocket()
-{
-    // 初始化
+CGameSocket::CGameSocket(){
     memset(m_bufOutput, 0, sizeof(m_bufOutput));
     memset(m_bufInput, 0, sizeof(m_bufInput));
 }
 
-void CGameSocket::closeSocket()
-{
+void CGameSocket::closeSocket(){
 #ifdef WIN32
     closesocket(m_sockClient);
     WSACleanup();
@@ -18,8 +15,7 @@ void CGameSocket::closeSocket()
 #endif
 }
 
-bool CGameSocket::Create(const char* pszServerIP, int nServerPort, int nBlockSec, bool bKeepAlive /*= FALSE*/)
-{
+bool CGameSocket::Create(const char* pszServerIP, int nServerPort, int nBlockSec, bool bKeepAlive /*= FALSE*/){
     // 检查参数
     if(pszServerIP == 0 || strlen(pszServerIP) > 15) {
         return false;
@@ -97,8 +93,8 @@ bool CGameSocket::Create(const char* pszServerIP, int nServerPort, int nBlockSec
             if (ret == 0 || ret < 0) {
                 closeSocket();
                 return false;
-            } else  // ret > 0
-            {
+            }
+            else {
                 ret = FD_ISSET(m_sockClient, &exceptset);
                 if(ret)     // or (!FD_ISSET(m_sockClient, &writeset)
                 {
@@ -151,6 +147,11 @@ bool CGameSocket::SendMsg(void* pBuf, int nSize)
     return true;
 }
 
+int CGameSocket::Recv(char* buf, int len, int flags)
+{
+    return (int)(recv(m_sockClient, buf, len, flags));
+}
+
 bool CGameSocket::ReceiveMsg(void* pBuf, int& nSize)
 {
     //检查参数
@@ -162,17 +163,17 @@ bool CGameSocket::ReceiveMsg(void* pBuf, int& nSize)
         return false;
     }
     
-    // 检查是否有一个消息(小于2则无法获取到消息长度)
-    if(m_nInbufLen < 2) {
+    // 检查是否有一个消息(小于4则无法获取到消息长度)
+    if(m_nInbufLen < 4) {
         //  如果没有请求成功  或者   如果没有数据则直接返回
-        if(!recvFromSock() || m_nInbufLen < 2) {     // 这个m_nInbufLen更新了
+        if(!recvFromSock() || m_nInbufLen < 4) {     // 这个m_nInbufLen更新了
             return false;
         }
     }
     
     // 计算要拷贝的消息的大小（一个消息，大小为整个消息的第一个16字节），因为环形缓冲区，所以要分开计算
-    int packsize = (unsigned char)m_bufInput[m_nInbufStart] +
-    (unsigned char)m_bufInput[(m_nInbufStart + 1) % INBUFSIZE] * 256; // 注意字节序，高位+低位
+    int packsize = m_bufInput[m_nInbufStart] << 24 | (m_bufInput[m_nInbufStart + 1] & 0xff) << 16 | (m_bufInput[m_nInbufStart + 2] & 0xff) << 8 | (m_bufInput[m_nInbufStart + 3] & 0xff);
+    packsize += 4;
     
     // 检测消息包尺寸错误 暂定最大16k
     if (packsize <= 0 || packsize > _MAX_MSGSIZE) {
@@ -331,23 +332,23 @@ bool CGameSocket::Check(void){
     int result = checkConnect();
     return (result >= 0);
     
-    char buf[1];
-    int ret = recv(m_sockClient, buf, 1, MSG_PEEK);
-    if(ret == 0) {
-        Destroy();
-        return false;
-    } else if(ret < 0) {
-        if (hasError()) {
-            Destroy();
-            return false;
-        } else {    // 阻塞
-            return true;
-        }
-    } else {    // 有数据
-        return true;
-    }
-    
-    return true;
+//    char buf[1];
+//    int ret = recv(m_sockClient, buf, 1, MSG_PEEK);
+//    if(ret == 0) {
+//        Destroy();
+//        return false;
+//    } else if(ret < 0) {
+//        if (hasError()) {
+//            Destroy();
+//            return false;
+//        } else {    // 阻塞
+//            return true;
+//        }
+//    } else {    // 有数据
+//        return true;
+//    }
+//    
+//    return true;
 }
     
 void CGameSocket::Destroy(void){
@@ -369,42 +370,41 @@ void CGameSocket::Destroy(void){
     
 }
     
-    int CGameSocket::checkConnect()
+int CGameSocket::checkConnect(){
+    fd_set rset, tval;
+    
+    FD_ZERO(&rset);
+    FD_SET(m_sockClient, &rset);
+    
+    timeval tm;
+    tm. tv_sec = 0;
+    tm.tv_usec = 0;
+    
+    if (select(m_sockClient + 1, NULL, &rset, &tval, &tm) <= 0)
     {
-        fd_set rset, tval;
-        
-        FD_ZERO(&rset);
-        FD_SET(m_sockClient, &rset);
-        
-        timeval tm;
-        tm. tv_sec = 0;
-        tm.tv_usec = 0;
-        
-        if (select(m_sockClient + 1, NULL, &rset, &tval, &tm) <= 0)
+        close(m_sockClient);
+        return -1;
+    }
+    
+    if (FD_ISSET(m_sockClient, &rset))
+    {
+        int err = -1;
+        socklen_t len = sizeof(int);
+        if ( getsockopt(m_sockClient,  SOL_SOCKET, SO_ERROR ,&err, &len) < 0 )
         {
             close(m_sockClient);
-            return -1;
+            printf("errno:%d %s\n", errno, strerror(errno));
+            return -2;
         }
         
-        if (FD_ISSET(m_sockClient, &rset))
+        if (err)
         {
-            int err = -1;
-            socklen_t len = sizeof(int);
-            if ( getsockopt(m_sockClient,  SOL_SOCKET, SO_ERROR ,&err, &len) < 0 )
-            {
-                close(m_sockClient);
-                printf("errno:%d %s\n", errno, strerror(errno));
-                return -2;
-            }
+            errno = err;
+            close(m_sockClient);
             
-            if (err)
-            {
-                errno = err;
-                close(m_sockClient);
-                
-                return -3;
-            }
+            return -3;
         }
-        
-        return 0;
     }
+    
+    return 0;
+}
