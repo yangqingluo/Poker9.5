@@ -55,6 +55,7 @@ private:
     bool    recvFromSock(void);     // 从网络中读取尽可能多的数据
     bool    hasError();         // 是否发生错误，注意，异步模式未完成非错误
     void    closeSocket();
+    int     checkConnect();
     
     SOCKET  m_sockClient;
     

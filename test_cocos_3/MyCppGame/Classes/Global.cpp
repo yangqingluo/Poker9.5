@@ -61,6 +61,7 @@ Global* Global::getInstance(){
                                                                   MTNotificationQueue::sharedNotificationQueue(),
                                                                   1.0 / 60.0,
                                                                   false);
+        Director::getInstance()->getScheduler()->scheduleUpdate(share, 1, false);
         
         //预加载音乐音效
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(MUSIC_FILE);
@@ -301,22 +302,71 @@ void Global::resetRoundIndex(){
     table_data.round.roundIndex = 0;
 }
 
+void Global::update(float delta){
+    // 接收消息处理（放到游戏主循环中，每帧处理）
+    if (!m_socket) {
+        return;
+    }
+    
+    if (!m_socket->Check()) {
+        m_socket = NULL;
+        // 掉线了
+        socketDidDisconnect();
+        return;
+    }
+    
+    // 发送数据（向服务器发送消息）
+    m_socket->Flush();
+    
+    // 接收数据（取得缓冲区中的所有消息，直到缓冲区为空）
+    while (true)
+    {
+        char buffer[_MAX_MSGSIZE] = { 0 };
+        int nSize = sizeof(buffer);
+        char* pbufMsg = buffer;
+        if(m_socket == NULL)
+        {
+            break;
+        }
+        if (!m_socket->ReceiveMsg(pbufMsg, nSize)) {
+            break;
+        }
+        
+        onReceiveData(pbufMsg, nSize);
+        break;
+//        char* pReceiveMsg = (MsgHead*)(pbufMsg);
+//        uint16  dwCurMsgSize = pReceiveMsg->usSize;
+//        //          CCLOG("msgsize: %d", dwCurMsgSize);
+//        
+//        if((int)dwCurMsgSize > nSize || dwCurMsgSize <= 0) {  // broken msg
+//            break;
+//        }
+//        
+//        CMessageSubject::instance().OnMessage((const char*)pReceiveMsg, pReceiveMsg->usSize);
+//        
+//        pbufMsg += dwCurMsgSize;
+//        nSize   -= dwCurMsgSize;
+//        if(nSize <= 0) {
+//            break;
+//        }
+    }
+}
+
 #pragma Socket
 void Global::disconnectServer(){
     // 关闭连接
-    socket.Destroy();
+    m_socket->Destroy();
 }
 void Global::connectServer(){
     // 初始化
-    socket = *new CGameSocket();
-    bool result = socket.Create("115.28.109.174", 8888, BLOCKSECONDS, true);
+    m_socket = new CGameSocket();
+    bool result = m_socket->Create("115.28.109.174", 8888, BLOCKSECONDS, true);
     
     if (result) {
         this->socketdidConnect();
     }
     else {
         log("Socket::can not connect to server");
-        return;
     }
 }
 
@@ -325,7 +375,7 @@ void Global::receiveData(){
     // 因为是强联网
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
-        if (!socket.Check()) {
+        if (!m_socket->Check()) {
             socketDidDisconnect();
             break;
         }
@@ -333,7 +383,7 @@ void Global::receiveData(){
         // 接收数据 Recv
         char data[MAX_NET_DATA_LEN] = {0};
         int nSize = MAX_NET_DATA_LEN;
-        int result = socket.ReceiveMsg(data, nSize);
+        int result = m_socket->ReceiveMsg(data, nSize);
         // 与服务器的连接断开了
         if (result <= 0){
             socketDidDisconnect();
@@ -346,37 +396,13 @@ void Global::receiveData(){
 }
 
 void Global::sendData(const char* value){
-    //    rapidjson::Document d1;
-    //    d1.SetObject();
-    //    rapidjson::Document::AllocatorType& allocator = d1.GetAllocator();
-    //    rapidjson::Value array(rapidjson::kArrayType);
-    //    rapidjson::Value object(rapidjson::kObjectType);
-    //
-    //    object.AddMember("id", 1000, allocator);
-    //    object.AddMember("name", "234", allocator);
-    //    object.AddMember("年龄", "111", allocator);
-    //    //            array.PushBack(object, allocator);
-    //
-    //    d1.AddMember("propety", "PLAYER-TO", allocator);
-    //    d1.AddMember("id", 3000, allocator);
-    //    d1.AddMember("player", object, allocator);
-    //
-    //    rapidjson::StringBuffer buffer;
-    //    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
-    //    d1.Accept(write);
-    //
-    //    //            StringUtils::format("%s",buffer.GetString());
-    //    log("******%s",buffer.GetString());
-    
-    
-    
     char send_data[1024] = {0};
     int value_len = (int)strlen(value);
     int reverseLen = reversebytes_uint32t(value_len);
     memcpy(send_data, &reverseLen, 4);
     memcpy(send_data + 4, value, value_len);
     
-    int result_send = socket.SendMsg(send_data, 4 + value_len);
+    int result_send = m_socket->SendMsg(send_data, 4 + value_len);
     if (result_send > 0) {
         log("Socket::send->%s",value);
     }
@@ -385,30 +411,11 @@ void Global::sendData(const char* value){
 void Global::socketdidConnect(){
     log("Socket::connect to server success!");
     
-    // 开启新线程，在子线程中，接收数据
-    std::thread recvThread = std::thread(&Global::receiveData, this);
-    recvThread.detach(); // 从主线程分离
+//    // 开启新线程，在子线程中，接收数据
+//    std::thread recvThread = std::thread(&Global::receiveData, this);
+//    recvThread.detach(); // 从主线程分离
     
     sendHandle();
-    //    //发送数据 Send
-    //    SEND_PACKAGE package = {0};
-    //    char handle[200];
-    //    sprintf(handle, "{\"id\":1000,\"content\":{\"userId\":\"%s\"}}", user_data.ID);
-    //
-    //    int length = (int)strlen(handle);
-    //    if (!endianBig) {
-    //        package.valueLength = reversebytes_uint32t(length);
-    //    }
-    //    else {
-    //        package.valueLength = length;
-    //    }
-    //
-    //    memcpy(package.value, handle, length);
-    //
-    //    int result_send = socket.Send((const char *)&package, sizeof(int) + length);
-    //    if (result_send > 0) {
-    //        log("Socket::send->%s",package.value);
-    //    }
 }
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");

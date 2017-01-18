@@ -217,13 +217,13 @@ bool CGameSocket::hasError()
     int err = WSAGetLastError();
     if(err != WSAEWOULDBLOCK) {
 #else
-        int err = errno;
-        if(err != EINPROGRESS && err != EAGAIN) {
+    int err = errno;
+    if(err != EINPROGRESS && err != EAGAIN) {
 #endif
-            return true;
-        }
+        return true;
+    }
         
-        return false;
+    return false;
 }
 
 // 从网络中读取尽可能多的数据，实际向服务器请求数据的地方
@@ -328,6 +328,9 @@ bool CGameSocket::Check(void){
         return false;
     }
     
+    int result = checkConnect();
+    return (result >= 0);
+    
     char buf[1];
     int ret = recv(m_sockClient, buf, 1, MSG_PEEK);
     if(ret == 0) {
@@ -365,3 +368,43 @@ void CGameSocket::Destroy(void){
     memset(m_bufInput, 0, sizeof(m_bufInput));
     
 }
+    
+    int CGameSocket::checkConnect()
+    {
+        fd_set rset, tval;
+        
+        FD_ZERO(&rset);
+        FD_SET(m_sockClient, &rset);
+        
+        timeval tm;
+        tm. tv_sec = 0;
+        tm.tv_usec = 0;
+        
+        if (select(m_sockClient + 1, NULL, &rset, &tval, &tm) <= 0)
+        {
+            close(m_sockClient);
+            return -1;
+        }
+        
+        if (FD_ISSET(m_sockClient, &rset))
+        {
+            int err = -1;
+            socklen_t len = sizeof(int);
+            if ( getsockopt(m_sockClient,  SOL_SOCKET, SO_ERROR ,&err, &len) < 0 )
+            {
+                close(m_sockClient);
+                printf("errno:%d %s\n", errno, strerror(errno));
+                return -2;
+            }
+            
+            if (err)
+            {
+                errno = err;
+                close(m_sockClient);
+                
+                return -3;
+            }
+        }
+        
+        return 0;
+    }
