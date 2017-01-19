@@ -8,6 +8,7 @@
 
 #include "ShopScene.h"
 #include "Global.h"
+#include "CppToFunction.h"
 
 Scene* ShopScene::createScene()
 {
@@ -286,7 +287,7 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                         NoteTip::show("请输入充值的金币数目");
                     }
                     else {
-                        NoteTip::show("精彩功能敬请期待");
+                        CppToFunction::getInstance()->doAlipayAction();
                     }
                 }
                     break;

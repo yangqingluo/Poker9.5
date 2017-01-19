@@ -151,6 +151,7 @@
 		FCA383F11E1F406E006E073C /* CppToFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToFunction.cpp */; };
 		FCA383F21E1F406E006E073C /* CppToFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToFunction.cpp */; };
 		FCA383F51E1F42C5006E073C /* OCFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA383F41E1F42C5006E073C /* OCFunction.m */; };
+		FCAABD9F1E310FD2004AAD7C /* AppPublic.m in Sources */ = {isa = PBXBuildFile; fileRef = FCAABD9E1E310FD2004AAD7C /* AppPublic.m */; };
 		FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
 		FCB5E04D1DF017D300EDB420 /* JettonSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */; };
 		FCB667D51E250F6100B5F2CD /* BetSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCB667D31E250F6100B5F2CD /* BetSlider.cpp */; };
@@ -459,6 +460,8 @@
 		FCA383F01E1F406E006E073C /* CppToFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CppToFunction.h; sourceTree = "<group>"; };
 		FCA383F31E1F42C5006E073C /* OCFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OCFunction.h; path = ios/OCFunction.h; sourceTree = SOURCE_ROOT; };
 		FCA383F41E1F42C5006E073C /* OCFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OCFunction.m; path = ios/OCFunction.m; sourceTree = SOURCE_ROOT; };
+		FCAABD9D1E310FD2004AAD7C /* AppPublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppPublic.h; path = ios/AppPublic.h; sourceTree = SOURCE_ROOT; };
+		FCAABD9E1E310FD2004AAD7C /* AppPublic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppPublic.m; path = ios/AppPublic.m; sourceTree = SOURCE_ROOT; };
 		FCB5E04A1DF017D300EDB420 /* JettonSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonSprite.cpp; sourceTree = "<group>"; };
 		FCB5E04B1DF017D300EDB420 /* JettonSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonSprite.h; sourceTree = "<group>"; };
 		FCB667D31E250F6100B5F2CD /* BetSlider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BetSlider.cpp; sourceTree = "<group>"; };
@@ -593,6 +596,8 @@
 				FCA383EC1E1F3C52006E073C /* OCPublic.mm */,
 				FCA383F31E1F42C5006E073C /* OCFunction.h */,
 				FCA383F41E1F42C5006E073C /* OCFunction.m */,
+				FCAABD9D1E310FD2004AAD7C /* AppPublic.h */,
+				FCAABD9E1E310FD2004AAD7C /* AppPublic.m */,
 			);
 			name = ios;
 			path = Classes;
@@ -1233,6 +1238,7 @@
 				FCED08E91E1C0750004BDFD6 /* RegistScene.cpp in Sources */,
 				FCED08D91E1C0750004BDFD6 /* MessageManager.cpp in Sources */,
 				FCED08DF1E1C0750004BDFD6 /* ODSocket.cpp in Sources */,
+				FCAABD9F1E310FD2004AAD7C /* AppPublic.m in Sources */,
 				FC7E77741E0EBFBC008EBE40 /* HelpScene.cpp in Sources */,
 				FC5481BD1E30BF74005A39C2 /* NSDataEx.m in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
@@ -1349,7 +1355,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../Classes\"",
-					"$(SRCROOT)/ios/Alipay",
+					"\"$(SRCROOT)/../Classes/alipay_sdk/Alipay\"",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
@@ -1397,7 +1403,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../Classes\"",
-					"$(SRCROOT)/ios/Alipay",
+					"\"$(SRCROOT)/../Classes/alipay_sdk/Alipay\"",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;

@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AppPublic.h"
 
 void nsCopy(const char *string){
     [UIPasteboard generalPasteboard].string = [NSString stringWithUTF8String:string];
+}
+
+void nsDoAlipay(){
+    [[AppPublic shareInstance] doAlipayPay];
 }
