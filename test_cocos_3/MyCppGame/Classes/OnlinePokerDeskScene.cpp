@@ -272,7 +272,21 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
                     break;
                     
                 default:{
-                    NoteTip::show("当前阶段不能退出");
+                    bool remainZero = false;
+                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+                        PlayerData player_data = Global::getInstance()->playerList[i];
+                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
+                            remainZero = (player_data.remainCap == 0);
+                            break;
+                        }
+                    }
+                    if (!Global::getInstance()->isDealer && remainZero) {
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                        Global::getInstance()->sendLeaveRoom();
+                    }
+                    else {
+                        NoteTip::show("当前阶段不能退出");
+                    }
                 }
                     break;
             }

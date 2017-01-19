@@ -287,7 +287,7 @@ void HelloWorld::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     switch (post->cmd) {
         case cmd_disconnect:{
-            NoteTip::show(this, "与服务器连接已断开，请重新登录");
+            NoteTip::show(this, "与服务器连接已断开");
         }
             break;
             
