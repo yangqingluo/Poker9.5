@@ -287,7 +287,12 @@ void HelloWorld::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     switch (post->cmd) {
         case cmd_disconnect:{
-            NoteTip::show(this, "与服务器连接已断开");
+            if (Global::getInstance()->isInitiativeLogout) {
+                Global::getInstance()->isInitiativeLogout = false;
+            }
+            else {
+                NoteTip::show(this, "与服务器连接已断开");
+            }
         }
             break;
             

@@ -129,6 +129,8 @@ public:
     bool isEffect();
     void setEffect(bool yn);
     
+    bool isInitiativeLogout = false;//是否用户主动点击退出登录
+    
     void stopEffect(int ID);
     int playEffect(const char* fileName , bool loop);
     int playEffect_sendcard(bool loop);

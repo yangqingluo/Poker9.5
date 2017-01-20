@@ -165,9 +165,10 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
 }
 
 void Global::logout(){
-    Director::getInstance()->popToRootScene();
+//    Director::getInstance()->popToRootScene();
     this->playBackgroundMusic(false);
     
+    this->isInitiativeLogout = true;
     this->disconnectServer();
 }
 
