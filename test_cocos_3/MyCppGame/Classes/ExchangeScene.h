@@ -15,22 +15,33 @@ USING_NS_CC;
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 
+#include "network/HttpClient.h"
+using namespace cocos2d::network;
+using namespace std;
+
+#include "NoteTip.h"
+#include "MessageManager.h"
+#include "YNButton.h"
+
 class ExchangeScene : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
     static cocos2d::Scene* createScene();
-    
     virtual bool init();
-    void buttonCallback(cocos2d::Ref* pSender, int index);
     CREATE_FUNC(ExchangeScene);
     
+    void buttonCallback(cocos2d::Ref* pSender, int index);
+    void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
+    void showSettingWithIndex(int index);
+private:
+    Vector<YNButton* > listButtons;
+    Vector<LayerColor* > listLayers;
     float recordListCellWidth = 0;
     TableView* recordListTableView;
     
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);
-    
     void tableCellTouched(TableView* table, TableViewCell* cell);
 };
 
