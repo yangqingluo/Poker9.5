@@ -329,26 +329,26 @@ bool CGameSocket::Check(void){
         return false;
     }
     
-    int result = checkConnect();
-    return (result >= 0);
+//    int result = checkConnect();
+//    return (result >= 0);
     
-//    char buf[1];
-//    int ret = recv(m_sockClient, buf, 1, MSG_PEEK);
-//    if(ret == 0) {
-//        Destroy();
-//        return false;
-//    } else if(ret < 0) {
-//        if (hasError()) {
-//            Destroy();
-//            return false;
-//        } else {    // 阻塞
-//            return true;
-//        }
-//    } else {    // 有数据
-//        return true;
-//    }
-//    
-//    return true;
+    char buf[1];
+    int ret = recv(m_sockClient, buf, 1, MSG_PEEK);
+    if(ret == 0) {
+        Destroy();
+        return false;
+    } else if(ret < 0) {
+        if (hasError()) {
+            Destroy();
+            return false;
+        } else {    // 阻塞
+            return true;
+        }
+    } else {    // 有数据
+        return true;
+    }
+    
+    return true;
 }
     
 void CGameSocket::Destroy(void){
