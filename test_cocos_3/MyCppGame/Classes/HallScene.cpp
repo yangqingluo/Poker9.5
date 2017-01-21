@@ -571,12 +571,14 @@ void Hall::popButtonCallback(Node* pNode){
         }
         cocos2d::ui::EditBox* capitalBox = (cocos2d::ui::EditBox* )popup->getChildByTag(capitalBoxTag);
         if (capitalBox == NULL) {
-            return;
+            
         }
-        jettonToEnter = atoi(capitalBox->getText());
-        if (jettonToEnter <= 0) {
-            NoteTip::show("本金输入有误");
-            return;
+        else {
+            jettonToEnter = atoi(capitalBox->getText());
+            if (jettonToEnter <= 0) {
+                NoteTip::show("本金输入有误");
+                return;
+            }
         }
         
         RoomItem* room = NULL;
