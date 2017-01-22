@@ -1111,13 +1111,13 @@ TableViewCell* OnlinePokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
             
             auto head = Sprite::create("images/default_head.png");
             head->setScale(MIN(0.3 * listCellWidth, height) / head->getContentSize().width);
-            head->setPosition(0.25 * listCellWidth, 0.5 * height);
+            head->setPosition(0.5 * head->getBoundingBox().size.width, 0.5 * height);
             cell->addChild(head, 0 , 2);
             
             Label* titleLabel = Label::createWithTTF("昵称:", "fonts/STKaiti.ttf", 8);
             titleLabel->setTextColor(Color4B::BLACK);
-            titleLabel->setPosition(0.75 * listCellWidth, 0.5 * height);
-            titleLabel->setDimensions(0.5 * listCellWidth, height);
+            titleLabel->setPosition(0.65 * listCellWidth, 0.5 * height);
+            titleLabel->setDimensions(0.7 * listCellWidth, height);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
             titleLabel->setTag(1);
@@ -1132,9 +1132,6 @@ TableViewCell* OnlinePokerDesk::tableCellAtIndex(TableView* table, ssize_t idx)
         sprintf(content, "%s\n%d", player.user.nikename, player.remainCap);
         
         label->setString(content);
-        
-        
-        
         
         return cell;
     }

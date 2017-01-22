@@ -85,20 +85,74 @@ bool ExchangeScene::init()
         this->addChild(layer);
         listLayers.pushBack(layer);
         
+        recordListCellWidth = layer->getContentSize().width;
         float inputHeight = MAX(32, layer->getContentSize().height / 8);
         switch (i) {
             case 0:{
+                exchangeItems.clear();
+                char description[8][30] = {"iPhone7 32GB", "iPhone7 128GB", "iPhone7 256GB", "iPhone7 Plus 32GB", "iPhone7 Plus 128GB", "iPhone7 Plus 256GB", "iPadPro 9.7英寸", "iPadPro 12.9英寸"};
+                int price[8] = {5388, 6188, 6988, 6388, 7188, 7988, 4388, 5388};
+                for (int i = 7; i >= 0; i--) {
+                    ExchangeItem* item = new ExchangeItem();
+                    item->autorelease();
+                    
+                    switch (i) {
+                        case 0:
+                        case 1:
+                        case 2:{
+                            sprintf(item->imagePath, "images/iphone7.png");
+                        }
+                            break;
+                            
+                        case 3:
+                        case 4:
+                        case 5:{
+                            sprintf(item->imagePath, "images/iphone7_plus.png");
+                        }
+                            break;
+                            
+                        case 6:{
+                            sprintf(item->imagePath, "images/ipad_pro_9in.png");
+                        }
+                            break;
+                            
+                        case 7:{
+                            sprintf(item->imagePath, "images/ipad_pro_12in.png");
+                        }
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    
+                    sprintf(item->description, "%s", description[i]);
+                    item->price_gold = price[i];
+                    
+                    exchangeItems.pushBack(item);
+                }
                 
+                
+//                auto label = Label::createWithTTF("兑换列表", "fonts/STKaiti.ttf", 14);
+//                label->setTextColor(Color4B::BLACK);
+//                label->setPosition(0.5 * layer->getContentSize().width, (610.0 / 640.0) * layer->getContentSize().height);
+//                layer->addChild(label);
+                
+                exchangeListTableView = TableView::create(this, Size(recordListCellWidth,  (520.0 / 640.0) * visibleSize.height));
+                exchangeListTableView->setPosition(0 , (40.0 / 640.0 ) * visibleSize.height);
+                exchangeListTableView->setDirection(TableView::Direction::VERTICAL);
+                exchangeListTableView->setDelegate(this);
+                layer->addChild(exchangeListTableView);
+                
+                exchangeListTableView->reloadData();
             }
                 break;
                 
             case 1:{
-                auto label = Label::createWithTTF("充值记录", "fonts/STKaiti.ttf", 14);
+                auto label = Label::createWithTTF("兑换记录", "fonts/STKaiti.ttf", 14);
                 label->setTextColor(Color4B::BLACK);
                 label->setPosition(0.5 * layer->getContentSize().width, (610.0 / 640.0) * layer->getContentSize().height);
                 layer->addChild(label);
                 
-                recordListCellWidth = layer->getContentSize().width;
                 recordListTableView = TableView::create(this, Size(recordListCellWidth,  (520.0 / 640.0) * visibleSize.height));
                 recordListTableView->setPosition(0 , (40.0 / 640.0 ) * visibleSize.height);
                 recordListTableView->setDirection(TableView::Direction::VERTICAL);
@@ -144,6 +198,8 @@ bool ExchangeScene::init()
 //    recordListSprite->addChild(recordListTableView);
 //    
 //    recordListTableView->reloadData();
+    
+    
     
     return true;
 }
@@ -229,6 +285,9 @@ Size ExchangeScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
     if (table == recordListTableView) {
         return Size(recordListCellWidth, 40);
     }
+    else if (table == exchangeListTableView) {
+        return Size(recordListCellWidth, 50);
+    }
     
     return Size::ZERO;
 }
@@ -266,6 +325,42 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         return cell;
     }
+    else if (table == exchangeListTableView) {
+        TableViewCell* cell = table->dequeueCell();
+        
+        float height = 50;
+        if(!cell){
+            cell = new TableViewCell();
+            cell->autorelease();
+            
+            auto head = Sprite::create("images/iphone7_plus.png");
+            head->setScale(height / head->getContentSize().height);
+            head->setPosition(0.5 * head->getBoundingBox().size.width, 0.5 * height);
+            cell->addChild(head, 0 , 2);
+            
+            Label* titleLabel = Label::create("", "", 8);
+            titleLabel->setTextColor(Color4B::BLACK);
+            titleLabel->setPosition(0.6 * recordListCellWidth, 0.5 * height);
+            titleLabel->setDimensions(0.7 * recordListCellWidth, height);
+            titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+            titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            titleLabel->setTag(1);
+            cell->addChild(titleLabel);
+        }
+        
+        ExchangeItem* item = exchangeItems.at(idx);
+        
+        Label* label = (Label* )cell->getChildByTag(1);
+        char content[200];
+        sprintf(content, "%s\n价格：%d金币", item->description, item->price_gold);
+        label->setString(content);
+        
+        Sprite* head = (Sprite* )cell->getChildByTag(2);
+        head->setTexture(item->imagePath);
+        head->setScale((0.9 * height) / head->getContentSize().height);
+        
+        return cell;
+    }
     
     return NULL;
 }
@@ -276,10 +371,18 @@ ssize_t ExchangeScene::numberOfCellsInTableView(TableView* table)
     if (table == recordListTableView) {
         return 20;
     }
+    else if (table == exchangeListTableView) {
+        return exchangeItems.size();
+    }
     
     return 0;
 }
 
 void ExchangeScene::tableCellTouched(TableView* table, TableViewCell* cell){
-    
+    if (table == recordListTableView) {
+        
+    }
+    else if (table == exchangeListTableView) {
+        
+    }
 }

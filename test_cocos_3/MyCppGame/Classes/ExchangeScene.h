@@ -23,6 +23,13 @@ using namespace std;
 #include "MessageManager.h"
 #include "YNButton.h"
 
+class ExchangeItem : public Ref{
+public:
+    int price_gold;//兑换价格-金币
+    char imagePath[50];
+    char description[200];
+};
+
 class ExchangeScene : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
@@ -38,6 +45,8 @@ private:
     Vector<LayerColor* > listLayers;
     float recordListCellWidth = 0;
     TableView* recordListTableView;
+    TableView* exchangeListTableView;
+    Vector<ExchangeItem* > exchangeItems;
     
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
