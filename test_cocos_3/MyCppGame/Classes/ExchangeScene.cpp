@@ -8,8 +8,7 @@
 
 #include "ExchangeScene.h"
 #include "ExchangeCell.h"
-
-USING_NS_CC;
+#include "Global.h"
 
 Scene* ExchangeScene::createScene()
 {
@@ -87,13 +86,12 @@ bool ExchangeScene::init()
         listLayers.pushBack(layer);
         
         recordListCellWidth = layer->getContentSize().width;
-        float inputHeight = MAX(32, layer->getContentSize().height / 8);
         switch (i) {
             case 0:{
                 exchangeItems.clear();
-                char description[8][30] = {"iPhone7 32GB", "iPhone7 128GB", "iPhone7 256GB", "iPhone7 Plus 32GB", "iPhone7 Plus 128GB", "iPhone7 Plus 256GB", "iPadPro 9.7英寸", "iPadPro 12.9英寸"};
-                int price[8] = {5388, 6188, 6988, 6388, 7188, 7988, 4388, 5388};
-                for (int i = 7; i >= 0; i--) {
+                char description[12][50] = {"iPhone7 32GB", "iPhone7 128GB", "iPhone7 256GB", "iPhone7 Plus 32GB", "iPhone7 Plus 128GB", "iPhone7 Plus 256GB", "iPadPro 9.7英寸 WLAN 32GB", "iPadPro 9.7英寸 WLAN 128GB", "iPadPro 9.7英寸 WLAN 256GB", "iPadPro 12.9英寸 WLAN 32GB", "iPadPro 12.9英寸 WLAN 128GB", "iPadPro 12.9英寸 WLAN 256GB"};
+                int price[12] = {5388, 6188, 6988, 6388, 7188, 7988, 4388, 5188, 5888, 5888, 6688, 7488};
+                for (int i = 11; i >= 0; i--) {
                     ExchangeItem* item = new ExchangeItem();
                     item->autorelease();
                     
@@ -102,6 +100,14 @@ bool ExchangeScene::init()
                         case 1:
                         case 2:{
                             sprintf(item->imagePath, "images/iphone7.png");
+                            
+                            item->colors.push_back(Value(ItemColorType_Black));
+                            item->colors.push_back(Value(ItemColorType_Silver));
+                            item->colors.push_back(Value(ItemColorType_Golden));
+                            item->colors.push_back(Value(ItemColorType_RoseGolden));
+                            if (i != 0) {
+                                item->colors.push_back(Value(ItemColorType_BlackLighted));
+                            }
                         }
                             break;
                             
@@ -109,16 +115,35 @@ bool ExchangeScene::init()
                         case 4:
                         case 5:{
                             sprintf(item->imagePath, "images/iphone7_plus.png");
+                            
+                            item->colors.push_back(Value(ItemColorType_Black));
+                            item->colors.push_back(Value(ItemColorType_Silver));
+                            item->colors.push_back(Value(ItemColorType_Golden));
+                            item->colors.push_back(Value(ItemColorType_RoseGolden));
+                            if (i != 3) {
+                                item->colors.push_back(Value(ItemColorType_BlackLighted));
+                            }
                         }
                             break;
                             
-                        case 6:{
+                        case 6:
+                        case 7:
+                        case 8:{
                             sprintf(item->imagePath, "images/ipad_pro_9in.png");
+                            item->colors.push_back(Value(ItemColorType_Silver));
+                            item->colors.push_back(Value(ItemColorType_Golden));
+                            item->colors.push_back(Value(ItemColorType_DeepSkyGray));
+                            item->colors.push_back(Value(ItemColorType_RoseGolden));
                         }
                             break;
                             
-                        case 7:{
+                        case 9:
+                        case 10:
+                        case 11:{
                             sprintf(item->imagePath, "images/ipad_pro_12in.png");
+                            item->colors.push_back(Value(ItemColorType_Silver));
+                            item->colors.push_back(Value(ItemColorType_Golden));
+                            item->colors.push_back(Value(ItemColorType_DeepSkyGray));
                         }
                             break;
                             
@@ -127,16 +152,17 @@ bool ExchangeScene::init()
                     }
                     
                     sprintf(item->description, "%s", description[i]);
-                    item->price_gold = price[i];
+                    item->price = price[i];
                     
                     exchangeItems.pushBack(item);
                 }
                 
-                
-//                auto label = Label::createWithTTF("兑换列表", "fonts/STKaiti.ttf", 14);
-//                label->setTextColor(Color4B::BLACK);
-//                label->setPosition(0.5 * layer->getContentSize().width, (610.0 / 640.0) * layer->getContentSize().height);
-//                layer->addChild(label);
+                auto label = Label::create();
+                label->setSystemFontSize(14.0);
+                label->setString("选择物品及颜色");
+                label->setTextColor(Color4B::BLACK);
+                label->setPosition(0.5 * layer->getContentSize().width, (610.0 / 640.0) * layer->getContentSize().height);
+                layer->addChild(label);
                 
                 exchangeListTableView = TableView::create(this, Size(recordListCellWidth,  (520.0 / 640.0) * visibleSize.height));
                 exchangeListTableView->setPosition(0 , (40.0 / 640.0 ) * visibleSize.height);
@@ -149,7 +175,9 @@ bool ExchangeScene::init()
                 break;
                 
             case 1:{
-                auto label = Label::createWithTTF("兑换记录", "fonts/STKaiti.ttf", 14);
+                auto label = Label::create();
+                label->setSystemFontSize(14.0);
+                label->setString("兑换记录");
                 label->setTextColor(Color4B::BLACK);
                 label->setPosition(0.5 * layer->getContentSize().width, (610.0 / 640.0) * layer->getContentSize().height);
                 layer->addChild(label);
@@ -207,6 +235,28 @@ bool ExchangeScene::init()
 
 
 void ExchangeScene::buttonCallback(cocos2d::Ref* pSender, int index){
+    if (index >= 100) {
+        //兑换物品颜色选择
+        int itemIndex = index / 100 - 1;
+        if (itemIndex >= 0 && itemIndex <= exchangeItems.size()) {
+            ExchangeItem* item = exchangeItems.at(itemIndex);
+            
+            int colorIndex = index % 100;
+            if (colorIndex < item->colors.size()) {
+                int colorType = item->colors.at(colorIndex).asInt();
+                char colorString[20] = {0};
+                Global::getInstance()->getStringWithItemColor(colorString, (ItemColorType)colorType);
+                
+                char showString[300] = {0};
+                sprintf(showString, "%s\n颜色:%s\n花费:%d金币",item->description, colorString,item->price * 10);
+                MessageBox(showString, "兑换");
+            }
+        }
+        else {
+            MessageBox("未知兑换物品", "出错了");
+        }
+        return;
+    }
     switch (index) {
         case 0:{
             Director::getInstance()->popScene();
@@ -304,7 +354,8 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
             cell = new TableViewCell();
             cell->autorelease();
             
-            Label* titleLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 10);
+            auto titleLabel = Label::create();
+            titleLabel->setSystemFontSize(10.0);
             titleLabel->setTextColor(Color4B::BLACK);
             titleLabel->setPosition(recordListCellWidth / 2, 15);
             titleLabel->setDimensions(recordListCellWidth, 40);
@@ -338,25 +389,65 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
             cell->addChild(head);
             cell->head = head;
             
-            auto titleLabel = Label::create("", "", 8);
+            auto titleLabel = Label::create();
+            titleLabel->setSystemFontSize(8.0);
             titleLabel->setTextColor(Color4B::BLACK);
-            titleLabel->setPosition(0.6 * recordListCellWidth, 0.5 * height);
-            titleLabel->setDimensions(0.7 * recordListCellWidth, height);
+            titleLabel->setPosition(0.3 * recordListCellWidth, 0.5 * height);
+            titleLabel->setDimensions(0.3 * recordListCellWidth, height);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
             cell->addChild(titleLabel);
             cell->titleLabel = titleLabel;
+            
+            auto line = Sprite::create("images/tableview_line.png");
+            line->setScaleX(recordListCellWidth / line->getContentSize().width);
+            line->setPosition(0.5 * recordListCellWidth, 0.5 * line->getContentSize().height);
+            cell->addChild(line);
+            
+            auto layerColor = LayerColor::create(Color4B::WHITE, 0.55 * recordListCellWidth, 0.8 * height);
+            layerColor->setPosition(0.45 * recordListCellWidth, 0.5 * height - 0.5 * layerColor->getContentSize().height);
+            cell->addChild(layerColor);
+            cell->buttonLayer = layerColor;
+            
+            cell->colorMenu = Menu::create();
+            cell->colorMenu->setPosition(Vec2::ZERO);
+            cell->buttonLayer->addChild(cell->colorMenu);
+            cell->itemWidth = MIN(30, layerColor->getContentSize().width / 5.0);
         }
         
         ExchangeItem* item = exchangeItems.at(idx);
         
         char content[200];
-        sprintf(content, "%s\n价格：%d金币", item->description, item->price_gold);
+        sprintf(content, "%s\n价格：%d金币", item->description, item->price * 10);
         cell->titleLabel->setString(content);
         
         cell->head->setTexture(item->imagePath);
         cell->head->setScale((0.9 * height) / cell->head->getContentSize().height);
         cell->head->setPosition(0.5 * cell->head->getBoundingBox().size.width, 0.5 * height);
+        
+        cell->colorMenu->removeAllChildren();
+        for (int i = 0; i < item->colors.size(); i++) {
+            int colorType = item->colors.at(i).asInt();
+            
+            char colorString[20] = {0};
+            Global::getInstance()->getStringWithItemColor(colorString, (ItemColorType)colorType);
+            
+            auto label = Label::create();
+            label->setSystemFontSize(8.0);
+            label->setTextColor(Color4B::BLACK);
+//            label->setPosition((i + 0.5) * cell->itemWidth, 0.5 * cell->buttonLayer->getContentSize().height);
+            label->setDimensions(cell->itemWidth, cell->buttonLayer->getContentSize().height);
+            label->setHorizontalAlignment(TextHAlignment::CENTER);
+            label->setVerticalAlignment(TextVAlignment::CENTER);
+            label->setString(colorString);
+            
+            auto menuItem = MenuItemLabel::create(label, CC_CALLBACK_1(ExchangeScene::buttonCallback, this, (idx + 1) * 100 + i));
+//            MenuItemFont::create(colorString, CC_CALLBACK_1(ExchangeScene::buttonCallback, this, (idx + 1) * 100 + i));
+//            menuItem->setFontSizeObj(8);
+//            menuItem->setColor(Color3B::BLACK);
+            menuItem->setPosition((i + 0.5) * cell->itemWidth, 0.5 * cell->buttonLayer->getContentSize().height);
+            cell->colorMenu->addChild(menuItem);
+        }
         
         return cell;
     }

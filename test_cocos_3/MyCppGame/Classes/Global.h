@@ -85,6 +85,18 @@ enum RoomType
     RoomType_Diamond,
 };
 
+//兑换物品颜色
+enum ItemColorType
+{
+    ItemColorType_Default = 0,
+    ItemColorType_BlackLighted,
+    ItemColorType_Black,
+    ItemColorType_Silver,
+    ItemColorType_Golden,
+    ItemColorType_RoseGolden,
+    ItemColorType_DeepSkyGray,
+};
+
 
 class PostRef: public Ref{
 public:
@@ -143,6 +155,7 @@ public:
     
     int calculateVIPLevel(int introCount);//通过邀请人数计算vip等级
     int getInt(char *buffer, int offset);
+    bool getStringWithItemColor(char *buffer, ItemColorType colorType);//通过颜色值得到颜色文本
     
     void saveLoginData(const rapidjson::Value& val_content);
     void logout();

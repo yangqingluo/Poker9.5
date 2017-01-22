@@ -14,6 +14,9 @@ public:
     
     Sprite* head;
     Label* titleLabel;
+    LayerColor* buttonLayer;
+    Menu* colorMenu;
+    float itemWidth = 30.0;
 };
 
 #endif /* __ExchangeCell_H__ */

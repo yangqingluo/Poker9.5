@@ -38,6 +38,8 @@
 #define MUSIC_FILE        "music/background.mp3"
 #endif
 
+char colorString[7][20] = {"默认","亮黑色","黑色","银色","金色","玫瑰金","深空灰"};
+
 
 PostRef::PostRef(){
     
@@ -188,6 +190,15 @@ int Global::calculateVIPLevel(int introCount){
 
 int Global::getInt(char *buffer, int offset) {
     return buffer[offset + 0] << 24 | (buffer[offset + 1] & 0xff) << 16 | (buffer[offset + 2] & 0xff) << 8 | (buffer[offset + 3] & 0xff);
+}
+
+bool Global::getStringWithItemColor(char *buffer, ItemColorType colorType){
+    if (colorType >= ItemColorType_Default) {
+        sprintf(buffer, "%s", colorString[colorType]);
+        return true;
+    }
+    
+    return false;
 }
 
 void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user){

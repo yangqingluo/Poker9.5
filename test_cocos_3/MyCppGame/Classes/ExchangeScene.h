@@ -25,9 +25,10 @@ using namespace std;
 
 class ExchangeItem : public Ref{
 public:
-    int price_gold;//兑换价格-金币
+    int price;//兑换价格
     char imagePath[50];
     char description[200];
+    ValueVector colors;
 };
 
 class ExchangeScene : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
