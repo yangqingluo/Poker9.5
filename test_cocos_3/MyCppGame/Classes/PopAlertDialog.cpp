@@ -127,7 +127,7 @@ void  PopAlertDialog::onEnter(){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    Sprite* background=getSpriteBackGround();
+    Sprite* background = getSpriteBackGround();
     
 //    Scale9Sprite* background=getSprite9BackGround();
     
@@ -149,8 +149,8 @@ void  PopAlertDialog::onEnter(){
 }
 
 void PopAlertDialog::backgroundFinish(){
-    Size winSize = Director::getInstance()->getWinSize();
-    Point pCenter = Point(winSize.width/2,winSize.height/2);
+    auto winSize = Director::getInstance()->getWinSize();
+    Point pCenter = Point(winSize.width / 2, winSize.height / 2);
     
     this->addChild(getMenuButton());
     
@@ -160,19 +160,22 @@ void PopAlertDialog::backgroundFinish(){
     
     int i = 0;
     for (Node* pObj : vector){
-        Node* node=dynamic_cast<Node*>(pObj);
-        node->setPosition(Point(winSize.width/2-m_dialogContentSize.width/2+btnWidth*(i+1),winSize.height/2-m_dialogContentSize.height/3));
+        Node* node = dynamic_cast<Node*>(pObj);
+        node->setPosition(Point(pCenter.x - m_dialogContentSize.width / 2 + btnWidth * (i + 1), pCenter.y - m_dialogContentSize.height / 3));
         i++;
     }
     
     if (getLabelTitle()) {
-        getLabelTitle()->setPosition(pCenter.x,pCenter.y + m_dialogContentSize.height / 2 - 35.0f);
+        getLabelTitle()->setDimensions(m_dialogContentSize.width, 50);
+        getLabelTitle()->setHorizontalAlignment(TextHAlignment::CENTER);
+        getLabelTitle()->setVerticalAlignment(TextVAlignment::CENTER);
+        getLabelTitle()->setPosition(pCenter.x, pCenter.y + m_dialogContentSize.height / 2 - 25.0f);
         this->addChild(getLabelTitle());
     }
     
     if (getLabelContentText()) {
         Label* ltf = getLabelContentText();
-        ltf->setPosition(winSize.width/2,winSize.height/2);
+        ltf->setPosition(pCenter);
         ltf->setDimensions(m_dialogContentSize.width - m_contentPadding * 2, m_dialogContentSize.height - m_contentPaddingTop);
         ltf->setHorizontalAlignment(TextHAlignment::LEFT);
         

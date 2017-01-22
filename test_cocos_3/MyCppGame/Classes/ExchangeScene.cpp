@@ -9,6 +9,14 @@
 #include "ExchangeScene.h"
 #include "ExchangeCell.h"
 #include "Global.h"
+#include "PopAlertDialog.h"
+
+#define dialogTag         9527
+#define addressBoxTag     9528
+#define nameBoxTag        9529
+#define mobileBoxTag      9530
+#define noteBoxTag      9531
+
 
 Scene* ExchangeScene::createScene()
 {
@@ -239,18 +247,8 @@ void ExchangeScene::buttonCallback(cocos2d::Ref* pSender, int index){
         //兑换物品颜色选择
         int itemIndex = index / 100 - 1;
         if (itemIndex >= 0 && itemIndex <= exchangeItems.size()) {
-            ExchangeItem* item = exchangeItems.at(itemIndex);
-            
             int colorIndex = index % 100;
-            if (colorIndex < item->colors.size()) {
-                int colorType = item->colors.at(colorIndex).asInt();
-                char colorString[20] = {0};
-                Global::getInstance()->getStringWithItemColor(colorString, (ItemColorType)colorType);
-                
-                char showString[300] = {0};
-                sprintf(showString, "%s\n颜色:%s\n花费:%d金币",item->description, colorString,item->price * 10);
-                MessageBox(showString, "兑换");
-            }
+            this->showExchangeInput(itemIndex, colorIndex);
         }
         else {
             MessageBox("未知兑换物品", "出错了");
@@ -328,6 +326,79 @@ void ExchangeScene::showSettingWithIndex(int index){
         LayerColor* layer = listLayers.at(i);
         layer->setVisible(i == index);
     }
+}
+
+void ExchangeScene::showExchangeInput(size_t itemIndex, size_t colorIndex){
+    ExchangeItem* item = exchangeItems.at(itemIndex);
+    if (colorIndex < item->colors.size()) {
+        int colorType = item->colors.at(colorIndex).asInt();
+        char colorString[20] = {0};
+        Global::getInstance()->getStringWithItemColor(colorString, (ItemColorType)colorType);
+        
+        char showTitle[200] = {0};
+        sprintf(showTitle, "兑换%s%s\n将花费%d金币", colorString, item->description, item->price * 10);
+        
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        PopAlertDialog* popup = PopAlertDialog::create("images/bg_dialog_empty.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+        popup->setTitle(showTitle, 14);
+        
+        popup->setTag(dialogTag);
+        popup->setCallBackFunc(this,callfuncN_selector(ExchangeScene::popButtonCallback));
+        
+        popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
+        popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+        
+        this->addChild(popup, 2);
+        
+        char boxPlaceHolder[3][50] = {"收货人姓名","收货地址","收货人联系方式"};
+        float boxHeight = MIN(0.15 * popup->m_dialogContentSize.height, 32);
+        for (int j = 0; j < 3; j++) {
+            auto inputBox = ui::EditBox::create(Size(0.4 * popup->m_dialogContentSize.width, boxHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+            inputBox->setPosition(Vec2(popup->getContentSize().width / 2, 0.6 * popup->getContentSize().height - j * boxHeight));
+            popup->addChild(inputBox);
+            
+            //属性设置
+            //    inputBox->setFontName("fonts/STKaiti.ttf");
+            inputBox->setFontSize(12);
+            inputBox->setFontColor(Color4B::BLACK);
+            //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+            inputBox->setPlaceholderFontSize(12);
+            inputBox->setPlaceholderFontColor(Color4B::GRAY);
+            
+            inputBox->setPlaceHolder(boxPlaceHolder[j]);
+            switch (j) {
+                case 0:{
+                    inputBox->setTag(nameBoxTag);
+                    inputBox->setMaxLength(20);
+                }
+                    break;
+                    
+                case 1:{
+                    inputBox->setTag(addressBoxTag);
+                    inputBox->setMaxLength(200);
+                }
+                    break;
+                    
+                case 2:{
+                    inputBox->setTag(mobileBoxTag);
+                    inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::PHONE_NUMBER);
+                    inputBox->setMaxLength(11);
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+    }
+    else {
+        MessageBox("未知颜色", "出错了");
+    }
+}
+
+void ExchangeScene::popButtonCallback(Node* pNode){
+    
 }
 
 #pragma tableview

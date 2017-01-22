@@ -49,6 +49,9 @@ private:
     TableView* exchangeListTableView;
     Vector<ExchangeItem* > exchangeItems;
     
+    void showExchangeInput(size_t itemIndex, size_t colorIndex);
+    void popButtonCallback(Node* pNode);
+    
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);
