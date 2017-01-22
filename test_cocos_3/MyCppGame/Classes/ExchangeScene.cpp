@@ -7,6 +7,7 @@
 //
 
 #include "ExchangeScene.h"
+#include "ExchangeCell.h"
 
 USING_NS_CC;
 
@@ -326,38 +327,36 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
         return cell;
     }
     else if (table == exchangeListTableView) {
-        TableViewCell* cell = table->dequeueCell();
+        ExchangeCell* cell = (ExchangeCell* )table->dequeueCell();
         
         float height = 50;
         if(!cell){
-            cell = new TableViewCell();
+            cell = new ExchangeCell();
             cell->autorelease();
             
-            auto head = Sprite::create("images/iphone7_plus.png");
-            head->setScale(height / head->getContentSize().height);
-            head->setPosition(0.5 * head->getBoundingBox().size.width, 0.5 * height);
-            cell->addChild(head, 0 , 2);
+            auto head = Sprite::create();
+            cell->addChild(head);
+            cell->head = head;
             
-            Label* titleLabel = Label::create("", "", 8);
+            auto titleLabel = Label::create("", "", 8);
             titleLabel->setTextColor(Color4B::BLACK);
             titleLabel->setPosition(0.6 * recordListCellWidth, 0.5 * height);
             titleLabel->setDimensions(0.7 * recordListCellWidth, height);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
-            titleLabel->setTag(1);
             cell->addChild(titleLabel);
+            cell->titleLabel = titleLabel;
         }
         
         ExchangeItem* item = exchangeItems.at(idx);
         
-        Label* label = (Label* )cell->getChildByTag(1);
         char content[200];
         sprintf(content, "%s\n价格：%d金币", item->description, item->price_gold);
-        label->setString(content);
+        cell->titleLabel->setString(content);
         
-        Sprite* head = (Sprite* )cell->getChildByTag(2);
-        head->setTexture(item->imagePath);
-        head->setScale((0.9 * height) / head->getContentSize().height);
+        cell->head->setTexture(item->imagePath);
+        cell->head->setScale((0.9 * height) / cell->head->getContentSize().height);
+        cell->head->setPosition(0.5 * cell->head->getBoundingBox().size.width, 0.5 * height);
         
         return cell;
     }
