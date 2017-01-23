@@ -30,7 +30,7 @@ public:
     char date[40];
 };
 
-class ShopScene : public Layer, public TableViewDataSource, public TableViewDelegate
+class ShopScene : public Layer, public TableViewDataSource, public TableViewDelegate, public ui::EditBoxDelegate
 {
 public:
     static cocos2d::Scene* createScene();
@@ -49,6 +49,8 @@ private:
     Vector<RechargeItem* > rechargeItems;
     bool hasGetRecordList = false;
     TableView* recordListTableView;
+    int payIndex = 0;
+    TableView* payListTableView;
     
     ui::EditBox* buyCountBox;
     ui::EditBox* userIDBox;
@@ -65,6 +67,11 @@ private:
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);
     void tableCellTouched(TableView* table, TableViewCell* cell);
+    
+    virtual void editBoxEditingDidBegin(ui::EditBox* editBox); //开始编辑
+    virtual void editBoxEditingDidEnd(ui::EditBox* editBox); //结束编辑
+    virtual void editBoxTextChanged(ui::EditBox* editBox, const std::string& text);//编辑框文字改变
+    virtual void editBoxReturn(ui::EditBox* editBox); //触发return后的回调函数
 };
 
 #endif /* ShopScene_h */

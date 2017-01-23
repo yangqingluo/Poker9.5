@@ -9,6 +9,7 @@
 #include "ShopScene.h"
 #include "Global.h"
 #include "CppToFunction.h"
+#include "BaseCell.h"
 
 Scene* ShopScene::createScene()
 {
@@ -93,6 +94,7 @@ bool ShopScene::init()
         this->addChild(layer);
         listLayers.pushBack(layer);
         
+        recordListCellWidth = layer->getContentSize().width;
         float inputHeight = MAX(32, layer->getContentSize().height / 8);
         switch (i) {
             case 0:{
@@ -113,10 +115,10 @@ bool ShopScene::init()
                 inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
                 inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
                 
+                inputBox->setDelegate(this);
                 inputBox->setPlaceHolder("请输入要充值的金币数目(10的整数倍)");
                 
                 buyCountBox = inputBox;
-                
                 auto btn_buy = Button::create("images/btn_green.png","images/btn_green_selected.png");
                 btn_buy->setScale9Enabled(true);//打开scale9 可以拉伸图片
                 btn_buy->setTitleText("确认充值");
@@ -126,6 +128,15 @@ bool ShopScene::init()
                 btn_buy->addTouchEventListener(CC_CALLBACK_2(ShopScene::touchEvent, this));
                 btn_buy->setTag(10);
                 layer->addChild(btn_buy);
+                
+                float payHeight = (360.0 / 640.0) * visibleSize.height;
+                payListTableView = TableView::create(this, Size(recordListCellWidth,  payHeight));
+                payListTableView->setPosition(0 , btn_buy->getBoundingBox().getMinY() - 5 - payHeight);
+                payListTableView->setDirection(TableView::Direction::VERTICAL);
+                payListTableView->setDelegate(this);
+                layer->addChild(payListTableView);
+                
+                payListTableView->reloadData();
             }
                 break;
                 
@@ -211,7 +222,6 @@ bool ShopScene::init()
                 label->setPosition(0.5 * layer->getContentSize().width, (610.0 / 640.0) * layer->getContentSize().height);
                 layer->addChild(label);
                 
-                recordListCellWidth = layer->getContentSize().width;
                 recordListTableView = TableView::create(this, Size(recordListCellWidth,  (520.0 / 640.0) * visibleSize.height));
                 recordListTableView->setPosition(0 , (40.0 / 640.0 ) * visibleSize.height);
                 recordListTableView->setDirection(TableView::Direction::VERTICAL);
@@ -283,11 +293,15 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     
                 case 10:{
                     //充值
-                    if (strlen(buyCountBox->getText()) == 0) {
-                        NoteTip::show("请输入充值的金币数目");
+                    int payCount = atoi(buyCountBox->getText());
+                    if (strlen(buyCountBox->getText()) == 0 || payCount <= 0) {
+                        NoteTip::show("请正确输入充值的金币数目");
                     }
                     else {
-                        CppToFunction::getInstance()->doAlipayAction();
+                        if (payIndex == 2) {
+                            CppToFunction::getInstance()->doAlipayAction();
+                        }
+                        
                     }
                 }
                     break;
@@ -307,7 +321,7 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                 case 12:{
                     //赠送
                     if (strlen(giveCountBox->getText()) == 0) {
-                        NoteTip::show("请输入赠送的数目");
+                        NoteTip::show("请正确输入赠送的数目");
                     }
                     else {
                         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
@@ -355,11 +369,35 @@ void ShopScene::showSettingWithIndex(int index){
     }
 }
 
+#pragma edixBox
+//开始编辑
+void ShopScene::editBoxEditingDidBegin(ui::EditBox* editBox){
+}
+
+//结束编辑
+void ShopScene::editBoxEditingDidEnd(ui::EditBox* editBox){
+}
+
+//编辑框内容改变
+void ShopScene::editBoxTextChanged(ui::EditBox* editBox, const std::string& text){
+    if (editBox == buyCountBox) {
+        payListTableView->reloadData();
+    }
+}
+
+//触发return返回
+void ShopScene::editBoxReturn(ui::EditBox* editBox){
+    
+}
+
 #pragma tableview
 Size ShopScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
     if (table == recordListTableView) {
         return Size(recordListCellWidth, 30);
+    }
+    else if (table == payListTableView) {
+        return Size(recordListCellWidth, 50);
     }
     
     return Size::ZERO;
@@ -396,6 +434,84 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         return cell;
     }
+    else if (table == payListTableView) {
+        BaseCell* cell = (BaseCell* )table->dequeueCell();
+        
+        float height = 40;
+        if(!cell)
+        {
+            cell = new BaseCell();
+            cell->autorelease();
+            
+            auto head = Sprite::create();
+            cell->addChild(head);
+            cell->head = head;
+            
+            auto titleLabel = Label::create();
+            titleLabel->setSystemFontSize(12.0);
+            titleLabel->setTextColor(Color4B::BLACK);
+            titleLabel->setPosition(0.5 * recordListCellWidth, 0.5 * height);
+            titleLabel->setDimensions(0.4 * recordListCellWidth, height);
+            titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+            titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            cell->addChild(titleLabel);
+            cell->titleLabel = titleLabel;
+            
+            auto line = Sprite::create("images/tableview_line.png");
+            line->setScaleX(recordListCellWidth / line->getContentSize().width);
+            line->setPosition(0.5 * recordListCellWidth, 0.5 * line->getContentSize().height);
+            cell->addChild(line);
+            
+            auto selectImage = Sprite::create("images/pay_selected.png");
+            selectImage->setScale(0.5 * height / selectImage->getContentSize().height);
+            selectImage->setPosition(0.95 * recordListCellWidth - 0.5 * selectImage->getBoundingBox().size.width, 0.5 * height);
+            selectImage->setVisible(false);
+            cell->addChild(selectImage);
+            cell->selectImage = selectImage;
+        }
+
+        char m_string[200] = {0};
+        
+        switch (idx) {
+            case 2:{
+                cell->head->setTexture("images/pay_alipay.png");
+                sprintf(m_string, "支付宝支付");
+            }
+                break;
+                
+            case 1:{
+                cell->head->setTexture("images/pay_wechat.png");
+                sprintf(m_string, "微信支付");
+            }
+                break;
+                
+            case 0:{
+                cell->head->setTexture("images/pay_apple.png");
+                sprintf(m_string, "苹果支付");
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+        if (strlen(buyCountBox->getText()) > 0) {
+            int payCount = atoi(buyCountBox->getText());
+            if (payCount > 0) {
+                sprintf(m_string + strlen(m_string), "\t¥%.2f", payCount / 10.0);
+            }
+        }
+        
+        cell->titleLabel->setString(m_string);
+        
+        cell->setColor(Color3B::RED);
+        cell->head->setScale((0.9 * height) / cell->head->getContentSize().height);
+        cell->head->setPosition(0.05 * recordListCellWidth + 0.5 * cell->head->getBoundingBox().size.width, 0.5 * height);
+        cell->selectImage->setVisible(payIndex == idx);
+        
+        
+        return cell;
+    }
     
     return NULL;
 }
@@ -406,12 +522,21 @@ ssize_t ShopScene::numberOfCellsInTableView(TableView* table)
     if (table == recordListTableView) {
         return rechargeItems.size();
     }
+    else if (table == payListTableView) {
+        return 3;
+    }
     
     return 0;
 }
 
 void ShopScene::tableCellTouched(TableView* table, TableViewCell* cell){
-    
+    if (table == recordListTableView) {
+        
+    }
+    else if (table == payListTableView) {
+        payIndex = (int)cell->getIdx();
+        table->reloadData();
+    }
 }
 
 #pragma http

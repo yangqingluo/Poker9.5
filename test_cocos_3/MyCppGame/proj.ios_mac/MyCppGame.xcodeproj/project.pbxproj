@@ -66,6 +66,8 @@
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 		FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */; };
 		FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */; };
+		FC146A621E3625E40080DAA4 /* BaseCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC146A601E3625E40080DAA4 /* BaseCell.cpp */; };
+		FC146A631E3625E40080DAA4 /* BaseCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC146A601E3625E40080DAA4 /* BaseCell.cpp */; };
 		FC1F22001E34989900BA3D85 /* ExchangeCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F21FE1E34989900BA3D85 /* ExchangeCell.cpp */; };
 		FC1F22011E34989900BA3D85 /* ExchangeCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1F21FE1E34989900BA3D85 /* ExchangeCell.cpp */; };
 		FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC292EE21DF7F0310096B017 /* FrameManager.cpp */; };
@@ -302,6 +304,8 @@
 		FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerSprite.cpp; sourceTree = "<group>"; };
 		FC139FEF1DEC17AC0067383F /* PokerSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerSprite.h; sourceTree = "<group>"; };
 		FC139FF31DEC18860067383F /* PokerGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokerGlobal.h; sourceTree = "<group>"; };
+		FC146A601E3625E40080DAA4 /* BaseCell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseCell.cpp; sourceTree = "<group>"; };
+		FC146A611E3625E40080DAA4 /* BaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCell.h; sourceTree = "<group>"; };
 		FC1F21FE1E34989900BA3D85 /* ExchangeCell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExchangeCell.cpp; sourceTree = "<group>"; };
 		FC1F21FF1E34989900BA3D85 /* ExchangeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangeCell.h; sourceTree = "<group>"; };
 		FC292EE21DF7F0310096B017 /* FrameManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameManager.cpp; sourceTree = "<group>"; };
@@ -714,6 +718,8 @@
 				FC7E77771E0F6C94008EBE40 /* InviterScene.h */,
 				FC983D5F1DE1691C006C2616 /* ShopScene.cpp */,
 				FC983D601DE1691C006C2616 /* ShopScene.h */,
+				FC146A601E3625E40080DAA4 /* BaseCell.cpp */,
+				FC146A611E3625E40080DAA4 /* BaseCell.h */,
 				FC983D631DE171F9006C2616 /* ExchangeScene.cpp */,
 				FC983D641DE171F9006C2616 /* ExchangeScene.h */,
 				FC1F21FE1E34989900BA3D85 /* ExchangeCell.cpp */,
@@ -1218,6 +1224,7 @@
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				FC983D611DE1691C006C2616 /* ShopScene.cpp in Sources */,
 				FCA383F11E1F406E006E073C /* CppToFunction.cpp in Sources */,
+				FC146A621E3625E40080DAA4 /* BaseCell.cpp in Sources */,
 				FCED08E31E1C0750004BDFD6 /* PasswordScene.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				FCED08E11E1C0750004BDFD6 /* OnlinePokerDeskScene.cpp in Sources */,
@@ -1278,6 +1285,7 @@
 				FCCBA4971E026E110072EA7E /* PokerStabber.cpp in Sources */,
 				FCB667D61E250F6100B5F2CD /* BetSlider.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				FC146A631E3625E40080DAA4 /* BaseCell.cpp in Sources */,
 				FC7E77751E0EBFBC008EBE40 /* HelpScene.cpp in Sources */,
 				FC47C01F1DF4385C00A22F70 /* Player.cpp in Sources */,
 				FC139FF11DEC17AC0067383F /* PokerSprite.cpp in Sources */,
