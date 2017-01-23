@@ -1333,8 +1333,16 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
         
-        case cmd_settle:{
+            //结算
+        case cmd_settle:
+            //结算恢复
+        case cmd_settleRecover:{
             this->showMessageManager(false);
+            if (post->cmd == cmd_settleRecover) {
+                //添加发牌显示
+                this->adjustPoker(Global::getInstance()->table_data.round.roundIndex);
+                this->sendPokerWithoutAnimation();
+            }
             
             this->stepIn(DeskState_Settle);
         }

@@ -264,6 +264,45 @@ void Global::parsePlayerData(const rapidjson::Value& val_player, PlayerData* dat
     }
 }
 
+void Global::parsePokerData(const rapidjson::Value& val_gateCards, const rapidjson::Value& val_startCard){
+    if (val_gateCards.IsArray()) {
+        clearPokerSendedList();
+        
+        if (val_gateCards.Size() != 4) {
+            return;
+        }
+        for (int i = 0; i < val_gateCards.Size(); ++i) {
+            const rapidjson::Value& val_pair = val_gateCards[i];
+            
+            PokerPair pair = {0};
+            pair.point = val_pair["point"].GetDouble();
+            
+            const char* pointDes = val_pair["pointDes"].GetString();
+            memcpy(pair.pointDes, pointDes, strlen(pointDes));
+            
+            const rapidjson::Value& val_cards = val_pair["cards"];
+            if (val_cards.Size() == 2) {
+                for (int j = 0; j < val_cards.Size(); ++j) {
+                    const rapidjson::Value& card = val_cards[j];
+                    
+                    pair.poker[j].color = card["color"].GetInt();
+                    pair.poker[j].count = card["count"].GetDouble();
+                    pair.poker[j].num = card["num"].GetInt();
+                }
+            }
+            
+            int gateType = val_pair["type"].GetInt();
+            
+            table_data.round.pokerSendedList[(gateType - 1) % 4] = pair;
+        }
+    }
+    if (val_startCard.IsObject()) {
+        table_data.round.pokerJudgement.color = val_startCard["color"].GetInt();
+        table_data.round.pokerJudgement.count = val_startCard["count"].GetDouble();
+        table_data.round.pokerJudgement.num = val_startCard["num"].GetInt();
+    }
+}
+
 void Global::clearPlayerList(){
     memset(playerList, 0, sizeof(PlayerData) * MAX_PLAYER_NUM);
     playerListCount = 0;
@@ -843,44 +882,10 @@ void Global::parseData(char* pbuf, int len){
                             countDownInSecond = val_content["countDown"].GetInt();
                         }
                         
-                        rapidjson::Value& val_gateCards = val_content["gateCards"];
-                        rapidjson::Value& val_startCard = val_content["startCard"];
-                        
-                        if (val_gateCards.IsArray()) {
-                            clearPokerSendedList();
-                            
-                            if (val_gateCards.Size() != 4) {
-                                return;
-                            }
-                            for (int i = 0; i < val_gateCards.Size(); ++i) {
-                                rapidjson::Value& val_pair = val_gateCards[i];
-                                
-                                PokerPair pair = {0};
-                                pair.point = val_pair["point"].GetDouble();
-                                
-                                const char* pointDes = val_pair["pointDes"].GetString();
-                                memcpy(pair.pointDes, pointDes, strlen(pointDes));
-                                
-                                rapidjson::Value& val_cards = val_pair["cards"];
-                                if (val_cards.Size() == 2) {
-                                    for (int j = 0; j < val_cards.Size(); ++j) {
-                                        rapidjson::Value& card = val_cards[j];
-                                        
-                                        pair.poker[j].color = card["color"].GetInt();
-                                        pair.poker[j].count = card["count"].GetDouble();
-                                        pair.poker[j].num = card["num"].GetInt();
-                                    }
-                                }
-                                
-                                int gateType = val_pair["type"].GetInt();
-                                
-                                table_data.round.pokerSendedList[(gateType - 1) % 4] = pair;
-                            }
-                        }
-                        if (val_startCard.IsObject()) {
-                            table_data.round.pokerJudgement.color = val_startCard["color"].GetInt();
-                            table_data.round.pokerJudgement.count = val_startCard["count"].GetDouble();
-                            table_data.round.pokerJudgement.num = val_startCard["num"].GetInt();
+                        if (val_content.HasMember("gateCards") && val_content.HasMember("startCard")) {
+                            rapidjson::Value& val_gateCards = val_content["gateCards"];
+                            rapidjson::Value& val_startCard = val_content["startCard"];
+                            parsePokerData(val_gateCards, val_startCard);
                         }
                     }
                 }
@@ -903,16 +908,44 @@ void Global::parseData(char* pbuf, int len){
                 }
                     break;
                     
-                case cmd_settle:{
                     //结算
+                case cmd_settle:
+                    //结算恢复
+                case cmd_settleRecover:{
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
                         return;
                     }
                     
                     rapidjson::Value& val_content = document["content"];
+                    assert(val_content.IsObject());
                     
-                    countDownInSecond = val_content["countDown"].GetInt();
+                    if (val_content.HasMember("roundIndex")) {
+                        table_data.round.roundIndex = val_content["roundIndex"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("bureauId")) {
+                        const char* bureauId = val_content["bureauId"].GetString();
+                        memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
+                    }
+                    
+                    if (val_content.HasMember("ownerId")) {
+                        const char* ownerId = val_content["ownerId"].GetString();
+                        memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
+                        
+                        //判断当前玩家是否是庄家
+                        isDealer = (0 == strcmp(table_data.bureau.bureauOwnerId, user_data.ID));
+                    }
+                    
+                    if (val_content.HasMember("countDown")) {
+                        countDownInSecond = val_content["countDown"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("gateCards") && val_content.HasMember("startCard")) {
+                        rapidjson::Value& val_gateCards = val_content["gateCards"];
+                        rapidjson::Value& val_startCard = val_content["startCard"];
+                        parsePokerData(val_gateCards, val_startCard);
+                    }
                     
                     if (val_content.HasMember("accountResult")) {
                         rapidjson::Value& val_accountResult = val_content["accountResult"];

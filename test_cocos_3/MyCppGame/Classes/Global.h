@@ -118,7 +118,7 @@ public:
     
     UserData user_data;//用户数据
     TableData table_data;//牌桌数据
-    int countDownInSecond;//倒计时读秒数
+    int countDownInSecond = 15;//倒计时读秒数
     bool isDealer;//是否是庄家
     
     int playerListCount = 0;
@@ -176,6 +176,7 @@ public:
     
     void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
     void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);
+    void parsePokerData(const rapidjson::Value& val_gateCards, const rapidjson::Value& val_startCard);
     
     void update(float delta);
 private:
