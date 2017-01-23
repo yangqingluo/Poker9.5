@@ -140,19 +140,7 @@ bool PokerDesk::init()
     gamePlayerInfoLabel->setColor(Color3B::WHITE);
     gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
     bottom_sprite->addChild(gamePlayerInfoLabel);
-    
-//    message_sprite = QLImageSprite::create("images/message_bg.png", Size(928.0 / 104.0 * 0.05 * visibleSize.height, 0.05 * visibleSize.height));
-//    message_sprite->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
-////    bottom_sprite->addChild(message_sprite);
-//    
-//    messageLabel = Label::createWithTTF("正在等待玩家加入...", "fonts/STKaiti.ttf", 10);
-//    messageLabel->setColor(Color3B::BLACK);
-//    messageLabel->setHorizontalAlignment(TextHAlignment::LEFT);
-//    messageLabel->setVerticalAlignment(TextVAlignment::CENTER);
-//    messageLabel->setDimensions(message_sprite->getContentSize().width, message_sprite->getContentSize().height);
-//    messageLabel->setPosition(0.5 * message_sprite->getContentSize().width, 0.5 * message_sprite->getContentSize().height);
-//    message_sprite->addChild(messageLabel);
-    
+        
     int betJettonArray[6] = {10,50,100,500,1000,5000};
     betLimiter = BetLimiter::create(betJettonArray, 6, Size(0.8 * bottom_sprite->getContentSize().width, 1.0 * bottom_sprite->getContentSize().height), BetType_Addition);
     betLimiter->setPosition(0.5 * bottom_sprite->getContentSize().width - 0.5 * betLimiter->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);

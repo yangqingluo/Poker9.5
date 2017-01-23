@@ -774,11 +774,15 @@ void Global::parseData(char* pbuf, int len){
                         return;
                     }
                     
-                    countDownInSecond = val_content["countDown"].GetInt();
-                    memset(table_data.round.roundId, 0, sizeof(table_data.round.roundId));
+                    if (val_content.HasMember("countDown")) {
+                        countDownInSecond = val_content["countDown"].GetInt();
+                    }
                     
-                    const char* roundId = val_content["roundId"].GetString();
-                    memcpy(table_data.round.roundId, roundId, strlen(roundId));
+                    if (val_content.HasMember("roundId")) {
+                        memset(table_data.round.roundId, 0, sizeof(table_data.round.roundId));
+                        const char* roundId = val_content["roundId"].GetString();
+                        memcpy(table_data.round.roundId, roundId, strlen(roundId));
+                    }
                     
                     if (val_content.HasMember("roundIndex")) {
                         table_data.round.roundIndex = val_content["roundIndex"].GetInt();
@@ -786,10 +790,47 @@ void Global::parseData(char* pbuf, int len){
                 }
                     break;
                     
+                case cmd_betStakeRecover:{
+//                    {"commandDesc":"通知客户端下注倒计时","commandId":1008,"content":{"countDown":15,"roundId":"588446aa0cf2f94d5719d0d8","roundIndex":4},"tableId":"585e15a18186692d160701ae"}
+//                    {"commandDesc":"通知客户端下注倒计时,恢复","commandId":10080,"content":{"betStakes":[],"bureauId":"588446400cf2f94d5719d077","curCount":1,"ownerId":"05388c56209347008fa5e0133e5fefe1","roundId":"5884468c0cf2f94d5719d0b6","roundIndex":3,"tableId":"585e15a18186692d160701ae"},"tableId":"585e15a18186692d160701ae"}
+                    //恢复到下注
+                    this->clearRoundData();
+                    
+                    rapidjson::Value& val_content = document["content"];
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                    if (val_content.HasMember("countDown")) {
+                        countDownInSecond = val_content["countDown"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("roundId")) {
+                        memset(table_data.round.roundId, 0, sizeof(table_data.round.roundId));
+                        const char* roundId = val_content["roundId"].GetString();
+                        memcpy(table_data.round.roundId, roundId, strlen(roundId));
+                    }
+                    
+                    if (val_content.HasMember("roundIndex")) {
+                        table_data.round.roundIndex = val_content["roundIndex"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("bureauId")) {
+                        const char* bureauId = val_content["bureauId"].GetString();
+                        memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
+                    }
+                    
+                    if (val_content.HasMember("ownerId")) {
+                        const char* ownerId = val_content["ownerId"].GetString();
+                        memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
+                    }
+                }
+                    break;
+                    
                 case cmd_countDownSendCard:{
                     //发牌
-                    countDownInSecond = 10;
-                    
                     rapidjson::Value& val_content = document["content"];
                     
                     const char* tableId = document["tableId"].GetString();
@@ -799,7 +840,9 @@ void Global::parseData(char* pbuf, int len){
                     }
                     
                     if (val_content.IsObject()) {
-                        countDownInSecond = val_content["countDown"].GetInt();
+                        if (val_content.HasMember("countDown")) {
+                            countDownInSecond = val_content["countDown"].GetInt();
+                        }
                         
                         rapidjson::Value& val_gateCards = val_content["gateCards"];
                         rapidjson::Value& val_startCard = val_content["startCard"];
@@ -841,8 +884,79 @@ void Global::parseData(char* pbuf, int len){
                             table_data.round.pokerJudgement.num = val_startCard["num"].GetInt();
                         }
                     }
+                }
+                    break;
                     
+                case cmd_sendCardRecover:{
+//                    {"commandDesc":"通知客户端发牌,恢复","commandId":10090,"content":{"betStakes":[],"bureauId":"588449890cf2f94d5719d25c","curCount":8,"gateCards":[{"cards":[{"color":2,"count":1,"num":11},{"color":1,"count":2,"num":12}],"createTime":1485064601134,"id":"588449990cf2f94d5719d272","index":0,"lossRate":0,"point":3,"pointDes":"三点","round":"588449990cf2f94d5719d271","type":1},{"cards":[{"color":3,"count":9,"num":9},{"color":3,"count":7,"num":7}],"createTime":1485064601134,"id":"588449990cf2f94d5719d273","index":1,"lossRate":0,"point":6,"pointDes":"六点","round":"588449990cf2f94d5719d271","type":2},{"cards":[{"color":3,"count":0,"num":10},{"color":3,"count":3,"num":13}],"createTime":1485064601134,"id":"588449990cf2f94d5719d274","index":2,"lossRate":0,"point":3,"pointDes":"三点","round":"588449990cf2f94d5719d271","type":3},{"cards":[{"color":3,"count":1,"num":1},{"color":3,"count":9,"num":9}],"createTime":1485064601134,"id":"588449990cf2f94d5719d275","index":3,"lossRate":0,"point":0,"pointDes":"没点","round":"588449990cf2f94d5719d271","type":4}],"ownerId":"0bee80508db04200b462973f4fe21443","roundId":"588449990cf2f94d5719d271","startCard":{"color":1,"count":3,"num":13},"tableId":"58787e39818642da0ea8440a"},"tableId":"58787e39818642da0ea8440a"}
+                    //恢复到发牌
+                    rapidjson::Value& val_content = document["content"];
                     
+                    const char* tableId = document["tableId"].GetString();
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        
+                        return;
+                    }
+                    
+                    if (val_content.IsObject()) {
+                        if (val_content.HasMember("roundIndex")) {
+                            table_data.round.roundIndex = val_content["roundIndex"].GetInt();
+                        }
+                        
+                        if (val_content.HasMember("bureauId")) {
+                            const char* bureauId = val_content["bureauId"].GetString();
+                            memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
+                        }
+                        
+                        if (val_content.HasMember("ownerId")) {
+                            const char* ownerId = val_content["ownerId"].GetString();
+                            memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
+                        }
+                        
+                        if (val_content.HasMember("countDown")) {
+                            countDownInSecond = val_content["countDown"].GetInt();
+                        }
+                        
+                        rapidjson::Value& val_gateCards = val_content["gateCards"];
+                        rapidjson::Value& val_startCard = val_content["startCard"];
+                        
+                        if (val_gateCards.IsArray()) {
+                            clearPokerSendedList();
+                            
+                            if (val_gateCards.Size() != 4) {
+                                return;
+                            }
+                            for (int i = 0; i < val_gateCards.Size(); ++i) {
+                                rapidjson::Value& val_pair = val_gateCards[i];
+                                
+                                PokerPair pair = {0};
+                                pair.point = val_pair["point"].GetDouble();
+                                
+                                const char* pointDes = val_pair["pointDes"].GetString();
+                                memcpy(pair.pointDes, pointDes, strlen(pointDes));
+                                
+                                rapidjson::Value& val_cards = val_pair["cards"];
+                                if (val_cards.Size() == 2) {
+                                    for (int j = 0; j < val_cards.Size(); ++j) {
+                                        rapidjson::Value& card = val_cards[j];
+                                        
+                                        pair.poker[j].color = card["color"].GetInt();
+                                        pair.poker[j].count = card["count"].GetDouble();
+                                        pair.poker[j].num = card["num"].GetInt();
+                                    }
+                                }
+                                
+                                int gateType = val_pair["type"].GetInt();
+                                
+                                table_data.round.pokerSendedList[(gateType - 1) % 4] = pair;
+                            }
+                        }
+                        if (val_startCard.IsObject()) {
+                            table_data.round.pokerJudgement.color = val_startCard["color"].GetInt();
+                            table_data.round.pokerJudgement.count = val_startCard["count"].GetDouble();
+                            table_data.round.pokerJudgement.num = val_startCard["num"].GetInt();
+                        }
+                    }
                 }
                     break;
                     

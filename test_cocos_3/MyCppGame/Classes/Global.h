@@ -32,11 +32,15 @@ using namespace CocosDenshion;
 #define cmd_countDownApplyBureauOwner  1004//抢庄通知
 #define cmd_selectedBureauOwner        1005//选中庄家通知
 #define cmd_countDownApplyStabber      1006//抢刺通知
+#define cmd_applyStabberRecover        10060//抢刺通知_恢复
 #define cmd_notifyStabber              1007//抢中刺通知
 #define cmd_countDownBetStake          1008//下注通知
+#define cmd_betStakeRecover            10080//下注通知_恢复
 #define cmd_countDownSendCard          1009//发牌通知
+#define cmd_sendCardRecover            10090//发牌通知_恢复
 #define cmd_sysBetStake                1010//同步下注数据通知
 #define cmd_settle                     1011//结算通知
+#define cmd_settleRecover              10110//结算通知_恢复
 #define cmd_bureauOwnerOff             1012//庄家强制下庄通知
 
 #define cmd_enterRoom                  3000//加入普通金币房间

@@ -44,7 +44,6 @@ public:
     void showSettingChip();
     
     QLImageSprite* upright_sprite;
-//    QLImageSprite* message_sprite;
     QLImageSprite* bottom_sprite;
     QLImageSprite* playerList_sprite;
     TableView* playerListTableView;
