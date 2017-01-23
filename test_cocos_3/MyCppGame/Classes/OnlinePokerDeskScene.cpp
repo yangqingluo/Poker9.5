@@ -1173,8 +1173,10 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
             
-        case cmd_countDownApplyStabber:{
             //抢刺
+        case cmd_countDownApplyStabber:
+            //恢复抢刺
+        case cmd_applyStabberRecover:{
             this->showGamePlayerInfo();
             this->stepIn(DeskState_ChooseStabber);
         }
@@ -1200,8 +1202,10 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
             
-        case cmd_countDownBetStake:{
             //开始下注倒计时
+        case cmd_countDownBetStake:
+            //恢复下注
+        case cmd_betStakeRecover:{
             this->showGamePlayerInfo();
             this->stepIn(DeskState_Bet);
         }
