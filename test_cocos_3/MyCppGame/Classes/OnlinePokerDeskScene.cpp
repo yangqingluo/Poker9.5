@@ -512,7 +512,8 @@ void OnlinePokerDesk::settleAction(){
                 chair->calculatePokerType();
                 if (i > 0) {
                     chair->calculateSettlement(chair0);
-                    chair->m_settlement.accounts = Global::getInstance()->table_data.round.settleList[i];
+                    chair->m_settlement.accounts = Global::getInstance()->table_data.round.settleList[i].count;
+                    chair->m_settlement.multiple = Global::getInstance()->table_data.round.settleList[i].times;
                     chair->m_settlement.winned = (chair->m_settlement.accounts > 0);
                     chair->showSettlement();
                     
@@ -1126,6 +1127,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
     if (post->cmd >= 10000) {
         //大于10000则是恢复牌局 重置显示庄家信息
         resetShowDealerInfo();
+        NoteTip::show("恢复牌局成功");
     }
     
     switch (post->cmd) {
@@ -1296,7 +1298,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_sendCardRecover:{
             this->showMessageManager(false);
             
-            this->adjustPoker(Global::getInstance()->table_data.round.roundIndex);
+            this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
             if (m_arrPokers.size() >= 9 + m_IndexSend) {
                 judgementPokerIndex = m_IndexSend;
                 for (int i = 0; i < 9; i++) {
@@ -1340,7 +1342,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             this->showMessageManager(false);
             if (post->cmd == cmd_settleRecover) {
                 //添加发牌显示
-                this->adjustPoker(Global::getInstance()->table_data.round.roundIndex);
+                this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
                 this->sendPokerWithoutAnimation();
             }
             

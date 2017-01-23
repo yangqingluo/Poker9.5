@@ -775,8 +775,11 @@ void Global::parseData(char* pbuf, int len){
                 }
                     break;
                     
-                case cmd_countDownApplyStabber:{
                     //开始抢刺倒计时
+                case cmd_countDownApplyStabber:
+                    //恢复抢刺
+                case cmd_applyStabberRecover:{
+                    
                     this->clearRoundData();
                     
                     rapidjson::Value& val_content = document["content"];
@@ -786,14 +789,28 @@ void Global::parseData(char* pbuf, int len){
                         return;
                     }
                     
-                    countDownInSecond = val_content["countDown"].GetInt();
-                    memset(table_data.round.roundId, 0, sizeof(table_data.round.roundId));
+                    if (val_content.HasMember("countDown")) {
+                        countDownInSecond = val_content["countDown"].GetInt();
+                    }
                     
-                    const char* roundId = val_content["roundId"].GetString();
-                    memcpy(table_data.round.roundId, roundId, strlen(roundId));
+                    if (val_content.HasMember("roundId")) {
+                        memset(table_data.round.roundId, 0, sizeof(table_data.round.roundId));
+                        const char* roundId = val_content["roundId"].GetString();
+                        memcpy(table_data.round.roundId, roundId, strlen(roundId));
+                    }
                     
                     if (val_content.HasMember("roundIndex")) {
                         table_data.round.roundIndex = val_content["roundIndex"].GetInt();
+                    }
+                    
+//                    if (val_content.HasMember("bureauId")) {
+//                        const char* bureauId = val_content["bureauId"].GetString();
+//                        memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
+//                    }
+                    
+                    if (val_content.HasMember("ownerId")) {
+                        const char* ownerId = val_content["ownerId"].GetString();
+                        memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
                     }
                 }
                     break;
@@ -964,7 +981,10 @@ void Global::parseData(char* pbuf, int len){
                                             if (val_resultMap.HasMember(gate_settle)) {
                                                 rapidjson::Value& val_gate = val_resultMap[gate_settle];
                                                 int count = val_gate["count"].GetInt();
-                                                table_data.round.settleList[j - 1] -= count;
+                                                table_data.round.settleList[j - 1].count -= count;
+                                                
+                                                int times = val_gate["times"].GetInt();
+                                                table_data.round.settleList[j - 1].times = -1 * times;
                                             }
                                         }
                                     }
@@ -979,7 +999,10 @@ void Global::parseData(char* pbuf, int len){
                                                 if (val_resultMap.HasMember(gate_settle)) {
                                                     rapidjson::Value& val_gate = val_resultMap[gate_settle];
                                                     int count = val_gate["count"].GetInt();
-                                                    table_data.round.settleList[j - 1] += count;
+                                                    table_data.round.settleList[j - 1].count += count;
+                                                    
+                                                    int times = val_gate["times"].GetInt();
+                                                    table_data.round.settleList[j - 1].times = times;
                                                 }
                                             }
                                         }

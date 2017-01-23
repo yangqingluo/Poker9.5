@@ -53,6 +53,12 @@ struct PokerPair {
     char pointDes[Min_String_Length];
 };
 
+struct SettleData {
+    int count;
+//    int result;
+    int times;
+};
+
 struct RoundData {
     char stabberId[Max_ID_Length];//刺ID
     int stabberIndex;//刺序
@@ -61,7 +67,7 @@ struct RoundData {
     
     PokerData pokerJudgement;//判定牌(决定发牌顺序的牌)
     PokerPair pokerSendedList[4];
-    int settleList[4];
+    SettleData settleList[4];
     int betList[4];
 };
 
