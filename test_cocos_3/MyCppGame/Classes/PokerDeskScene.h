@@ -100,6 +100,7 @@ private:
     
     bool createPokers();//创建一副扑克牌
     bool reindexPoker();//洗牌
+    void adjustPoker(int index);//发牌前调整
     void sendPoker();//发牌
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画
     void addJetton(PokerChair* chair,JettonSprite* jetton);//添加筹码

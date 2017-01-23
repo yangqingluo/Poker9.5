@@ -255,12 +255,10 @@ void PokerDesk::goBackAction(){
 
 void PokerDesk::waitForPrepareAction(){
     if (!showTimer->getIsValid()) {
-        m_IndexSend = 0;
-        
         btn_PrepareItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"等待准备…");
-        showTimer->start(30);
+        showTimer->start(15);
     }
 }
 
@@ -269,6 +267,7 @@ void PokerDesk::preparedAction(){
     reindexPoker();
     
     m_deskState = DeskState_Prepared;
+    Global::getInstance()->table_data.round.roundIndex = 0;
     
     btn_PrepareItem->setVisible(false);
     
@@ -288,7 +287,8 @@ void PokerDesk::waitForBetAction(){
 void PokerDesk::settleAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"结算");
-        showTimer->start(15);
+        showTimer->start(10);
+        Global::getInstance()->table_data.round.roundIndex++;
         
         if (stabberPlayer == NULL) {
             int zeroCount = 0;//牌型为0点的座位计数
@@ -369,7 +369,7 @@ void PokerDesk::waitForChooseDealerAction(){
         btn_BeBankerItem->setVisible(true);
         
         sprintf(showTimer->prefixString,"抢庄");
-        showTimer->start(10);
+        showTimer->start(5);
     }
 }
 
@@ -425,11 +425,11 @@ void PokerDesk::chooseStabberAction(int index){
 }
 
 void PokerDesk::sendPokerAction(){
-    m_isSendSet = false;
-    m_deskState = DeskState_SendPoker;
-    
     sprintf(showTimer->prefixString,"发牌");
-    showTimer->start(10);
+    showTimer->start(6);
+    
+    this->adjustPoker(Global::getInstance()->table_data.round.roundIndex);
+    m_deskState = DeskState_SendPoker;
 }
 
 void PokerDesk::showGamePlayerInfo(){
@@ -707,21 +707,31 @@ bool PokerDesk::reindexPoker(){
         PokerSprite* pk2 = m_arrPokers.getRandomObject();
         m_arrPokers.swap(pk1, pk2);
     }
-    
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
-    for (size_t i = m_arrPokers.size(); i > 0; --i) {
-        PokerSprite* pk = m_arrPokers.at(i - 1);
-        pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
-        pk->setVisible(true);
-        if (pk->getIsFront()) {
-            pk->showPokerAnimated(false, false, 0);
-        }
-        this->reorderChild(pk, (int)(m_arrPokers.size() - i));
-    }
+    adjustPoker(0);
     
     return true;
+}
+
+void PokerDesk::adjustPoker(int index){
+    index = index % 6;
+    if (index >= 0 && index <= 5) {
+        m_IndexSend = index * 9;
+        m_isSendSet = false;
+        m_isSendSingle = true;
+        
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
+        for (size_t i = m_arrPokers.size(); i > 0; --i) {
+            PokerSprite* pk = m_arrPokers.at(i - 1);
+            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
+            pk->setVisible((i - 1) >= index * 9);
+            if (pk->getIsFront()) {
+                pk->showPokerAnimated(false, false, 0);
+            }
+            this->reorderChild(pk, (int)(m_arrPokers.size() - i));
+        }
+    }
 }
 
 void PokerDesk::sendPoker(){
