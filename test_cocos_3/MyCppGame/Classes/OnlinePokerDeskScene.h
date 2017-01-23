@@ -42,8 +42,6 @@ public:
     int roomType;//房间类型
     char roomTypeId[Max_ID_Length];//房间类型Id
     int jettonToEnter;//带入的筹码数量
-//    int chipMin;//带入筹码最小值
-//    int perMin;//单注下注最小值
     char roomPassword[length_room_password + 1];
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
@@ -58,7 +56,6 @@ public:
     TableView* playerListTableView;
     Label* countLabel;
     Label* gamePlayerInfoLabel;
-//    Label* roomInfoLabel;
     Label* roundInfoLabel;
     BetLimiter* betLimiter;
     Sprite* dealerHead;
@@ -79,15 +76,13 @@ public:
     void preparedAction();
     void waitForBetAction();
     void settleAction();
-//    void chooseDealerAction();//选择庄家
     void waitForChooseDealerAction();//等待选择庄家
-//    void dealerDidChoosedAction();//庄家已选择
     void waitForChooseStabberAction();//等待抢刺
-    void chooseStabberAction(int index);//抢刺
     void sendPokerAction();//发牌
     
-    void showGamePlayerInfo();
-    void showDealerInfo();
+    void showGamePlayerInfo();//显示玩家信息（包括玩家列表）
+    void showDealerInfo();//显示庄家信息
+    void resetShowDealerInfo();//重置显示庄家信息
     
     void turnedSinglePokerCallback(Node* pSender);
     void sendedSinglePoker(Node* pSender, void* pData);
@@ -111,8 +106,8 @@ private:
     JettonSprite* createjetton(int value);//生成一个筹码
     
     bool createPokers();//创建一副扑克牌
-    bool reindexPoker();//洗牌
     void updatePokerWithData(PokerSprite* poker, PokerData data);
+    void adjustPoker(int index);//发牌前调整
     void sendPoker();//发牌
     void sendPokerWithoutAnimation();//发牌(没有动画)
     void movePoker(PokerChair* chair,PokerSprite* poker);//发牌移动动画

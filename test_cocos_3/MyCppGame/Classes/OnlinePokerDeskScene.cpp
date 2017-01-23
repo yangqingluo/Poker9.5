@@ -151,14 +151,6 @@ bool OnlinePokerDesk::init()
     btn_addJetton->setVisible(false);
     bottom_sprite->addChild(btn_addJetton);
     
-//    roomInfoLabel = Label::createWithTTF("    房间名    ", "fonts/STKaiti.ttf", 10);
-//    roomInfoLabel->setDimensions(MAX(2 * bottom_sprite->getContentSize().height, 100), bottom_sprite->getContentSize().height);
-//    roomInfoLabel->setPosition(0.5 * roomInfoLabel->getDimensions().width, 0.5 * bottom_sprite->getContentSize().height);
-//    roomInfoLabel->setHorizontalAlignment(TextHAlignment::CENTER);
-//    roomInfoLabel->setVerticalAlignment(TextVAlignment::CENTER);
-//    roomInfoLabel->setTextColor(Color4B::WHITE);
-//    bottom_sprite->addChild(roomInfoLabel);
-    
     int betJettonArray[6] = {10,50,100,500,1000,5000};
     betLimiter = BetLimiter::create(betJettonArray, 6, Size(0.8 * bottom_sprite->getContentSize().width, 1.0 * bottom_sprite->getContentSize().height), BetType_Addition);
     betLimiter->setPosition(0.5 * bottom_sprite->getContentSize().width - 0.5 * betLimiter->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
@@ -490,8 +482,6 @@ void OnlinePokerDesk::waitForPrepareAction(){
 }
 
 void OnlinePokerDesk::preparedAction(){
-//    createPokers();
-//    reindexPoker();
     updateDeskState(DeskState_Prepared);
     
     btn_PrepareItem->setVisible(false);
@@ -592,29 +582,6 @@ void OnlinePokerDesk::waitForChooseDealerAction(){
     }
 }
 
-//void OnlinePokerDesk::chooseDealerAction(){
-//    //单机模拟强制选择电脑为庄家
-//    if (dealerPlayer == NULL) {
-//        dealerPlayer = pcPlayer;
-//        dealerHead->setTexture(dealerPlayer->headImage);
-//        btn_BeBankerItem->setVisible(false);
-//        dealerHead->setVisible(true);
-//    }
-//    
-//    showDealerInfo();
-//}
-
-//void OnlinePokerDesk::dealerDidChoosedAction(){
-//    if (dealerPlayer->getJettonCount() * 3 < dealerPlayer->getJettonInitial()) {
-//        //庄家本金小于初始本金1/3，抢刺
-//        updateDeskState(DeskState_ChooseStabber);
-//    }
-//    else {
-//        //下注
-//        updateDeskState(DeskState_Bet);
-//    }
-//}
-
 void OnlinePokerDesk::waitForChooseStabberAction(){
     if (!showTimer->getIsValid()) {
         sprintf(showTimer->prefixString,"等待其他玩家抢刺");
@@ -647,17 +614,6 @@ void OnlinePokerDesk::waitForChooseStabberAction(){
         
         showTimer->start(Global::getInstance()->countDownInSecond);
     }
-}
-
-void OnlinePokerDesk::chooseStabberAction(int index){
-//    stabberPlayer = gamePlayer;
-//    for (int i = 0; i < m_arrChairs.size(); i++) {
-//        PokerChair* chair = m_arrChairs.at(i);
-//        chair->showBeStabber(false);
-//        if (i == index) {
-//            chair->showStabber(gamePlayer->headImage, gamePlayer->nickName, gamePlayer->getJettonCount());
-//        }
-//    }
 }
 
 void OnlinePokerDesk::sendPokerAction(){
@@ -723,6 +679,13 @@ void OnlinePokerDesk::showDealerInfo(){
     
     countLabel->setString(mString);
     playerListTableView->reloadData();
+}
+
+void OnlinePokerDesk::resetShowDealerInfo(){
+    showDealerInfo();
+//            betLimiter->minValue = Global::getInstance()->table_data.minPerStack;
+    betLimiter->reset();
+    betLimiter->setVisible(!Global::getInstance()->isDealer);
 }
 
 void OnlinePokerDesk::showTimerDoneCallback(Node* pNode){
@@ -840,7 +803,6 @@ void OnlinePokerDesk::touchedChairCallback(Node* pSender, void* pTarget){
             
         case 11:{
             if (m_deskState == DeskState_ChooseStabber) {
-//                chooseStabberAction((int)m_arrChairs.getIndex(chair));
                 //发送抢刺
                 for (int i = 0; i < m_arrChairs.size(); i++) {
                     PokerChair* chairBuffer = m_arrChairs.at(i);
@@ -900,13 +862,13 @@ PokerSprite* OnlinePokerDesk::createPoker(PokerColor color,PokerPoint point){
     return pk;
 }
 bool OnlinePokerDesk::createPokers(){
-//    m_arrPokers.clear();
     if (m_arrPokers.size() == 0) {
         //创建52个牌
         for (int i = PokerColor_Spade; i <= PokerColor_Diamond; ++i){
             for (int j = PokerPoint_Ace; j <= PokerPoint_King; ++j){
                 PokerSprite* pk = createPoker((PokerColor)i, (PokerPoint)j);
                 m_arrPokers.pushBack(pk);
+                
                 this->addChild(pk);
                 pk->setCallBackFunc(this, callfuncN_selector(OnlinePokerDesk::turnedSinglePokerCallback));
             }
@@ -928,29 +890,6 @@ bool OnlinePokerDesk::createPokers(){
     return true;
 }
 
-bool OnlinePokerDesk::reindexPoker(){
-//    for(int i = 0; i < m_arrPokers.size(); ++i){
-//        PokerSprite* pk1 = m_arrPokers.getRandomObject();
-//        PokerSprite* pk2 = m_arrPokers.getRandomObject();
-//        m_arrPokers.swap(pk1, pk2);
-//    }
-    
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
-    for (size_t i = m_arrPokers.size(); i > 0; --i) {
-        PokerSprite* pk = m_arrPokers.at(i - 1);
-        pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
-        pk->setVisible(true);
-        if (pk->getIsFront()) {
-            pk->showPokerAnimated(false, false, 0);
-        }
-        this->reorderChild(pk, (int)(m_arrPokers.size() - i));
-    }
-    
-    return true;
-}
-
 void OnlinePokerDesk::updatePokerWithData(PokerSprite* poker, PokerData data){
     int color = data.color;
     int num = data.num;
@@ -961,6 +900,28 @@ void OnlinePokerDesk::updatePokerWithData(PokerSprite* poker, PokerData data){
     }
     poker->setPoker_color((PokerColor)color);
     poker->setPoker_point((PokerPoint)num);
+}
+
+void OnlinePokerDesk::adjustPoker(int index){
+    index = index % 6;
+    if (index >= 0 && index <= 5) {
+        m_IndexSend = index * 9;
+        m_isSendSet = false;
+        m_isSendSingle = true;
+        
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
+        for (size_t i = m_arrPokers.size(); i > 0; --i) {
+            PokerSprite* pk = m_arrPokers.at(i - 1);
+            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
+            pk->setVisible((i - 1) >= index * 9);
+            if (pk->getIsFront()) {
+                pk->showPokerAnimated(false, false, 0);
+            }
+            this->reorderChild(pk, (int)(m_arrPokers.size() - i));
+        }
+    }
 }
 
 void OnlinePokerDesk::sendPoker(){
@@ -1162,6 +1123,11 @@ void OnlinePokerDesk::stepIn(DeskState state){
 #pragma notification
 void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
+    if (post->cmd >= 10000) {
+        //大于10000则是恢复牌局 重置显示庄家信息
+        resetShowDealerInfo();
+    }
+    
     switch (post->cmd) {
         case cmd_removePlayer:{
             this->showMessageManager(false);
@@ -1186,9 +1152,6 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
         case cmd_bureauOpen:{
             //开始牌局
-            createPokers();
-            reindexPoker();
-            
             this->stepIn(DeskState_Start);
         }
             break;
@@ -1200,15 +1163,11 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_selectedBureauOwner:{
             //选中庄家通知
             btn_BeBankerItem->setVisible(false);
-            showDealerInfo();
             
             if (Global::getInstance()->isDealer) {
                 NoteTip::show("恭喜，抢庄成功！");
             }
-            
-//            betLimiter->minValue = Global::getInstance()->table_data.minPerStack;
-            betLimiter->reset();
-            betLimiter->setVisible(!Global::getInstance()->isDealer);
+            resetShowDealerInfo();
         }
             break;
             
@@ -1224,10 +1183,10 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
                 PlayerData player_data = Global::getInstance()->playerList[i];
                 if (0 == strcmp(Global::getInstance()->table_data.round.stabberId, player_data.user.ID)) {
-                    for (int i = 0; i < m_arrChairs.size(); i++) {
-                        PokerChair* chairBuffer = m_arrChairs.at(i);
+                    for (int j = 0; j < m_arrChairs.size(); j++) {
+                        PokerChair* chairBuffer = m_arrChairs.at(j);
                         chairBuffer->showBeStabber(false);
-                        if (i + 1 == Global::getInstance()->table_data.round.stabberIndex) {
+                        if (j + 1 == Global::getInstance()->table_data.round.stabberIndex) {
                             chairBuffer->showStabber("images/default_head.png", player_data.user.nikename, player_data.remainCap);
                         }
                     }
@@ -1258,9 +1217,9 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_enterRoomByPassword:{
             this->showMessageManager(false);
             this->showGamePlayerInfo();
-//            if (strlen(Global::getInstance()->table_data.roomType) > 0) {
-//                roomInfoLabel->setString(Global::getInstance()->table_data.roomType);
-//            }
+            
+            createPokers();
+            adjustPoker(0);
             
             switch (Global::getInstance()->table_data.code) {
                 case state_enterRoom_success_wait:
@@ -1331,10 +1290,13 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         }
             break;
             
-        case cmd_countDownSendCard:{
             //发牌
+        case cmd_countDownSendCard:
+            //恢复发牌
+        case cmd_sendCardRecover:{
             this->showMessageManager(false);
             
+            this->adjustPoker(Global::getInstance()->table_data.round.roundIndex);
             if (m_arrPokers.size() >= 9 + m_IndexSend) {
                 judgementPokerIndex = m_IndexSend;
                 for (int i = 0; i < 9; i++) {
@@ -1358,8 +1320,6 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                     }
                 }
             }
-            
-            
             
             sendPokerAction();
         }

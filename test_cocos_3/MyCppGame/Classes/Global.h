@@ -135,8 +135,8 @@ public:
     void clearRoundData();//清除把数据
     void clearBetData();//清除下注数据
     void clearBureauOwnerData();//清除庄家数据
+    void resetBureauOwnerData(const char* ownerId);//重置庄家数据
     void resetRoundIndex();//把数重置
-    
     
     bool isBackgroundMusic();
     void setBackgroundMusic(bool yn);
