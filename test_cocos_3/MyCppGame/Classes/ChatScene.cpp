@@ -9,6 +9,15 @@
 #include "ChatScene.h"
 #include "Global.h"
 #include "QLImageSprite.h"
+#include "BaseCell.h"
+
+ChatScene::ChatScene(){
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(ChatScene::onNotification_Socket), kNotification_Socket, NULL);
+}
+
+ChatScene::~ChatScene(){
+    NotificationCenter::getInstance()->removeAllObservers(this);
+}
 
 Scene* ChatScene::createScene()
 {
@@ -107,6 +116,15 @@ bool ChatScene::init()
     btn_send->addTouchEventListener(CC_CALLBACK_2(ChatScene::touchEvent, this));
     navHead->addChild(btn_send);
     
+    recordListCellWidth = visibleSize.width;
+    recordListTableView = TableView::create(this, Size(recordListCellWidth,  visibleSize.height - navHead->getContentSize().height));
+    recordListTableView->setPosition(origin.x , origin.y);
+    recordListTableView->setDirection(TableView::Direction::VERTICAL);
+    recordListTableView->setDelegate(this);
+    this->addChild(recordListTableView);
+    
+    recordListTableView->reloadData();
+    
     return true;
 }
 
@@ -137,7 +155,12 @@ void ChatScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
                 case 0:{
-                    
+                    if (strlen(msgBox->getText()) > 0) {
+                        Global::getInstance()->sendMessageToAll(msgBox->getText());
+                    }
+                    else {
+                        NoteTip::show("发送消息不能为空");
+                    }
                 }
                     break;
                     
@@ -148,6 +171,96 @@ void ChatScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
             
         case Widget::TouchEventType::CANCELED:{
             
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+#pragma tableview
+Size ChatScene::tableCellSizeForIndex(TableView* table, ssize_t idx){
+    if (table == recordListTableView) {
+        return Size(recordListCellWidth, 40);
+    }
+    
+    return Size::ZERO;
+}
+
+//定制每个cell的内容
+TableViewCell* ChatScene::tableCellAtIndex(TableView* table, ssize_t idx){
+    if (table == recordListTableView) {
+        BaseCell* cell = (BaseCell* )table->dequeueCell();
+        
+        float height = 40;
+        if(!cell)
+        {
+            cell = new BaseCell();
+            cell->autorelease();
+            
+            auto head = Sprite::create();
+            cell->addChild(head);
+            cell->head = head;
+            
+            auto titleLabel = Label::create();
+            titleLabel->setSystemFontSize(12.0);
+            titleLabel->setTextColor(Color4B::BLACK);
+            titleLabel->setPosition(0.5 * recordListCellWidth, 0.5 * height);
+            titleLabel->setDimensions(0.9 * recordListCellWidth, height);
+            titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+            titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            cell->addChild(titleLabel);
+            cell->titleLabel = titleLabel;
+            
+            auto line = Sprite::create("images/tableview_line.png");
+            line->setScaleX(0.9 * recordListCellWidth / line->getContentSize().width);
+            line->setPosition(0.5 * recordListCellWidth, 0.5 * line->getContentSize().height);
+            cell->addChild(line);
+        }
+        
+        MessageRef* item = Global::getInstance()->messageItems.at(idx);
+        
+        char m_string[200] = {0};
+        sprintf(m_string, "%s\t%s:\t%s", item->sendTime, item->fromUserNikeName, item->message);
+        cell->titleLabel->setString(m_string);
+        
+        return cell;
+    }
+    
+    return NULL;
+}
+
+//确定这个tableview的cell行数
+ssize_t ChatScene::numberOfCellsInTableView(TableView* table){
+    if (table == recordListTableView) {
+        return Global::getInstance()->messageItems.size();
+    }
+    
+    return 0;
+}
+
+void ChatScene::tableCellTouched(TableView* table, TableViewCell* cell){
+    
+}
+
+#pragma notification
+void ChatScene::onNotification_Socket(Ref* pSender){
+    PostRef* post = (PostRef* )pSender;
+    switch (post->cmd) {
+        case cmd_sendMessageToAll:{
+            if (strlen(post->description) > 0) {
+                NoteTip::show(post->description);
+            }
+            
+            if (post->sub_cmd == 1) {
+                msgBox->setText("");
+            }
+        }
+            break;
+            
+        case cmd_receiveAllMessage:{
+            this->recordListTableView->reloadData();
         }
             break;
             

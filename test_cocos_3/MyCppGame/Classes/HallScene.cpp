@@ -368,12 +368,7 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
                 case 0:{
-//                    if (strlen(msgBox->getText()) > 0) {
-//                        Global::getInstance()->sendMessageToAll(msgBox->getText());
-//                    }
-//                    else {
-//                        NoteTip::show("发送消息不能为空");
-//                    }
+                    
                 }
                     break;
                     

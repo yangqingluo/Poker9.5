@@ -504,7 +504,6 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         cell->titleLabel->setString(m_string);
         
-        cell->setColor(Color3B::RED);
         cell->head->setScale((0.9 * height) / cell->head->getContentSize().height);
         cell->head->setPosition(0.05 * recordListCellWidth + 0.5 * cell->head->getBoundingBox().size.width, 0.5 * height);
         cell->selectImage->setVisible(payIndex == idx);
