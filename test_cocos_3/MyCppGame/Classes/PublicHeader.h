@@ -9,10 +9,11 @@
 #define length_room_capital        6
 #define length_invite_code         8
 #define Max_Message_Length 100
+#define Max_Name_Length 30
 
 struct UserData {
     char ID[Max_ID_Length];
-    char nikename[50];
+    char nikename[Max_Name_Length];
     char account[Max_ID_Length];
 //    "mobile": "18811610036",
 //    "birthday": "1990-08-15",

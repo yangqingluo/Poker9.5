@@ -132,7 +132,7 @@ bool SettingScene::init()
     inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
     
     inputBox->setPlaceHolder("输入昵称");
-    inputBox->setMaxLength(20);
+    inputBox->setMaxLength(Max_Name_Length);
     nikenameBox = inputBox;
     
     auto btn_changeNikename = Button::create("images/btn_green.png","images/btn_green_selected.png");

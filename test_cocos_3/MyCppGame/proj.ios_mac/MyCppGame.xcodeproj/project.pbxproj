@@ -151,6 +151,8 @@
 		FC983D661DE171F9006C2616 /* ExchangeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC983D631DE171F9006C2616 /* ExchangeScene.cpp */; };
 		FCA0AD891DF54F4600DA1515 /* poker.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA0AD881DF54F4600DA1515 /* poker.png */; };
 		FCA0AD8A1DF54F4600DA1515 /* poker.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA0AD881DF54F4600DA1515 /* poker.png */; };
+		FCA3596F1E38FEC000253D70 /* ChatScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA3596D1E38FEC000253D70 /* ChatScene.cpp */; };
+		FCA359701E38FEC000253D70 /* ChatScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA3596D1E38FEC000253D70 /* ChatScene.cpp */; };
 		FCA383ED1E1F3C52006E073C /* OCPublic.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EC1E1F3C52006E073C /* OCPublic.mm */; };
 		FCA383F11E1F406E006E073C /* CppToFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToFunction.cpp */; };
 		FCA383F21E1F406E006E073C /* CppToFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCA383EF1E1F406E006E073C /* CppToFunction.cpp */; };
@@ -462,6 +464,8 @@
 		FC983D631DE171F9006C2616 /* ExchangeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExchangeScene.cpp; sourceTree = "<group>"; };
 		FC983D641DE171F9006C2616 /* ExchangeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangeScene.h; sourceTree = "<group>"; };
 		FCA0AD881DF54F4600DA1515 /* poker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poker.png; sourceTree = "<group>"; };
+		FCA3596D1E38FEC000253D70 /* ChatScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatScene.cpp; sourceTree = "<group>"; };
+		FCA3596E1E38FEC000253D70 /* ChatScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatScene.h; sourceTree = "<group>"; };
 		FCA383EB1E1F3C52006E073C /* OCPublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OCPublic.h; path = ios/OCPublic.h; sourceTree = SOURCE_ROOT; };
 		FCA383EC1E1F3C52006E073C /* OCPublic.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OCPublic.mm; path = ios/OCPublic.mm; sourceTree = SOURCE_ROOT; };
 		FCA383EF1E1F406E006E073C /* CppToFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CppToFunction.cpp; sourceTree = "<group>"; };
@@ -712,6 +716,8 @@
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
 				FCC339CF1DDFB45E00E71685 /* HallScene.cpp */,
 				FCC339D01DDFB45E00E71685 /* HallScene.h */,
+				FCA3596D1E38FEC000253D70 /* ChatScene.cpp */,
+				FCA3596E1E38FEC000253D70 /* ChatScene.h */,
 				FC983D5B1DE16728006C2616 /* InviteScene.cpp */,
 				FC983D5C1DE16728006C2616 /* InviteScene.h */,
 				FC7E77761E0F6C94008EBE40 /* InviterScene.cpp */,
@@ -1245,6 +1251,7 @@
 				FCED08E51E1C0750004BDFD6 /* PokerDeskScene.cpp in Sources */,
 				FC35C0981DEAE239009C3A83 /* PokerChair.cpp in Sources */,
 				FC292EE41DF7F0310096B017 /* FrameManager.cpp in Sources */,
+				FCA3596F1E38FEC000253D70 /* ChatScene.cpp in Sources */,
 				FCED08D51E1C0750004BDFD6 /* Global.cpp in Sources */,
 				FC331E061E23907E00174856 /* CCUMSocialSDK.cpp in Sources */,
 				FCC0226E1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */,
@@ -1294,6 +1301,7 @@
 				FCC0226F1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */,
 				FC8FEF7A1E038D63009D907E /* PokerStabberBtn.cpp in Sources */,
 				FC983D621DE1691C006C2616 /* ShopScene.cpp in Sources */,
+				FCA359701E38FEC000253D70 /* ChatScene.cpp in Sources */,
 				FCBDFED01DE9D8F4001EA2BC /* PopAlertDialog.cpp in Sources */,
 				FC7FC24D1DF00F97007A6D25 /* PokerChair.cpp in Sources */,
 				FC3A21251E2E19F0000C67F0 /* CGameSocket.cpp in Sources */,

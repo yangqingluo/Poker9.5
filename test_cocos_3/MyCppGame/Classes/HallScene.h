@@ -92,7 +92,7 @@ private:
     
     MessageManager* m_pMessage;
     Label* msgLabel;
-//    ui::EditBox* msgBox;
+
     int roomTypeSelected;
     int roomIndexSelected;
     int jettonToEnter;

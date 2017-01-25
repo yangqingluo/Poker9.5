@@ -1065,7 +1065,20 @@ void Global::parseData(char* pbuf, int len){
                     
                     //收到所有人消息
                 case cmd_receiveAllMessage:{
-                    
+                    if (!document["content"].IsNull()) {
+                        rapidjson::Value& val_content = document["content"];
+                        if (!val_content["fromUserId"].IsNull() && !val_content["fromUserNikeName"].IsNull() && !val_content["message"].IsNull() && !val_content["sendTime"].IsNull()) {
+                            MessageRef* message = new MessageRef();
+                            message->autorelease();
+                            
+                            strcpy(message->fromUserId, val_content["fromUserId"].GetString());
+                            strcpy(message->fromUserNikeName, val_content["fromUserNikeName"].GetString());
+                            strcpy(message->message, val_content["message"].GetString());
+                            strcpy(message->sendTime, val_content["sendTime"].GetString());
+                            
+                            this->messageItems.pushBack(message);
+                        }
+                    }
                 }
                     break;
                     

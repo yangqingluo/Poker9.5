@@ -118,10 +118,19 @@ public:
     char description[1024];
 };
 
+class MessageRef: public Ref{
+public:
+    char fromUserId[Max_ID_Length];
+    char fromUserNikeName[Max_Name_Length];
+    char message[Max_Message_Length];
+    char sendTime[20];
+};
+
 class Global: public Ref{
 public:
     static Global* getInstance();
     
+    Vector<MessageRef* > messageItems;
     UserData user_data;//用户数据
     TableData table_data;//牌桌数据
     int countDownInSecond = 15;//倒计时读秒数
