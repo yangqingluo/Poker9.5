@@ -25,6 +25,7 @@ struct UserData {
     int diamond;
     int gold;
     int silver;
+    char inviteUser[Max_ID_Length];
 //    "token": null,
 };
 

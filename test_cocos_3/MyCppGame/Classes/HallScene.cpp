@@ -399,22 +399,10 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
             switch (button->getTag()) {
                 case 0:{
                     if (strlen(msgBox->getText()) > 0) {
-//                        auto visibleSize = Director::getInstance()->getVisibleSize();
-//                        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-//                        
-//                        msgLabel->stopAllActions();
-//                        msgLabel->setString(msgBox->getText());
-//                        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.5 * msgLabel->getContentSize().height));
-//                        
-//                        msgBox->setText("");
-//                        
-//                        float width = visibleSize.width + msgLabel->getContentSize().width;
-//                        MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
-//                        CallFunc* func1 = CallFunc::create([=]{
-//                            msgLabel->setPositionX(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2);
-//                        });
-//                        msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
                         Global::getInstance()->sendMessageToAll(msgBox->getText());
+                    }
+                    else {
+                        NoteTip::show("发送消息不能为空");
                     }
                 }
                     break;
@@ -1067,25 +1055,40 @@ void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
 
 #pragma notification
 void Hall::onNotification_Socket(Ref* pSender){
-//    PostRef* post = (PostRef* )pSender;
-//    switch (post->cmd) {
-//        case cmd_enterRoom:{
-//            if (m_pMessage != NULL) {
-//                m_pMessage->hidden();
-//            }
+    PostRef* post = (PostRef* )pSender;
+    switch (post->cmd) {
+        case cmd_sendMessageToAll:{
+            if (post->sub_cmd == 1) {
+                msgBox->setText("");
+            }
+            
+            if (strlen(post->description) > 0) {
+                NoteTip::show(post->description);
+            }
+        }
+            break;
+            
+        case cmd_receiveAllMessage:{
+//            auto visibleSize = Director::getInstance()->getVisibleSize();
+//            Vec2 origin = Director::getInstance()->getVisibleOrigin();
 //            
-//            auto scene = OnlinePokerDesk::createScene();
-//            PokerDesk* layer = (PokerDesk* )(scene->getChildren().at(1));
-//            layer->gamePlayer->infoConfig("阿罗", "images/default_head.png", 3000);
+//            msgLabel->stopAllActions();
+//            msgLabel->setString(msgBox->getText());
+//            msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.5 * msgLabel->getContentSize().height));
 //            
-//            TransitionScene* ts = TransitionMoveInR::create(0.2, scene);
-//            Director::getInstance()->pushScene(ts);
-//        }
-//            break;
-//            
-//        default:
-//            break;
-//    }
+//            float width = visibleSize.width + msgLabel->getContentSize().width;
+//            MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
+//            CallFunc* func1 = CallFunc::create([=]{
+//                msgLabel->setPositionX(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2);
+//            });
+//            msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
+
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 void Hall::onNotification_RefreshUserinfo(Ref* pSender){

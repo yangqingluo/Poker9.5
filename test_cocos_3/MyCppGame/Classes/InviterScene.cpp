@@ -273,11 +273,15 @@ void InviterScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                 if (val_content.IsObject()) {
                     char msg[200] = {0};
                     if (val_content.HasMember("nickname") && val_content.HasMember("account")) {
-                        const char* nickname = val_content["nickname"].GetString();
+//                        const char* nickname = val_content["nickname"].GetString();
                         const char* account = val_content["account"].GetString();
-                        sprintf(msg, "账号：%s\n昵称：%s", account, nickname);
+                        
+                        sprintf(Global::getInstance()->user_data.inviteUser, "%s", account);
                     }
-                    MessageBox(msg, "绑定邀请人成功");
+                    PostRef* post = new PostRef();
+                    sprintf(post->description, "绑定邀请人成功");
+                    
+                    MTNotificationQueue::sharedNotificationQueue()->postNotification(showNoteTipTag, post);
                 }
             }
             else {

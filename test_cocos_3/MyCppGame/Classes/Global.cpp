@@ -202,22 +202,42 @@ bool Global::getStringWithItemColor(char *buffer, ItemColorType colorType){
 }
 
 void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user){
-    data_user->gameTimes = val_user["gameTimes"].GetInt();
+    if (val_user.HasMember("gameTimes")) {
+        data_user->gameTimes = val_user["gameTimes"].GetInt();
+    }
     
-    const char* nikename = val_user["nikename"].GetString();
-    memcpy(data_user->nikename, nikename, strlen(nikename));
+    if (val_user.HasMember("nikename")) {
+        const char* nikename = val_user["nikename"].GetString();
+        memcpy(data_user->nikename, nikename, strlen(nikename));
+    }
     
-    const char* account = val_user["account"].GetString();
-    memcpy(data_user->account, account, strlen(account));
+    if (val_user.HasMember("account")) {
+        const char* account = val_user["account"].GetString();
+        memcpy(data_user->account, account, strlen(account));
+    }
     
-    const char* ID = val_user["id"].GetString();
-    memcpy(data_user->ID, ID, strlen(ID));
+    if (val_user.HasMember("id")) {
+        const char* ID = val_user["id"].GetString();
+        memcpy(data_user->ID, ID, strlen(ID));
+    }
     
-    const char* winningPercent = val_user["winningPercent"].GetString();
-    memcpy(data_user->winningPercent, winningPercent, strlen(winningPercent));
+    if (val_user.HasMember("winningPercent")) {
+        const char* winningPercent = val_user["winningPercent"].GetString();
+        memcpy(data_user->winningPercent, winningPercent, strlen(winningPercent));
+    }
     
-    const char* inviteCode = val_user["inviteCode"].GetString();
-    memcpy(data_user->inviteCode, inviteCode, strlen(inviteCode));
+    if (val_user.HasMember("inviteCode")) {
+        const char* inviteCode = val_user["inviteCode"].GetString();
+        memcpy(data_user->inviteCode, inviteCode, strlen(inviteCode));
+    }
+    
+    if (val_user.HasMember("inviteUser")) {
+        const rapidjson::Value& val_inviteUser = val_user["inviteUser"];
+        if (!val_inviteUser.IsNull()) {
+            const char* inviteUser = val_user["inviteUser"].GetString();
+            memcpy(data_user->inviteUser, inviteUser, strlen(inviteUser));
+        }
+    }
     
     if (val_user.HasMember("introCount")) {
         data_user->introCount = val_user["introCount"].GetInt();
@@ -558,6 +578,7 @@ void Global::parseData(char* pbuf, int len){
             
             PostRef* post = new PostRef();
             post->cmd = cmd;
+            post->sub_cmd = code;
             memset(post->description, 0, sizeof(post->description));
             
             if (code == 1) {

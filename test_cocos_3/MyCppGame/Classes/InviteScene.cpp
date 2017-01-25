@@ -18,6 +18,13 @@ USING_NS_UM_SOCIAL;
 USING_NS_CC;
 using namespace ui;
 
+InviteScene::InviteScene(){
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(InviteScene::onNotification_NoteTip), showNoteTipTag, NULL);
+}
+InviteScene::~InviteScene(){
+    NotificationCenter::getInstance()->removeAllObservers(this);
+}
+
 Scene* InviteScene::createScene()
 {
     // 'scene' is an autorelease object
@@ -187,8 +194,14 @@ void InviteScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     break;
                     
                 case 3:{
-                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-                    onHttpRequest_GetInviter();
+                    if (strlen(Global::getInstance()->user_data.inviteUser) > 0) {
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        onHttpRequest_GetInviter();
+                    }
+                    else {
+                        auto scene = InviterScene::createScene();
+                        Director::getInstance()->pushScene(scene);
+                    }
                 }
                     break;
                     
@@ -329,11 +342,11 @@ void InviteScene::onHttpRequest_GetInviter(){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/getInvitedUser");
+    request->setUrl("http://115.28.109.174:8181/game/user/userinfo");
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "userId=%s", Global::getInstance()->user_data.ID);
+    sprintf(param, "account=%s", Global::getInstance()->user_data.inviteUser);
     request->setRequestData(param, strlen(param));
     
     // HTTP响应函数
@@ -404,8 +417,7 @@ void InviteScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             MessageBox(msg, "您的邀请人");
                         }
                         else {
-                            auto scene = InviterScene::createScene();
-                            Director::getInstance()->pushScene(scene);
+                            MessageBox("未查询到邀请人信息", "出错");
                         }
                     }
                     else if (tag == "GetInviteList") {
@@ -418,7 +430,7 @@ void InviteScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                                 const rapidjson::Value& val_user = val_content[i];
                                 assert(val_user.IsObject());
                                 
-                                if (val_user.HasMember("nickname") && val_user.HasMember("account")) {
+                                if (!val_user["nickname"].IsNull() && val_user.HasMember("account")) {
                                     InviteItem* item = new InviteItem();
                                     item->autorelease();
                                     
@@ -444,4 +456,10 @@ void InviteScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
         }
         
     }
+}
+
+#pragma notification
+void InviteScene::onNotification_NoteTip(Ref* pSender){
+    PostRef* post = (PostRef* )pSender;
+    NoteTip::show(this, post->description);
 }

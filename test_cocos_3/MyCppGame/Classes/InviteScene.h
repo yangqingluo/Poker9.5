@@ -34,6 +34,8 @@ public:
 class InviteScene : public cocos2d::Layer, public TableViewDataSource, public TableViewDelegate
 {
 public:
+    InviteScene();
+    ~InviteScene();
     static cocos2d::Scene* createScene();
     virtual bool init();
     virtual void onEnter();
@@ -58,6 +60,7 @@ private:
     void onHttpRequest_GetInviteList();
     void onHttpRequest_GetInviter();
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
+    void onNotification_NoteTip(Ref* pSender);
 };
 
 #endif /* InviteScene_h */
