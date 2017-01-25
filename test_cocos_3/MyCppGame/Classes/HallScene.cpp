@@ -182,7 +182,7 @@ bool Hall::init()
         huangItems.pushBack(item);
     }
     
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
         NoteItem* item = new NoteItem();
         item->autorelease();
         sprintf(item->image, "images/server_btn_%d.png", i);
@@ -218,7 +218,8 @@ bool Hall::init()
     userNameLabel->setPosition(Vec2(userInfoSprite->getContentSize().width / 2, userInfoSprite->getContentSize().height * 0.6));
     userInfoSprite->addChild(userNameLabel);
     
-    userinfoLabel = Label::create("", "", 7);
+    userinfoLabel = Label::create();
+    userinfoLabel->setSystemFontSize(7.0);
     userinfoLabel->setTextColor(Color4B(0xe0, 0xe0, 0xe0, 0xff));
     userinfoLabel->setPosition(0.55 * userInfoSprite->getContentSize().width, 0.25 * userInfoSprite->getContentSize().height);
     userinfoLabel->setDimensions(0.95 * userInfoSprite->getContentSize().width, 0.5 * userInfoSprite->getContentSize().height);
@@ -287,49 +288,49 @@ bool Hall::init()
     
     auto noteNoticeBG = Sprite::create("images/notice_no_gamble.png");
     noteNoticeBG->setScale(0.3 * noteListSprite->getContentSize().width / noteNoticeBG->getContentSize().width);
-    noteNoticeBG->setPosition(noteListSprite->getContentSize().width - 0.5 * noteNoticeBG->getBoundingBox().size.width - 1.5 * edge, 0.5 * noteListCellHeight);
+    noteNoticeBG->setPosition(noteListSprite->getContentSize().width - 0.5 * noteNoticeBG->getBoundingBox().size.width - 1.5 * edge, 0.5 * noteListSprite->getBoundingBox().size.height);
     noteListSprite->addChild(noteNoticeBG);
     
     noteListTableView = TableView::create(this, Size(noteListSprite->getBoundingBox().size.width * 0.96,  noteListCellHeight));
-    noteListTableView->setPosition(noteListSprite->getBoundingBox().size.width * 0.02, 0.0 * noteListSprite->getBoundingBox().size.height);
+    noteListTableView->setPosition(noteListSprite->getBoundingBox().size.width * 0.02, 0.5 * noteListSprite->getBoundingBox().size.height - 0.5 * noteListCellHeight);
     noteListTableView->setDirection(TableView::Direction::HORIZONTAL);
     noteListTableView->setDelegate(this);
     noteListSprite->addChild(noteListTableView);
     
     noteListTableView->reloadData();
     
-    auto inputBox = ui::EditBox::create(Size(0.8 * noteListSprite->getContentSize().width, MIN(0.3 * noteListSprite->getContentSize().height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
-    inputBox->setPosition(Vec2(noteListTableView->getPositionX() + 0.5 * inputBox->getContentSize().width, 0.65 * noteListSprite->getContentSize().height));
-    noteListSprite->addChild(inputBox);
+//    auto inputBox = ui::EditBox::create(Size(0.8 * noteListSprite->getContentSize().width, MIN(0.3 * noteListSprite->getContentSize().height, 32)), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
+//    inputBox->setPosition(Vec2(noteListTableView->getPositionX() + 0.5 * inputBox->getContentSize().width, 0.65 * noteListSprite->getContentSize().height));
+//    noteListSprite->addChild(inputBox);
+//    
+//    //属性设置
+//    //    inputBox->setFontName("fonts/STKaiti.ttf");
+//    inputBox->setFontSize(12);
+//    inputBox->setFontColor(Color4B::BLACK);
+//    //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
+//    inputBox->setPlaceholderFontSize(12);
+//    inputBox->setPlaceholderFontColor(Color4B::GRAY);
+//    
+//    //模式类型设置
+//    inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+//    inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
+//    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
+//    
+//    inputBox->setPlaceHolder("请输入喇叭的内容");
+//    inputBox->setDelegate(this);
+//    inputBox->setMaxLength(Max_Message_Length);
+//    msgBox = inputBox;
     
-    //属性设置
-    //    inputBox->setFontName("fonts/STKaiti.ttf");
-    inputBox->setFontSize(12);
-    inputBox->setFontColor(Color4B::BLACK);
-    //    inputBox->setPlaceholderFont("fonts/STKaiti.ttf", 10);
-    inputBox->setPlaceholderFontSize(12);
-    inputBox->setPlaceholderFontColor(Color4B::GRAY);
-    
-    //模式类型设置
-    inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
-    inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS);
-    inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
-    
-    inputBox->setPlaceHolder("请输入喇叭的内容");
-    inputBox->setDelegate(this);
-    inputBox->setMaxLength(Max_Message_Length);
-    msgBox = inputBox;
-    
-    auto btn_send = Button::create("images/chat_btn_send.png");
-    btn_send->setScale9Enabled(true);//打开scale9 可以拉伸图片
-    btn_send->setTitleText("发送");
-    btn_send->setTitleFontSize(12);
-    btn_send->setTitleColor(Color3B::BLACK);
-    btn_send->setContentSize(Size(MIN(2 * inputBox->getContentSize().height, 0.15 * noteListSprite->getContentSize().width), inputBox->getContentSize().height));
-    btn_send->setPosition(Vec2(inputBox->getBoundingBox().getMaxX() + 0.6 * btn_send->getContentSize().width, inputBox->getPositionY()));
-    btn_send->setTag(0);
-    btn_send->addTouchEventListener(CC_CALLBACK_2(Hall::touchEvent, this));
-    noteListSprite->addChild(btn_send);
+//    auto btn_send = Button::create("images/chat_btn_send.png");
+//    btn_send->setScale9Enabled(true);//打开scale9 可以拉伸图片
+//    btn_send->setTitleText("发送");
+//    btn_send->setTitleFontSize(12);
+//    btn_send->setTitleColor(Color3B::BLACK);
+//    btn_send->setContentSize(Size(MIN(2 * inputBox->getContentSize().height, 0.15 * noteListSprite->getContentSize().width), inputBox->getContentSize().height));
+//    btn_send->setPosition(Vec2(inputBox->getBoundingBox().getMaxX() + 0.6 * btn_send->getContentSize().width, inputBox->getPositionY()));
+//    btn_send->setTag(0);
+//    btn_send->addTouchEventListener(CC_CALLBACK_2(Hall::touchEvent, this));
+//    noteListSprite->addChild(btn_send);
     
     msgLabel = Label::createWithTTF("","fonts/STKaiti.ttf",16);
     msgLabel->setColor(Color3B::WHITE);
@@ -398,12 +399,12 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
         case Widget::TouchEventType::ENDED:
             switch (button->getTag()) {
                 case 0:{
-                    if (strlen(msgBox->getText()) > 0) {
-                        Global::getInstance()->sendMessageToAll(msgBox->getText());
-                    }
-                    else {
-                        NoteTip::show("发送消息不能为空");
-                    }
+//                    if (strlen(msgBox->getText()) > 0) {
+//                        Global::getInstance()->sendMessageToAll(msgBox->getText());
+//                    }
+//                    else {
+//                        NoteTip::show("发送消息不能为空");
+//                    }
                 }
                     break;
                     
@@ -890,6 +891,11 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 5:{
+                
+            }
+                break;
+                
+            case 6:{
                 Global::getInstance()->logout();
             }
                 break;
@@ -1058,10 +1064,6 @@ void Hall::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     switch (post->cmd) {
         case cmd_sendMessageToAll:{
-            if (post->sub_cmd == 1) {
-                msgBox->setText("");
-            }
-            
             if (strlen(post->description) > 0) {
                 NoteTip::show(post->description);
             }
