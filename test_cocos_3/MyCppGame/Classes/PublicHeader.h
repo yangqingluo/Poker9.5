@@ -8,6 +8,7 @@
 #define length_room_password       8
 #define length_room_capital        6
 #define length_invite_code         8
+#define Max_Message_Length 100
 
 struct UserData {
     char ID[Max_ID_Length];

@@ -30,6 +30,7 @@ using namespace CocosDenshion;
 #define cmd_synPlayerList              1002//同步玩家列表通知
 #define cmd_bureauOpen                 1003//开始牌局通知
 #define cmd_countDownApplyBureauOwner  1004//抢庄通知
+#define cmd_applyBureauOwnerRecover    10040//抢庄通知_恢复
 #define cmd_selectedBureauOwner        1005//选中庄家通知
 #define cmd_countDownApplyStabber      1006//抢刺通知
 #define cmd_applyStabberRecover        10060//抢刺通知_恢复
@@ -42,6 +43,9 @@ using namespace CocosDenshion;
 #define cmd_settle                     1011//结算通知
 #define cmd_settleRecover              10110//结算通知_恢复
 #define cmd_bureauOwnerOff             1012//庄家强制下庄通知
+#define cmd_receiveBureauMessage       1015//收到牌局消息
+#define cmd_receiveAllMessage          1016//收到消息
+#define cmd_notifyRecoverBureau        1017//恢复牌局通知
 
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
@@ -55,6 +59,8 @@ using namespace CocosDenshion;
 
 #define cmd_enterRoomByPassword        4000//加入需要密码的指定房间
 
+#define cmd_sendMessageToAll           5000//向所有人发送消息
+#define cmd_sendMessageToBureau        5001//向牌局的人发送消息
 
 
 #define state_enterRoom_success_wait             1000//加入房间成功，房间人数不足以开始游戏
@@ -173,6 +179,7 @@ public:
     void sendLeaveRoom();
     void sendBetStake(int jetton, int gateType);
     void sendSupplyBit(int count);//补充本金
+    void sendMessageToAll(const char* message);
     
     void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
     void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);

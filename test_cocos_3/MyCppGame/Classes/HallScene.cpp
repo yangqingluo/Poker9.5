@@ -317,6 +317,7 @@ bool Hall::init()
     
     inputBox->setPlaceHolder("请输入喇叭的内容");
     inputBox->setDelegate(this);
+    inputBox->setMaxLength(Max_Message_Length);
     msgBox = inputBox;
     
     auto btn_send = Button::create("images/chat_btn_send.png");
@@ -398,21 +399,22 @@ void Hall::touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type){
             switch (button->getTag()) {
                 case 0:{
                     if (strlen(msgBox->getText()) > 0) {
-                        auto visibleSize = Director::getInstance()->getVisibleSize();
-                        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-                        
-                        msgLabel->stopAllActions();
-                        msgLabel->setString(msgBox->getText());
-                        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.5 * msgLabel->getContentSize().height));
-                        
-                        msgBox->setText("");
-                        
-                        float width = visibleSize.width + msgLabel->getContentSize().width;
-                        MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
-                        CallFunc* func1 = CallFunc::create([=]{
-                            msgLabel->setPositionX(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2);
-                        });
-                        msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
+//                        auto visibleSize = Director::getInstance()->getVisibleSize();
+//                        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+//                        
+//                        msgLabel->stopAllActions();
+//                        msgLabel->setString(msgBox->getText());
+//                        msgLabel->setPosition(Vec2(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2, visibleSize.height + origin.y - 0.5 * msgLabel->getContentSize().height));
+//                        
+//                        msgBox->setText("");
+//                        
+//                        float width = visibleSize.width + msgLabel->getContentSize().width;
+//                        MoveBy* to = MoveBy::create(0.01 * width, Vec2(-width, 0));
+//                        CallFunc* func1 = CallFunc::create([=]{
+//                            msgLabel->setPositionX(visibleSize.width + origin.x + msgLabel->getContentSize().width / 2);
+//                        });
+//                        msgLabel->runAction(RepeatForever::create(Sequence::create(to, func1, NULL)));
+                        Global::getInstance()->sendMessageToAll(msgBox->getText());
                     }
                 }
                     break;
