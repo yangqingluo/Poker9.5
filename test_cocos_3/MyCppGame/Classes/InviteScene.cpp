@@ -430,7 +430,7 @@ void InviteScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                                 const rapidjson::Value& val_user = val_content[i];
                                 assert(val_user.IsObject());
                                 
-                                if (!val_user["nickname"].IsNull() && val_user.HasMember("account")) {
+                                if (!val_user["nickname"].IsNull() && !val_user["account"].IsNull()) {
                                     InviteItem* item = new InviteItem();
                                     item->autorelease();
                                     
