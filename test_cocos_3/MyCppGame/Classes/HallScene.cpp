@@ -1063,6 +1063,15 @@ void Hall::onNotification_Socket(Ref* pSender){
         }
             break;
             
+        case cmd_notifyRecoverBureau:{
+            auto scene = OnlinePokerDesk::createScene();
+            OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
+            layer->roomType = RoomType_Recovery;
+            
+            Director::getInstance()->pushScene(scene);
+        }
+            break;
+            
         default:
             break;
     }

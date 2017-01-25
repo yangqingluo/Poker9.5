@@ -1,6 +1,7 @@
 #include "Global.h"
 #include "HallScene.h"
 #include "tcpcommand.h"
+#include "OnlinePokerDeskScene.h"
 
 #include "json/document.h"
 #include "json/writer.h"
@@ -776,16 +777,32 @@ void Global::parseData(char* pbuf, int len){
                     memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
                 }
                     break;
-                case cmd_countDownApplyBureauOwner:{
+                    
                     //开始抢庄倒计时
-                    countDownInSecond = document["content"].GetInt();
+                case cmd_countDownApplyBureauOwner:
+                    //开始抢庄恢复
+                case cmd_applyBureauOwnerRecover:{
+                    rapidjson::Value& val_content = document["content"];
+                    
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
                         
                         return;
                     }
                     
-                    
+                    if (val_content.IsObject()) {
+                        if (val_content.HasMember("curCount")) {
+                            countDownInSecond = val_content["curCount"].GetInt();
+                        }
+                        
+                        if (val_content.HasMember("bureauId")) {
+                            const char* bureauId = val_content["bureauId"].GetString();
+                            memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
+                        }
+                    }
+                    else {
+                        countDownInSecond = document["content"].GetInt();
+                    }
                 }
                     break;
                 case cmd_selectedBureauOwner:{
@@ -819,6 +836,10 @@ void Global::parseData(char* pbuf, int len){
                     
                     if (val_content.HasMember("countDown")) {
                         countDownInSecond = val_content["countDown"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("curCount")) {
+                        countDownInSecond = val_content["curCount"].GetInt();
                     }
                     
                     if (val_content.HasMember("roundId")) {
@@ -869,6 +890,10 @@ void Global::parseData(char* pbuf, int len){
                     
                     if (val_content.HasMember("countDown")) {
                         countDownInSecond = val_content["countDown"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("curCount")) {
+                        countDownInSecond = val_content["curCount"].GetInt();
                     }
                     
                     if (val_content.HasMember("roundId")) {
@@ -925,6 +950,10 @@ void Global::parseData(char* pbuf, int len){
                         
                         if (val_content.HasMember("countDown")) {
                             countDownInSecond = val_content["countDown"].GetInt();
+                        }
+                        
+                        if (val_content.HasMember("curCount")) {
+                            countDownInSecond = val_content["curCount"].GetInt();
                         }
                         
                         if (val_content.HasMember("gateCards") && val_content.HasMember("startCard")) {
@@ -984,6 +1013,10 @@ void Global::parseData(char* pbuf, int len){
                     
                     if (val_content.HasMember("countDown")) {
                         countDownInSecond = val_content["countDown"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("curCount")) {
+                        countDownInSecond = val_content["curCount"].GetInt();
                     }
                     
                     if (val_content.HasMember("gateCards") && val_content.HasMember("startCard")) {
@@ -1077,6 +1110,37 @@ void Global::parseData(char* pbuf, int len){
                             strcpy(message->sendTime, val_content["sendTime"].GetString());
                             
                             this->messageItems.pushBack(message);
+                        }
+                    }
+                }
+                    break;
+                    
+                    //恢复牌局通知
+                case cmd_notifyRecoverBureau:{
+                    this->clearTableData();
+                    
+                    rapidjson::Value& val_content = document["content"];
+                    
+                    if (val_content.HasMember("code")) {
+                        table_data.code = val_content["code"].GetInt();
+                    }
+                    
+                    if (val_content.HasMember("tableId")) {
+                        const char* tableId = val_content["tableId"].GetString();
+                        memcpy(table_data.tableId, tableId, strlen(tableId));
+                    }
+                    
+                    if (val_content.HasMember("room")) {
+                        rapidjson::Value& val_room = val_content["room"];
+                        
+                        if (val_room.IsObject()) {
+                            table_data.minStack = val_room["minStack"].GetInt();
+                            table_data.minPerStack= val_room["minPerStack"].GetInt();
+                            const char* roomId = val_room["id"].GetString();
+                            memcpy(table_data.roomId, roomId, strlen(roomId));
+                            
+                            const char* roomType = val_room["roomType"].GetString();
+                            memcpy(table_data.roomType, roomType, strlen(roomType));
                         }
                     }
                 }

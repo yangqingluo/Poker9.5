@@ -93,6 +93,7 @@ enum RoomType
     RoomType_Gold,
     RoomType_VIP,
     RoomType_Diamond,
+    RoomType_Recovery,
 };
 
 //兑换物品颜色
