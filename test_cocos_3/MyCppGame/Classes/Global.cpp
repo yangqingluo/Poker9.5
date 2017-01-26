@@ -1141,6 +1141,9 @@ void Global::parseData(char* pbuf, int len){
                             
                             const char* roomType = val_room["roomType"].GetString();
                             memcpy(table_data.roomType, roomType, strlen(roomType));
+                            
+                            const char* roomTypeId = val_room["roomTypeId"].GetString();
+                            memcpy(table_data.roomTypeId, roomTypeId, strlen(roomTypeId));
                         }
                     }
                 }

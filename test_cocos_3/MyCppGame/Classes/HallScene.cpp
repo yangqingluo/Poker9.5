@@ -1067,6 +1067,8 @@ void Hall::onNotification_Socket(Ref* pSender){
             auto scene = OnlinePokerDesk::createScene();
             OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
             layer->roomType = RoomType_Recovery;
+            strcpy(layer->roomTypeId, Global::getInstance()->table_data.roomTypeId);
+            layer->jettonToEnter = 0;
             
             Director::getInstance()->pushScene(scene);
         }

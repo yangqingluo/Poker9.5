@@ -85,6 +85,7 @@ struct TableData {
     int minStack;//房间金额
     char roomType[Min_String_Length];//房间类型
     char roomId[Max_ID_Length];
+    char roomTypeId[Max_ID_Length];
     
     int code;
     char tableId[Max_ID_Length];
