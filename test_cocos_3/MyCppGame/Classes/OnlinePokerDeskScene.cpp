@@ -1333,8 +1333,9 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             //恢复发牌
         case cmd_sendCardRecover:{
             this->showMessageManager(false);
-            
-            this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
+            if (post->cmd == cmd_sendCardRecover) {
+                this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
+            }
             this->updatePokerData();
             this->sendPokerAction();
         }
