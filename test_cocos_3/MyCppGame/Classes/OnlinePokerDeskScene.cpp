@@ -1186,8 +1186,11 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             this->stepIn(DeskState_Start);
         }
             break;
-        case cmd_countDownApplyBureauOwner:{
+            
             //抢庄
+        case cmd_countDownApplyBureauOwner:
+            //恢复抢庄
+        case cmd_applyBureauOwnerRecover:{
             this->stepIn(DeskState_ChooseDealer);
         }
             break;
