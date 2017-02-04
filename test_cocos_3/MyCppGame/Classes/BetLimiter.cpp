@@ -40,7 +40,7 @@ BetLimiter* BetLimiter::create(const int* jettonValueArray, size_t count, Size s
     layer->setContentSize(size);
     
     layer->m_type = type;
-    float radius = 0.8 * size.height;
+    float radius = MIN(0.8 * size.height, 24.0);
     float positionY = 0.5 * layer->getContentSize().height;
     float edgeScale = 0.1;
     float xOrigin = 0.0;

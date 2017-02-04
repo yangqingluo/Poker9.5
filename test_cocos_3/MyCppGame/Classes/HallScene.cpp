@@ -285,7 +285,7 @@ bool Hall::init()
     noteListSprite->setPosition(origin.x + noteListSprite->getContentSize().width / 2, origin.y + noteListSprite->getContentSize().height / 2);
     this->addChild(noteListSprite, 2);
     
-    noteListCellHeight = noteListSprite->getBoundingBox().size.height * 0.5;
+    noteListCellHeight = MIN(noteListSprite->getBoundingBox().size.height * 0.5, 36);
     
     auto noteNoticeBG = Sprite::create("images/notice_no_gamble.png");
     noteNoticeBG->setScale(0.3 * noteListSprite->getContentSize().width / noteNoticeBG->getContentSize().width);
