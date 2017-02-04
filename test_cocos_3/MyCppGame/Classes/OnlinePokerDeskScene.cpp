@@ -894,6 +894,32 @@ bool OnlinePokerDesk::createPokers(){
     return true;
 }
 
+void OnlinePokerDesk::updatePokerData(){
+    if (m_arrPokers.size() >= 9 + m_IndexSend) {
+        judgementPokerIndex = m_IndexSend;
+        for (int i = 0; i < 9; i++) {
+            PokerSprite *pk = m_arrPokers.at(m_IndexSend + i);
+            if (i == 0) {
+                this->updatePokerWithData(pk, Global::getInstance()->table_data.round.pokerJudgement);
+                if (pk->getPoker_point() == PokerPoint_Joker) {
+                    m_IndexStart = 0;
+                }
+                else{
+                    m_IndexStart = pk->getPoker_point() - 1;
+                }
+            }
+            else {
+                int chair_index = ((i - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
+                
+                PokerPair pair = Global::getInstance()->table_data.round.pokerSendedList[chair_index];
+                PokerData card = pair.poker[(i - 1) / 4];
+                
+                this->updatePokerWithData(pk, card);
+            }
+        }
+    }
+}
+
 void OnlinePokerDesk::updatePokerWithData(PokerSprite* poker, PokerData data){
     int color = data.color;
     int num = data.num;
@@ -1306,31 +1332,8 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             this->showMessageManager(false);
             
             this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
-            if (m_arrPokers.size() >= 9 + m_IndexSend) {
-                judgementPokerIndex = m_IndexSend;
-                for (int i = 0; i < 9; i++) {
-                    PokerSprite *pk = m_arrPokers.at(m_IndexSend + i);
-                    if (i == 0) {
-                        this->updatePokerWithData(pk, Global::getInstance()->table_data.round.pokerJudgement);
-                        if (pk->getPoker_point() == PokerPoint_Joker) {
-                            m_IndexStart = 0;
-                        }
-                        else{
-                            m_IndexStart = pk->getPoker_point() - 1;
-                        }
-                    }
-                    else {
-                        int chair_index = ((i - 1) % m_arrChairs.size() + m_IndexStart) % m_arrChairs.size();
-                        
-                        PokerPair pair = Global::getInstance()->table_data.round.pokerSendedList[chair_index];
-                        PokerData card = pair.poker[(i - 1) / 4];
-                        
-                        this->updatePokerWithData(pk, card);
-                    }
-                }
-            }
-            
-            sendPokerAction();
+            this->updatePokerData();
+            this->sendPokerAction();
         }
             break;
             
@@ -1350,6 +1353,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             if (post->cmd == cmd_settleRecover) {
                 //添加发牌显示
                 this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
+                this->updatePokerData();
                 this->sendPokerWithoutAnimation();
             }
             

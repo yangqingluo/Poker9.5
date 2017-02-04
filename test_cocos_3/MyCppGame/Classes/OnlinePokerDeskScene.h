@@ -106,6 +106,7 @@ private:
     JettonSprite* createjetton(int value);//生成一个筹码
     
     bool createPokers();//创建一副扑克牌
+    void updatePokerData();
     void updatePokerWithData(PokerSprite* poker, PokerData data);
     void adjustPoker(int index);//发牌前调整
     void sendPoker();//发牌

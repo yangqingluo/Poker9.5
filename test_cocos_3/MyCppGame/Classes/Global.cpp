@@ -1019,8 +1019,8 @@ void Global::parseData(char* pbuf, int len){
                         countDownInSecond = val_content["curCount"].GetInt();
                     }
                     
-                    if (val_content.HasMember("gateCards") && val_content.HasMember("startCard")) {
-                        rapidjson::Value& val_gateCards = val_content["gateCards"];
+                    if (val_content.HasMember("gates") && val_content.HasMember("startCard")) {
+                        rapidjson::Value& val_gateCards = val_content["gates"];
                         rapidjson::Value& val_startCard = val_content["startCard"];
                         parsePokerData(val_gateCards, val_startCard);
                     }
