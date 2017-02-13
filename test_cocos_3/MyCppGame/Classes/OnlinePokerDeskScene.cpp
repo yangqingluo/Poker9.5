@@ -255,7 +255,7 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
             switch (m_deskState) {
-                case DeskState_Default:
+//                case DeskState_Default:
                 case DeskState_Prepared:
                 case DeskState_Waiting:{
                     m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
@@ -622,6 +622,7 @@ void OnlinePokerDesk::waitForChooseStabberAction(){
 
 void OnlinePokerDesk::sendPokerAction(){
     m_isSendSet = false;
+    m_isSendSingle = true;
     updateDeskState(DeskState_SendPoker);
     
     sprintf(showTimer->prefixString,"发牌");
@@ -944,11 +945,9 @@ void OnlinePokerDesk::adjustPoker(int index){
         Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
         for (size_t i = m_arrPokers.size(); i > 0; --i) {
             PokerSprite* pk = m_arrPokers.at(i - 1);
-            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
             pk->setVisible((i - 1) >= index * 9);
-            if (pk->getIsFront()) {
-                pk->showPokerAnimated(false, false, 0);
-            }
+            pk->showPokerAnimated(false, false, 0);
+            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
             this->reorderChild(pk, (int)(m_arrPokers.size() - i));
         }
     }
@@ -1184,6 +1183,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_bureauOpen:{
             //开始牌局
             this->stepIn(DeskState_Start);
+            adjustPoker(0);
         }
             break;
             
@@ -1333,9 +1333,9 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             //恢复发牌
         case cmd_sendCardRecover:{
             this->showMessageManager(false);
-            if (post->cmd == cmd_sendCardRecover) {
+//            if (post->cmd == cmd_sendCardRecover) {
                 this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
-            }
+//            }
             this->updatePokerData();
             this->sendPokerAction();
         }

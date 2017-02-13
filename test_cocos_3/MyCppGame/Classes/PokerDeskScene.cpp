@@ -724,11 +724,9 @@ void PokerDesk::adjustPoker(int index){
         Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
         for (size_t i = m_arrPokers.size(); i > 0; --i) {
             PokerSprite* pk = m_arrPokers.at(i - 1);
-            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
             pk->setVisible((i - 1) >= index * 9);
-            if (pk->getIsFront()) {
-                pk->showPokerAnimated(false, false, 0);
-            }
+            pk->showPokerAnimated(false, false, 0);
+            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
             this->reorderChild(pk, (int)(m_arrPokers.size() - i));
         }
     }
