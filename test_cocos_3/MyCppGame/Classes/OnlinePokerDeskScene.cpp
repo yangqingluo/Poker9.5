@@ -255,7 +255,7 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
             switch (m_deskState) {
-//                case DeskState_Default:
+                case DeskState_Default:
                 case DeskState_Prepared:
                 case DeskState_Waiting:{
                     m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
