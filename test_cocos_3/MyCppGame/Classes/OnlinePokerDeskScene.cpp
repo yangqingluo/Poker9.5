@@ -16,7 +16,7 @@
 #define pokerMoveTime 0.5
 const float jetton_height_scale = 0.08;
 
-OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
+OnlinePokerDesk::OnlinePokerDesk():m_deskState(0),m_IndexSend(0),m_IndexStart(0),m_isStarted(false),m_isSendSingle(true),m_isSendSet(true),stabberPlayer(NULL),dealerPlayer(NULL),m_pMessage(NULL){
     pcPlayer = new Player();
     pcPlayer->retain();
     pcPlayer->infoConfig("电脑", "images/p2.png", 3000);
@@ -228,8 +228,14 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
     }
     
     switch (state) {
+        case DeskState_Waiting:{
+            m_isStarted = false;
+        }
+            break;
+            
         case DeskState_Start:{
             //牌局开始
+            m_isStarted = true;
             sprintf(showTimer->prefixString,"开始！");
             showTimer->showPrefix();
         }
@@ -254,12 +260,13 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
 void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
+            bool can_leave = false;
+            
             switch (m_deskState) {
                 case DeskState_Default:
                 case DeskState_Prepared:
                 case DeskState_Waiting:{
-                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                    Global::getInstance()->sendLeaveRoom();
+                    can_leave = !m_isStarted;
                 }
                     break;
                     
@@ -273,16 +280,19 @@ void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
                         }
                     }
                     if (!Global::getInstance()->isDealer && remainZero) {
-                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                        Global::getInstance()->sendLeaveRoom();
-                    }
-                    else {
-                        NoteTip::show("当前阶段不能退出");
+                        can_leave = true;
                     }
                 }
                     break;
             }
             
+            if (can_leave) {
+                m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                Global::getInstance()->sendLeaveRoom();
+            }
+            else {
+                NoteTip::show("当前阶段不能退出");
+            }
         }
             break;
             
@@ -1154,6 +1164,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
     if (post->cmd >= 10000) {
         //大于10000则是恢复牌局 重置显示庄家信息
+        m_isStarted = true;
         resetShowDealerInfo();
         NoteTip::show("恢复牌局成功");
     }

@@ -92,6 +92,7 @@ private:
     MessageManager* m_pMessage;
     void showMessageManager(bool isShow);
     
+    bool m_isStarted;//牌局是否开始
     bool m_isSendSingle;//是否发完一张牌
     bool m_isSendSet;//是否发完一把牌(8+1张)
     int m_deskState;//当前状态
