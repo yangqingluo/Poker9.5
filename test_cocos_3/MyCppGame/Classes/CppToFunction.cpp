@@ -41,10 +41,10 @@ void CppToFunction::doCopyAction(char* m_string){
 #endif
 }
 
-void CppToFunction::doAlipayAction(){
+void CppToFunction::doAlipayAction(char* m_string){
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     //iOS代码
-    nsDoAlipay();
+    nsDoAlipay(m_string);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     //Android代码
     

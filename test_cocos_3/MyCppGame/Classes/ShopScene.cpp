@@ -294,12 +294,13 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                 case 10:{
                     //充值
                     int payCount = atoi(buyCountBox->getText());
-                    if (strlen(buyCountBox->getText()) == 0 || payCount <= 0) {
+                    if (strlen(buyCountBox->getText()) == 0 || payCount <= 0 || payCount % 10 != 0) {
                         NoteTip::show("请正确输入充值的金币数目");
                     }
                     else {
                         if (payIndex == 2) {
-                            CppToFunction::getInstance()->doAlipayAction();
+                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                            this->onHttpRequest_GetOrderAndSign(payCount);
                         }
                         
                     }
@@ -312,7 +313,7 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                         NoteTip::show("请输入查询的用户账号ID");
                     }
                     else {
-                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
                         onHttpRequest_SearchUser(userIDBox->getText());
                     }
                 }
@@ -627,6 +628,28 @@ void ShopScene::onHttpRequest_DonateUserDiamond(const char* account, const char*
     request->release();
 }
 
+void ShopScene::onHttpRequest_GetOrderAndSign(int totalFee){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/alipay/getOrderAndSign");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "totalFee=%d&partner=2088521530118846&subject=充值&userId=%s&account=%s", totalFee, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
+    request->setTag("getOrderAndSign");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
 // HTTP响应请求函数
 void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
     if (m_pMessage != NULL) {
@@ -731,6 +754,13 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         }
                         
                         recordListTableView->reloadData();
+                    }
+                    else if (tag == "getOrderAndSign") {
+                        const rapidjson::Value& val_content = document["content"];
+                        char order_string[1024] = {0};
+                        strcpy(order_string, val_content.GetString());
+                        log("*******%zu",strlen(val_content.GetString()));
+                        CppToFunction::getInstance()->doAlipayAction(order_string);
                     }
                 }
             }

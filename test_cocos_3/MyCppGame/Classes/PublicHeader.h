@@ -5,6 +5,7 @@
 #define Max_String_Length 1024
 #define Min_String_Length 100
 #define MAX_PLAYER_NUM             7
+#define length_mobile              11
 #define length_room_password       8
 #define length_room_capital        6
 #define length_invite_code         8

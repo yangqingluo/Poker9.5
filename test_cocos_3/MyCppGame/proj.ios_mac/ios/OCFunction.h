@@ -11,7 +11,7 @@ extern "C"
 {
 #endif
     void nsCopy(const char *string);
-    void nsDoAlipay();
+    void nsDoAlipay(const char *string);
 #ifdef __cplusplus
 }
 #endif

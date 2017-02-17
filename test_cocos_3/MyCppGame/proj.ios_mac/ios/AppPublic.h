@@ -19,6 +19,6 @@
  */
 BOOL isFirstUsing();
 
-- (void)doAlipayPay;
+- (void)doAlipayPay:(NSString *)orderString;
 
 @end

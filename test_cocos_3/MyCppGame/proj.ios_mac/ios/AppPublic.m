@@ -83,7 +83,7 @@ BOOL isFirstUsing(){
 //
 //选中商品调用支付宝极简支付
 //
-- (void)doAlipayPay{
+- (void)doAlipayPay:(NSString *)orderString;{
     //重要说明
     //这里只是为了方便直接向商户展示支付宝的整个支付流程；所以Demo中加签过程直接放在客户端完成；
     //真实App里，privateKey等数据严禁放在客户端，加签过程务必要放在服务端完成；
@@ -170,7 +170,7 @@ BOOL isFirstUsing(){
     if (signedString != nil) {
         //应用注册scheme,在AliSDKDemo-Info.plist定义URL types
         NSString *appScheme = @"alisdkdemo";
-        
+
         // NOTE: 将签名成功字符串格式化为订单字符串,请严格按照该格式
         NSString *orderString = [NSString stringWithFormat:@"%@&sign=%@",
                                  orderInfoEncoded, signedString];
@@ -180,6 +180,17 @@ BOOL isFirstUsing(){
             NSLog(@"reslut = %@",resultDic);
         }];
     }
+    
+//    _input_charset=\"utf-8\"&notify_url=\"http://115.28.109.174:8181/game/alipay/notify\"&out_trade_no=\"20170217180127652\"&partner=\"2088521530118846\"&payment_type=\"1\"&seller_id=\"779159405@qq.com\"&service=\"mobile.securitypay.pay\"&subject=\"充值\"&total_fee=\"10\"&sign=\"gqhJTeZDA9I%2BQhjqzTQycj3fiPEQQKLM9%2BIoibROiDZpq%2FvX86brbZNkyrm8xLLS6tvHEtXDqp1pID0EbE178oXAtX9gbLdEyJfT%2FVwzEbx2%2BlyRPSleVLMKY2chImTXWC0KPuAJQK2dEvy%2BtcbQiju68LrxMsnh3vYW1ORLiAfH%2FxWWIe%2FTEVPbWpOXoiGjFftyy4uClfBf8LEriYIHMMHI6V8PM1JoJrMZH6R8PZRZ5RdrXNRtOn1PWQC2gVYja1nk6xEi%2Fh6cfRiSkZ1sy3RKin7xtkg4zieRv%2FQzwbOVG6mQ2ksgTcMKy1%2BqW%2FEAb2Pv%2BZ4sd1fTzM0i5jjkPw%3D%3D\"&sign_type=\"RSA\"
+    
+//    app_id=2017012505408813&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.01%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22Q9GG3S6NKUKIIQO%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2017-02-17%2018%3A08%3A38&version=1.0&sign=NE1yNk5xDWZeswghjNThdKb%2FYIGhLdDKjs64s7V7%2FD7RYdqxYTooy2TvD1xx%2BL09P6jUul7C1XDMCq0II06%2FlqvoeGLDRgUHGelU9NrnQkBgRgPdFeunzrGYtvtLFdk6OPYWJSw6uYi%2FOG5mQjZXSVgxPwjHAk%2BHhZsBzEZHCbLW%2F0NvHR2vELv8fi5r4a0kaIOlJiBnyzpHgfV%2BM5xXYtGnjClJQHmq%2BKGSz5jPsTjD3tXz5uamsqVsY97L3hEscY3sPVf6PCUTIcQQbrzLedWSl1pVxpOrJVga0DfiN9r1ETURd9NNQDHQCy1J8uRTrKF4FogX6dpx0W4KWn6uUA%3D%3D
+    
+    //应用注册scheme,在AliSDKDemo-Info.plist定义URL types
+    NSString *appScheme = @"fulushouNineHalf";
+    // NOTE: 调用支付结果开始支付
+    [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
+        NSLog(@"reslut = %@",resultDic);
+    }];
 }
 
 

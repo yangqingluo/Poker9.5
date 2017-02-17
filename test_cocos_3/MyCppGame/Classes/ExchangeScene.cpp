@@ -382,7 +382,7 @@ void ExchangeScene::showExchangeInput(size_t itemIndex, size_t colorIndex){
                 case 2:{
                     inputBox->setTag(mobileBoxTag);
                     inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::PHONE_NUMBER);
-                    inputBox->setMaxLength(11);
+                    inputBox->setMaxLength(length_mobile);
                 }
                     break;
                     
@@ -398,7 +398,46 @@ void ExchangeScene::showExchangeInput(size_t itemIndex, size_t colorIndex){
 }
 
 void ExchangeScene::popButtonCallback(Node* pNode){
-    
+    if (pNode->getTag() == 0) {
+        PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
+        if (popup == NULL) {
+            return;
+        }
+        cocos2d::ui::EditBox* nameBox = (cocos2d::ui::EditBox* )popup->getChildByTag(nameBoxTag);
+        if (nameBox == NULL) {
+            return;
+        }
+        else {
+            if (strlen(nameBox->getText()) == 0) {
+                NoteTip::show("请输入正确的联系人姓名");
+                return;
+            }
+        }
+        
+        cocos2d::ui::EditBox* addressBox = (cocos2d::ui::EditBox* )popup->getChildByTag(addressBoxTag);
+        if (addressBox == NULL) {
+            return;
+        }
+        else {
+            if (strlen(addressBox->getText()) == 0) {
+                NoteTip::show("请输入正确的联系人地址");
+                return;
+            }
+        }
+        
+        cocos2d::ui::EditBox* mobileBox = (cocos2d::ui::EditBox* )popup->getChildByTag(mobileBoxTag);
+        if (mobileBox == NULL) {
+            return;
+        }
+        else {
+            if (strlen(addressBox->getText()) != length_mobile) {
+                NoteTip::show("请输入正确的联系人电话");
+                return;
+            }
+        }
+        
+        
+    }
 }
 
 #pragma tableview

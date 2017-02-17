@@ -13,6 +13,6 @@ void nsCopy(const char *string){
     [UIPasteboard generalPasteboard].string = [NSString stringWithUTF8String:string];
 }
 
-void nsDoAlipay(){
-    [[AppPublic shareInstance] doAlipayPay];
+void nsDoAlipay(const char *string){
+    [[AppPublic shareInstance] doAlipayPay:[NSString stringWithUTF8String:string]];
 }

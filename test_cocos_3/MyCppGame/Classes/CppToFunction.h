@@ -17,7 +17,7 @@ public:
     static CppToFunction* getInstance();
     
     void doCopyAction(char* m_string);
-    void doAlipayAction();
+    void doAlipayAction(char* m_string);
 private:
     
 protected:
