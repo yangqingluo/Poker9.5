@@ -20,5 +20,6 @@
 BOOL isFirstUsing();
 
 - (void)doAlipayPay:(NSString *)orderString;
+- (void)alipayResult:(NSDictionary *)resultDic;
 
 @end

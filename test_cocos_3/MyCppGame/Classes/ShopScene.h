@@ -33,6 +33,8 @@ public:
 class ShopScene : public Layer, public TableViewDataSource, public TableViewDelegate, public ui::EditBoxDelegate
 {
 public:
+    ShopScene();
+    ~ShopScene();
     static cocos2d::Scene* createScene();
     virtual bool init();
     virtual void onEnter();
@@ -63,6 +65,7 @@ private:
     void onHttpRequest_SearchUser(const char* account);
     void onHttpRequest_GetOrderAndSign(int totalFee);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
+    void onNotification_Pay(Ref* pSender);
     
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);

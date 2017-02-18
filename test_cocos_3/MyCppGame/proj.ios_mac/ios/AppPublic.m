@@ -7,6 +7,7 @@
 //
 
 #import "AppPublic.h"
+#import "OCFunction.h"
 #import "Order.h"
 #import "APAuthV2Info.h"
 #import "RSADataSigner.h"
@@ -88,9 +89,29 @@ BOOL isFirstUsing(){
     NSString *appScheme = @"fulushouNineHalf";
     // NOTE: 调用支付结果开始支付
     [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
-        NSLog(@"reslut = %@",resultDic);
+        NSLog(@"doAlipayPay reslut = %@",resultDic);
+        if (resultDic[@"memo"]) {
+            NSString *memo = [NSString stringWithFormat:@"%@",resultDic[@"memo"]];
+            if (memo.length) {
+                NSLog(@"支付结果:%@",memo);
+            }
+            
+        }
+        
+        //            9000 	订单支付成功
+        //            8000 	正在处理中
+        //            4000 	订单支付失败
+        //            6001 	用户中途取消
+        //            6002 	网络连接出错
+        
+        if ([resultDic[@"resultStatus"] intValue] == 9000) {
+            
+        }
     }];
 }
 
+- (void)alipayResult:(NSDictionary *)resultDic{
+    appCallback([resultDic[@"resultStatus"] intValue]);
+}
 
 @end

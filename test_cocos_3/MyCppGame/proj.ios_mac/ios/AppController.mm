@@ -26,7 +26,7 @@
 #import "cocos2d.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
-
+#import "AppPublic.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import <UMSocialCore/UMSocialCore.h>
 
@@ -144,6 +144,7 @@ static AppDelegate s_sharedApplication;
             // 支付跳转支付宝钱包进行支付，处理支付结果
             [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
                 NSLog(@"result(< 9.0) = %@",resultDic);
+                [[AppPublic shareInstance] alipayResult:resultDic];
             }];
             
             // 授权跳转支付宝钱包进行支付，处理支付结果
@@ -176,6 +177,7 @@ static AppDelegate s_sharedApplication;
         // 支付跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
             NSLog(@"result(>= 9.0) = %@",resultDic);
+            [[AppPublic shareInstance] alipayResult:resultDic];
         }];
         
         // 授权跳转支付宝钱包进行支付，处理支付结果

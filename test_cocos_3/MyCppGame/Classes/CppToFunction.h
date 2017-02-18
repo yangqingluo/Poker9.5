@@ -12,6 +12,16 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+extern void callbackAliPay(int code);
+#ifdef __cplusplus
+}
+#endif
+
+
 class CppToFunction : public Ref{
 public:
     static CppToFunction* getInstance();

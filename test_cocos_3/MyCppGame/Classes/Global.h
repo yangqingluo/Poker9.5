@@ -18,6 +18,7 @@ using namespace CocosDenshion;
 
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
+#define kNotification_Pay              "notification_pay"
 #define kNotification_Socket           "notification_socket"
 #define kNotification_RefreshUserInfo  "notification_refreshUserInfo"
 
@@ -70,6 +71,13 @@ using namespace CocosDenshion;
 #define state_enterRoom_fail_password            1004//密码错误
 #define state_enterRoom_fail_type                1005//类型错误
 
+//牌局状态
+enum PayStyle
+{
+    PayStyle_alipay = 1,//支付宝支付
+    PayStyle_wx,//微信支付
+    PayStyle_apple,//苹果支付
+};
 
 //牌局状态
 enum DeskState

@@ -11,6 +11,14 @@
 #include "CppToFunction.h"
 #include "BaseCell.h"
 
+ShopScene::ShopScene(){
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(ShopScene::onNotification_Pay), kNotification_Pay, NULL);
+}
+
+ShopScene::~ShopScene(){
+    NotificationCenter::getInstance()->removeAllObservers(this);
+}
+
 Scene* ShopScene::createScene()
 {
     // 'scene' is an autorelease object
@@ -302,7 +310,9 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                             m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
                             this->onHttpRequest_GetOrderAndSign(payCount / 10);
                         }
-                        
+                        else {
+                            NoteTip::show("精彩功能敬请期待");
+                        }
                     }
                 }
                     break;
@@ -771,5 +781,26 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
         }
         
         
+    }
+}
+
+#pragma notification
+void ShopScene::onNotification_Pay(Ref* pSender){
+    PostRef* post = (PostRef* )pSender;
+    switch (post->cmd) {
+        case PayStyle_alipay:{
+            if (post->sub_cmd == 9000) {
+                NoteTip::show("充值成功");
+                
+                MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
+            }
+            else {
+                NoteTip::show("充值失败");
+            }
+        }
+            break;
+            
+        default:
+            break;
     }
 }

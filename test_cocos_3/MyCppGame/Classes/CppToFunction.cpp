@@ -13,6 +13,15 @@
 #endif
 
 #include "CppToFunction.h"
+#include "Global.h"
+
+void callbackAliPay(int code){
+    PostRef* post = new PostRef();
+    post->cmd = PayStyle_alipay;
+    post->sub_cmd = code;
+    
+    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Pay, post);
+}
 
 static CppToFunction* share = nullptr;
 
