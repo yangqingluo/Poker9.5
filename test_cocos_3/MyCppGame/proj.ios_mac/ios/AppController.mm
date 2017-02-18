@@ -143,7 +143,7 @@ static AppDelegate s_sharedApplication;
         if ([url.host isEqualToString:@"safepay"]) {
             // 支付跳转支付宝钱包进行支付，处理支付结果
             [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-                NSLog(@"result = %@",resultDic);
+                NSLog(@"result(< 9.0) = %@",resultDic);
             }];
             
             // 授权跳转支付宝钱包进行支付，处理支付结果
@@ -175,7 +175,7 @@ static AppDelegate s_sharedApplication;
     if ([url.host isEqualToString:@"safepay"]) {
         // 支付跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"result = %@",resultDic);
+            NSLog(@"result(>= 9.0) = %@",resultDic);
         }];
         
         // 授权跳转支付宝钱包进行支付，处理支付结果

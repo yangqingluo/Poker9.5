@@ -300,7 +300,7 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     else {
                         if (payIndex == 2) {
                             m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                            this->onHttpRequest_GetOrderAndSign(payCount);
+                            this->onHttpRequest_GetOrderAndSign(payCount / 10);
                         }
                         
                     }
@@ -759,7 +759,6 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         const rapidjson::Value& val_content = document["content"];
                         char order_string[1024] = {0};
                         strcpy(order_string, val_content.GetString());
-                        log("*******%zu",strlen(val_content.GetString()));
                         CppToFunction::getInstance()->doAlipayAction(order_string);
                     }
                 }
