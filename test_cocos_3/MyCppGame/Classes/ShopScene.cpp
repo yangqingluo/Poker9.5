@@ -791,8 +791,6 @@ void ShopScene::onNotification_Pay(Ref* pSender){
         case PayStyle_alipay:{
             if (post->sub_cmd == 9000) {
                 NoteTip::show("充值成功");
-                
-                MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
             }
             else {
                 NoteTip::show("充值失败");

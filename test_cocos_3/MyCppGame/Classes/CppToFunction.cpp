@@ -21,6 +21,9 @@ void callbackAliPay(int code){
     post->sub_cmd = code;
     
     MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Pay, post);
+    if (code == 9000) {
+        MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
+    }
 }
 
 static CppToFunction* share = nullptr;
