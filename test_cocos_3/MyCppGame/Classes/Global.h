@@ -70,6 +70,7 @@ using namespace CocosDenshion;
 #define state_enterRoom_success_prepare          1003//加入房间成功，准备开始
 #define state_enterRoom_fail_password            1004//密码错误
 #define state_enterRoom_fail_type                1005//类型错误
+#define state_enterRoom_success_countdown        1006//加入房间成功，已经准备倒计时
 
 //牌局状态
 enum PayStyle

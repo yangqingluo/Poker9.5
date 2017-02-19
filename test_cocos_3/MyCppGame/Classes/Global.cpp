@@ -604,6 +604,10 @@ void Global::parseData(char* pbuf, int len){
                             memcpy(table_data.tableId, tableId, strlen(tableId));
                         }
                         
+                        if (val_content.HasMember("countDown")) {
+                            countDownInSecond = val_content["countDown"].GetInt();
+                        }
+                        
                         if (val_content.HasMember("room")) {
                             rapidjson::Value& val_room = val_content["room"];
                             

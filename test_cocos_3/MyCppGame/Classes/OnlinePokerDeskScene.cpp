@@ -1272,12 +1272,21 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             
             switch (Global::getInstance()->table_data.code) {
                 case state_enterRoom_success_wait:
-                case state_enterRoom_success_prepare:{
+                case state_enterRoom_success_prepare:
+                case state_enterRoom_success_countdown:{
                     sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
                     showTimer->showPrefix();
                     btn_addJetton->setVisible(true);
                     
                     scheduleUpdate();
+                    
+                    if (Global::getInstance()->table_data.code == state_enterRoom_success_countdown) {
+                        this->showMessageManager(false);
+                        
+                        this->showGamePlayerInfo();
+                        
+                        this->stepIn(DeskState_Waiting);
+                    }
                 }
                     break;
 

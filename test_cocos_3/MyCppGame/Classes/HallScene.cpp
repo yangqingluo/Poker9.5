@@ -22,7 +22,7 @@
 #define passwordBoxTag    9529
 #define capitalBoxTag     9530
 
-static int chipTypeCount = 5;
+static int chipTypeCount = 4;
 
 Hall::Hall():m_pMessage(NULL){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_Socket), kNotification_Socket, NULL);
@@ -87,14 +87,14 @@ bool Hall::init()
     Global::getInstance()->playBackgroundMusic(true);
     
     int roomIDLength = 32;
-    char goldRoomID[5][33] = {"ca22bf326f78469ab3f387f9625b43c4","11d01846ca6e4449ad1809426ff33b6f","9310fedae22b45a59d4ef9768a7bbeec","bdfe95b277e84ce5bfe2ce8123558bc8","f869fe26232b464c9159a87b0ee236a0"};
-    char vipRoomID[5][33] = {"de8b5d247b02491e88b011f33df3ea65","8b36978ce93a4dd485ffd61e5405499c","7299037e3e9e4a44b843e2f2110dd00d","75788e6f3f34450180a10c59d10a28fd","8494f5ea601d4427b17ce9e2a0ab1112"};
-    char diamondRoomID[5][33] = {"93e9ff7482dc4be4a6100ef61a103adb","281c8761602d41a8b91ed3ac3fabcbc5","cd027cf993434e22b0f908d3f1f51192","e867c097effb431f92d934fc66c997d5","da531815c8c54317b3db887d84c9952a"};
+    char goldRoomID[4][33] = {"11d01846ca6e4449ad1809426ff33b6f","9310fedae22b45a59d4ef9768a7bbeec","bdfe95b277e84ce5bfe2ce8123558bc8","f869fe26232b464c9159a87b0ee236a0"};
+    char vipRoomID[4][33] = {"8b36978ce93a4dd485ffd61e5405499c","7299037e3e9e4a44b843e2f2110dd00d","75788e6f3f34450180a10c59d10a28fd","8494f5ea601d4427b17ce9e2a0ab1112"};
+    char diamondRoomID[4][33] = {"281c8761602d41a8b91ed3ac3fabcbc5","cd027cf993434e22b0f908d3f1f51192","e867c097effb431f92d934fc66c997d5","da531815c8c54317b3db887d84c9952a"};
     
-    int chip[2][5] = {{500, 1000,3000,5000,10000},{10, 20,50,100,200}};
+    int chip[2][4] = {{1000,3000,5000,10000},{20,50,100,200}};
     
     
-    char goldTitle[5][20] = {"新手房", "初级房","普通房","中级房","高级房"};
+    char goldTitle[4][20] = {"初级房","普通房","中级房","高级房"};
     for (int i = 0; i < chipTypeCount; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
