@@ -72,7 +72,7 @@ using namespace CocosDenshion;
 #define state_enterRoom_fail_type                1005//类型错误
 #define state_enterRoom_success_countdown        1006//加入房间成功，已经准备倒计时
 
-//牌局状态
+//支付类型
 enum PayStyle
 {
     PayStyle_alipay = 1,//支付宝支付

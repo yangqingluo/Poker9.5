@@ -306,7 +306,7 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                         NoteTip::show("请正确输入充值的金币数目");
                     }
                     else {
-                        if (payIndex == 2) {
+                        if (payIndex == 0) {
                             m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
                             this->onHttpRequest_GetOrderAndSign(payCount / 10);
                         }
@@ -484,7 +484,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
         char m_string[200] = {0};
         
         switch (idx) {
-            case 2:{
+            case 0:{
                 cell->head->setTexture("images/pay_alipay.png");
                 sprintf(m_string, "支付宝支付");
             }
@@ -496,7 +496,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
             }
                 break;
                 
-            case 0:{
+            case 2:{
                 cell->head->setTexture("images/pay_apple.png");
                 sprintf(m_string, "苹果支付");
             }
