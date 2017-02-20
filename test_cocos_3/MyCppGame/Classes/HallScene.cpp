@@ -996,11 +996,11 @@ void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         char m_roomString[50] = {0};
                         if (roomTypeSelected == 1) {
                             room = diItems.at(roomIndexSelected);
-                            sprintf(m_roomString, "VIP房间：≥%d\n底注%d", room->chipMin, room->perMin);
+                            sprintf(m_roomString, "VIP房间：≥%d\t底注%d", room->chipMin, room->perMin);
                         }
                         else if (roomTypeSelected == 2) {
                             room = xuanItems.at(roomIndexSelected);
-                            sprintf(m_roomString, "钻石房间：≥%d\n底注%d", room->chipMin, room->perMin);
+                            sprintf(m_roomString, "钻石房间：≥%d\t底注%d", room->chipMin, room->perMin);
                         }
                         
                         char msg[200] = {0};
