@@ -8,7 +8,6 @@
 
 #include "ExchangeScene.h"
 #include "ExchangeCell.h"
-#include "Global.h"
 #include "PopAlertDialog.h"
 
 #define dialogTag         9527
@@ -292,12 +291,12 @@ void ExchangeScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                 case 0:
                 case 1:{
                     showSettingWithIndex(button->getTag());
-//                    if (button->getTag() == 1) {
-//                        if (!hasGetRecordList) {
-//                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-//                            this->onHttpRequest_RechargeRecords();
-//                        }
-//                    }
+                    if (button->getTag() == 1) {
+                        if (!hasGetRecordList) {
+                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+                            this->onHttpRequest_ExchangeRecords();
+                        }
+                    }
                 }
                     break;
                 default:
@@ -372,13 +371,13 @@ void ExchangeScene::showExchangeInput(size_t itemIndex, size_t colorIndex){
             switch (j) {
                 case 0:{
                     inputBox->setTag(nameBoxTag);
-                    inputBox->setMaxLength(20);
+                    inputBox->setMaxLength(Max_Name_Length);
                 }
                     break;
                     
                 case 1:{
                     inputBox->setTag(addressBoxTag);
-                    inputBox->setMaxLength(200);
+                    inputBox->setMaxLength(Max_Address_Length);
                 }
                     break;
                     
@@ -489,15 +488,47 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
         }
         
         Label* label = (Label* )cell->getChildByTag(1);
+        ExchangeRecordItem* item = recordItems.at(idx);
         char content[200] = {0};
-        if (idx % 2 == 0) {
-            sprintf(content, "2016-10-%d\t-1000金币\t兑换AAAA 订单号:201610%02d%06d 快递单号:201610%02d%06d 快递公司:顺丰快递",(int)idx,(int)idx,(int)idx,(int)idx,(int)idx);
+        char status_string[100] = {0};
+        switch (item->status) {
+            case 0:{
+                sprintf(status_string, "拒绝");
+            }
+                break;
+                
+            case 1:{
+                sprintf(status_string, "待审核");
+            }
+                break;
+                
+            case 2:{
+                sprintf(status_string, "审核通过");
+            }
+                break;
+                
+            case 3:{
+                if (strlen(item->expressCode) > 0 && strlen(item->expressType) > 0) {
+                    sprintf(status_string, "已发货\t快递单号:%s\t快递公司:%s", item->expressCode, item->expressType);
+                }
+                else {
+                    sprintf(status_string, "已发货");
+                }
+            }
+                break;
+                
+            case 4:{
+                sprintf(status_string, "已完成");
+            }
+                break;
+                
+            default:
+                break;
         }
-        else{
-            sprintf(content, "2016-10-%d\t-2000金币\t兑换BBBB 订单号:201610%02d%06d 未发货",(int)idx,(int)idx,(int)idx);
-        }
-        label->setString(content);
         
+        sprintf(content, "%s\t-%d金币\t兑换%s 订单号:%s %s", item->date, item->gameBitAmount, item->remarks, item->ID, status_string);
+        
+        label->setString(content);
         
         return cell;
     }
@@ -583,7 +614,7 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
 ssize_t ExchangeScene::numberOfCellsInTableView(TableView* table)
 {
     if (table == recordListTableView) {
-        return 20;
+        return recordItems.size();
     }
     else if (table == exchangeListTableView) {
         return exchangeItems.size();
@@ -603,6 +634,28 @@ void ExchangeScene::tableCellTouched(TableView* table, TableViewCell* cell){
 
 #pragma http
 // 发送HTTP请求
+void ExchangeScene::onHttpRequest_ExchangeRecords(){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/awardRecords");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "userId=%s", Global::getInstance()->user_data.ID);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ExchangeScene::onHttpResponse, this));
+    request->setTag("exchangeRecords");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
 void ExchangeScene::onHttpRequest_addAwardRecord(const char* name, const char* address, const char* tel, const char* remarks, int gold){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
@@ -673,10 +726,48 @@ void ExchangeScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                     if (tag == "addAwardRecord") {
                         rapidjson::Value& val_content = document["content"];
                         if (val_content.IsObject()) {
+                            if (val_content.HasMember("code")) {
+                                int code = val_content["code"].GetInt();
+                                if (code == 1000) {
+                                    //成功
+                                    ExchangeItem* item = exchangeItems.at(m_itemIndex);
+                                    Global::getInstance()->user_data.gold -= item->price * 10;
+                                    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
+                                }
+                            }
+                            
                             if (val_content.HasMember("description")) {
                                 NoteTip::show(val_content["description"].GetString());
                             }
                         }
+                    }
+                    else if (tag == "exchangeRecords") {
+                        hasGetRecordList = true;
+                        recordItems.clear();
+                        
+                        const rapidjson::Value& val_content = document["content"];
+                        if (val_content.IsArray()) {
+                            for (int i = 0; i < val_content.Size(); ++i) {
+                                const rapidjson::Value& val_record = val_content[i];
+                                assert(val_record.IsObject());
+                                
+                                if (val_record.HasMember("id") && val_record.HasMember("receiveName") && val_record.HasMember("status") && val_record.HasMember("gameBitAmount") && val_record.HasMember("address") && val_record.HasMember("remarks")) {
+                                    ExchangeRecordItem* item = new ExchangeRecordItem();
+                                    item->autorelease();
+                                    
+                                    item->status = atoi(val_record["status"].GetString());
+                                    item->gameBitAmount = val_record["gameBitAmount"].GetInt();
+                                    sprintf(item->ID, "%s", val_record["id"].GetString());
+                                    sprintf(item->receiveName, "%s", val_record["receiveName"].GetString());
+                                    sprintf(item->address, "%s", val_record["address"].GetString());
+                                    sprintf(item->remarks, "%s", val_record["remarks"].GetString());
+                                    
+                                    recordItems.pushBack(item);
+                                }
+                            }
+                        }
+                        
+                        recordListTableView->reloadData();
                     }
                 }
             }

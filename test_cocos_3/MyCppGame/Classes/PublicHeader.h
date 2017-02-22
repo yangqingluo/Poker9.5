@@ -11,6 +11,8 @@
 #define length_invite_code         8
 #define Max_Message_Length 100
 #define Max_Name_Length 30
+#define Max_Address_Length 200
+#define Max_ExpressCode_Length 40
 
 struct UserData {
     char ID[Max_ID_Length];
