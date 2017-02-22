@@ -124,7 +124,7 @@ bool ShopScene::init()
                 inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
                 
                 inputBox->setDelegate(this);
-                inputBox->setPlaceHolder("请输入要充值的金币数目(10的整数倍)");
+                inputBox->setPlaceHolder("请输入要充值的金币数目");
                 
                 buyCountBox = inputBox;
                 auto btn_buy = Button::create("images/btn_green.png","images/btn_green_selected.png");
@@ -302,13 +302,14 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                 case 10:{
                     //充值
                     int payCount = atoi(buyCountBox->getText());
-                    if (strlen(buyCountBox->getText()) == 0 || payCount <= 0 || payCount % 10 != 0) {
+                    if (strlen(buyCountBox->getText()) == 0 || payCount <= 0) {
                         NoteTip::show("请正确输入充值的金币数目");
                     }
                     else {
+                        Global::getInstance()->goldToRecharge = payCount;
                         if (payIndex == 0) {
                             m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                            this->onHttpRequest_GetOrderAndSign(payCount / 10);
+                            this->onHttpRequest_GetOrderAndSign(payCount / 10.0);
                         }
                         else {
                             NoteTip::show("精彩功能敬请期待");
@@ -638,7 +639,7 @@ void ShopScene::onHttpRequest_DonateUserDiamond(const char* account, const char*
     request->release();
 }
 
-void ShopScene::onHttpRequest_GetOrderAndSign(int totalFee){
+void ShopScene::onHttpRequest_GetOrderAndSign(float totalFee){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
     
@@ -647,7 +648,7 @@ void ShopScene::onHttpRequest_GetOrderAndSign(int totalFee){
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "totalFee=%d&partner=2088521530118846&subject=充值&userId=%s&account=%s", totalFee, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
+    sprintf(param, "totalFee=%.2f&partner=2088521530118846&subject=recharge&userId=%s&account=%s", totalFee, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
     request->setRequestData(param, strlen(param));
     
     // HTTP响应函数

@@ -22,6 +22,7 @@ void callbackAliPay(int code){
     
     MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Pay, post);
     if (code == 9000) {
+        Global::getInstance()->user_data.gold += Global::getInstance()->goldToRecharge;
         MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
     }
 }

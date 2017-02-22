@@ -142,6 +142,7 @@ public:
     
     Vector<MessageRef* > messageItems;
     UserData user_data;//用户数据
+    int goldToRecharge;//要充值的金币数目
     TableData table_data;//牌桌数据
     int countDownInSecond = 15;//倒计时读秒数
     bool isDealer;//是否是庄家

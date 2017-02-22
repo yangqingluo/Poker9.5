@@ -63,7 +63,7 @@ private:
     void onHttpRequest_DonateUserGold(const char* account, const char* count);
     void onHttpRequest_DonateUserDiamond(const char* account, const char* count);
     void onHttpRequest_SearchUser(const char* account);
-    void onHttpRequest_GetOrderAndSign(int totalFee);
+    void onHttpRequest_GetOrderAndSign(float totalFee);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Pay(Ref* pSender);
     
