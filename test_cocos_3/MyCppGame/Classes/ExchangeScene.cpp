@@ -329,6 +329,9 @@ void ExchangeScene::showSettingWithIndex(int index){
 }
 
 void ExchangeScene::showExchangeInput(size_t itemIndex, size_t colorIndex){
+    m_itemIndex = itemIndex;
+    m_colorIndex = colorIndex;
+    
     ExchangeItem* item = exchangeItems.at(itemIndex);
     if (colorIndex < item->colors.size()) {
         int colorType = item->colors.at(colorIndex).asInt();
@@ -430,13 +433,24 @@ void ExchangeScene::popButtonCallback(Node* pNode){
             return;
         }
         else {
-            if (strlen(addressBox->getText()) != length_mobile) {
+            if (strlen(mobileBox->getText()) != length_mobile) {
                 NoteTip::show("请输入正确的联系人电话");
                 return;
             }
         }
         
-        
+        ExchangeItem* item = exchangeItems.at(m_itemIndex);
+        if (m_colorIndex < item->colors.size()) {
+            int colorType = item->colors.at(m_colorIndex).asInt();
+            char colorString[20] = {0};
+            Global::getInstance()->getStringWithItemColor(colorString, (ItemColorType)colorType);
+            
+            char remarks[200] = {0};
+            sprintf(remarks, "%s%s", colorString, item->description);
+            
+            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+            this->onHttpRequest_addAwardRecord(nameBox->getText(), addressBox->getText(), addressBox->getText(), remarks, item->price * 10);
+        }
     }
 }
 
@@ -583,6 +597,96 @@ void ExchangeScene::tableCellTouched(TableView* table, TableViewCell* cell){
         
     }
     else if (table == exchangeListTableView) {
+        
+    }
+}
+
+#pragma http
+// 发送HTTP请求
+void ExchangeScene::onHttpRequest_addAwardRecord(const char* name, const char* address, const char* tel, const char* remarks, int gold){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/addAwardRecord");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "user=%s&receiveName=%s&address=%s&tel=%s&remarks=%s&gameBitAmount=%d", Global::getInstance()->user_data.ID, name, address, tel, remarks, gold);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ExchangeScene::onHttpResponse, this));
+    request->setTag("addAwardRecord");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
+// HTTP响应请求函数
+void ExchangeScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
+    if (m_pMessage != NULL) {
+        m_pMessage->hidden();
+        m_pMessage = NULL;
+    }
+    
+    // 没有收到响应
+    if (!response){
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    long statusCode = response->getResponseCode();
+    char statusString[64] = {};
+    sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    CCLOG("response code: %s", statusString);
+    
+    if (statusCode > 200) {
+        NoteTip::show("网络错误");
+        return;
+    }
+    // 链接失败
+    if (!response->isSucceed())
+    {
+        CCLOG("response failed");
+        CCLOG("error buffer: %s", response->getErrorBuffer());
+        NoteTip::show("请检查网络");
+        return;
+    }
+    
+    std::vector<char>* responseData = response -> getResponseData();
+    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
+    log("%s\n", responseStr.c_str());
+    rapidjson::Document document;
+    document.Parse<0>(responseStr.c_str());
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code")){
+            const rapidjson::Value& val_code = document["code"];
+            int code = val_code.GetInt();
+            if (code == 1) {
+                if (0 != strlen(response->getHttpRequest()->getTag())){
+                    std::string tag = response->getHttpRequest()->getTag();
+                    if (tag == "addAwardRecord") {
+                        rapidjson::Value& val_content = document["content"];
+                        if (val_content.IsObject()) {
+                            if (val_content.HasMember("description")) {
+                                NoteTip::show(val_content["description"].GetString());
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                const rapidjson::Value& val_content = document["content"];
+                const char* content = val_content.GetString();
+                NoteTip::show(content);
+            }
+        }
+        
         
     }
 }

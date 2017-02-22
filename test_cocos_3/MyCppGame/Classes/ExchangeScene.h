@@ -48,6 +48,8 @@ private:
     TableView* recordListTableView;
     TableView* exchangeListTableView;
     Vector<ExchangeItem* > exchangeItems;
+    size_t m_itemIndex;
+    size_t m_colorIndex;
     
     void showExchangeInput(size_t itemIndex, size_t colorIndex);
     void popButtonCallback(Node* pNode);
@@ -56,6 +58,11 @@ private:
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);
     void tableCellTouched(TableView* table, TableViewCell* cell);
+    
+    MessageManager* m_pMessage;
+    
+    void onHttpRequest_addAwardRecord(const char* name, const char* address, const char* tel, const char* remarks, int gold);
+    void onHttpResponse(HttpClient* sender, HttpResponse* response);
 };
 
 #endif /* ExchangeScene_h */
