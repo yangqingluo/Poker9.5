@@ -161,7 +161,9 @@ void InviterScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     if (strlen(usernameBox->getText()) != length_invite_code) {
                         NoteTip::show("邀请码输入有误");
                     }
-
+                    else if (0 == strcmp(usernameBox->getText(), Global::getInstance()->user_data.inviteCode)) {
+                        NoteTip::show("自己不能邀请自己");
+                    }
                     else {
                         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示                        
                         onHttpRequest_Inviter(usernameBox->getText());
