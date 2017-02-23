@@ -509,9 +509,7 @@ void Hall::showSettingChip(){
         inputBox->setPlaceholderFontColor(Color4B::GRAY);
         
         //模式类型设置
-        inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
-        inputBox->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
-        inputBox->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
+        inputBox->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
         
         inputBox->setPlaceHolder("房间密码");
         inputBox->setMaxLength(length_room_password);
