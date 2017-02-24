@@ -534,7 +534,13 @@ ssize_t ShopScene::numberOfCellsInTableView(TableView* table)
         return rechargeItems.size();
     }
     else if (table == payListTableView) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        //iOS代码
         return 3;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+        //Android代码
+        return 2;
+#endif
     }
     
     return 0;

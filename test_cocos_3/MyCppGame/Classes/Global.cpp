@@ -168,11 +168,12 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
 }
 
 void Global::logout(){
-//    Director::getInstance()->popToRootScene();
     this->playBackgroundMusic(false);
     
     this->isInitiativeLogout = true;
     this->disconnectServer();
+    
+    Director::getInstance()->popToRootScene();
 }
 
 int Global::calculateVIPLevel(int introCount){
