@@ -762,6 +762,13 @@ void ExchangeScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                                     sprintf(item->address, "%s", val_record["address"].GetString());
                                     sprintf(item->remarks, "%s", val_record["remarks"].GetString());
                                     
+                                    if (val_record.HasMember("expressCode") && val_record.HasMember("expressType")) {
+                                        if (!val_record["expressCode"].IsNull() && !val_record["expressType"].IsNull()) {
+                                            sprintf(item->expressCode, "%s", val_record["expressCode"].GetString());
+                                            sprintf(item->expressType, "%s", val_record["expressType"].GetString());
+                                        }
+                                    }
+                                    
                                     recordItems.pushBack(item);
                                 }
                             }
