@@ -47,6 +47,9 @@ private:
     
     void showSettingWithIndex(int index);
     
+    void pictureCallback(std::string* imagePath);
+//    size_t write_data(uint8_t *dataBack, size_t size, size_t nmemb, void *userp); 
+    void onHttpRequest_UploadPictures(const char* imagename);
     void onHttpRequest_SettingNikename(const char* nikename);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
 };

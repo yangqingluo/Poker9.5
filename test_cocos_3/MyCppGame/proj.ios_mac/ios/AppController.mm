@@ -29,6 +29,7 @@
 #import "AppPublic.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import <UMSocialCore/UMSocialCore.h>
+#import "ImagePicker.h"
 
 @implementation AppController
 
@@ -78,6 +79,8 @@ static AppDelegate s_sharedApplication;
 
     [window makeKeyAndVisible];
 
+    ImagePicker::getInstance()->setViewController(_viewController);
+    
     [[UIApplication sharedApplication] setStatusBarHidden:true];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];//屏幕常量
 
