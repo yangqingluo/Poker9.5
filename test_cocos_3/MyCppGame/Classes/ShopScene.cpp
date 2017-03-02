@@ -10,6 +10,7 @@
 #include "Global.h"
 #include "CppToFunction.h"
 #include "BaseCell.h"
+#include "PopAlertDialog.h"
 
 ShopScene::ShopScene(){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(ShopScene::onNotification_Pay), kNotification_Pay, NULL);
@@ -80,6 +81,17 @@ bool ShopScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
+    int buy[3][3] = {{60,6,6},{1000,100,98},{10000,1000,998}};
+    for (int i = 0; i < 3; i++) {
+        BuyItem* item = new BuyItem();
+        item->autorelease();
+        
+        item->goldCount = buy[i][0];
+        item->price_normal = buy[i][1];
+        item->price_apple = buy[i][2];
+        
+        buyList.pushBack(item);
+    }
     
     char showTitle[3][100] = {"充值","赠送","充值记录"};
     for (int i = 0; i < 3; i++) {
@@ -108,7 +120,7 @@ bool ShopScene::init()
             case 0:{
                 auto inputBox = ui::EditBox::create(Size(0.9 * layer->getContentSize().width, 0.8 * inputHeight), ui::Scale9Sprite::create("images/bg_editbox_normal.png"));
                 inputBox->setPosition(Vec2(0.5 * layer->getContentSize().width, layer->getContentSize().height - (i * 1.0 + 0.8) * inputHeight));
-                layer->addChild(inputBox);
+//                layer->addChild(inputBox);
                 
                 //属性设置
                 //    inputBox->setFontName("fonts/STKaiti.ttf");
@@ -129,7 +141,7 @@ bool ShopScene::init()
                 buyCountBox = inputBox;
                 auto btn_buy = Button::create("images/btn_green.png","images/btn_green_selected.png");
                 btn_buy->setScale9Enabled(true);//打开scale9 可以拉伸图片
-                btn_buy->setTitleText("确认充值");
+                btn_buy->setTitleText("确认购买");
                 btn_buy->setTitleFontSize(16);
                 btn_buy->setContentSize(inputBox->getContentSize());
                 btn_buy->setPosition(Vec2(inputBox->getPositionX(), inputBox->getBoundingBox().getMinY() - btn_buy->getContentSize().height));
@@ -301,20 +313,21 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     
                 case 10:{
                     //充值
-                    int payCount = atoi(buyCountBox->getText());
-                    if (strlen(buyCountBox->getText()) == 0 || payCount <= 0) {
-                        NoteTip::show("请正确输入充值的金币数目");
-                    }
-                    else {
-                        Global::getInstance()->goldToRecharge = payCount;
-                        if (payIndex == 0) {
-                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                            this->onHttpRequest_GetOrderAndSign(payCount / 10.0);
-                        }
-                        else {
-                            NoteTip::show("精彩功能敬请期待");
-                        }
-                    }
+//                    int payCount = atoi(buyCountBox->getText());
+//                    if (strlen(buyCountBox->getText()) == 0 || payCount <= 0) {
+//                        NoteTip::show("请正确输入充值的金币数目");
+//                    }
+//                    else {
+//                        Global::getInstance()->goldToRecharge = payCount;
+//                        if (payIndex == 0) {
+//                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+//                            this->onHttpRequest_GetOrderAndSign(payCount / 10.0);
+//                        }
+//                        else {
+//                            NoteTip::show("精彩功能敬请期待");
+//                        }
+//                    }
+                    showBuyInfo();
                 }
                     break;
                     
@@ -379,6 +392,35 @@ void ShopScene::showSettingWithIndex(int index){
         LayerColor* layer = listLayers.at(i);
         layer->setVisible(i == index);
     }
+}
+
+void ShopScene::showBuyInfo(){
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    PopAlertDialog* popup = PopAlertDialog::create("images/store2_buy_background.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+    popup->setTitle("确认购买");
+    popup->m_touchCancel = true;
+    popup->setCallBackFunc(this,callfuncN_selector(ShopScene::popButtonCallback));
+    
+//    auto btn_apple = Button::create("images/store2_buy_channel_select_background.png");
+//    btn_apple->setScale9Enabled(true);//打开scale9 可以拉伸图片
+//    btn_apple->setTitleText("App Store");
+//    btn_apple->setTitleFontSize(16);
+//    btn_apple->setContentSize(Size(0.2 * visibleSize.width, 0.2 * visibleSize.width * 88.0 / 298.0));
+//    btn_apple->setPosition(Vec2(0.25 * visibleSize.width, 0.55 * popup->getContentSize().height));
+//    btn_apple->addTouchEventListener(CC_CALLBACK_2(ShopScene::touchEvent, this));
+//    btn_apple->setTag(20);
+    
+    
+    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "App Store",1);
+    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "支付宝",0);
+    
+    this->addChild(popup, INT_MAX);
+    
+//    popup->addChild(btn_apple);
+}
+
+void ShopScene::popButtonCallback(Node* pNode){
+    
 }
 
 #pragma edixBox
@@ -462,7 +504,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
             auto titleLabel = Label::create();
             titleLabel->setSystemFontSize(12.0);
             titleLabel->setTextColor(Color4B::BLACK);
-            titleLabel->setPosition(0.5 * recordListCellWidth, 0.5 * height);
+            titleLabel->setPosition(0.4 * recordListCellWidth, 0.5 * height);
             titleLabel->setDimensions(0.4 * recordListCellWidth, height);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
@@ -482,37 +524,44 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
             cell->selectImage = selectImage;
         }
 
+        BuyItem* item = buyList.at(idx);
+        
+        
         char m_string[200] = {0};
+        sprintf(m_string, "购买%d金币\t¥%d", item->goldCount, item->price_normal);
         
-        switch (idx) {
-            case 0:{
-                cell->head->setTexture("images/pay_alipay.png");
-                sprintf(m_string, "支付宝支付");
-            }
-                break;
-                
-            case 1:{
-                cell->head->setTexture("images/pay_wechat.png");
-                sprintf(m_string, "微信支付");
-            }
-                break;
-                
-            case 2:{
-                cell->head->setTexture("images/pay_apple.png");
-                sprintf(m_string, "苹果支付");
-            }
-                break;
-                
-            default:
-                break;
-        }
+        char m_image[30] = {0};
+        sprintf(m_image, "images/gold_buy_%d.png", item->goldCount);
+        cell->head->setTexture(m_image);
+//        switch (idx) {
+//            case 0:{
+//                cell->head->setTexture("images/pay_alipay.png");
+//                sprintf(m_string, "支付宝支付");
+//            }
+//                break;
+//                
+//            case 1:{
+//                cell->head->setTexture("images/pay_wechat.png");
+//                sprintf(m_string, "微信支付");
+//            }
+//                break;
+//                
+//            case 2:{
+//                cell->head->setTexture("images/pay_apple.png");
+//                sprintf(m_string, "苹果支付");
+//            }
+//                break;
+//                
+//            default:
+//                break;
+//        }
         
-        if (strlen(buyCountBox->getText()) > 0) {
-            int payCount = atoi(buyCountBox->getText());
-            if (payCount > 0) {
-                sprintf(m_string + strlen(m_string), "\t¥%.2f", payCount / 10.0);
-            }
-        }
+//        if (strlen(buyCountBox->getText()) > 0) {
+//            int payCount = atoi(buyCountBox->getText());
+//            if (payCount > 0) {
+//                sprintf(m_string + strlen(m_string), "\t¥%.2f", payCount / 10.0);
+//            }
+//        }
         
         cell->titleLabel->setString(m_string);
         
@@ -534,13 +583,14 @@ ssize_t ShopScene::numberOfCellsInTableView(TableView* table)
         return rechargeItems.size();
     }
     else if (table == payListTableView) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        //iOS代码
-        return 3;
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        //Android代码
-        return 2;
-#endif
+        return buyList.size();
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//        //iOS代码
+//        return 3;
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//        //Android代码
+//        return 2;
+//#endif
     }
     
     return 0;

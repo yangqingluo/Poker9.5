@@ -24,6 +24,13 @@
 }
 
 -(void)localPhoto{
+    NSNumber *orientationUnknown = [NSNumber numberWithInt:UIInterfaceOrientationUnknown];
+    [[UIDevice currentDevice] setValue:orientationUnknown forKey:@"orientation"];
+    
+    NSNumber *orientationTarget = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+    [[UIDevice currentDevice] setValue:orientationTarget forKey:@"orientation"];
+    
+    
     UIImagePickerController *picker = [[[UIImagePickerController alloc] init] autorelease];
     picker.delegate      = self;
     picker.sourceType    = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -104,7 +111,11 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     NSLog(@"您取消了选择图片");
     [picker dismissViewControllerAnimated:YES completion:^{
+        NSNumber *orientationUnknown = [NSNumber numberWithInt:UIInterfaceOrientationUnknown];
+        [[UIDevice currentDevice] setValue:orientationUnknown forKey:@"orientation"];
         
+        NSNumber *orientationTarget = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeRight];
+        [[UIDevice currentDevice] setValue:orientationTarget forKey:@"orientation"];
     }];
 }
 

@@ -9,7 +9,7 @@
 #include "PopAlertDialog.h"
 
 PopAlertDialog::PopAlertDialog():
-m__pMenu(NULL),m_contentPadding(0),m_contentPaddingTop(0),m_callbackListener(NULL),m_callback(NULL),m__sfBackGround(NULL),m__s9BackGround(NULL),m__ltContentText(NULL),m__ltTitle(NULL){
+m__pMenu(NULL),m_contentPadding(0),m_contentPaddingTop(0),m_callbackListener(NULL),m_callback(NULL),m__sfBackGround(NULL),m__s9BackGround(NULL),m__ltContentText(NULL),m__ltTitle(NULL),m_touchCancel(false){
     
     
     
@@ -55,7 +55,13 @@ void PopAlertDialog::onTouchMoved(Touch* touch,Event* event){
 }
 
 void PopAlertDialog::onTouchEnded(Touch* touch,Event* event){
+    auto target = static_cast<Sprite*>(event->getCurrentTarget());//获取的当前触摸的目标
     
+    Point locationInNode = target->convertToNodeSpace(touch->getLocation());
+    Rect rect = getSpriteBackGround()->getBoundingBox();
+    if (!rect.containsPoint(locationInNode) && m_touchCancel){
+         this->removeFromParentAndCleanup(true);
+    }
 }
 
 PopAlertDialog* PopAlertDialog::create(const char* backgoundImage,Size dialogSize){
@@ -99,11 +105,15 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
     menuImage->setPosition(center_point);
     menuImage->setScale(0.2 * m_dialogContentSize.width / menuImage->getContentSize().width);
     
-//    Size menuSize = menuImage->getContentSize();
-//    Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
-//    Label->setColor(Color3B(Color3B::WHITE));
-//    Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
-//    menuImage->addChild(Label);
+    if (strlen(title)) {
+        Size menuSize = menuImage->getContentSize();
+        Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
+        Label->setColor(Color3B(Color3B::WHITE));
+        Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
+        menuImage->addChild(Label);
+
+    }
+    
     getMenuButton()->addChild(menuImage);
     
     return true;

@@ -37,6 +37,7 @@ public:
     void backgroundFinish();
     
     Size m_dialogContentSize; //对话框大小
+    bool m_touchCancel;//触摸对话框以外区域是否消失
 private:
     void buttonCallBack(Ref* pSender);
     int m_contentPadding;

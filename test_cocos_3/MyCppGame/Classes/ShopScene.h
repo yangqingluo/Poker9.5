@@ -30,6 +30,13 @@ public:
     char date[40];
 };
 
+class BuyItem : public Ref{
+public:
+    int goldCount;
+    int price_apple;
+    int price_normal;
+};
+
 class ShopScene : public Layer, public TableViewDataSource, public TableViewDelegate, public ui::EditBoxDelegate
 {
 public:
@@ -44,11 +51,14 @@ public:
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
     void showSettingWithIndex(int index);
+    void showBuyInfo();
+    void popButtonCallback(Node* pNode);
 private:
     Vector<YNButton* > listButtons;
     Vector<LayerColor* > listLayers;
     float recordListCellWidth = 0;
     Vector<RechargeItem* > rechargeItems;
+    Vector<BuyItem* >buyList;
     bool hasGetRecordList = false;
     TableView* recordListTableView;
     int payIndex = 0;

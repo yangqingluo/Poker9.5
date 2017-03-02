@@ -135,7 +135,7 @@ bool ImagePicker::init()
         m_layer->runAction(seq);
         openPhoto();
     });
-    btnPhoto->setAnchorPoint(Vec2(0.5, 1));
+//    btnPhoto->setAnchorPoint(Vec2(0.5, 1));
     btnPhoto->setPosition(Vec2(visibleSize.width / 2, 280));
     menu->addChild(btnPhoto);
     //-------------------------------------
@@ -151,7 +151,7 @@ bool ImagePicker::init()
         m_layer->runAction(seq);
         openCamera();
     });
-    btnCamera->setAnchorPoint(Vec2(0.5, 1));
+//    btnCamera->setAnchorPoint(Vec2(0.5, 1));
     btnCamera->setPosition(btnPhoto->getPosition() + Vec2(0, -btnPhoto->getContentSize().height));
     menu->addChild(btnCamera);
     //-------------------------------------
@@ -166,7 +166,7 @@ bool ImagePicker::init()
         Sequence* seq = Sequence::createWithTwoActions(FadeOut::create(0.2), RemoveSelf::create());
         m_layer->runAction(seq);
     });
-    btnCancel->setAnchorPoint(Vec2(0.5, 1));
+//    btnCancel->setAnchorPoint(Vec2(0.5, 1));
     btnCancel->setPosition(btnCamera->getPosition() + Vec2(0, -btnCamera->getContentSize().height - 20));
     menu->addChild(btnCancel);
     //-------------------------------------
@@ -201,7 +201,7 @@ bool ImagePicker::init()
 
         MoveBy* move = MoveBy::create(0.3, Vec2(0, height));
         sprite->runAction(move);
-        menu  ->runAction(move->clone());
+        menu  ->runAction(MoveBy::create(0.3, Vec2(0, 0)));
 
         m_layer->setOpacity(0);
         m_layer->runAction(FadeTo::create(0.2, 125));
