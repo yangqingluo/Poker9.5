@@ -38,6 +38,7 @@ public:
     
     Size m_dialogContentSize; //对话框大小
     bool m_touchCancel;//触摸对话框以外区域是否消失
+    bool m_buttonListed;//是否按行列排列按钮
 private:
     void buttonCallBack(Ref* pSender);
     int m_contentPadding;

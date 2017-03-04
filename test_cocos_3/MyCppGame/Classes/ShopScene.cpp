@@ -81,7 +81,7 @@ bool ShopScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    int buy[3][3] = {{60,6,6},{1000,100,98},{10000,1000,998}};
+    int buy[3][3] = {{60,6,6},{1000,98,98},{10000,998,998}};
     for (int i = 0; i < 3; i++) {
         BuyItem* item = new BuyItem();
         item->autorelease();

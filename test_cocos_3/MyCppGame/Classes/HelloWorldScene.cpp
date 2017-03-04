@@ -192,8 +192,10 @@ void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
             break;
             
         case 1:{
-            CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
-            sdk->authorize(QQ, auth_selector(authCallback));
+//            CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
+//            sdk->authorize(QQ, auth_selector(authCallback));
+            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+            onHttpRequest_LoginQQ();
         }
             break;
             
@@ -219,29 +221,27 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 
 // 发送HTTP请求
-void HelloWorld::onHttpRequest(std::string type)
+void HelloWorld::onHttpRequest_LoginQQ()
 {
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/user/qqlogin");
     
-    if (type == "get")
-    {
-        request->setRequestType(HttpRequest::Type::GET);
-        // url后面附加数据信息
-        request->setUrl("http://115.28.109.174:8181/game/user/login?username=15928622486&password=123456");
-    }
-    else if(type == "post")
-    {
-        request->setRequestType(HttpRequest::Type::POST);
-        request->setUrl("http://httpbin.org/post");
-        // 设置post发送请求的数据信息
-        std::string data = "hello world!";
-        request->setRequestData(data.c_str(), data.length());
-    }
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "uid=B40B57B7CEB780C9A8DDA51F79AB7324&name=fighting&iconurl=http://q.qlogo.cn/qqapp/1105893963/B40B57B7CEB780C9A8DDA51F79AB7324/100");
+    request->setRequestData(param, strlen(param));
+    
+//    request->setRequestType(HttpRequest::Type::GET);
+//    // url后面附加数据信息
+//    char url[200] = {0};
+//    sprintf(url, "http://115.28.109.174:8181/game/user/qqlogin?uid=B40B57B7CEB780C9A8DDA51F79AB7324&name=fighting&accessToken=0DD873B16CA6865B462EA3AEE654393E&iconurl=http://q.qlogo.cn/qqapp/1105893963/B40B57B7CEB780C9A8DDA51F79AB7324/100");
+//    request->setUrl(url);
     
     // HTTP响应函数
     request->setResponseCallback(CC_CALLBACK_2(HelloWorld::onHttpResponse, this));
-    
+    request->setTag("loginqq");
     // 发送请求
     HttpClient::getInstance()->send(request);
     
@@ -253,33 +253,61 @@ void HelloWorld::onHttpRequest(std::string type)
 // HTTP响应请求函数
 void HelloWorld::onHttpResponse(HttpClient* sender, HttpResponse* response)
 {
+    if (m_pMessage != NULL) {
+        m_pMessage->hidden();
+        m_pMessage = NULL;
+    }
+    
     // 没有收到响应
-    if (!response)
-    {
-        CCLOG("no response");
+    if (!response){
+        NoteTip::show("请检查网络");
         return;
     }
     
-    int statusCode = response->getResponseCode();
+    long statusCode = response->getResponseCode();
     char statusString[64] = {};
-    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
     CCLOG("response code: %s", statusString);
     
+    if (statusCode > 200) {
+        NoteTip::show("网络错误");
+        return;
+    }
     // 链接失败
     if (!response->isSucceed())
     {
         CCLOG("response failed");
         CCLOG("error buffer: %s", response->getErrorBuffer());
+        NoteTip::show("请检查网络");
         return;
     }
     
-    // 获取数据
-    std::vector<char>* v = response->getResponseData();
-    for (int i = 0; i < v->size(); i++)
-    {
-        printf("%c", v->at(i));
+    std::vector<char>* responseData = response -> getResponseData();
+    std::string responseStr = std::string(responseData -> begin(), responseData -> end());
+    log("%s\n", responseStr.c_str());
+    rapidjson::Document document;
+    document.Parse<0>(responseStr.c_str());
+    CCASSERT(!document.HasParseError(), "Parsing to document failed");
+    
+    if(document.IsObject()){
+        if(document.HasMember("code")){
+            const rapidjson::Value& val_code = document["code"];
+            int code = val_code.GetInt();
+            if (code == 1) {
+                if (0 != strlen(response->getHttpRequest()->getTag())){
+                    std::string tag = response->getHttpRequest()->getTag();
+                    if (tag == "loginqq") {
+                        
+                    }
+                }
+            }
+            else {
+                const rapidjson::Value& val_content = document["content"];
+                const char* content = val_content.GetString();
+                NoteTip::show(content);
+            }
+        }
     }
-    printf("\n");
 }
 
 #pragma notification

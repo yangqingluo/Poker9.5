@@ -9,7 +9,7 @@
 #include "PopAlertDialog.h"
 
 PopAlertDialog::PopAlertDialog():
-m__pMenu(NULL),m_contentPadding(0),m_contentPaddingTop(0),m_callbackListener(NULL),m_callback(NULL),m__sfBackGround(NULL),m__s9BackGround(NULL),m__ltContentText(NULL),m__ltTitle(NULL),m_touchCancel(false){
+m__pMenu(NULL),m_contentPadding(0),m_contentPaddingTop(0),m_callbackListener(NULL),m_callback(NULL),m__sfBackGround(NULL),m__s9BackGround(NULL),m__ltContentText(NULL),m__ltTitle(NULL),m_touchCancel(false), m_buttonListed(false){
     
     
     
@@ -103,7 +103,7 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
                                          CC_CALLBACK_1(PopAlertDialog::buttonCallBack,this));
     menuImage->setTag(tag);
     menuImage->setPosition(center_point);
-    menuImage->setScale(0.2 * m_dialogContentSize.width / menuImage->getContentSize().width);
+    menuImage->setScale(m_buttonListed ? 0.4 : 0.2 * m_dialogContentSize.width / menuImage->getContentSize().width);
     
     if (strlen(title)) {
         Size menuSize = menuImage->getContentSize();

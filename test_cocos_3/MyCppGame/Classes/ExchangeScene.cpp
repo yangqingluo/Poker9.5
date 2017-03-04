@@ -448,7 +448,7 @@ void ExchangeScene::popButtonCallback(Node* pNode){
             sprintf(remarks, "%s%s", colorString, item->description);
             
             m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-            this->onHttpRequest_addAwardRecord(nameBox->getText(), addressBox->getText(), addressBox->getText(), remarks, item->price * 10);
+            this->onHttpRequest_addAwardRecord(nameBox->getText(), addressBox->getText(), mobileBox->getText(), remarks, item->price * 10);
         }
     }
 }

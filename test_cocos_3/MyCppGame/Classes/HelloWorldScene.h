@@ -5,6 +5,10 @@
 
 #include "network/HttpClient.h"
 using namespace cocos2d::network;
+using namespace std;
+
+#include "NoteTip.h"
+#include "MessageManager.h"
 
 class HelloWorld : public cocos2d::Layer
 {
@@ -23,8 +27,9 @@ public:
     CREATE_FUNC(HelloWorld);
     
 private:
+    MessageManager* m_pMessage;
     
-    void onHttpRequest(std::string type);
+    void onHttpRequest_LoginQQ();
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Socket(Ref* pSender);
 };
