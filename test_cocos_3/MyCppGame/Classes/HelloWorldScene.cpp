@@ -183,6 +183,26 @@ void authCallback(int platform, int stCode, map<string, string>& data) {
     }
 }
 
+void getCallback(int platform, int stCode, map<string, string>& data) {
+    string result = "";
+    if (stCode == 200) {
+        result = "获取成功";
+        log("#### 获取成功");
+    } else if (stCode == 0) {
+        log("#### 获取出错");
+    } else if (stCode == -1) {
+        log("#### 取消获取");
+    }
+    
+    // 输入授权数据, 如果授权失败,则会输出错误信息
+    map<string, string>::iterator it = data.begin();
+    for (; it != data.end(); ++it) {
+        log("#### data  %s -> %s.", it->first.c_str(), it->second.c_str());
+        //        result.append(it->first.c_str());
+        //        result.append(it->second.c_str());
+    }
+}
+
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
@@ -192,10 +212,11 @@ void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
             break;
             
         case 1:{
-//            CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
+            CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
 //            sdk->authorize(QQ, auth_selector(authCallback));
-            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-            onHttpRequest_LoginQQ();
+            sdk->getPlatformInfo(QQ, auth_selector(getCallback));
+//            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+//            onHttpRequest_LoginQQ();
         }
             break;
             

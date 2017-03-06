@@ -54,7 +54,7 @@ static AppDelegate s_sharedApplication;
     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wxe3be7fd52334734f" appSecret:@"3baf1193c85774b3fd9d18447d76cab0" redirectURL:@"http://mobile.umeng.com/social"];
     
     //设置分享到QQ互联的appID
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"100424460"/*设置QQ平台的appID*/  appSecret:nil redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105893963"/*设置QQ平台的appID*/  appSecret:@"aCMQkh20RPMNv0f3" redirectURL:@"http://mobile.umeng.com/social"];
 
     
     // Add the view controller's view to the window and display.
