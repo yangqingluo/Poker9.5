@@ -173,6 +173,7 @@ public:
     void setEffect(bool yn);
     
     bool isInitiativeLogout = false;//是否用户主动点击退出登录
+    bool isInRootScene = true;
     
     void stopEffect(int ID);
     int playEffect(const char* fileName , bool loop);
@@ -190,6 +191,7 @@ public:
     
     void saveLoginData(const rapidjson::Value& val_content);
     void logout();
+    void goToRootScene();
     
     void sendHandle();
     void sendEnterRoom(const char* roomTypeId, int capital);

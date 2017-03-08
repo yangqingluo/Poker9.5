@@ -32,6 +32,15 @@ Scene* HelloWorld::createScene()
     return scene;
 }
 
+void HelloWorld::onEnter(){
+    Layer::onEnter();
+    Global::getInstance()->isInRootScene = true;
+}
+void HelloWorld::onExit(){
+    Layer::onExit();
+    Global::getInstance()->isInRootScene = false;
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -97,7 +106,7 @@ bool HelloWorld::init()
     
     
     // create menu, it's an autorelease object
-    auto menu = Menu::create(login_WechatItem, login_QQItem, login_SystemItem, NULL);
+    auto menu = Menu::create(login_QQItem, login_SystemItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     

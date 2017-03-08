@@ -2,6 +2,7 @@
 #include "HallScene.h"
 #include "tcpcommand.h"
 #include "OnlinePokerDeskScene.h"
+#include "HelloWorldScene.h"
 
 #include "json/document.h"
 #include "json/writer.h"
@@ -163,7 +164,12 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
     
     auto scene = Hall::createScene();
     
-    Director::getInstance()->pushScene(scene);
+    if (this->isInRootScene) {
+        Director::getInstance()->pushScene(scene);
+    }
+    else {
+        Director::getInstance()->replaceScene(scene);
+    }
     
     this->connectServer();
 }
@@ -174,7 +180,13 @@ void Global::logout(){
     this->isInitiativeLogout = true;
     this->disconnectServer();
     
-    Director::getInstance()->popToRootScene();
+    this->goToRootScene();
+}
+
+void Global::goToRootScene(){
+    if (!this->isInRootScene) {
+        Director::getInstance()->popToRootScene();
+    }
 }
 
 int Global::calculateVIPLevel(int introCount){
@@ -536,7 +548,7 @@ void Global::socketdidConnect(){
 void Global::socketDidDisconnect(){
     log("Socket::disconnect");
     
-    Director::getInstance()->popToRootScene();
+    this->goToRootScene();
     postNotification(cmd_disconnect);
 }
 

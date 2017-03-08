@@ -17,6 +17,8 @@ public:
     ~HelloWorld();
     static cocos2d::Scene* createScene();
     virtual bool init();
+    virtual void onEnter();
+    virtual void onExit();
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);

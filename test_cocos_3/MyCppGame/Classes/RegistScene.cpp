@@ -286,7 +286,7 @@ void RegistScene::onHttpRequest_Regist(string username, string password, string 
     request->setUrl("http://115.28.109.174:8181/game/user/register");
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "mobile=%s&verifyCode=%s&password=%s&nikename=%s&birthday=1990-08-15", username.c_str(), vcode.c_str() ,password.c_str(), nikename.c_str());
+    sprintf(param, "mobile=%s&verifyCode=%s&password=%s&nikename=%s", username.c_str(), vcode.c_str() ,password.c_str(), nikename.c_str());
     std::string data;
     data.assign(param);
     request->setRequestData(data.c_str(), data.length());
