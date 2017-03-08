@@ -327,7 +327,9 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
 //                            NoteTip::show("精彩功能敬请期待");
 //                        }
 //                    }
-                    showBuyInfo();
+                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+                    this->onHttpRequest_RechargeForApple(100000.0);
+//                    showBuyInfo();
                 }
                     break;
                     
@@ -710,6 +712,29 @@ void ShopScene::onHttpRequest_GetOrderAndSign(float totalFee){
     // HTTP响应函数
     request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
     request->setTag("getOrderAndSign");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
+
+void ShopScene::onHttpRequest_RechargeForApple(float totalGold){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl("http://115.28.109.174:8181/game/applepay/rechargebit");
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "money=%f&userId=%s&userAccount=%s", totalGold, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
+    request->setTag("rechargeForApple");
     // 发送请求
     HttpClient::getInstance()->send(request);
     
