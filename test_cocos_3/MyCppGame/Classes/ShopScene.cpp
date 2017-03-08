@@ -479,7 +479,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         Label* label = (Label* )cell->getChildByTag(1);
         
-        RechargeItem* item = rechargeItems.at(idx);
+        RechargeItem* item = rechargeItems.at(rechargeItems.size() - 1 - idx);
         char content[100] = {0};
         sprintf(content, "%s\t+%d金币\t%s", item->date, item->amount, (item->rechargeWay == 2) ? "VIP奖励" : "充值");
         

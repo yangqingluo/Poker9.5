@@ -201,6 +201,10 @@ void getCallback(int platform, int stCode, map<string, string>& data) {
         //        result.append(it->first.c_str());
         //        result.append(it->second.c_str());
     }
+    
+//    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+//    onHttpRequest_LoginQQ();
+
 }
 
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
@@ -215,8 +219,6 @@ void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
             CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
 //            sdk->authorize(QQ, auth_selector(authCallback));
             sdk->getPlatformInfo(QQ, auth_selector(getCallback));
-//            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-//            onHttpRequest_LoginQQ();
         }
             break;
             

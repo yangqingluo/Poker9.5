@@ -488,7 +488,7 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
         }
         
         Label* label = (Label* )cell->getChildByTag(1);
-        ExchangeRecordItem* item = recordItems.at(idx);
+        ExchangeRecordItem* item = recordItems.at(recordItems.size() - 1 - idx);
         char content[200] = {0};
         char status_string[100] = {0};
         switch (item->status) {
@@ -526,7 +526,7 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
                 break;
         }
         
-        sprintf(content, "%s\t-%d金币\t兑换%s 订单号:%s %s", item->date, item->gameBitAmount, item->remarks, item->ID, status_string);
+        sprintf(content, "%s\t-%d金币\t兑换%s 订单号:%s 收货人:%s 地址:%s 电话:%s %s", item->date, item->gameBitAmount, item->remarks, item->ID, item->receiveName, item->address, item->tel,status_string);
         
         label->setString(content);
         
@@ -751,7 +751,7 @@ void ExchangeScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                                 const rapidjson::Value& val_record = val_content[i];
                                 assert(val_record.IsObject());
                                 
-                                if (val_record.HasMember("id") && val_record.HasMember("receiveName") && val_record.HasMember("status") && val_record.HasMember("gameBitAmount") && val_record.HasMember("address") && val_record.HasMember("remarks")) {
+                                if (val_record.HasMember("id") && val_record.HasMember("receiveName") && val_record.HasMember("status") && val_record.HasMember("gameBitAmount") && val_record.HasMember("address") && val_record.HasMember("tel") && val_record.HasMember("remarks") && val_record.HasMember("date")) {
                                     ExchangeRecordItem* item = new ExchangeRecordItem();
                                     item->autorelease();
                                     
@@ -760,7 +760,9 @@ void ExchangeScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                                     sprintf(item->ID, "%s", val_record["id"].GetString());
                                     sprintf(item->receiveName, "%s", val_record["receiveName"].GetString());
                                     sprintf(item->address, "%s", val_record["address"].GetString());
+                                    sprintf(item->tel, "%s", val_record["tel"].GetString());
                                     sprintf(item->remarks, "%s", val_record["remarks"].GetString());
+                                    sprintf(item->date, "%s", val_record["date"].GetString());
                                     
                                     if (val_record.HasMember("expressCode") && val_record.HasMember("expressType")) {
                                         if (!val_record["expressCode"].IsNull() && !val_record["expressType"].IsNull()) {

@@ -36,6 +36,7 @@ class ExchangeRecordItem : public Ref{
 public:
     char ID[Max_ID_Length];
     char receiveName[Max_Name_Length];
+    char tel[Min_String_Length];
     char address[Max_Address_Length];
     int gameBitAmount;
     int status;
