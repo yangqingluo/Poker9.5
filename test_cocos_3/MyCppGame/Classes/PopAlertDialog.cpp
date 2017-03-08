@@ -75,9 +75,11 @@ PopAlertDialog* PopAlertDialog::create(const char* backgoundImage,Size dialogSiz
     return layer;
 }
 
-void PopAlertDialog::setTitle(const char* title,int fontsize /*=20*/){
-    Label* label = Label::createWithTTF(title, "fonts/STKaiti.ttf", fontsize);
-    label->setColor(Color3B::WHITE);
+void PopAlertDialog::setTitle(const char* title,int fontsize /*=20*/, Color3B color /*= Color3B::WHITE*/){
+    Label* label = Label::create();
+    label->setSystemFontSize(fontsize);
+    label->setString(title);
+    label->setColor(color);
     setLabelTitle(label);
 }
 
@@ -107,7 +109,9 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
     
     if (strlen(title)) {
         Size menuSize = menuImage->getContentSize();
-        Label* Label = Label::createWithTTF(title, "fonts/STKaiti.ttf", 15);
+        Label* Label = Label::create();
+        Label->setString(title);
+        Label->setSystemFontSize(15.0);
         Label->setColor(Color3B(Color3B::WHITE));
         Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
         menuImage->addChild(Label);

@@ -327,9 +327,8 @@ void ShopScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
 //                            NoteTip::show("精彩功能敬请期待");
 //                        }
 //                    }
-                    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-                    this->onHttpRequest_RechargeForApple(100000.0);
-//                    showBuyInfo();
+                    
+                    showBuyInfo();
                 }
                     break;
                     
@@ -399,7 +398,7 @@ void ShopScene::showSettingWithIndex(int index){
 void ShopScene::showBuyInfo(){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     PopAlertDialog* popup = PopAlertDialog::create("images/store2_buy_background.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
-    popup->setTitle("确认购买");
+    popup->setTitle("请选择支付方式\n(银行卡支付请选择支付宝)", 18, Color3B::Color3B(220, 20, 60));
     popup->m_touchCancel = true;
     popup->setCallBackFunc(this,callfuncN_selector(ShopScene::popButtonCallback));
     

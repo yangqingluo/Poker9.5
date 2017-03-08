@@ -26,7 +26,7 @@ public:
     bool onTouchBegan(Touch* touch,Event* event);
     void onTouchMoved(Touch* touch,Event* event);
     void onTouchEnded(Touch* touch,Event* event);
-    void setTitle(const char* title,int fontsize=20);
+    void setTitle(const char* title,int fontsize=20, Color3B color = Color3B::WHITE);
     void setContentTextShowed(const char* text);
     void setContentText(const char* text,int fontsize=20,int padding=50,int paddingTop=50);
     void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);

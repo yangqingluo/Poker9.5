@@ -387,6 +387,9 @@ void HelloWorld::onNotification_LoginQQ(Ref* pSender){
         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
         onHttpRequest_LoginQQ(post->description);
     }
+    else if (post->cmd == -1) {
+        
+    }
     else {
         NoteTip::show(this, "登陆失败");
     }
