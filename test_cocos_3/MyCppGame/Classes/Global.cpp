@@ -162,7 +162,8 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
     parseUserData(val_content, &user_data);
     
     auto scene = Hall::createScene();
-    Director::getInstance()->replaceScene(scene);
+    
+    Director::getInstance()->pushScene(scene);
     
     this->connectServer();
 }

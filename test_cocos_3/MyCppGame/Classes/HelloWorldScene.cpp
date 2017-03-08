@@ -7,8 +7,11 @@ USING_NS_UM_SOCIAL;
 
 USING_NS_CC;
 
+int getHelloWorldTag = 444;
+
 HelloWorld::HelloWorld(){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(HelloWorld::onNotification_Socket), kNotification_Socket, NULL);
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(HelloWorld::onNotification_LoginQQ), kNotification_LoginQQ, NULL);
 }
 HelloWorld::~HelloWorld(){
     NotificationCenter::getInstance()->removeAllObservers(this);
@@ -21,7 +24,7 @@ Scene* HelloWorld::createScene()
     
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
-
+    layer->setTag(getHelloWorldTag);
     // add layer as a child to scene
     scene->addChild(layer);
 
@@ -184,27 +187,44 @@ void authCallback(int platform, int stCode, map<string, string>& data) {
 }
 
 void getCallback(int platform, int stCode, map<string, string>& data) {
-    string result = "";
+    PostRef* post = new PostRef();
+    post->cmd = stCode;
+    memset(post->description, 0, sizeof(post->description));
+    
     if (stCode == 200) {
-        result = "获取成功";
-        log("#### 获取成功");
-    } else if (stCode == 0) {
-        log("#### 获取出错");
-    } else if (stCode == -1) {
-        log("#### 取消获取");
+        char uid[Max_ID_Length] = {0};
+        char name[Max_Name_Length] = {0};
+        char accessToken[Max_ID_Length] = {0};
+        
+        // 输入授权数据, 如果授权失败,则会输出错误信息
+        map<string, string>::iterator it = data.begin();
+        for (; it != data.end(); ++it) {
+            log("#### data  %s -> %s.", it->first.c_str(), it->second.c_str());
+            if (0 == strcmp(it->first.c_str(), "name")) {
+                strcpy(name, it->second.c_str());
+            }
+            
+            if (0 == strcmp(it->first.c_str(), "uid")) {
+                strcpy(uid, it->second.c_str());
+            }
+            
+            if (0 == strcmp(it->first.c_str(), "accessToken")) {
+                strcpy(accessToken, it->second.c_str());
+            }
+            
+            if (strlen(name) > 0 && strlen(uid) > 0 && strlen(accessToken) > 0 ) {
+                sprintf(post->description, "uid=%s&name=%s&accessToken=%s", uid, name, accessToken);
+            }
+        }
     }
+//    else {
+//        NoteTip::show("登陆失败");
+//    }
     
-    // 输入授权数据, 如果授权失败,则会输出错误信息
-    map<string, string>::iterator it = data.begin();
-    for (; it != data.end(); ++it) {
-        log("#### data  %s -> %s.", it->first.c_str(), it->second.c_str());
-        //        result.append(it->first.c_str());
-        //        result.append(it->second.c_str());
-    }
-    
-//    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-//    onHttpRequest_LoginQQ();
-
+    HelloWorld* hwLayer =(HelloWorld* ) Director::getInstance()->getRunningScene()->getChildByTag(
+                                                                                   getHelloWorldTag);
+    hwLayer->onNotification_LoginQQ(post);
+//    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_LoginQQ, post);
 }
 
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
@@ -244,7 +264,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 
 // 发送HTTP请求
-void HelloWorld::onHttpRequest_LoginQQ()
+void HelloWorld::onHttpRequest_LoginQQ(char* m_string)
 {
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
@@ -252,9 +272,7 @@ void HelloWorld::onHttpRequest_LoginQQ()
     request->setUrl("http://115.28.109.174:8181/game/user/qqlogin");
     
     // 设置post发送请求的数据信息
-    char param[200] = {0};
-    sprintf(param, "uid=B40B57B7CEB780C9A8DDA51F79AB7324&name=fighting&iconurl=http://q.qlogo.cn/qqapp/1105893963/B40B57B7CEB780C9A8DDA51F79AB7324/100");
-    request->setRequestData(param, strlen(param));
+    request->setRequestData(m_string, strlen(m_string));
     
 //    request->setRequestType(HttpRequest::Type::GET);
 //    // url后面附加数据信息
@@ -320,7 +338,9 @@ void HelloWorld::onHttpResponse(HttpClient* sender, HttpResponse* response)
                 if (0 != strlen(response->getHttpRequest()->getTag())){
                     std::string tag = response->getHttpRequest()->getTag();
                     if (tag == "loginqq") {
-                        
+                        if (document.HasMember("content")) {
+                            Global::getInstance()->saveLoginData(document["content"]);
+                        }
                     }
                 }
             }
@@ -349,6 +369,17 @@ void HelloWorld::onNotification_Socket(Ref* pSender){
             
         default:
             break;
+    }
+}
+
+void HelloWorld::onNotification_LoginQQ(Ref* pSender){
+    PostRef* post = (PostRef* )pSender;
+    if (post->cmd == 200) {
+        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+        onHttpRequest_LoginQQ(post->description);
+    }
+    else {
+        NoteTip::show(this, "登陆失败");
     }
 }
 

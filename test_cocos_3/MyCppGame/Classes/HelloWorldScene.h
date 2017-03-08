@@ -26,12 +26,14 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
+    void onNotification_LoginQQ(Ref* pSender);
 private:
     MessageManager* m_pMessage;
     
-    void onHttpRequest_LoginQQ();
+    void onHttpRequest_LoginQQ(char* m_string);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Socket(Ref* pSender);
+    
 };
 
 #endif // __HELLOWORLD_SCENE_H__
