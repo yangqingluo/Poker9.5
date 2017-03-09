@@ -28,11 +28,11 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
-    void onNotification_LoginQQ(Ref* pSender);
+    void doLoginQQ(const char* m_string);
 private:
     MessageManager* m_pMessage;
     
-    void onHttpRequest_LoginQQ(char* m_string);
+    void onHttpRequest_LoginQQ(const char* m_string);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Socket(Ref* pSender);
     

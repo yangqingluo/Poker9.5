@@ -11,7 +11,6 @@ int getHelloWorldTag = 444;
 
 HelloWorld::HelloWorld(){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(HelloWorld::onNotification_Socket), kNotification_Socket, NULL);
-    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(HelloWorld::onNotification_LoginQQ), kNotification_LoginQQ, NULL);
 }
 HelloWorld::~HelloWorld(){
     NotificationCenter::getInstance()->removeAllObservers(this);
@@ -196,11 +195,11 @@ void authCallback(int platform, int stCode, map<string, string>& data) {
 }
 
 void getCallback(int platform, int stCode, map<string, string>& data) {
-    PostRef* post = new PostRef();
-    post->cmd = stCode;
-    memset(post->description, 0, sizeof(post->description));
+    HelloWorld* hwLayer =(HelloWorld* ) Director::getInstance()->getRunningScene()->getChildByTag(
+                                                                                                  getHelloWorldTag);
     
     if (stCode == 200) {
+        char m_string[200] = {0};
         char uid[Max_ID_Length] = {0};
         char name[Max_Name_Length] = {0};
         char accessToken[Max_ID_Length] = {0};
@@ -222,18 +221,18 @@ void getCallback(int platform, int stCode, map<string, string>& data) {
             }
             
             if (strlen(name) > 0 && strlen(uid) > 0 && strlen(accessToken) > 0 ) {
-                sprintf(post->description, "uid=%s&name=%s&accessToken=%s", uid, name, accessToken);
+                sprintf(m_string, "uid=%s&name=%s&accessToken=%s", uid, name, accessToken);
             }
         }
+        
+        hwLayer->doLoginQQ(m_string);
     }
-//    else {
-//        NoteTip::show("登陆失败");
-//    }
-    
-    HelloWorld* hwLayer =(HelloWorld* ) Director::getInstance()->getRunningScene()->getChildByTag(
-                                                                                   getHelloWorldTag);
-    hwLayer->onNotification_LoginQQ(post);
-//    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_LoginQQ, post);
+    else if (stCode == -1) {
+        
+    }
+    else {
+        NoteTip::show(hwLayer, "登陆失败");
+    }
 }
 
 void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
@@ -273,7 +272,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 
 // 发送HTTP请求
-void HelloWorld::onHttpRequest_LoginQQ(char* m_string)
+void HelloWorld::onHttpRequest_LoginQQ(const char* m_string)
 {
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
@@ -381,17 +380,8 @@ void HelloWorld::onNotification_Socket(Ref* pSender){
     }
 }
 
-void HelloWorld::onNotification_LoginQQ(Ref* pSender){
-    PostRef* post = (PostRef* )pSender;
-    if (post->cmd == 200) {
-        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-        onHttpRequest_LoginQQ(post->description);
-    }
-    else if (post->cmd == -1) {
-        
-    }
-    else {
-        NoteTip::show(this, "登陆失败");
-    }
+void HelloWorld::doLoginQQ(const char* m_string){
+    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+    onHttpRequest_LoginQQ(m_string);
 }
 
