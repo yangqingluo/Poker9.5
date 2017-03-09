@@ -1167,6 +1167,16 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         m_isStarted = true;
         resetShowDealerInfo();
         NoteTip::show("恢复牌局成功");
+        
+        //显示当前玩家下注情况
+        for (int j = 1; j < m_arrChairs.size(); j++) {
+            int stake = Global::getInstance()->table_data.round.betStakes[j];
+            if (stake > 0) {
+                PokerChair* chairBuffer = m_arrChairs.at(j);
+                JettonSprite* sp = this->createjetton(stake);
+                chairBuffer->updateJetton(sp);
+            }
+        }
     }
     
     switch (post->cmd) {

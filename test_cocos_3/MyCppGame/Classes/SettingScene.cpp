@@ -7,11 +7,8 @@
 //
 
 #include "SettingScene.h"
-//#include <curl/curl.h>
-
 #include "Global.h"
 #include "QLImageSprite.h"
-#include "ImagePicker.h"
 
 USING_NS_CC;
 
@@ -257,13 +254,12 @@ void SettingScene::touchEvent(Ref *pSender, Widget::TouchEventType type){
                     }
                     else {
                         m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-//                        onHttpRequest_SettingNikename(nikenameBox->getText());
-                        onHttpRequest_UploadPictures("images/p4.png");
+                        onHttpRequest_SettingNikename(nikenameBox->getText());
                     }
                 }
                     break;
                     
-                
+                    
                     
                 default:
                     break;
@@ -311,118 +307,6 @@ void SettingScene::showSettingWithIndex(int index){
 }
 
 #pragma http
-void SettingScene::pictureCallback(std::string* imagePath){
-    log("*****%s",imagePath->c_str());
-}
-
-//size_t SettingScene::write_data(uint8_t *dataBack, size_t size, size_t nmemb, void *user_p)
-//{
-//    string szData = string((char*)dataBack); //返回的结果
-//    
-//    return 0;
-//}
-
-void  SettingScene::onHttpRequest_UploadPictures(const char* imagename){
-//    CCLOG("IN uploadFile::UpLoadFile(");
-//    CURLcode cURLcode;
-//    CURL *cURL;
-//    
-//    //Init
-//    cURLcode = curl_global_init(CURL_GLOBAL_SSL);
-//    if(CURLE_OK != cURLcode)
-//    {
-//        curl_global_cleanup();
-//        return ;
-//    }
-//    
-//    cURL = curl_easy_init();
-//    if(!cURL)
-//    {
-//        curl_easy_cleanup(cURL);
-//        curl_global_cleanup();
-//        return ;
-//    }
-//    curl_httppost *post = NULL;
-//    curl_httppost *last = NULL;
-//    
-//    //上传的文件的全路径并指定类型
-//    curl_formadd(&post, &last,CURLFORM_COPYNAME,"photo",
-//                 CURLFORM_FILE, imagename,
-//                 CURLFORM_CONTENTTYPE,"Image/png",CURLFORM_END);
-//    
-//    ////设置多个参数
-//    curl_formadd(&post, &last,CURLFORM_COPYNAME,"userId",
-//                CURLFORM_COPYCONTENTS,Global::getInstance()->user_data.ID,CURLFORM_END);
-//    
-//    curl_easy_setopt(cURL, CURLOPT_URL,"http://115.28.109.174:8181/game/user/updateHeadImg");
-//    curl_easy_setopt(cURL, CURLOPT_TIMEOUT,10);//超时时间10秒
-//    curl_easy_setopt(cURL, CURLOPT_HTTPPOST,post);//请求方式POST
-//    curl_easy_setopt(cURL, CURLOPT_WRITEFUNCTION,write_data); //设置回调
-//    curl_easy_setopt(cURL, CURLOPT_VERBOSE,1); //非零值表示你想CURL报告每一件意外的事情
-//    
-//    curl_easy_perform(cURL);
-//    
-//    curl_easy_cleanup(cURL);
-//    
-//    curl_global_cleanup();
-    
-    
-//    HttpRequest* request = new HttpRequest();
-//    
-//    request->setRequestType(HttpRequest::Type::POST);
-//    request->setUrl("http://115.28.109.174:8181/game/user/updateHeadImg");
-//    
-//    std::string pathKey = FileUtils::getInstance()->fullPathForFilename(imagename);
-//    CCLOG("path = %s",pathKey.c_str());
-//    
-////    //auto sifile = PathFindFileName(pathKey);
-////    Data imgdata = FileUtils::getInstance()->getDataFromFile(pathKey);
-//    
-//    //拿到图片数据
-//    long buff = 0;
-//    unsigned char * pBuffer = FileUtils::getInstance()->getFileData(pathKey.c_str(),"rb", &buff);
-//    const char* fileBinary = (const char*)pBuffer;
-//    CCLOG("fileBinary %s = ", fileBinary);
-//    //得到图片 文件流大小
-//    std::string strBin = std::string(fileBinary, buff);
-//    //设置 http headers  参数 和  数据流
-//    std::string boundary = "----------------WebKitFormBou3123ndaryEm5WNw6hGiQUBpng";
-//    std::string bound = boundary;
-//    std::vector<std::string> headers;
-//    headers.push_back("Content-Type:multipart/form-data; boundary = " + bound);
-//    std::string strdata = strBin;
-//    std::string str = "\r\n--" + boundary + "\r\n";
-//    str = str + "Content-Disposition: form-data; name=\"headImg\"; filename=\"paoku1.png\"\r\n";
-//    str = str + "Content-Type: application/octet-stream\r\n\r\n";
-//    str = str + strBin;
-//    str = str + "\r\n--" + boundary + "--\r\n";
-//    
-//    // 设置设置Header
-//    request->setHeaders(headers);
-//    
-//    //设置 RequesData
-//    request->setRequestData(str.data(), str.size());
-//    
-//    CCLOG("str data = %s \n str .size = %d \n", str.data(), str.size());
-//    
-//    // HTTP响应函数
-//    request->setResponseCallback(CC_CALLBACK_2(SettingScene::onHttpResponse, this));
-//    request->setTag("updatepictures");
-//    // 发送请求
-//    HttpClient::getInstance()->send(request);
-//    
-//    // 释放链接
-//    request->release();
-    
-    m_pMessage->hidden();
-    ImagePicker::getInstance()->callImagePickerWithPhotoAndCamera([=](std::string path)
-                                                                  {
-                                                                      CCLOG("photo path:%s",path.c_str());
-                                                                      
-                                                                      
-                                                                  });
-};
-
 void SettingScene::onHttpRequest_SettingNikename(const char* nikename){
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();

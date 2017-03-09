@@ -75,6 +75,7 @@ struct RoundData {
     PokerPair pokerSendedList[4];
     SettleData settleList[4];
     int betList[4];
+    int betStakes[4];//当前玩家下注情况
 };
 
 struct BureauData {
