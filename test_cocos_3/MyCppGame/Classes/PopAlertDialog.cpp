@@ -96,7 +96,7 @@ void PopAlertDialog::setCallBackFunc(Ref*target, SEL_CallFuncN callfun){
     m_callback = callfun;
 }
 
-bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImage,const char* title,int tag){
+bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImage,const char* title,const char* subTitle,int tag){
     Size winSize = Director::getInstance()->getWinSize();
     Point center_point = Point(winSize.width / 2,winSize.height / 2);
     
@@ -105,17 +105,31 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
                                          CC_CALLBACK_1(PopAlertDialog::buttonCallBack,this));
     menuImage->setTag(tag);
     menuImage->setPosition(center_point);
-    menuImage->setScale(m_buttonListed ? 0.4 : 0.2 * m_dialogContentSize.width / menuImage->getContentSize().width);
+    menuImage->setScale((m_buttonListed ? 0.4 : 0.2) * m_dialogContentSize.width / menuImage->getContentSize().width);
     
     if (strlen(title)) {
         Size menuSize = menuImage->getContentSize();
-        Label* Label = Label::create();
-        Label->setString(title);
-        Label->setSystemFontSize(15.0);
-        Label->setColor(Color3B(Color3B::WHITE));
-        Label->setPosition(Point(menuSize.width/2,menuSize.height/2));
-        menuImage->addChild(Label);
-
+        Label* titleLabel = Label::create();
+        titleLabel->setString(title);
+        titleLabel->setSystemFontSize(15.0);
+        titleLabel->setColor(Color3B(Color3B::WHITE));
+        titleLabel->setPosition(Point(menuSize.width/2,menuSize.height/2));
+        menuImage->addChild(titleLabel);
+        if (strlen(subTitle)) {
+            auto subLabel = Label::create();
+            subLabel->setString(subTitle);
+            subLabel->setSystemFontSize(15.0);
+            subLabel->setColor(Color3B::Color3B(220, 20, 60));
+            subLabel->setPosition(Point(menuSize.width/2,menuSize.height/2));
+            subLabel->setDimensions(0.8 * menuSize.width, menuSize.height);
+            subLabel->setHorizontalAlignment(TextHAlignment::RIGHT);
+            subLabel->setVerticalAlignment(TextVAlignment::CENTER);
+            menuImage->addChild(subLabel);
+            
+            titleLabel->setDimensions(0.8 * menuSize.width, menuSize.height);
+            titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+            titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
+        }
     }
     
     getMenuButton()->addChild(menuImage);
@@ -175,7 +189,13 @@ void PopAlertDialog::backgroundFinish(){
     int i = 0;
     for (Node* pObj : vector){
         Node* node = dynamic_cast<Node*>(pObj);
-        node->setPosition(Point(pCenter.x - m_dialogContentSize.width / 2 + btnWidth * (i + 1), pCenter.y - m_dialogContentSize.height / 3));
+        if (m_buttonListed) {
+            node->setPosition((i % 2 == 0) ? pCenter.x - m_dialogContentSize.width / 4 : pCenter.x + m_dialogContentSize.width / 4, pCenter.y);
+        }
+        else {
+            node->setPosition(Point(pCenter.x - m_dialogContentSize.width / 2 + btnWidth * (i + 1), pCenter.y - m_dialogContentSize.height / 3));
+        }
+        
         i++;
     }
     

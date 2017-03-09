@@ -347,8 +347,8 @@ void ExchangeScene::showExchangeInput(size_t itemIndex, size_t colorIndex){
         popup->setTag(dialogTag);
         popup->setCallBackFunc(this,callfuncN_selector(ExchangeScene::popButtonCallback));
         
-        popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
-        popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+        popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "","",1);
+        popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "","",0);
         
         this->addChild(popup, 2);
         

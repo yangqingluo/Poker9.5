@@ -400,6 +400,7 @@ void ShopScene::showBuyInfo(){
     PopAlertDialog* popup = PopAlertDialog::create("images/store2_buy_background.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
     popup->setTitle("请选择支付方式\n(银行卡支付请选择支付宝)", 18, Color3B::Color3B(220, 20, 60));
     popup->m_touchCancel = true;
+    popup->m_buttonListed = true;
     popup->setCallBackFunc(this,callfuncN_selector(ShopScene::popButtonCallback));
     
 //    auto btn_apple = Button::create("images/store2_buy_channel_select_background.png");
@@ -411,9 +412,15 @@ void ShopScene::showBuyInfo(){
 //    btn_apple->addTouchEventListener(CC_CALLBACK_2(ShopScene::touchEvent, this));
 //    btn_apple->setTag(20);
     
+    BuyItem* item = buyList.at(payIndex);
+    char m_string_pay_normal[20] = {0};
+    char m_string_pay_apple[20] = {0};
     
-    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "App Store",1);
-    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "支付宝",0);
+    sprintf(m_string_pay_normal, "¥ %d", item->price_normal);
+    sprintf(m_string_pay_apple, "¥ %d", item->price_apple);
+    
+    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "App Store",m_string_pay_apple,1);
+    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "支付宝",m_string_pay_normal,0);
     
     this->addChild(popup, INT_MAX);
     

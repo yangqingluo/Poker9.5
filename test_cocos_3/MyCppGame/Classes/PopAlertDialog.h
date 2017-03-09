@@ -30,7 +30,7 @@ public:
     void setContentTextShowed(const char* text);
     void setContentText(const char* text,int fontsize=20,int padding=50,int paddingTop=50);
     void setCallBackFunc(Ref* target,SEL_CallFuncN callfun);
-    bool addButton(const char* normalImage,const char* selectedImage,const char* title,int tag=0);
+    bool addButton(const char* normalImage,const char* selectedImage,const char* title,const char* subTitle,int tag=0);
     
     virtual void onEnter();
     virtual void onExit();

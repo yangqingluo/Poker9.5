@@ -467,8 +467,8 @@ void Hall::showSettingChip(){
     popup->setTag(dialogTag);
     popup->setCallBackFunc(this,callfuncN_selector(Hall::popButtonCallback));
     
-    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
-    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
+    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "","",1);
+    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "","",0);
     
     this->addChild(popup, 2);
     

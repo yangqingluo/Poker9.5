@@ -237,8 +237,8 @@ void PokerDesk::showSettingChip(){
     popup->setTitle("");
     popup->setContentText("请设置本金数目",12,50,130);
     popup->setCallBackFunc(this,callfuncN_selector(PokerDesk::popButtonCallback));
-    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "",0);
-    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "",1);
+    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "","",0);
+    popup->addButton("images/btn_cancel.png", "images/btn_cancel_highlighted.png", "","",1);
     
     this->addChild(popup);
     
