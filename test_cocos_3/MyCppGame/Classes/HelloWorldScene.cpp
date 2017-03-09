@@ -95,14 +95,14 @@ bool HelloWorld::init()
                                               "images/login_qq.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 1));
     login_QQItem->setScale(login_WechatItem->getScale());
-    login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.1 * visibleSize.height));
+    login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.4 * visibleSize.height));
     
     auto login_SystemItem = MenuItemImage::create(
                                               "images/login_system.png",
                                               "images/login_system.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 2));
     login_SystemItem->setScale(login_WechatItem->getScale());
-    login_SystemItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1.5 * login_SystemItem->getBoundingBox().size.width, origin.y + 0.1 * visibleSize.height));
+    login_SystemItem->setPosition(Vec2(login_QQItem->getPositionX(), login_QQItem->getBoundingBox().getMinY() - login_QQItem->getBoundingBox().size.height));
     
     
     // create menu, it's an autorelease object
