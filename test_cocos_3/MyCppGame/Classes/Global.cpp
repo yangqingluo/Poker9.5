@@ -338,6 +338,19 @@ void Global::parsePokerData(const rapidjson::Value& val_gateCards, const rapidjs
     }
 }
 
+void Global::parsePlayerStake(const rapidjson::Value& val_betStakes){
+    if (val_betStakes.IsArray()) {
+        for (int i = 0; i < val_betStakes.Size(); ++i) {
+            const rapidjson::Value& val_stake = val_betStakes[i];
+            if (val_stake.HasMember("count") && val_stake.HasMember("gate")) {
+                int count = val_stake["count"].GetInt();
+                int gate = atoi(val_stake["gate"].GetString());
+                table_data.round.betStakes[(gate - 1) % 4] = count;
+            }
+        }
+    }
+}
+
 void Global::clearPlayerList(){
     memset(playerList, 0, sizeof(PlayerData) * MAX_PLAYER_NUM);
     playerListCount = 0;
@@ -936,16 +949,7 @@ void Global::parseData(char* pbuf, int len){
                     
                     if (val_content.HasMember("betStakes")) {
                         rapidjson::Value& val_betStakes = val_content["betStakes"];
-                        if (val_betStakes.IsArray()) {
-                            for (int i = 0; i < val_betStakes.Size(); ++i) {
-                                rapidjson::Value& val_stake = val_betStakes[i];
-                                if (val_stake.HasMember("count") && val_stake.HasMember("gate")) {
-                                    int count = val_stake["count"].GetInt();
-                                    int gate = val_stake["gate"].GetInt();
-                                    table_data.round.betStakes[gate] = count;
-                                }
-                            }
-                        }
+                        this->parsePlayerStake(val_betStakes);
                     }
                 }
                     break;
@@ -996,16 +1000,7 @@ void Global::parseData(char* pbuf, int len){
                         
                         if (val_content.HasMember("betStakes")) {
                             rapidjson::Value& val_betStakes = val_content["betStakes"];
-                            if (val_betStakes.IsArray()) {
-                                for (int i = 0; i < val_betStakes.Size(); ++i) {
-                                    rapidjson::Value& val_stake = val_betStakes[i];
-                                    if (val_stake.HasMember("count") && val_stake.HasMember("gate")) {
-                                        int count = val_stake["count"].GetInt();
-                                        int gate = val_stake["gate"].GetInt();
-                                        table_data.round.betStakes[gate] = count;
-                                    }
-                                }
-                            }
+                            this->parsePlayerStake(val_betStakes);
                         }
                     }
                 }
@@ -1073,16 +1068,7 @@ void Global::parseData(char* pbuf, int len){
                     
                     if (val_content.HasMember("betStakes")) {
                         rapidjson::Value& val_betStakes = val_content["betStakes"];
-                        if (val_betStakes.IsArray()) {
-                            for (int i = 0; i < val_betStakes.Size(); ++i) {
-                                rapidjson::Value& val_stake = val_betStakes[i];
-                                if (val_stake.HasMember("count") && val_stake.HasMember("gate")) {
-                                    int count = val_stake["count"].GetInt();
-                                    int gate = val_stake["gate"].GetInt();
-                                    table_data.round.betStakes[gate] = count;
-                                }
-                            }
-                        }
+                        this->parsePlayerStake(val_betStakes);
                     }
                     
                     if (val_content.HasMember("accountResult")) {

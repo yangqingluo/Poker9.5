@@ -207,6 +207,7 @@ public:
     void parseUserData(const rapidjson::Value& val_user, UserData* data_user);
     void parsePlayerData(const rapidjson::Value& val_player, PlayerData* data_player);
     void parsePokerData(const rapidjson::Value& val_gateCards, const rapidjson::Value& val_startCard);
+    void parsePlayerStake(const rapidjson::Value& val_betStakes);
     
     void update(float delta);
 private:
