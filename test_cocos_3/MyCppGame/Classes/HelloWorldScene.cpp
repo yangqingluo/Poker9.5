@@ -211,6 +211,9 @@ void getCallback(int platform, int stCode, map<string, string>& data) {
             if (0 == strcmp(it->first.c_str(), "name")) {
                 strcpy(name, it->second.c_str());
             }
+            else if (0 == strcmp(it->first.c_str(), "screen_name")) {
+                strcpy(name, it->second.c_str());
+            }
             
             if (0 == strcmp(it->first.c_str(), "uid")) {
                 strcpy(uid, it->second.c_str());
@@ -218,6 +221,13 @@ void getCallback(int platform, int stCode, map<string, string>& data) {
             
             if (0 == strcmp(it->first.c_str(), "accessToken")) {
                 strcpy(accessToken, it->second.c_str());
+            }
+            else if (0 == strcmp(it->first.c_str(), "access_token")) {
+                strcpy(accessToken, it->second.c_str());
+            }
+            
+            if (strlen(name) == 0) {
+                sprintf(name, "福禄寿");
             }
             
             if (strlen(name) > 0 && strlen(uid) > 0 && strlen(accessToken) > 0 ) {
