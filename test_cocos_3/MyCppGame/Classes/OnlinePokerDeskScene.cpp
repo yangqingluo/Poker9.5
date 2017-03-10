@@ -408,24 +408,21 @@ void OnlinePokerDesk::onEnter(){
     this->showGamePlayerInfo();
     this->showDealerInfo();
     
-    this->showMessageManager(true);
     if (this->roomType == RoomType_Gold) {
+        this->showMessageManager(true);
         Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
     }
     else if (this->roomType == RoomType_VIP) {
+        this->showMessageManager(true);
         Global::getInstance()->sendEnterRoomByPassword(this->roomPassword, jettonToEnter, 1);
     }
     else if (this->roomType == RoomType_Diamond) {
+        this->showMessageManager(true);
         Global::getInstance()->sendEnterRoomByPassword(this->roomPassword, jettonToEnter, 2);
     }
     else if (this->roomType == RoomType_Recovery) {
-        this->showMessageManager(false);
 //        Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
     }
-    else {
-        this->showMessageManager(false);
-    }
-
 }
 
 void OnlinePokerDesk::onExit(){

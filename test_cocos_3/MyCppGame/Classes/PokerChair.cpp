@@ -54,37 +54,17 @@ bool PokerChair::onTouchBegan(Touch* touch,Event* event){
 void PokerChair::onEnter(){
     LayerColor::onEnter();
     
-    pokerTypeLabel = Label::createWithTTF("", "fonts/microsoftSong.ttf", 12);
-    pokerTypeLabel->setVisible(false);
     pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.08 * this->getContentSize().height);
-    this->addChild(pokerTypeLabel);
     
     QLImageSprite* background = getBetZoneBackGround();
     if (background != NULL) {
-        background->setTag(10);
         background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
-        this->addChild(background);
         
-        betTotalLabel = Label::createWithSystemFont("", "Arial", 20.0);
-        betTotalLabel->setColor(Color3B::WHITE);
-//        betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
-//        betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
-        betTotalLabel->setVisible(false);
         betTotalLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.2 * background->getContentSize().height);
-        this->addChild(betTotalLabel);
         
-        betPlayerLabel = Label::createWithSystemFont("", "Arial", 20.0);
-        betPlayerLabel->setColor(Color3B::YELLOW);
-//        betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
-//        betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
-        betPlayerLabel->setVisible(false);
         betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
-        this->addChild(betPlayerLabel);
         
-        settlementLabel = Label::createWithTTF("", "fonts/microsoftSong.ttf", 12);
-        settlementLabel->setVisible(false);
         settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.24 * this->getContentSize().height);
-        this->addChild(settlementLabel);
         
         //触摸响应注册
         auto listener = EventListenerTouchOneByOne::create();
@@ -92,19 +72,6 @@ void PokerChair::onEnter(){
         listener->onTouchBegan = CC_CALLBACK_2(PokerChair::onTouchBegan, this);//触摸开始
         getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, background);//注册分发器
         
-        Size size_stabber = background->getContentSize();
-        
-        m_BeStabberSprite = PokerStabberBtn::create(Color4B(0, 0, 0, 0), size_stabber);
-        m_BeStabberSprite->setPosition(Vec2(background->getBoundingBox().getMinX(), background->getBoundingBox().getMinY()));
-        this->addChild(m_BeStabberSprite);
-        m_BeStabberSprite->setVisible(false);
-        
-        m_Stabber = PokerStabber::create("images/default_head.png", size_stabber);
-        m_Stabber->setPosition(m_BeStabberSprite->getPosition());
-        this->addChild(m_Stabber);
-        m_Stabber->setVisible(false);
-        
-        m_BeStabberSprite->setTag(11);
         //触摸响应注册
         auto stabber_listener = EventListenerTouchOneByOne::create();
         stabber_listener->setSwallowTouches(false);
@@ -135,9 +102,60 @@ PokerChair* PokerChair::create(const char* betZoneImage,Size size){
     if (betZoneImage) {
         layer->setBetZoneBackGround(QLImageSprite::create(betZoneImage, size));
     }
+    
+    layer->initialSubViews();
+    
     return layer;
 }
 
+void PokerChair::initialSubViews(){
+    pokerTypeLabel = Label::createWithTTF("", "fonts/microsoftSong.ttf", 12);
+    pokerTypeLabel->setVisible(false);
+    pokerTypeLabel->setPosition(0.5 * this->getContentSize().width, -0.08 * this->getContentSize().height);
+    this->addChild(pokerTypeLabel);
+    
+    QLImageSprite* background = getBetZoneBackGround();
+    if (background != NULL) {
+        background->setTag(10);
+        background->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.5 * background->getContentSize().height);
+        this->addChild(background);
+        
+        betTotalLabel = Label::createWithSystemFont("", "Arial", 20.0);
+        betTotalLabel->setColor(Color3B::WHITE);
+        //        betTotalLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
+        //        betTotalLabel->enableOutline(Color4B::WHITE, 1);             //轮廓
+        betTotalLabel->setVisible(false);
+        betTotalLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.2 * background->getContentSize().height);
+        this->addChild(betTotalLabel);
+        
+        betPlayerLabel = Label::createWithSystemFont("", "Arial", 20.0);
+        betPlayerLabel->setColor(Color3B::YELLOW);
+        //        betPlayerLabel->enableShadow(Color4B::BLACK, Size(1, 1)); //阴影
+        //        betPlayerLabel->enableOutline(Color4B::YELLOW, 1);             //轮廓
+        betPlayerLabel->setVisible(false);
+        betPlayerLabel->setPosition(0.5 * this->getContentSize().width, this->getContentSize().height - 0.8 * background->getContentSize().height);
+        this->addChild(betPlayerLabel);
+        
+        settlementLabel = Label::createWithTTF("", "fonts/microsoftSong.ttf", 12);
+        settlementLabel->setVisible(false);
+        settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.24 * this->getContentSize().height);
+        this->addChild(settlementLabel);
+        
+        Size size_stabber = background->getContentSize();
+        
+        m_BeStabberSprite = PokerStabberBtn::create(Color4B(0, 0, 0, 0), size_stabber);
+        m_BeStabberSprite->setPosition(Vec2(background->getBoundingBox().getMinX(), background->getBoundingBox().getMinY()));
+        this->addChild(m_BeStabberSprite);
+        m_BeStabberSprite->setVisible(false);
+        
+        m_Stabber = PokerStabber::create("images/default_head.png", size_stabber);
+        m_Stabber->setPosition(m_BeStabberSprite->getPosition());
+        this->addChild(m_Stabber);
+        m_Stabber->setVisible(false);
+        
+        m_BeStabberSprite->setTag(11);        
+    }
+}
 
 void PokerChair::setIsBanker(bool yn){
     if (yn) {

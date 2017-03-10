@@ -38,6 +38,7 @@ public:
     CREATE_FUNC(PokerChair);
     static PokerChair* create(const char* betZoneImage,Size size);
     
+    void initialSubViews();//初始化视图
     void setIsBanker(bool yn);//设置是否是庄家
     void setHighlighted(bool yn);
     void updatePokerPosition();//更新牌的位置

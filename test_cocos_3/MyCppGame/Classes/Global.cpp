@@ -782,7 +782,7 @@ void Global::parseData(char* pbuf, int len){
                     
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
-                        return;
+//                        return;
                     }
                     
                     if (val_content.IsArray()) {
