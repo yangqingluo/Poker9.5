@@ -419,7 +419,8 @@ void OnlinePokerDesk::onEnter(){
         Global::getInstance()->sendEnterRoomByPassword(this->roomPassword, jettonToEnter, 2);
     }
     else if (this->roomType == RoomType_Recovery) {
-        Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
+        this->showMessageManager(false);
+//        Global::getInstance()->sendEnterRoom(roomTypeId, jettonToEnter);
     }
     else {
         this->showMessageManager(false);
@@ -1178,6 +1179,15 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 chairBuffer->updateJetton(sp);
             }
         }
+        
+        this->showMessageManager(false);
+        this->showGamePlayerInfo();
+        
+        createPokers();
+        this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
+        
+        btn_addJetton->setVisible(true);
+        scheduleUpdate();
     }
     
     switch (post->cmd) {

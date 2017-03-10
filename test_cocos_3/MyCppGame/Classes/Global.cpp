@@ -744,6 +744,16 @@ void Global::parseData(char* pbuf, int len){
         }
         else if(document.HasMember("commandId") && document.HasMember("content")){
             int commandId = document["commandId"].GetInt();
+            
+            if (commandId >= 10000) {
+                //恢复牌局
+                rapidjson::Value& val_content = document["content"];
+                if (val_content.HasMember("tableId")) {
+                    const char* tableId = val_content["tableId"].GetString();
+                    memcpy(table_data.tableId, tableId, strlen(tableId));
+                }
+            }
+            
             switch (commandId) {
                 case cmd_removePlayer:{
                     //踢出房间
@@ -772,7 +782,6 @@ void Global::parseData(char* pbuf, int len){
                     
                     const char* tableId = document["tableId"].GetString();
                     if (0 != strcmp(tableId, table_data.tableId)) {
-                        
                         return;
                     }
                     
