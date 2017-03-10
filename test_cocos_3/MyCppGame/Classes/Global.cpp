@@ -883,14 +883,14 @@ void Global::parseData(char* pbuf, int len){
                         table_data.round.roundIndex = val_content["roundIndex"].GetInt();
                     }
                     
-//                    if (val_content.HasMember("bureauId")) {
-//                        const char* bureauId = val_content["bureauId"].GetString();
-//                        memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
-//                    }
+                    if (val_content.HasMember("bureauId")) {
+                        const char* bureauId = val_content["bureauId"].GetString();
+                        memcpy(table_data.bureau.bureauId, bureauId, strlen(bureauId));
+                    }
                     
                     if (val_content.HasMember("ownerId")) {
                         const char* ownerId = val_content["ownerId"].GetString();
-                        memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
+                        resetBureauOwnerData(ownerId);
                     }
                 }
                     break;
@@ -944,7 +944,7 @@ void Global::parseData(char* pbuf, int len){
                     
                     if (val_content.HasMember("ownerId")) {
                         const char* ownerId = val_content["ownerId"].GetString();
-                        memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
+                        resetBureauOwnerData(ownerId);
                     }
                     
                     if (val_content.HasMember("betStakes")) {
@@ -978,10 +978,7 @@ void Global::parseData(char* pbuf, int len){
                         
                         if (val_content.HasMember("ownerId")) {
                             const char* ownerId = val_content["ownerId"].GetString();
-                            memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
-                            
-                            //判断当前玩家是否是庄家
-                            isDealer = (0 == strcmp(table_data.bureau.bureauOwnerId, user_data.ID));
+                            resetBureauOwnerData(ownerId);
                         }
                         
                         if (val_content.HasMember("countDown")) {
@@ -1046,10 +1043,7 @@ void Global::parseData(char* pbuf, int len){
                     
                     if (val_content.HasMember("ownerId")) {
                         const char* ownerId = val_content["ownerId"].GetString();
-                        memcpy(table_data.bureau.bureauOwnerId, ownerId, strlen(ownerId));
-                        
-                        //判断当前玩家是否是庄家
-                        isDealer = (0 == strcmp(table_data.bureau.bureauOwnerId, user_data.ID));
+                        resetBureauOwnerData(ownerId);
                     }
                     
                     if (val_content.HasMember("countDown")) {
