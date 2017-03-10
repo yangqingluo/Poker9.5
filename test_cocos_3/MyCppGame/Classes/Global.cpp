@@ -1272,6 +1272,27 @@ void Global::sendEnterRoomByPassword(const char* roomPassword, int capital, int 
     sendData(buffer.GetString());
 }
 
+void Global::sendEnterRoomByID(const char* roomId, int capital, int type){
+    rapidjson::Document doc;
+    doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    rapidjson::Value content(rapidjson::kObjectType);
+    
+    content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
+    content.AddMember("roomId", rapidjson::Value(roomId, allocator), allocator);
+    content.AddMember("capital", capital, allocator);
+    content.AddMember("type", type, allocator);
+    
+    doc.AddMember("id", cmd_enterRoomByRoomId, allocator);
+    doc.AddMember("content", content, allocator);
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+    doc.Accept(write);
+    
+    sendData(buffer.GetString());
+}
+
 void Global::sendPlayerReady(){
     rapidjson::Document doc;
     doc.SetObject();

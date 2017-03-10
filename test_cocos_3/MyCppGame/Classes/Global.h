@@ -51,6 +51,7 @@ using namespace CocosDenshion;
 
 #define cmd_enterRoom                  3000//加入普通金币房间
 #define cmd_leaveRoom                  3001//退出房间
+#define cmd_enterRoomByRoomId          3002//加入ID加入指定房间
 
 #define cmd_playerReady                3003//玩家准备
 #define cmd_applyOwner                 3004//申请上庄
@@ -196,6 +197,7 @@ public:
     void sendHandle();
     void sendEnterRoom(const char* roomTypeId, int capital);
     void sendEnterRoomByPassword(const char* roomPassword, int capital, int type);
+    void sendEnterRoomByID(const char* roomId, int capital, int type);
     void sendPlayerReady();
     void sendApplyOwner();
     void sendApplyStabber(int gateType);

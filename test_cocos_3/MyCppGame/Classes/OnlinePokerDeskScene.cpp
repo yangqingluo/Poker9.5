@@ -209,8 +209,9 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
             if (!m_isSendSet) {
                 //发牌动画未完成
                 m_isSendSet = true;
-                
-                sendPokerWithoutAnimation();
+                if (m_IndexSend % 9 != 0) {
+                    sendPokerWithoutAnimation();
+                }
             }
         }
             break;
