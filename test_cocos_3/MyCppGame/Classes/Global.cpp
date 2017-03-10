@@ -780,10 +780,10 @@ void Global::parseData(char* pbuf, int len){
                     //同步玩家列表
                     rapidjson::Value& val_content = document["content"];
                     
-                    const char* tableId = document["tableId"].GetString();
-                    if (0 != strcmp(tableId, table_data.tableId)) {
+//                    const char* tableId = document["tableId"].GetString();
+//                    if (0 != strcmp(tableId, table_data.tableId)) {
 //                        return;
-                    }
+//                    }
                     
                     if (val_content.IsArray()) {
                         clearPlayerList();
