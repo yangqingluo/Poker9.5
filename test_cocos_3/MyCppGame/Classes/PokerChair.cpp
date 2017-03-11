@@ -66,6 +66,9 @@ void PokerChair::onEnter(){
         
         settlementLabel->setPosition(0.5 * this->getContentSize().width, -0.24 * this->getContentSize().height);
         
+        m_BeStabberSprite->setPosition(Vec2(background->getBoundingBox().getMinX(), background->getBoundingBox().getMinY()));
+        m_Stabber->setPosition(m_BeStabberSprite->getPosition());
+        
         //触摸响应注册
         auto listener = EventListenerTouchOneByOne::create();
         listener->setSwallowTouches(true);
@@ -144,12 +147,10 @@ void PokerChair::initialSubViews(){
         Size size_stabber = background->getContentSize();
         
         m_BeStabberSprite = PokerStabberBtn::create(Color4B(0, 0, 0, 0), size_stabber);
-        m_BeStabberSprite->setPosition(Vec2(background->getBoundingBox().getMinX(), background->getBoundingBox().getMinY()));
         this->addChild(m_BeStabberSprite);
         m_BeStabberSprite->setVisible(false);
         
         m_Stabber = PokerStabber::create("images/default_head.png", size_stabber);
-        m_Stabber->setPosition(m_BeStabberSprite->getPosition());
         this->addChild(m_Stabber);
         m_Stabber->setVisible(false);
         

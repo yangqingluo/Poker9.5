@@ -105,7 +105,7 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
                                          CC_CALLBACK_1(PopAlertDialog::buttonCallBack,this));
     menuImage->setTag(tag);
     menuImage->setPosition(center_point);
-    menuImage->setScale((m_buttonListed ? 0.4 : 0.2) * m_dialogContentSize.width / menuImage->getContentSize().width);
+    menuImage->setScale((m_buttonListed ? 0.45 : 0.2) * m_dialogContentSize.width / menuImage->getContentSize().width);
     
     if (strlen(title)) {
         Size menuSize = menuImage->getContentSize();
