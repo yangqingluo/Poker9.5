@@ -183,6 +183,10 @@
 		FCD0BD791DF2D4C800952CAD /* BetLimiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCD0BD761DF2D4C800952CAD /* BetLimiter.cpp */; };
 		FCDF45601DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
 		FCDF45611DF662AA00AB1016 /* JettonChosenSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */; };
+		FCEB0EDB1E74506C00A60354 /* GamePayment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCEB0ED51E74506C00A60354 /* GamePayment.cpp */; };
+		FCEB0EDC1E74506C00A60354 /* IOSiAP.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCEB0ED81E74506C00A60354 /* IOSiAP.mm */; };
+		FCEB0EDD1E74506C00A60354 /* IOSiAP_Bridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCEB0ED91E74506C00A60354 /* IOSiAP_Bridge.cpp */; };
+		FCEB0EE01E7452DB00A60354 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCEB0EDF1E7452DB00A60354 /* StoreKit.framework */; };
 		FCED08D51E1C0750004BDFD6 /* Global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCED08B71E1C0750004BDFD6 /* Global.cpp */; };
 		FCED08D61E1C0750004BDFD6 /* Global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCED08B71E1C0750004BDFD6 /* Global.cpp */; };
 		FCED08D71E1C0750004BDFD6 /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCED08B91E1C0750004BDFD6 /* LoginScene.cpp */; };
@@ -500,6 +504,13 @@
 		FCD0BD771DF2D4C800952CAD /* BetLimiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetLimiter.h; sourceTree = "<group>"; };
 		FCDF455E1DF662AA00AB1016 /* JettonChosenSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JettonChosenSprite.cpp; sourceTree = "<group>"; };
 		FCDF455F1DF662AA00AB1016 /* JettonChosenSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JettonChosenSprite.h; sourceTree = "<group>"; };
+		FCEB0ED51E74506C00A60354 /* GamePayment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GamePayment.cpp; sourceTree = "<group>"; };
+		FCEB0ED61E74506C00A60354 /* GamePayment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GamePayment.h; sourceTree = "<group>"; };
+		FCEB0ED71E74506C00A60354 /* IOSiAP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSiAP.h; sourceTree = "<group>"; };
+		FCEB0ED81E74506C00A60354 /* IOSiAP.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IOSiAP.mm; sourceTree = "<group>"; };
+		FCEB0ED91E74506C00A60354 /* IOSiAP_Bridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOSiAP_Bridge.cpp; sourceTree = "<group>"; };
+		FCEB0EDA1E74506C00A60354 /* IOSiAP_Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSiAP_Bridge.h; sourceTree = "<group>"; };
+		FCEB0EDF1E7452DB00A60354 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		FCED08B71E1C0750004BDFD6 /* Global.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Global.cpp; sourceTree = "<group>"; };
 		FCED08B81E1C0750004BDFD6 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		FCED08B91E1C0750004BDFD6 /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
@@ -537,6 +548,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCEB0EE01E7452DB00A60354 /* StoreKit.framework in Frameworks */,
 				FC5481C21E30BF74005A39C2 /* AlipaySDK.framework in Frameworks */,
 				FC5481C31E30BF74005A39C2 /* libcrypto.a in Frameworks */,
 				FC5481C41E30BF74005A39C2 /* libssl.a in Frameworks */,
@@ -659,6 +671,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FCEB0EDF1E7452DB00A60354 /* StoreKit.framework */,
 				FC5481541E30BB5C005A39C2 /* CFNetwork.framework */,
 				FC54814E1E30BAD5005A39C2 /* libc++.tbd */,
 				FC331E691E23C65A00174856 /* GameController.framework */,
@@ -713,6 +726,7 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				FCEB0ED41E74506C00A60354 /* IAP */,
 				FC5481581E30BF74005A39C2 /* alipay_sdk */,
 				FC331E0B1E23909200174856 /* umeng_ios_social_sdk */,
 				FC331DFF1E23907E00174856 /* Common */,
@@ -1066,6 +1080,19 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		FCEB0ED41E74506C00A60354 /* IAP */ = {
+			isa = PBXGroup;
+			children = (
+				FCEB0ED51E74506C00A60354 /* GamePayment.cpp */,
+				FCEB0ED61E74506C00A60354 /* GamePayment.h */,
+				FCEB0ED71E74506C00A60354 /* IOSiAP.h */,
+				FCEB0ED81E74506C00A60354 /* IOSiAP.mm */,
+				FCEB0ED91E74506C00A60354 /* IOSiAP_Bridge.cpp */,
+				FCEB0EDA1E74506C00A60354 /* IOSiAP_Bridge.h */,
+			);
+			path = IAP;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1275,6 +1302,7 @@
 				FC7E77741E0EBFBC008EBE40 /* HelpScene.cpp in Sources */,
 				FC8DD9B31E66BFC4007C7942 /* ImagePicker.mm in Sources */,
 				FC5481BD1E30BF74005A39C2 /* NSDataEx.m in Sources */,
+				FCEB0EDB1E74506C00A60354 /* GamePayment.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				FC331E081E23907E00174856 /* UmSocialControllerIOS.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
@@ -1284,8 +1312,10 @@
 				FCA383F51E1F42C5006E073C /* OCFunction.m in Sources */,
 				FC1F22001E34989900BA3D85 /* ExchangeCell.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				FCEB0EDC1E74506C00A60354 /* IOSiAP.mm in Sources */,
 				FC5481BC1E30BF74005A39C2 /* base64.m in Sources */,
 				FCED08E71E1C0750004BDFD6 /* RegistInputView.cpp in Sources */,
+				FCEB0EDD1E74506C00A60354 /* IOSiAP_Bridge.cpp in Sources */,
 				FCB5E04C1DF017D300EDB420 /* JettonSprite.cpp in Sources */,
 				FC3A21241E2E19F0000C67F0 /* CGameSocket.cpp in Sources */,
 				FC7E77781E0F6C94008EBE40 /* InviterScene.cpp in Sources */,

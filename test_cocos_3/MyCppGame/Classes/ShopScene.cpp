@@ -11,6 +11,9 @@
 #include "CppToFunction.h"
 #include "BaseCell.h"
 #include "PopAlertDialog.h"
+#include "GamePayment.h"
+
+int getShopTag = 555;
 
 ShopScene::ShopScene(){
     NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(ShopScene::onNotification_Pay), kNotification_Pay, NULL);
@@ -27,7 +30,7 @@ Scene* ShopScene::createScene()
     
     // 'layer' is an autorelease object
     auto layer = ShopScene::create();
-    
+    layer->setTag(getShopTag);
     // add layer as a child to scene
     scene->addChild(layer);
     
@@ -82,6 +85,7 @@ bool ShopScene::init()
     this->addChild(menu, 1);
     
     int buy[3][3] = {{60,6,6},{1000,98,100},{10000,998,1000}};
+    char buyID[3][100] = {"com.fulushou.ninehalf.gold60","com.fulushou.ninehalf.gold1000","com.fulushou.ninehalf.gold10000"};
     for (int i = 0; i < 3; i++) {
         BuyItem* item = new BuyItem();
         item->autorelease();
@@ -89,6 +93,7 @@ bool ShopScene::init()
         item->goldCount = buy[i][0];
         item->price_normal = buy[i][1];
         item->price_apple = buy[i][2];
+        strcpy(item->ID, buyID[i]);
         
         buyList.pushBack(item);
     }
@@ -403,15 +408,6 @@ void ShopScene::showBuyInfo(){
     popup->m_buttonListed = true;
     popup->setCallBackFunc(this,callfuncN_selector(ShopScene::popButtonCallback));
     
-//    auto btn_apple = Button::create("images/store2_buy_channel_select_background.png");
-//    btn_apple->setScale9Enabled(true);//打开scale9 可以拉伸图片
-//    btn_apple->setTitleText("App Store");
-//    btn_apple->setTitleFontSize(16);
-//    btn_apple->setContentSize(Size(0.2 * visibleSize.width, 0.2 * visibleSize.width * 88.0 / 298.0));
-//    btn_apple->setPosition(Vec2(0.25 * visibleSize.width, 0.55 * popup->getContentSize().height));
-//    btn_apple->addTouchEventListener(CC_CALLBACK_2(ShopScene::touchEvent, this));
-//    btn_apple->setTag(20);
-    
     BuyItem* item = buyList.at(payIndex);
     char m_string_pay_normal[20] = {0};
     char m_string_pay_apple[20] = {0};
@@ -423,13 +419,60 @@ void ShopScene::showBuyInfo(){
     popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "支付宝",m_string_pay_normal,0);
     
     this->addChild(popup, INT_MAX);
-    
-//    popup->addChild(btn_apple);
+}
+
+void ShopScene::showMessageManager(bool isShow){
+    if (isShow) {
+        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+    }
+    else {
+        if (m_pMessage != NULL) {
+            m_pMessage->hidden();
+            m_pMessage = NULL;
+        }
+    }
+}
+
+void getProductCallback(IOSProduct *product, int code) // 获取商品的回调
+{
+    ShopScene* spLayer =(ShopScene* ) Director::getInstance()->getRunningScene()->getChildByTag(
+                                                                                                  getShopTag);
+    spLayer->showMessageManager(false);
+    if (product != NULL) {
+        log( "My: product->productIdentifier => %s", product->productIdentifier.c_str() );
+        log( "My: product->localizedPrice => %s", product->localizedPrice.c_str() );
+    }
+    else {
+        NoteTip::show("购买失败");
+    }
 }
 
 void ShopScene::popButtonCallback(Node* pNode){
-    
+    switch (pNode->getTag()) {
+        case 0:{
+            BuyItem* item = buyList.at(payIndex);
+            
+            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+            this->onHttpRequest_GetOrderAndSign(item->price_normal);
+        }
+            break;
+            
+        case 1:{
+            BuyItem* item = buyList.at(payIndex);
+            string str_s = item->ID;
+            
+            this->showMessageManager(true);
+            GamePayment *gamePayment = GamePayment::getInstance();
+            gamePayment->req_iap(str_s, getProductCallback);
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
+
+
 
 #pragma edixBox
 //开始编辑
@@ -750,10 +793,7 @@ void ShopScene::onHttpRequest_RechargeForApple(float totalGold){
 
 // HTTP响应请求函数
 void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
-    if (m_pMessage != NULL) {
-        m_pMessage->hidden();
-        m_pMessage = NULL;
-    }
+    this->showMessageManager(false);
     
     // 没有收到响应
     if (!response){

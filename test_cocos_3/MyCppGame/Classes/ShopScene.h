@@ -35,6 +35,7 @@ public:
     int goldCount;
     int price_apple;
     int price_normal;
+    char ID[100];
 };
 
 class ShopScene : public Layer, public TableViewDataSource, public TableViewDelegate, public ui::EditBoxDelegate
@@ -53,6 +54,8 @@ public:
     void showSettingWithIndex(int index);
     void showBuyInfo();
     void popButtonCallback(Node* pNode);
+    
+    void showMessageManager(bool isShow);
 private:
     Vector<YNButton* > listButtons;
     Vector<LayerColor* > listLayers;
