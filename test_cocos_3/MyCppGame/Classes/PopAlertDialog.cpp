@@ -119,7 +119,7 @@ bool PopAlertDialog::addButton(const char *normalImage, const char *selectedImag
             auto subLabel = Label::create();
             subLabel->setString(subTitle);
             subLabel->setSystemFontSize(15.0);
-            subLabel->setColor(Color3B::Color3B(220, 20, 60));
+            subLabel->setTextColor(Color4B(220, 20, 60, 255));
             subLabel->setPosition(Point(menuSize.width/2,menuSize.height/2));
             subLabel->setDimensions(0.8 * menuSize.width, menuSize.height);
             subLabel->setHorizontalAlignment(TextHAlignment::RIGHT);

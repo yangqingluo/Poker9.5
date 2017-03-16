@@ -457,7 +457,7 @@ void ExchangeScene::popButtonCallback(Node* pNode){
 Size ExchangeScene::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
     if (table == recordListTableView) {
-        return Size(recordListCellWidth, 40);
+        return Size(recordListCellWidth, 50);
     }
     else if (table == exchangeListTableView) {
         return Size(recordListCellWidth, 50);
@@ -481,7 +481,7 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
             titleLabel->setSystemFontSize(10.0);
             titleLabel->setTextColor(Color4B::BLACK);
             titleLabel->setPosition(recordListCellWidth / 2, 15);
-            titleLabel->setDimensions(recordListCellWidth, 40);
+            titleLabel->setDimensions(recordListCellWidth, 50);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::TOP);
             cell->addChild(titleLabel, 0 , 1);
@@ -489,7 +489,7 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         Label* label = (Label* )cell->getChildByTag(1);
         ExchangeRecordItem* item = recordItems.at(recordItems.size() - 1 - idx);
-        char content[200] = {0};
+        char content[300] = {0};
         char status_string[100] = {0};
         switch (item->status) {
             case 0:{

@@ -65,7 +65,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>tencent1105893963</string>
+				<string>QQ41ea9a4b</string>
 			</array>
 		</dict>
 		<dict>
@@ -82,6 +82,14 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fulushouNineHalf</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tencent1105893963</string>
 			</array>
 		</dict>
 	</array>
