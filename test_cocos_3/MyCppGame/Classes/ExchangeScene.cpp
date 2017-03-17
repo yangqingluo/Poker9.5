@@ -489,7 +489,7 @@ TableViewCell* ExchangeScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         Label* label = (Label* )cell->getChildByTag(1);
         ExchangeRecordItem* item = recordItems.at(recordItems.size() - 1 - idx);
-        char content[300] = {0};
+        char content[400] = {0};
         char status_string[100] = {0};
         switch (item->status) {
             case 0:{
@@ -774,6 +774,10 @@ void ExchangeScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                                     recordItems.pushBack(item);
                                 }
                             }
+                        }
+                        
+                        if (recordItems.size() == 0) {
+                            NoteTip::show(this, "没有兑换记录");
                         }
                         
                         recordListTableView->reloadData();

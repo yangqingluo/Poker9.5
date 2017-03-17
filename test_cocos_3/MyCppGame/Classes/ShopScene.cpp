@@ -891,6 +891,10 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             }
                         }
                         
+                        if (rechargeItems.size() == 0) {
+                            NoteTip::show(this, "没有充值记录");
+                        }
+                        
                         recordListTableView->reloadData();
                     }
                     else if (tag == "getOrderAndSign") {

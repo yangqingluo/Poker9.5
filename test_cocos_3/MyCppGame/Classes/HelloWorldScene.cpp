@@ -256,6 +256,10 @@ void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
         case 1:{
             CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
 //            sdk->authorize(QQ, auth_selector(authCallback));
+//            if (sdk->isAuthorized(QQ)) {
+//                sdk->deleteAuthorization(QQ, auth_selector(authCallback));
+//            }
+            
             sdk->getPlatformInfo(QQ, auth_selector(getCallback));
         }
             break;
