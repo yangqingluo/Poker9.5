@@ -944,21 +944,20 @@ void OnlinePokerDesk::updatePokerWithData(PokerSprite* poker, PokerData data){
 
 void OnlinePokerDesk::adjustPoker(int index){
     index = index % 6;
-    if (index >= 0 && index <= 5) {
-        m_IndexSend = index * 9;
-        m_isSendSet = false;
-        m_isSendSingle = true;
-        
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
-        for (size_t i = m_arrPokers.size(); i > 0; --i) {
-            PokerSprite* pk = m_arrPokers.at(i - 1);
-            pk->setVisible((i - 1) >= index * 9);
-            pk->showPokerAnimated(false, false, 0);
-            pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
-            this->reorderChild(pk, (int)(m_arrPokers.size() - i));
-        }
+    
+    m_IndexSend = index * 9;
+    m_isSendSet = false;
+    m_isSendSingle = true;
+    
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Vec2 position = Vec2(origin.x + 0.3 * visibleSize.width, origin.y + 0.8 * visibleSize.height);
+    for (size_t i = m_arrPokers.size(); i > 0; --i) {
+        PokerSprite* pk = m_arrPokers.at(i - 1);
+        pk->setVisible((i - 1) >= index * 9);
+        pk->showPokerAnimated(false, false, 0);
+        pk->setPosition(position.x, position.y - (i - 1) * 0.005 * pk->getContentSize().height);
+        this->reorderChild(pk, (int)m_arrPokers.size() - (int)i + 1);
     }
 }
 
@@ -1035,13 +1034,11 @@ void OnlinePokerDesk::movePokerWithoutAnimation(PokerChair* chair,PokerSprite* p
 void OnlinePokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     Global::getInstance()->playEffect_sendcard(false);
     
-    this->reorderChild(pSender, 0);
     PokerChair* chair = (PokerChair* )pData;
     chair->updatePokerPosition();
-    if (chair->pokerArray.size() == 2) {
+    if (chair->pokerArray.size() == 1) {
         PokerSprite* pk0 = chair->pokerArray.at(0);
-        PokerSprite* pk1 = chair->pokerArray.at(1);
-        this->reorderChild(pk1, pk0->getLocalZOrder());
+        this->reorderChild(pk0, 0);
     }
     m_isSendSingle = true;
     if (m_IndexSend % 9 == 0) {
