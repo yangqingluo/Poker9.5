@@ -408,7 +408,7 @@ void Global::resetBureauOwnerData(const char* ownerId){
 
 //把数重置
 void Global::resetRoundIndex(){
-    table_data.round.roundIndex = 0;
+    table_data.round.roundIndex = 1;
 }
 
 void Global::update(float delta){
@@ -849,9 +849,19 @@ void Global::parseData(char* pbuf, int len){
                     //选中庄家通知
                     rapidjson::Value& val_content = document["content"];
                     const char* tableId = document["tableId"].GetString();
-                    const char* bureauId = val_content["bureauId"].GetString();
-                    if (0 != strcmp(tableId, table_data.tableId) || 0 != strcmp(bureauId, table_data.bureau.bureauId)) {
-                        
+                    
+                    if (0 != strcmp(tableId, table_data.tableId)) {
+                        return;
+                    }
+                    
+                    if (val_content.HasMember("bureauId")) {
+                        const char* bureauId = val_content["bureauId"].GetString();
+                        if (0 != strcmp(bureauId, table_data.bureau.bureauId)) {
+                            return;
+                        }
+                    }
+                    
+                    if (!val_content.HasMember("bureauOwnerId")) {
                         return;
                     }
                     
@@ -1446,3 +1456,4 @@ void Global::sendMessageToAll(const char* message){
     
     sendData(buffer.GetString());
 }
+
