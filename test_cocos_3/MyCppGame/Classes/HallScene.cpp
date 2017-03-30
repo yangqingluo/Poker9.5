@@ -226,6 +226,8 @@ bool Hall::init()
     roominfoLabel->setDimensions(0.96 * roomListSprite->getContentSize().width, 0.16 * roomListSprite->getContentSize().height);
     roomListSprite->addChild(roominfoLabel);
     
+    
+    char roomTypeTitle[4][20] = {"金币房","钻石房","练习房"};
     auto menu = Menu::create();
     menu->setPosition(Vec2::ZERO);
     roomListSprite->addChild(menu);
@@ -240,6 +242,14 @@ bool Hall::init()
         
         roomMenuItems.pushBack(room_Item);
         menu->addChild(room_Item);
+        
+        auto ltf = Label::createWithTTF(roomTypeTitle[i], "fonts/microsoftSong.ttf", 16);
+        ltf->setColor(Color3B::GRAY);
+        ltf->setPosition(0.5 * room_Item->getContentSize().width, 0.5 * room_Item->getContentSize().height);
+        ltf->setDimensions(room_Item->getContentSize().width, room_Item->getContentSize().height);
+        ltf->setHorizontalAlignment(TextHAlignment::CENTER);
+        ltf->setVerticalAlignment(TextVAlignment::CENTER);
+        room_Item->addChild(ltf);
     }
     
     //默认房间类型0

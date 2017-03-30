@@ -261,39 +261,39 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
 void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-//            bool can_leave = false;
-//            
-//            switch (m_deskState) {
-//                case DeskState_Default:
-//                case DeskState_Prepared:
-//                case DeskState_Waiting:{
-//                    can_leave = !m_isStarted;
-//                }
-//                    break;
-//                    
-//                default:{
-//                    bool remainZero = false;
-//                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
-//                        PlayerData player_data = Global::getInstance()->playerList[i];
-//                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
-//                            remainZero = (player_data.remainCap == 0);
-//                            break;
-//                        }
-//                    }
-//                    if (!Global::getInstance()->isDealer && remainZero) {
-//                        can_leave = true;
-//                    }
-//                }
-//                    break;
-//            }
-//            
-//            if (can_leave) {
+            bool can_leave = false;
+            
+            switch (m_deskState) {
+                case DeskState_Default:
+                case DeskState_Prepared:
+                case DeskState_Waiting:{
+                    can_leave = !m_isStarted;
+                }
+                    break;
+                    
+                default:{
+                    bool remainZero = false;
+                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+                        PlayerData player_data = Global::getInstance()->playerList[i];
+                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
+                            remainZero = (player_data.remainCap == 0);
+                            break;
+                        }
+                    }
+                    if (!Global::getInstance()->isDealer && remainZero) {
+                        can_leave = true;
+                    }
+                }
+                    break;
+            }
+            
+            if (can_leave) {
                 m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
                 Global::getInstance()->sendLeaveRoom();
-//            }
-//            else {
-//                NoteTip::show("当前阶段不能退出");
-//            }
+            }
+            else {
+                NoteTip::show("当前阶段不能退出");
+            }
         }
             break;
             
