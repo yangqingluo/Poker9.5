@@ -7,7 +7,6 @@
 //
 
 #include "HallScene.h"
-#include "InviteScene.h"
 #include "ShopScene.h"
 #include "ExchangeScene.h"
 #include "PokerDeskScene.h"
@@ -59,14 +58,7 @@ void Hall::showUserInfo(){
     
     char userInfoString[300];
     
-    
-    int vip_level = Global::getInstance()->calculateVIPLevel(user_data.introCount);
-    if (vip_level > 0) {
-        sprintf(userInfoString, "ID:%s\nVIP:vip%d\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, vip_level , user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
-    }
-    else {
-        sprintf(userInfoString, "ID:%s\nVIP:无\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
-    }
+    sprintf(userInfoString, "ID:%s\n钻石:%d\n金币:%d\n银币:%d\n战斗次数:%d\n胜率:%s",user_data.account, user_data.diamond, user_data.gold, user_data.silver, user_data.gameTimes, user_data.winningPercent);
     
     userinfoLabel->setString(userInfoString);
 }
@@ -88,7 +80,6 @@ bool Hall::init()
     
     int roomIDLength = 32;
     char goldRoomID[4][33] = {"11d01846ca6e4449ad1809426ff33b6f","9310fedae22b45a59d4ef9768a7bbeec","bdfe95b277e84ce5bfe2ce8123558bc8","f869fe26232b464c9159a87b0ee236a0"};
-    char vipRoomID[4][33] = {"8b36978ce93a4dd485ffd61e5405499c","7299037e3e9e4a44b843e2f2110dd00d","75788e6f3f34450180a10c59d10a28fd","8494f5ea601d4427b17ce9e2a0ab1112"};
     char diamondRoomID[4][33] = {"281c8761602d41a8b91ed3ac3fabcbc5","cd027cf993434e22b0f908d3f1f51192","e867c097effb431f92d934fc66c997d5","da531815c8c54317b3db887d84c9952a"};
     
     int chip[2][4] = {{1000,3000,5000,10000},{20,50,100,200}};
@@ -107,33 +98,6 @@ bool Hall::init()
         memcpy(item->typeID, goldRoomID[i], roomIDLength);
         
         tianItems.pushBack(item);
-    }
-    
-    for (int i = 0; i < chipTypeCount + 1; i++) {
-        RoomItem* item = new RoomItem();
-        item->autorelease();
-        if (i < chipTypeCount) {
-            item->chipMin = chip[0][i];
-            item->perMin = chip[1][i];
-        }
-        else {
-            item->chipMin = chip[0][0];
-            item->perMin = chip[1][0];
-        }
-        item->type = RoomType_VIP;
-        memcpy(item->typeID, vipRoomID[i], roomIDLength);
-        if (i < chipTypeCount) {
-            item->chipMin = chip[0][i];
-            item->perMin = chip[1][i];
-            sprintf(item->title, "创建vip房间");
-            sprintf(item->content, "≥%d\n底注%d", item->chipMin, item->perMin);
-        }
-        else{
-            sprintf(item->title, "加入房间");
-            sprintf(item->content, "凭密码加入");
-        }
-        
-        diItems.pushBack(item);
     }
     
     for (int i = 0; i < chipTypeCount + 1; i++) {
@@ -183,7 +147,7 @@ bool Hall::init()
         huangItems.pushBack(item);
     }
     
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 6; i++) {
         NoteItem* item = new NoteItem();
         item->autorelease();
         sprintf(item->image, "images/server_btn_%d.png", i);
@@ -265,7 +229,7 @@ bool Hall::init()
     auto menu = Menu::create();
     menu->setPosition(Vec2::ZERO);
     roomListSprite->addChild(menu);
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
         auto room_Item = MenuItemImage::create(
                                                "images/btn_noselect.png",
                                                "images/btn_select.png",
@@ -320,16 +284,11 @@ void Hall::roomTypeSelectedAction(int type){
             break;
             
         case 1:{
-            roominfoLabel->setString("使用金币结算，vip玩家可创建房间，非vip玩家凭密码加入");
-        }
-            break;
-            
-        case 2:{
             roominfoLabel->setString("使用钻石结算，有足够钻石的玩家可创建或者加入房间");
         }
             break;
             
-        case 3:{
+        case 2:{
             roominfoLabel->setString("使用银币结算，单机练习");
         }
             break;
@@ -413,23 +372,6 @@ void Hall::showSettingChip(){
             break;
             
         case 1:{
-            room = diItems.at(roomIndexSelected);
-            if (roomIndexSelected + 1 == diItems.size()) {
-                passwordEnter = true;
-                sprintf(m_show_string, "加入VIP房间");
-            }
-            else {
-                if (Global::getInstance()->user_data.gold < room->chipMin) {
-                    NoteTip::show("您的金币不足");
-                    return;
-                }
-                capitalEnter = false;
-                sprintf(m_show_string, "创建%d金币的VIP房间", room->chipMin);
-            }
-        }
-            break;
-            
-        case 2:{
             room = xuanItems.at(roomIndexSelected);
             if (roomIndexSelected + 1 == xuanItems.size()) {
                 passwordEnter = true;
@@ -446,7 +388,7 @@ void Hall::showSettingChip(){
         }
             break;
             
-        case 3:{
+        case 2:{
             room = huangItems.at(roomIndexSelected);
             if (Global::getInstance()->user_data.silver < room->chipMin) {
                 NoteTip::show("您的银币不足");
@@ -558,44 +500,6 @@ void Hall::popButtonCallback(Node* pNode){
                 break;
                 
             case 1:{
-                if (roomIndexSelected + 1 == diItems.size()) {
-                    cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
-                    if (box) {
-                        if (strlen(box->getText()) != length_room_password) {
-                            NoteTip::show("密码输入有误");
-                        }
-                        else {
-                            auto scene = OnlinePokerDesk::createScene();
-                            OnlinePokerDesk* layer = (OnlinePokerDesk* )(scene->getChildren().at(1));
-                            layer->roomType = RoomType_VIP;
-                            layer->jettonToEnter = jettonToEnter;
-                            strcpy(layer->roomPassword, box->getText());
-                            
-                            Director::getInstance()->pushScene(scene);
-                        }
-                    }
-                }
-                else {
-                    int vip_level = Global::getInstance()->calculateVIPLevel(Global::getInstance()->user_data.introCount);
-                    if (vip_level > 0) {
-                        room = diItems.at(roomIndexSelected);
-                        
-                        if (room->chipMin > Global::getInstance()->user_data.gold) {
-                            NoteTip::show("金币不足，不能创建");
-                        }
-                        else {
-                            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
-                            onHttpRequest_CreateRoom(room->typeID);
-                        }
-                    }
-                    else {
-                        NoteTip::show("抱歉，您还不是VIP会员");
-                    }
-                }
-            }
-                break;
-                
-            case 2:{
                 if (roomIndexSelected + 1 == xuanItems.size()) {
                     cocos2d::ui::EditBox* box = (cocos2d::ui::EditBox* )popup->getChildByTag(passwordBoxTag);
                     if (box) {
@@ -626,7 +530,7 @@ void Hall::popButtonCallback(Node* pNode){
             }
                 break;
                 
-            case 3:{
+            case 2:{
                 room = huangItems.at(roomIndexSelected);
                 
                 if (jettonToEnter > Global::getInstance()->user_data.silver) {
@@ -717,16 +621,11 @@ TableViewCell* Hall::tableCellAtIndex(TableView* table, ssize_t idx)
                 break;
                 
             case 1:{
-                room = diItems.at(idx);
-            }
-                break;
-                
-            case 2:{
                 room = xuanItems.at(idx);
             }
                 break;
                 
-            case 3:{
+            case 2:{
                 room = huangItems.at(idx);
             }
                 break;
@@ -785,16 +684,11 @@ ssize_t Hall::numberOfCellsInTableView(TableView* table)
                 break;
                 
             case 1:{
-                return diItems.size();
-            }
-                break;
-                
-            case 2:{
                 return xuanItems.size();
             }
                 break;
                 
-            case 3:{
+            case 2:{
                 return huangItems.size();
             }
                 break;
@@ -834,31 +728,24 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 2:{
-                auto scene = InviteScene::createScene();
-                
-                Director::getInstance()->pushScene(scene);
-            }
-                break;
-                
-            case 3:{
                 auto scene = HelpScene::createScene();
                 Director::getInstance()->pushScene(scene);
             }
                 break;
                 
-            case 4:{
+            case 3:{
                 auto scene = SettingScene::createScene();
                 Director::getInstance()->pushScene(scene);
             }
                 break;
                 
-            case 5:{
+            case 4:{
                 auto scene = ChatScene::createScene();
                 Director::getInstance()->pushScene(scene);
             }
                 break;
                 
-            case 6:{
+            case 5:{
                 Global::getInstance()->logout();
             }
                 break;
@@ -993,10 +880,6 @@ void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         RoomItem* room = NULL;
                         char m_roomString[50] = {0};
                         if (roomTypeSelected == 1) {
-                            room = diItems.at(roomIndexSelected);
-                            sprintf(m_roomString, "VIP房间：≥%d\t底注%d", room->chipMin, room->perMin);
-                        }
-                        else if (roomTypeSelected == 2) {
                             room = xuanItems.at(roomIndexSelected);
                             sprintf(m_roomString, "钻石房间：≥%d\t底注%d", room->chipMin, room->perMin);
                         }

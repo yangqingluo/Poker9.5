@@ -58,7 +58,7 @@ public:
     Vector<MenuItem* > roomMenuItems;
     Vector<NoteItem* > noteItems;
     Vector<RoomItem* > tianItems;
-    Vector<RoomItem* > diItems;
+//    Vector<RoomItem* > diItems;
     Vector<RoomItem* > xuanItems;
     Vector<RoomItem* > huangItems;
     
