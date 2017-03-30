@@ -261,39 +261,39 @@ void OnlinePokerDesk::updateDeskState(DeskState state){
 void OnlinePokerDesk::buttonCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
-            bool can_leave = false;
-            
-            switch (m_deskState) {
-                case DeskState_Default:
-                case DeskState_Prepared:
-                case DeskState_Waiting:{
-                    can_leave = !m_isStarted;
-                }
-                    break;
-                    
-                default:{
-                    bool remainZero = false;
-                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
-                        PlayerData player_data = Global::getInstance()->playerList[i];
-                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
-                            remainZero = (player_data.remainCap == 0);
-                            break;
-                        }
-                    }
-                    if (!Global::getInstance()->isDealer && remainZero) {
-                        can_leave = true;
-                    }
-                }
-                    break;
-            }
-            
-            if (can_leave) {
+//            bool can_leave = false;
+//            
+//            switch (m_deskState) {
+//                case DeskState_Default:
+//                case DeskState_Prepared:
+//                case DeskState_Waiting:{
+//                    can_leave = !m_isStarted;
+//                }
+//                    break;
+//                    
+//                default:{
+//                    bool remainZero = false;
+//                    for (int i = 0; i < Global::getInstance()->playerListCount; i++) {
+//                        PlayerData player_data = Global::getInstance()->playerList[i];
+//                        if (0 == strcmp(Global::getInstance()->user_data.ID, player_data.user.ID)) {
+//                            remainZero = (player_data.remainCap == 0);
+//                            break;
+//                        }
+//                    }
+//                    if (!Global::getInstance()->isDealer && remainZero) {
+//                        can_leave = true;
+//                    }
+//                }
+//                    break;
+//            }
+//            
+//            if (can_leave) {
                 m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
                 Global::getInstance()->sendLeaveRoom();
-            }
-            else {
-                NoteTip::show("当前阶段不能退出");
-            }
+//            }
+//            else {
+//                NoteTip::show("当前阶段不能退出");
+//            }
         }
             break;
             
@@ -1036,7 +1036,7 @@ void OnlinePokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     
     PokerChair* chair = (PokerChair* )pData;
     chair->updatePokerPosition();
-    if (chair->pokerArray.size() == 1) {
+    if (chair->pokerArray.size() > 0) {
         PokerSprite* pk0 = chair->pokerArray.at(0);
         this->reorderChild(pk0, 0);
     }
@@ -1162,7 +1162,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         //大于10000则是恢复牌局 重置显示庄家信息
         m_isStarted = true;
         resetShowDealerInfo();
-        NoteTip::show("恢复牌局成功");
+        NoteTip::show(this, "恢复牌局成功");
         
         //显示当前玩家下注情况
         for (int j = 1; j < m_arrChairs.size(); j++) {
@@ -1273,7 +1273,17 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_leaveRoom:{
             this->showMessageManager(false);
             
-            Director::getInstance()->popScene();
+            if (post->sub_cmd == 1) {
+               Director::getInstance()->popScene();
+            }
+            else if (post->sub_cmd == 2) {
+                if (strlen(post->description) > 0) {
+                    NoteTip::show(post->description);
+                }
+                else {
+                    NoteTip::show("当前阶段不能退出");
+                }
+            }
         }
             break;
             
@@ -1317,7 +1327,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                     break;
             }
             
-            if (strlen(post->description)) {
+            if (strlen(post->description) > 0) {
                 NoteTip::show(post->description);
             }
         }
@@ -1353,7 +1363,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 this->showDealerInfo();
             }
             else {
-                if (strlen(post->description)) {
+                if (strlen(post->description) > 0) {
                     NoteTip::show(post->description);
                 }
                 else {

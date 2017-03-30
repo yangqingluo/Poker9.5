@@ -784,7 +784,7 @@ void PokerDesk::sendedSinglePoker(Node* pSender, void* pData){
     
     PokerChair* chair = (PokerChair* )pData;
     chair->updatePokerPosition();
-    if (chair->pokerArray.size() == 1) {
+    if (chair->pokerArray.size() > 0) {
         PokerSprite* pk0 = chair->pokerArray.at(0);
         this->reorderChild(pk0, 0);
     }
