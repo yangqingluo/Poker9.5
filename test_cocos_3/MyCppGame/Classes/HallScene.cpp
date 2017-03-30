@@ -243,13 +243,15 @@ bool Hall::init()
         roomMenuItems.pushBack(room_Item);
         menu->addChild(room_Item);
         
-        auto ltf = Label::createWithTTF(roomTypeTitle[i], "fonts/microsoftSong.ttf", 16);
+        Label* ltf = Label::create();
+        ltf->setSystemFontSize(10.0);
         ltf->setColor(Color3B::GRAY);
-        ltf->setPosition(0.5 * room_Item->getContentSize().width, 0.5 * room_Item->getContentSize().height);
-        ltf->setDimensions(room_Item->getContentSize().width, room_Item->getContentSize().height);
-        ltf->setHorizontalAlignment(TextHAlignment::CENTER);
-        ltf->setVerticalAlignment(TextVAlignment::CENTER);
-        room_Item->addChild(ltf);
+        ltf->setPosition(room_Item->getPosition());
+//        ltf->setDimensions(room_Item->getContentSize().width, room_Item->getContentSize().height);
+//        ltf->setHorizontalAlignment(TextHAlignment::CENTER);
+//        ltf->setVerticalAlignment(TextVAlignment::CENTER);
+        ltf->setString(roomTypeTitle[i]);
+        roomListSprite->addChild(ltf);
     }
     
     //默认房间类型0
