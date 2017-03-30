@@ -461,5 +461,5 @@ void InviteScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
 #pragma notification
 void InviteScene::onNotification_NoteTip(Ref* pSender){
     PostRef* post = (PostRef* )pSender;
-    NoteTip::show(this, post->description);
+    NoteTip::show(post->description);
 }

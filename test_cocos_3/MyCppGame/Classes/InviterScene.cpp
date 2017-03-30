@@ -274,8 +274,12 @@ void InviterScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                 const rapidjson::Value& val_content = document["content"];
                 if (val_content.IsObject()) {
                     if (val_content.HasMember("id")) {
-                        strcpy(Global::getInstance()->user_data.inviteUser, val_content["id"].GetString());
+                        if (!val_content["id"].IsNull()) {
+                            strcpy(Global::getInstance()->user_data.inviteUser, val_content["id"].GetString());
+                        }
                     }
+                    Director::getInstance()->popScene();
+                    
                     PostRef* post = new PostRef();
                     sprintf(post->description, "绑定邀请人成功");
                     
