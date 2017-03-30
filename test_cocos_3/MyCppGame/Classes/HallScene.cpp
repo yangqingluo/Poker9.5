@@ -166,8 +166,8 @@ bool Hall::init()
     for (int i = 0; i < 1; i++) {
         RoomItem* item = new RoomItem();
         item->autorelease();
-        item->chipMin = chip[0][0];
-        item->perMin = chip[1][0];
+        item->chipMin = 500;
+        item->perMin = 10;
         item->type = RoomType_Silver;
         switch (i) {
             case 0:{
