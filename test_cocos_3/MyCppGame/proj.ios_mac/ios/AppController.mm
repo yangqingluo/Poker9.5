@@ -51,10 +51,10 @@ static AppDelegate s_sharedApplication;
     [[UMSocialManager defaultManager] setUmSocialAppkey:@"5795aff8e0f55aca2f002a19"];
     
     //设置微信的appKey和appSecret
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wxe3be7fd52334734f" appSecret:@"3baf1193c85774b3fd9d18447d76cab0" redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx68e0c3280fc82385" appSecret:@"cd90e07167a8d867eea7c60efed360e8" redirectURL:@"https://catseyeslee.wixsite.com/9and5"];
     
     //设置分享到QQ互联的appID
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105893963"/*设置QQ平台的appID*/  appSecret:@"aCMQkh20RPMNv0f3" redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105893963"/*设置QQ平台的appID*/  appSecret:@"aCMQkh20RPMNv0f3" redirectURL:@"https://catseyeslee.wixsite.com/9and5"];
 
     
     // Add the view controller's view to the window and display.

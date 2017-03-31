@@ -94,18 +94,20 @@ bool HelloWorld::init()
                                               "images/login_qq.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 1));
     login_QQItem->setScale(login_WechatItem->getScale());
-    login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 0.4 * visibleSize.height));
+    login_QQItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                   origin.y + 0.1 * visibleSize.height));
     
     auto login_SystemItem = MenuItemImage::create(
                                               "images/login_system.png",
                                               "images/login_system.png",
                                               CC_CALLBACK_1(HelloWorld::loginCallback, this, 2));
     login_SystemItem->setScale(login_WechatItem->getScale());
-    login_SystemItem->setPosition(Vec2(login_QQItem->getPositionX(), login_QQItem->getBoundingBox().getMinY() - login_QQItem->getBoundingBox().size.height));
+    login_SystemItem->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1.5 * login_SystemItem->getBoundingBox().size.width,
+                                       origin.y + 0.1 * visibleSize.height));
     
     
     // create menu, it's an autorelease object
-    auto menu = Menu::create(login_QQItem, login_SystemItem, NULL);
+    auto menu = Menu::create(login_WechatItem, login_QQItem, login_SystemItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
@@ -199,10 +201,10 @@ void getCallback(int platform, int stCode, map<string, string>& data) {
                                                                                                   getHelloWorldTag);
     
     if (stCode == 200) {
-        char m_string[200] = {0};
+        char m_string[300] = {0};
         char uid[Max_ID_Length] = {0};
         char name[Max_Name_Length] = {0};
-        char accessToken[Max_ID_Length] = {0};
+        char accessToken[150] = {0};
         
         // 输入授权数据, 如果授权失败,则会输出错误信息
         map<string, string>::iterator it = data.begin();
@@ -249,7 +251,7 @@ void HelloWorld::loginCallback(cocos2d::Ref* pSender, int index){
     switch (index) {
         case 0:{
             CCUMSocialSDK *sdk = CCUMSocialSDK::create( );
-            sdk->authorize(WEIXIN, auth_selector(authCallback));
+            sdk->getPlatformInfo(WEIXIN, auth_selector(getCallback));
         }
             break;
             
