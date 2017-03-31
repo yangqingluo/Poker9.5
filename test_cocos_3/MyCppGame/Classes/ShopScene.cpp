@@ -153,7 +153,7 @@ bool ShopScene::init()
                 btn_buy->setTag(10);
                 layer->addChild(btn_buy);
                 
-                float payHeight = (360.0 / 640.0) * visibleSize.height;
+                float payHeight = (400.0 / 640.0) * visibleSize.height;
                 payListTableView = TableView::create(this, Size(recordListCellWidth,  payHeight));
                 payListTableView->setPosition(0 , btn_buy->getBoundingBox().getMinY() - 5 - payHeight);
                 payListTableView->setDirection(TableView::Direction::VERTICAL);
@@ -459,6 +459,7 @@ void ShopScene::popButtonCallback(Node* pNode){
             break;
             
         case 1:{
+            NoteTip::show("精彩功能，敬请期待");
 //            BuyItem* item = buyList.at(payIndex);
 //            
 //            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
@@ -551,7 +552,7 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
     else if (table == payListTableView) {
         BaseCell* cell = (BaseCell* )table->dequeueCell();
         
-        float height = 40;
+        float height = 50;
         if(!cell)
         {
             cell = new BaseCell();
@@ -562,10 +563,10 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
             cell->head = head;
             
             auto titleLabel = Label::create();
-            titleLabel->setSystemFontSize(12.0);
+            titleLabel->setSystemFontSize(14.0);
             titleLabel->setTextColor(Color4B::BLACK);
-            titleLabel->setPosition(0.4 * recordListCellWidth, 0.5 * height);
-            titleLabel->setDimensions(0.4 * recordListCellWidth, height);
+            titleLabel->setPosition(0.6 * recordListCellWidth, 0.5 * height);
+            titleLabel->setDimensions(0.7 * recordListCellWidth, height);
             titleLabel->setHorizontalAlignment(TextHAlignment::LEFT);
             titleLabel->setVerticalAlignment(TextVAlignment::CENTER);
             cell->addChild(titleLabel);
@@ -588,16 +589,16 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
         
         
         char m_string[200] = {0};
-        sprintf(m_string, "购买%d金币\t¥%d", item->goldCount, item->price_normal);
+        sprintf(m_string, "购买%d金币\t\t¥%d", item->goldCount, item->price_normal);
 //        
 //        char m_image[30] = {0};
 //        sprintf(m_image, "images/gold_buy_%d.png", item->goldCount);
-        cell->head->setTexture("jetton/jetton_bg.bng");
+        cell->head->setTexture("jetton/jetton_bg.png");
         
         cell->titleLabel->setString(m_string);
         
         cell->head->setScale((0.9 * height) / cell->head->getContentSize().height);
-        cell->head->setPosition(0.05 * recordListCellWidth + 0.5 * cell->head->getBoundingBox().size.width, 0.5 * height);
+        cell->head->setPosition(0.8 * cell->head->getBoundingBox().size.width, 0.5 * height);
         cell->selectImage->setVisible(payIndex == (buyList.size() - 1 - idx));
         
         
@@ -633,7 +634,9 @@ void ShopScene::tableCellTouched(TableView* table, TableViewCell* cell){
     }
     else if (table == payListTableView) {
         BaseCell* old_cell = (BaseCell *)table->cellAtIndex(buyList.size() - 1 - payIndex);
-        old_cell->selectImage->setVisible(false);
+        if (old_cell != NULL) {
+            old_cell->selectImage->setVisible(false);
+        }
         
         payIndex = (int)buyList.size() - 1 - (int)cell->getIdx();
         
