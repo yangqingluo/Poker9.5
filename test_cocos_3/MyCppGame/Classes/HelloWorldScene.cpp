@@ -220,11 +220,17 @@ void getCallback(int platform, int stCode, map<string, string>& data) {
             if (0 == strcmp(it->first.c_str(), "uid")) {
                 strcpy(uid, it->second.c_str());
             }
+            else if (0 == strcmp(it->first.c_str(), "openid")) {
+                strcpy(uid, it->second.c_str());
+            }
             
             if (0 == strcmp(it->first.c_str(), "accessToken")) {
                 strcpy(accessToken, it->second.c_str());
             }
             else if (0 == strcmp(it->first.c_str(), "access_token")) {
+                strcpy(accessToken, it->second.c_str());
+            }
+            else if (0 == strcmp(it->first.c_str(), "refresh_token")) {
                 strcpy(accessToken, it->second.c_str());
             }
             
