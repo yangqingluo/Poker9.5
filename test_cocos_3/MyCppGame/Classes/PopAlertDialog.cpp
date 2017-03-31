@@ -187,10 +187,11 @@ void PopAlertDialog::backgroundFinish(){
     Vector<Node*> vector = getMenuButton()->getChildren();
     
     int i = 0;
+    int num_line = 2;
     for (Node* pObj : vector){
         Node* node = dynamic_cast<Node*>(pObj);
         if (m_buttonListed) {
-            node->setPosition((i % 2 == 0) ? pCenter.x - m_dialogContentSize.width / 4 : pCenter.x + m_dialogContentSize.width / 4, pCenter.y);
+            node->setPosition((i % num_line == 0) ? pCenter.x - m_dialogContentSize.width / 4 : pCenter.x + m_dialogContentSize.width / 4, pCenter.y - (i / num_line) * 1.1 * node->getContentSize().height);
         }
         else {
             node->setPosition(Point(pCenter.x - m_dialogContentSize.width / 2 + btnWidth * (i + 1), pCenter.y - m_dialogContentSize.height / 3));

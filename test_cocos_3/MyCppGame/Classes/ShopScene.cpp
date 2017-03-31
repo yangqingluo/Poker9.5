@@ -84,16 +84,15 @@ bool ShopScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    int buy[3][3] = {{60,6,6},{1000,98,100},{10000,998,1000}};
-    char buyID[3][100] = {"com.fulushou.ninehalf.gold60","com.fulushou.ninehalf.gold1000","com.fulushou.ninehalf.gold10000"};
-    for (int i = 0; i < 3; i++) {
+    int buy[7][3] = {{120,12,12},{250,25,25},{500,50,50},{980,98,98},{1980,198,198},{4880,488,488},{9980,998,998}};
+    for (int i = 0; i < 7; i++) {
         BuyItem* item = new BuyItem();
         item->autorelease();
         
         item->goldCount = buy[i][0];
         item->price_normal = buy[i][1];
         item->price_apple = buy[i][2];
-        strcpy(item->ID, buyID[i]);
+        sprintf(item->ID, "com.fulushou.ninehalf.pay%d", item->price_apple);
         
         buyList.pushBack(item);
     }
@@ -415,8 +414,10 @@ void ShopScene::showBuyInfo(){
     sprintf(m_string_pay_normal, "¥ %d", item->price_normal);
     sprintf(m_string_pay_apple, "¥ %d", item->price_apple);
     
-    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "App Store",m_string_pay_apple,1);
+    
     popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "支付宝",m_string_pay_normal,0);
+    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "微信",m_string_pay_apple,1);
+    popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "App Store",m_string_pay_apple,2);
     
     this->addChild(popup, INT_MAX);
 }
@@ -458,6 +459,14 @@ void ShopScene::popButtonCallback(Node* pNode){
             break;
             
         case 1:{
+//            BuyItem* item = buyList.at(payIndex);
+//            
+//            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+//            this->onHttpRequest_GetOrderAndSign(item->price_normal);
+        }
+            break;
+            
+        case 2:{
             BuyItem* item = buyList.at(payIndex);
             string str_s = item->ID;
             
@@ -575,50 +584,21 @@ TableViewCell* ShopScene::tableCellAtIndex(TableView* table, ssize_t idx)
             cell->selectImage = selectImage;
         }
 
-        BuyItem* item = buyList.at(idx);
+        BuyItem* item = buyList.at(buyList.size() - 1 - idx);
         
         
         char m_string[200] = {0};
         sprintf(m_string, "购买%d金币\t¥%d", item->goldCount, item->price_normal);
-        
-        char m_image[30] = {0};
-        sprintf(m_image, "images/gold_buy_%d.png", item->goldCount);
-        cell->head->setTexture(m_image);
-//        switch (idx) {
-//            case 0:{
-//                cell->head->setTexture("images/pay_alipay.png");
-//                sprintf(m_string, "支付宝支付");
-//            }
-//                break;
-//                
-//            case 1:{
-//                cell->head->setTexture("images/pay_wechat.png");
-//                sprintf(m_string, "微信支付");
-//            }
-//                break;
-//                
-//            case 2:{
-//                cell->head->setTexture("images/pay_apple.png");
-//                sprintf(m_string, "苹果支付");
-//            }
-//                break;
-//                
-//            default:
-//                break;
-//        }
-        
-//        if (strlen(buyCountBox->getText()) > 0) {
-//            int payCount = atoi(buyCountBox->getText());
-//            if (payCount > 0) {
-//                sprintf(m_string + strlen(m_string), "\t¥%.2f", payCount / 10.0);
-//            }
-//        }
+//        
+//        char m_image[30] = {0};
+//        sprintf(m_image, "images/gold_buy_%d.png", item->goldCount);
+        cell->head->setTexture("jetton/jetton_bg.bng");
         
         cell->titleLabel->setString(m_string);
         
         cell->head->setScale((0.9 * height) / cell->head->getContentSize().height);
         cell->head->setPosition(0.05 * recordListCellWidth + 0.5 * cell->head->getBoundingBox().size.width, 0.5 * height);
-        cell->selectImage->setVisible(payIndex == idx);
+        cell->selectImage->setVisible(payIndex == (buyList.size() - 1 - idx));
         
         
         return cell;
@@ -652,8 +632,13 @@ void ShopScene::tableCellTouched(TableView* table, TableViewCell* cell){
         
     }
     else if (table == payListTableView) {
-        payIndex = (int)cell->getIdx();
-        table->reloadData();
+        BaseCell* old_cell = (BaseCell *)table->cellAtIndex(buyList.size() - 1 - payIndex);
+        old_cell->selectImage->setVisible(false);
+        
+        payIndex = (int)buyList.size() - 1 - (int)cell->getIdx();
+        
+        BaseCell* new_cell = (BaseCell *)cell;
+        new_cell->selectImage->setVisible(true);
     }
 }
 
