@@ -1424,7 +1424,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fushoulu.ninehalf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fulushou.ninehalf;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1474,7 +1474,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fushoulu.ninehalf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fulushou.ninehalf;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";

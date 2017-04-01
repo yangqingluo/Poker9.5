@@ -180,7 +180,7 @@ void Global::logout(){
     this->isInitiativeLogout = true;
     this->disconnectServer();
     
-    this->goToRootScene();
+//    this->goToRootScene();
 }
 
 void Global::goToRootScene(){
@@ -447,6 +447,11 @@ void Global::update(float delta){
 }
 
 #pragma Socket
+void* Global::threadFunc(void *arg){
+    Global::getInstance()->receiveData();
+    return NULL;
+}
+
 void Global::disconnectServer(){
     // 关闭连接
     m_socket.Close();
@@ -479,8 +484,8 @@ void Global::receiveData(){
     // 所以可以一直检测服务端是否有数据传来
     while (true) {
         // 接收数据 Recv
-        char data[MAX_NET_DATA_LEN] = "";
-        int result = m_socket.Recv(data, MAX_NET_DATA_LEN, 0);
+        char data[1] = "";
+        int result = m_socket.Recv(data, 1, 0);
         // 与服务器的连接断开了
         if (result <= 0){
             socketDidDisconnect();
@@ -532,9 +537,22 @@ void Global::sendData(const char* value){
 void Global::socketdidConnect(){
     log("Socket::connect to server success!");
     
-    // 开启新线程，在子线程中，接收数据
-    std::thread recvThread = std::thread(&Global::receiveData, this);
-    recvThread.detach(); // 从主线程分离
+//    // 开启新线程，在子线程中，接收数据
+//    std::thread recvThread = std::thread(&Global::receiveData, this);
+//    recvThread.detach(); // 从主线程分离
+    int errCode = 0;
+    do{
+        pthread_attr_t attributes;
+        errCode = pthread_attr_init(&attributes);
+        CC_BREAK_IF(errCode != 0);
+        //但是上面这个函数其他内容则主要为你创建的线程设定为分离式
+        errCode = pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_DETACHED);
+        if (errCode != 0) {
+            pthread_attr_destroy(&attributes);
+            break;
+        }
+        errCode = pthread_create(&handle, &attributes,threadFunc,this);
+    }while (0);
     
     sendHandle();
     //    //发送数据 Send
@@ -568,23 +586,23 @@ void Global::socketDidDisconnect(){
 void Global::onReceiveData(char *buffer, int len){
     log("Socket::receive->length:%d", len);
     
-    bool parseHeader = false;
     for(int i = 0; i < len; i++){
         m_ucRecvBuffer[m_nRecvLen++] = buffer[i];
-        if(m_nRecvLen == 4){
-            if (!parseHeader) {
+        if(m_nRecvLen <= 4){
+            if (m_nRecvLen == 4) {
                 int header = getInt(m_ucRecvBuffer, 0);
                 m_nRecvFrameLen = header;
-                m_nRecvLen = 0;
-                parseHeader = true;
-                continue;
+                if (m_nRecvFrameLen <= 0) {
+                    memset(m_ucRecvBuffer, 0, m_nRecvLen);
+                    m_nRecvLen = 0;
+                    m_nRecvFrameLen = 0;
+                }
             }
         }
-        else if(m_nRecvLen == m_nRecvFrameLen){
-            parseData(m_ucRecvBuffer, m_nRecvLen);
+        else if(m_nRecvLen - 4 == m_nRecvFrameLen){
+            parseData(m_ucRecvBuffer + 4, m_nRecvFrameLen);
             
             memset(m_ucRecvBuffer, 0, m_nRecvLen);
-            parseHeader = false;
             m_nRecvLen = 0;
             m_nRecvFrameLen = 0;
         }

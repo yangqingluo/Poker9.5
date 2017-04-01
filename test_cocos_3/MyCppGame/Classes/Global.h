@@ -217,6 +217,8 @@ private:
     unsigned int m_nRecvLen = 0;
     unsigned int m_nRecvFrameLen = 0;
     
+    pthread_t handle;
+    static void * threadFunc(void *);
     ODSocket m_socket;
     void connectServer();
     void disconnectServer();
