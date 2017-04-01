@@ -171,6 +171,7 @@ int ODSocket::Close() {
 #ifdef WIN32
     return (closesocket(m_sock));
 #else
+    shutdown(m_sock, SHUT_RDWR);
     return (close(m_sock));
 #endif
 }
