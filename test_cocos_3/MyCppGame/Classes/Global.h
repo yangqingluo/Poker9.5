@@ -125,8 +125,8 @@ public:
     PostRef();
     ~PostRef();
     
-    int cmd;
-    int sub_cmd;
+    int cmd = 0;
+    int sub_cmd = 0;
     char description[1024];
 };
 

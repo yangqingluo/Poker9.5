@@ -1273,16 +1273,16 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_leaveRoom:{
             this->showMessageManager(false);
             
-            if (post->sub_cmd == 1) {
-               Director::getInstance()->popScene();
-            }
-            else if (post->sub_cmd == 2) {
+            if (post->sub_cmd == 2) {
                 if (strlen(post->description) > 0) {
                     NoteTip::show(post->description);
                 }
                 else {
                     NoteTip::show("当前阶段不能退出");
                 }
+            }
+            else {
+                Director::getInstance()->popScene();
             }
         }
             break;
