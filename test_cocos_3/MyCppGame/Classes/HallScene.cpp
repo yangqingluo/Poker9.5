@@ -470,6 +470,16 @@ void Hall::showSettingChip(){
     }
 }
 
+void Hall::showMessageBox(const char* subTitle, const char* title){
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    PopAlertDialog* popup = PopAlertDialog::create("images/bg_dialog_empty.png", Size(0.7 * visibleSize.width, 0.7 * visibleSize.height));
+    popup->setTitle(title);
+    popup->setContentText(subTitle, 15, 50, 0.45 * popup->getContentSize().height);
+    popup->addButton("images/btn_sure.png", "images/btn_sure_highlighted.png", "","",0);
+    
+    this->addChild(popup, INT_MAX);
+}
+
 void Hall::popButtonCallback(Node* pNode){
     if (pNode->getTag() == 0) {
         PopAlertDialog* popup = (PopAlertDialog *)this->getChildByTag(dialogTag);
@@ -904,7 +914,7 @@ void Hall::onHttpResponse(HttpClient* sender, HttpResponse* response){
                             sprintf(msg, "请牢记您的密码：%s", document["content"].GetString());
                         }
                         
-                        MessageBox(msg, "创建房间成功");
+                        showMessageBox(msg, "创建房间成功");
                     }
                 }
             }

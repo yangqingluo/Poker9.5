@@ -89,6 +89,7 @@ public:
 private:
     void popButtonCallback(Node* pNode);
     void showSettingChip();
+    void showMessageBox(const char* subTitle, const char* title);
     
     MessageManager* m_pMessage;
     Label* msgLabel;
