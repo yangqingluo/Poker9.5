@@ -785,10 +785,16 @@ void Global::parseData(char* pbuf, int len){
                     this->resetRoundIndex();
                     
                     countDownInSecond = document["content"].GetInt();
+                    
                     const char* tableId = document["tableId"].GetString();
-                    if (0 != strcmp(tableId, table_data.tableId)) {
-                        
-                        return;
+                    if (strlen(table_data.tableId) > 0) {
+                        if (0 != strcmp(tableId, table_data.tableId)) {
+                            
+                            return;
+                        }
+                    }
+                    else {
+                        memcpy(table_data.tableId, tableId, strlen(tableId));
                     }
                     
                 }

@@ -135,16 +135,16 @@ bool PokerDesk::init()
     bottom_sprite = QLImageSprite::create("images/desk_bottom_bg.png", Size(visibleSize.width, 0.12 * visibleSize.height));
     bottom_sprite->setPosition(origin.x + visibleSize.width / 2, origin.y + bottom_sprite->getContentSize().height / 2);
     this->addChild(bottom_sprite);
-    
-    gamePlayerInfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
-    gamePlayerInfoLabel->setColor(Color3B::WHITE);
-    gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
-    bottom_sprite->addChild(gamePlayerInfoLabel);
         
     int betJettonArray[6] = {10,50,100,500,1000,5000};
     betLimiter = BetLimiter::create(betJettonArray, 6, Size(0.8 * bottom_sprite->getContentSize().width, 1.0 * bottom_sprite->getContentSize().height), BetType_Addition);
     betLimiter->setPosition(0.5 * bottom_sprite->getContentSize().width - 0.5 * betLimiter->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
     bottom_sprite->addChild(betLimiter);
+    
+    gamePlayerInfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
+    gamePlayerInfoLabel->setTextColor(Color4B::WHITE);
+    gamePlayerInfoLabel->setPosition(0.9 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
+    bottom_sprite->addChild(gamePlayerInfoLabel);
     
     showTimer = GameTimer::createTimer();
     showTimer->showTag = 0;

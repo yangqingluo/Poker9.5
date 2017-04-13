@@ -136,6 +136,12 @@ bool OnlinePokerDesk::init()
     bottom_sprite->setPosition(origin.x + visibleSize.width / 2, origin.y + bottom_sprite->getContentSize().height / 2);
     this->addChild(bottom_sprite);
     
+    int betJettonArray[6] = {10,50,100,500,1000,5000};
+    betLimiter = BetLimiter::create(betJettonArray, 6, Size(0.8 * bottom_sprite->getContentSize().width, 1.0 * bottom_sprite->getContentSize().height), BetType_Addition);
+    betLimiter->setPosition(0.5 * bottom_sprite->getContentSize().width - 0.5 * betLimiter->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
+    betLimiter->setVisible(false);
+    bottom_sprite->addChild(betLimiter);
+    
     gamePlayerInfoLabel = Label::createWithTTF("", "fonts/STKaiti.ttf", 8);
     gamePlayerInfoLabel->setTextColor(Color4B::WHITE);
     gamePlayerInfoLabel->setPosition(0.85 * bottom_sprite->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height);
@@ -150,12 +156,6 @@ bool OnlinePokerDesk::init()
     btn_addJetton->setTag(10);
     btn_addJetton->setVisible(false);
     bottom_sprite->addChild(btn_addJetton);
-    
-    int betJettonArray[6] = {10,50,100,500,1000,5000};
-    betLimiter = BetLimiter::create(betJettonArray, 6, Size(0.8 * bottom_sprite->getContentSize().width, 1.0 * bottom_sprite->getContentSize().height), BetType_Addition);
-    betLimiter->setPosition(0.5 * bottom_sprite->getContentSize().width - 0.5 * betLimiter->getContentSize().width, 0.5 * bottom_sprite->getContentSize().height - 0.5 * betLimiter->getContentSize().height);
-    betLimiter->setVisible(false);
-    bottom_sprite->addChild(betLimiter);
     
     showTimer = GameTimer::createTimer();
     showTimer->showTag = 0;
@@ -404,6 +404,9 @@ void OnlinePokerDesk::popButtonCallback(Node* pNode){
 
 void OnlinePokerDesk::onEnter(){
     Layer::onEnter();
+    scheduleUpdate();
+    createPokers();
+    adjustPoker(0);
     
     this->showGamePlayerInfo();
     this->showDealerInfo();
@@ -1177,11 +1180,9 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         this->showMessageManager(false);
         this->showGamePlayerInfo();
         
-        createPokers();
         this->adjustPoker(Global::getInstance()->table_data.round.roundIndex - 1);
         
         btn_addJetton->setVisible(true);
-        scheduleUpdate();
     }
     
     switch (post->cmd) {
@@ -1195,6 +1196,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             this->showMessageManager(false);
             
             this->showGamePlayerInfo();
+            btn_addJetton->setVisible(true);
             
             this->stepIn(DeskState_Waiting);
             
@@ -1292,9 +1294,6 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
             this->showMessageManager(false);
             this->showGamePlayerInfo();
             
-            createPokers();
-            adjustPoker(0);
-            
             switch (Global::getInstance()->table_data.code) {
                 case state_enterRoom_success_wait:
                 case state_enterRoom_success_prepare:
@@ -1302,8 +1301,6 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                     sprintf(showTimer->prefixString,"%s", Global::getInstance()->table_data.description);
                     showTimer->showPrefix();
                     btn_addJetton->setVisible(true);
-                    
-                    scheduleUpdate();
                     
                     if (Global::getInstance()->table_data.code == state_enterRoom_success_countdown) {
                         this->showMessageManager(false);
