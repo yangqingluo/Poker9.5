@@ -37,10 +37,6 @@ void PokerSprite::onExit(){
 }
 
 void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDelay){
-    if (showFront == p_isFront) {
-        return;
-    }
-    
     Rect rect = Rect::ZERO;
     if (showFront) {
         rect = Rect((p_point - 1) * pkWidth, (p_color - 1) * pkHeight, pkWidth, pkHeight);
@@ -50,6 +46,11 @@ void PokerSprite::showPokerAnimated(bool showFront, bool animated, float doneDel
     }
     else{
         rect = Rect(2 * pkWidth, 4 * pkHeight, pkWidth, pkHeight);
+    }
+    
+    if (showFront == p_isFront) {
+        bgSprite->setTextureRect(rect);
+        return;
     }
     
     if (animated) {
