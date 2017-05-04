@@ -1391,7 +1391,7 @@ void Global::sendApplyStabber(int gateType){
 }
 
 void Global::sendLeaveRoom(){
-    if (strlen(table_data.roomId) == 0 || strlen(table_data.tableId) == 0 ) {
+    if (strlen(table_data.roomId) == 0) {
         postNotification(cmd_leaveRoom);
         return;
     }
@@ -1402,8 +1402,14 @@ void Global::sendLeaveRoom(){
     rapidjson::Value content(rapidjson::kObjectType);
     
     content.AddMember("userId", rapidjson::Value(user_data.ID, allocator), allocator);
-    content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
-    content.AddMember("tableId", rapidjson::Value(table_data.tableId, allocator), allocator);
+    
+    if (strlen(table_data.roomId) > 0) {
+        content.AddMember("roomId", rapidjson::Value(table_data.roomId, allocator), allocator);
+    }
+    
+    if (strlen(table_data.tableId) > 0) {
+        content.AddMember("tableId", rapidjson::Value(table_data.tableId, allocator), allocator);
+    }
     
     doc.AddMember("id", cmd_leaveRoom, allocator);
     doc.AddMember("content", content, allocator);
