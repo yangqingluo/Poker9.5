@@ -613,6 +613,12 @@ void Global::onReceiveData(char *buffer, int len){
 void Global::parseData(char* pbuf, int len){
     log("Socket::parse->%s", pbuf);
     
+    if (len == 4) {
+        //心跳报文
+        this->sendData("0x12");
+        return;
+    }
+    
     rapidjson::Document document;
     document.Parse<0>(pbuf);
     CCASSERT(!document.HasParseError(), "Parsing to document failed");
