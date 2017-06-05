@@ -261,7 +261,7 @@ void RegistScene::onHttpRequest_GetVCode(string username){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/getverifycode");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/getverifycode"));
     // 设置post发送请求的数据信息
     char param[200] = {0};
     sprintf(param, "mobile=%s", username.c_str());
@@ -283,7 +283,7 @@ void RegistScene::onHttpRequest_Regist(string username, string password, string 
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/register");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/register"));
     // 设置post发送请求的数据信息
     char param[200] = {0};
     sprintf(param, "mobile=%s&verifyCode=%s&password=%s&nikename=%s", username.c_str(), vcode.c_str() ,password.c_str(), nikename.c_str());

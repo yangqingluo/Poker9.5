@@ -652,7 +652,7 @@ void ShopScene::onHttpRequest_RechargeRecords(){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/gamebit/rechargeRecords");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("gamebit/rechargeRecords"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -673,7 +673,7 @@ void ShopScene::onHttpRequest_SearchUser(const char* account){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/userinfo");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/userinfo"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -695,7 +695,7 @@ void ShopScene::onHttpRequest_DonateUserGold(const char* account, const char* co
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/gamebit/donateGoldBit");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("gamebit/donateGoldBit"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -717,7 +717,7 @@ void ShopScene::onHttpRequest_DonateUserDiamond(const char* account, const char*
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/gamebit/donateDiamondBit");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("gamebit/donateDiamondBit"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -739,7 +739,7 @@ void ShopScene::onHttpRequest_GetOrderAndSign(float totalFee){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/alipay/getOrderAndSign");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("alipay/getOrderAndSign"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -762,7 +762,7 @@ void ShopScene::onHttpRequest_RechargeForApple(float totalGold){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/applepay/rechargebit");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("applepay/rechargebit"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};

@@ -769,8 +769,7 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 5:{
-//                Global::getInstance()->logout();
-                Director::getInstance()->popScene();
+                Global::getInstance()->logout();
             }
                 break;
                 
@@ -805,7 +804,7 @@ void Hall::onHttpRequest_CreateRoom(const char* roomTypeId){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/room/createRoom");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("room/createRoom"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -828,7 +827,7 @@ void Hall::onHttpRequest_SearchUser(const char* account){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/userinfo");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/userinfo"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};

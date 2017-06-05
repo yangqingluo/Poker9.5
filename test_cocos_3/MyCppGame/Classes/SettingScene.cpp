@@ -312,7 +312,7 @@ void SettingScene::onHttpRequest_SettingNikename(const char* nikename){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/updateinfo");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/updateinfo"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};

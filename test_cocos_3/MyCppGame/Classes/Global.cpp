@@ -217,6 +217,13 @@ bool Global::getStringWithItemColor(char *buffer, ItemColorType colorType){
     return false;
 }
 
+std::string Global::getURLWithSuffix(std::string suffix) {
+    std::string address = std::string(gameURLAddress);
+    address.append(suffix);
+    
+    return address;
+}
+
 void Global::parseUserData(const rapidjson::Value& val_user, UserData* data_user){
     if (val_user.HasMember("gameTimes")) {
         data_user->gameTimes = val_user["gameTimes"].GetInt();

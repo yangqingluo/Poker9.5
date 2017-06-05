@@ -256,7 +256,7 @@ void LoginScene::onHttpRequest_Login(string username, string password){
     request->setRequestType(HttpRequest::Type::GET);
     // url后面附加数据信息
     char url[200] = {0};
-    sprintf(url, "http://115.28.109.174:8181/game/user/login?username=%s&password=%s", username.c_str(), password.c_str());
+    sprintf(url, "%s/user/login?username=%s&password=%s", gameURLAddress, username.c_str(), password.c_str());
     request->setUrl(url);
     
     // HTTP响应函数

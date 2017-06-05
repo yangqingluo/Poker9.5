@@ -312,16 +312,10 @@ void HelloWorld::onHttpRequest_LoginQQ(const char* m_string)
     // 创建HTTP请求
     HttpRequest* request = new HttpRequest();
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/qqlogin");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/qqlogin"));
     
     // 设置post发送请求的数据信息
     request->setRequestData(m_string, strlen(m_string));
-    
-//    request->setRequestType(HttpRequest::Type::GET);
-//    // url后面附加数据信息
-//    char url[200] = {0};
-//    sprintf(url, "http://115.28.109.174:8181/game/user/qqlogin?uid=B40B57B7CEB780C9A8DDA51F79AB7324&name=fighting&accessToken=0DD873B16CA6865B462EA3AEE654393E&iconurl=http://q.qlogo.cn/qqapp/1105893963/B40B57B7CEB780C9A8DDA51F79AB7324/100");
-//    request->setUrl(url);
     
     // HTTP响应函数
     request->setResponseCallback(CC_CALLBACK_2(HelloWorld::onHttpResponse, this));

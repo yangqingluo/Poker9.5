@@ -639,7 +639,7 @@ void ExchangeScene::onHttpRequest_ExchangeRecords(){
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/awardRecords");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/awardRecords"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
@@ -661,7 +661,7 @@ void ExchangeScene::onHttpRequest_addAwardRecord(const char* name, const char* a
     HttpRequest* request = new HttpRequest();
     
     request->setRequestType(HttpRequest::Type::POST);
-    request->setUrl("http://115.28.109.174:8181/game/user/addAwardRecord");
+    request->setUrl(Global::getInstance()->getURLWithSuffix("user/addAwardRecord"));
     
     // 设置post发送请求的数据信息
     char param[200] = {0};

@@ -15,7 +15,7 @@ using namespace CocosDenshion;
 
 #define MAX_NET_DATA_LEN (10 * 1024)
 
-
+#define gameURLAddress "http://115.28.109.174:8181/game/"
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
 #define kNotification_LoginQQ          "notification_loginqq"
@@ -189,6 +189,7 @@ public:
     int calculateVIPLevel(int introCount);//通过邀请人数计算vip等级
     int getInt(char *buffer, int offset);
     bool getStringWithItemColor(char *buffer, ItemColorType colorType);//通过颜色值得到颜色文本
+    std::string getURLWithSuffix(std::string suffix);
     
     void saveLoginData(const rapidjson::Value& val_content);
     void logout();
