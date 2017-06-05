@@ -24,7 +24,8 @@
 static int chipTypeCount = 4;
 
 Hall::Hall():m_pMessage(NULL){
-    
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_Socket), kNotification_Socket, NULL);
+    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_RefreshUserinfo), kNotification_RefreshUserInfo, NULL);
 }
 Hall::~Hall(){
     NotificationCenter::getInstance()->removeAllObservers(this);
@@ -49,8 +50,7 @@ void Hall::onEnter(){
     Layer::onEnter();
     
     this->showUserInfo();
-    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_Socket), kNotification_Socket, NULL);
-    NotificationCenter::getInstance()->addObserver(this,callfuncO_selector(Hall::onNotification_RefreshUserinfo), kNotification_RefreshUserInfo, NULL);
+    
 }
 
 void Hall::showUserInfo(){
@@ -769,7 +769,8 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 5:{
-                Global::getInstance()->logout();
+//                Global::getInstance()->logout();
+                Director::getInstance()->popScene();
             }
                 break;
                 

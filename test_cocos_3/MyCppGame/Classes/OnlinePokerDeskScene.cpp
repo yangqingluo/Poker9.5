@@ -1189,7 +1189,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
         case cmd_removePlayer:{
             this->showMessageManager(false);
             
-            Director::getInstance()->popScene();
+            this->goBackAction();
         }
             break;
         case cmd_beginCountDownBeforeBureau:{
@@ -1284,7 +1284,7 @@ void OnlinePokerDesk::onNotification_Socket(Ref* pSender){
                 }
             }
             else {
-                Director::getInstance()->popScene();
+                this->goBackAction();
             }
         }
             break;

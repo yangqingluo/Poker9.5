@@ -164,12 +164,13 @@ void Global::saveLoginData(const rapidjson::Value& val_content){
     
     auto scene = Hall::createScene();
     
-    if (this->isInRootScene) {
+    log("****push to Hall...");
+//    if (this->isInRootScene) {
         Director::getInstance()->pushScene(scene);
-    }
-    else {
-        Director::getInstance()->replaceScene(scene);
-    }
+//    }
+//    else {
+//        Director::getInstance()->replaceScene(scene);
+//    }
     
     this->connectServer();
 }
@@ -637,6 +638,8 @@ void Global::parseData(char* pbuf, int len){
                 switch (cmd) {
                     case cmd_handle:{
                         //握手
+                        //握手1000和踢出房间1000重合，发送通知可能导致牌局退出
+                        return;
                     }
                         break;
                         
