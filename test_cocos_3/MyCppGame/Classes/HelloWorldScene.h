@@ -31,6 +31,7 @@ public:
     void doLoginQQ(const char* m_string);
 private:
     MessageManager* m_pMessage;
+    void showMessageManager(bool isShow);
     
     void onHttpRequest_LoginQQ(const char* m_string);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);

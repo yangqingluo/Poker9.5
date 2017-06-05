@@ -162,6 +162,19 @@ bool HelloWorld::init()
     
     return true;
 }
+
+void HelloWorld::showMessageManager(bool isShow){
+    if (isShow) {
+        m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+    }
+    else {
+        if (m_pMessage != NULL) {
+            m_pMessage->hidden();
+            m_pMessage = NULL;
+        }
+    }
+}
+
 /*
  *授权回调
  * @param platform 要授权的平台
@@ -324,10 +337,7 @@ void HelloWorld::onHttpRequest_LoginQQ(const char* m_string)
 // HTTP响应请求函数
 void HelloWorld::onHttpResponse(HttpClient* sender, HttpResponse* response)
 {
-    if (m_pMessage != NULL) {
-        m_pMessage->hidden();
-        m_pMessage = NULL;
-    }
+    this->showMessageManager(false);
     
     // 没有收到响应
     if (!response){
@@ -403,7 +413,7 @@ void HelloWorld::onNotification_Socket(Ref* pSender){
 }
 
 void HelloWorld::doLoginQQ(const char* m_string){
-    m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);//显示
+    this->showMessageManager(true);
     onHttpRequest_LoginQQ(m_string);
 }
 
