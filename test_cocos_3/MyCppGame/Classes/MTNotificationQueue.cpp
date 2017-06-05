@@ -61,13 +61,16 @@ MTNotificationQueue* MTNotificationQueue::sharedNotificationQueue()
 
 void MTNotificationQueue::postNotifications(float dt)
 {
-    LifeCircleMutexLock(&sharedNotificationQueueLock);
+    Director::getInstance()->getScheduler()->performFunctionInCocosThread([&, this] {
+        LifeCircleMutexLock(&sharedNotificationQueueLock);
+        
+        for(uint16_t i = 0; i < notifications.size(); i++) {
+            NotificationArgs &arg = notifications[i];
+            NotificationCenter::getInstance()->postNotification(arg.name.c_str(), arg.object);
+        }
+        notifications.clear();
+    });
     
-    for(uint16_t i = 0; i < notifications.size(); i++) {
-        NotificationArgs &arg = notifications[i];
-        NotificationCenter::getInstance()->postNotification(arg.name.c_str(), arg.object);
-    }
-    notifications.clear();
 }
 
 void MTNotificationQueue::postNotification(const char* name, Ref* object)
