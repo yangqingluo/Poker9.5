@@ -23,5 +23,6 @@ BOOL isFirstUsing();
 - (void)alipayResult:(NSDictionary *)resultDic;
 
 - (void)doWechatPay:(NSString *)orderString;
+- (void)wechatPayResult:(int)code;
 
 @end

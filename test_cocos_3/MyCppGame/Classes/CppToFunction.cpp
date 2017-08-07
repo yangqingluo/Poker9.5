@@ -27,6 +27,18 @@ void callbackAliPay(int code){
     }
 }
 
+void callbackWechatPay(int code){
+    PostRef* post = new PostRef();
+    post->cmd = PayStyle_wx;
+    post->sub_cmd = code;
+    
+    MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_Pay, post);
+    if (code == 0) {
+        Global::getInstance()->user_data.gold += Global::getInstance()->goldToRecharge;
+        MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
+    }
+}
+
 static CppToFunction* share = nullptr;
 
 CppToFunction::~CppToFunction(void){

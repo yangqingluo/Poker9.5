@@ -127,7 +127,11 @@ BOOL isFirstUsing(){
 }
 
 - (void)alipayResult:(NSDictionary *)resultDic{
-    appCallback([resultDic[@"resultStatus"] intValue]);
+    appAlipayCallback([resultDic[@"resultStatus"] intValue]);
+}
+
+- (void)wechatPayResult:(int)code{
+    appWechatPayCallback(code);
 }
 
 - (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString{

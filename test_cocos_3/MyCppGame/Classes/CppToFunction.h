@@ -17,6 +17,7 @@ extern "C"
 {
 #endif
 extern void callbackAliPay(int code);
+extern void callbackWechatPay(int code);
 #ifdef __cplusplus
 }
 #endif
