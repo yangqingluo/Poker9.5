@@ -30,6 +30,7 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import <UMSocialCore/UMSocialCore.h>
 #import "ImagePicker.h"
+#import "WXApiManager.h"
 
 @implementation AppController
 
@@ -51,7 +52,7 @@ static AppDelegate s_sharedApplication;
     [[UMSocialManager defaultManager] setUmSocialAppkey:@"5795aff8e0f55aca2f002a19"];
     
     //设置微信的appKey和appSecret
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx68e0c3280fc82385" appSecret:@"cd90e07167a8d867eea7c60efed360e8" redirectURL:@"https://catseyeslee.wixsite.com/9and5"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx41c63ef190036334" appSecret:@"f206724ceda4bd5ad5866b87ab34da8d" redirectURL:@"https://catseyeslee.wixsite.com/9and5"];
     
     //设置分享到QQ互联的appID
     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105893963"/*设置QQ平台的appID*/  appSecret:@"aCMQkh20RPMNv0f3" redirectURL:@"https://catseyeslee.wixsite.com/9and5"];
@@ -132,6 +133,10 @@ static AppDelegate s_sharedApplication;
     BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];
     if (!result) {
         // 其他如支付等SDK的回调
+        if ([[NSString stringWithFormat:@"%@",url] hasPrefix:@"wx"]) {
+            //微信支付
+            return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+        }
     }
     return result;
 }
@@ -143,7 +148,18 @@ static AppDelegate s_sharedApplication;
     BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];
     if (!result) {
         // 其他如支付等SDK的回调
-        if ([url.host isEqualToString:@"safepay"]) {
+        if ([[NSString stringWithFormat:@"%@",url] hasPrefix:@"wx"]) {
+            //微信支付
+            BOOL payResult = [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+            if (payResult) {
+                NSLog(@"微信支付成功");
+            }
+            else {
+                NSLog(@"微信支付失败");
+            }
+            return payResult;
+        }
+        else if ([url.host isEqualToString:@"safepay"]) {
             // 支付跳转支付宝钱包进行支付，处理支付结果
             [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
                 NSLog(@"result(< 9.0) = %@",resultDic);

@@ -19,6 +19,10 @@ void nsDoAlipay(const char *string){
     [[AppPublic shareInstance] doAlipayPay:[NSString stringWithUTF8String:string]];
 }
 
+void nsDoWechatpay(const char *string){
+    [[AppPublic shareInstance] doWechatPay:[NSString stringWithUTF8String:string]];
+}
+
 void appCallback(int code){
     callbackAliPay(code);
 }

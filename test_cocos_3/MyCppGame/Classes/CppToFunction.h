@@ -28,6 +28,7 @@ public:
     
     void doCopyAction(char* m_string);
     void doAlipayAction(char* m_string);
+    void doWechatpayAction(char* m_string);
 private:
     
 protected:

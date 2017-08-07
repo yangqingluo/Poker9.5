@@ -77,6 +77,7 @@ private:
     void onHttpRequest_DonateUserDiamond(const char* account, const char* count);
     void onHttpRequest_SearchUser(const char* account);
     void onHttpRequest_GetOrderAndSign(float totalFee);
+    void onHttpRequest_UnifiedOrder(float totalFee);
     void onHttpRequest_RechargeForApple(float totalGold);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Pay(Ref* pSender);

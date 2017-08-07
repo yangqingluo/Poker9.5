@@ -73,7 +73,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx68e0c3280fc82385</string>
+				<string>wx41c63ef190036334</string>
 			</array>
 		</dict>
 		<dict>
@@ -94,7 +94,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>26</string>
+	<string>28</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>linkedin</string>

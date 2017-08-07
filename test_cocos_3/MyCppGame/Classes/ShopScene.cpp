@@ -13,6 +13,10 @@
 #include "PopAlertDialog.h"
 #include "GamePayment.h"
 
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 int getShopTag = 555;
 
 ShopScene::ShopScene(){
@@ -459,11 +463,10 @@ void ShopScene::popButtonCallback(Node* pNode){
             break;
             
         case 1:{
-            NoteTip::show("精彩功能，敬请期待");
-//            BuyItem* item = buyList.at(payIndex);
-//            
-//            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
-//            this->onHttpRequest_GetOrderAndSign(item->price_normal);
+            BuyItem* item = buyList.at(payIndex);
+            
+            m_pMessage = MessageManager::show(this, MESSAGETYPE_LOADING, NULL);
+            this->onHttpRequest_UnifiedOrder(item->price_normal);
         }
             break;
             
@@ -743,12 +746,34 @@ void ShopScene::onHttpRequest_GetOrderAndSign(float totalFee){
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "totalFee=%.2f&partner=2088521530118846&subject=recharge&userId=%s&account=%s", totalFee, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
+    sprintf(param, "totalFee=%.2f&partner=2088521530118846&subject=recharge&userId=%s&account=%s", 0.1, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
     request->setRequestData(param, strlen(param));
     
     // HTTP响应函数
     request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
     request->setTag("getOrderAndSign");
+    // 发送请求
+    HttpClient::getInstance()->send(request);
+    
+    // 释放链接
+    request->release();
+}
+
+void ShopScene::onHttpRequest_UnifiedOrder(float totalFee){
+    // 创建HTTP请求
+    HttpRequest* request = new HttpRequest();
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    request->setUrl(Global::getInstance()->getURLWithSuffix("wechatPay/unifiedOrder"));
+    
+    // 设置post发送请求的数据信息
+    char param[200] = {0};
+    sprintf(param, "totalFee=%.2f&body=charge&attach=charge&userId=%s&account=%s", 0.1, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
+    request->setRequestData(param, strlen(param));
+    
+    // HTTP响应函数
+    request->setResponseCallback(CC_CALLBACK_2(ShopScene::onHttpResponse, this));
+    request->setTag("wechatPay");
     // 发送请求
     HttpClient::getInstance()->send(request);
     
@@ -777,6 +802,14 @@ void ShopScene::onHttpRequest_RechargeForApple(float totalGold){
     
     // 释放链接
     request->release();
+}
+
+std::string JsonToString(const rapidjson::Value& valObj)
+{
+    rapidjson::StringBuffer sbBuf;
+    rapidjson::Writer<rapidjson::StringBuffer> jWriter(sbBuf);
+    valObj.Accept(jWriter);
+    return std::string(sbBuf.GetString());
 }
 
 // HTTP响应请求函数
@@ -890,6 +923,12 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         char order_string[1024] = {0};
                         strcpy(order_string, val_content.GetString());
                         CppToFunction::getInstance()->doAlipayAction(order_string);
+                    }
+                    else if (tag == "wechatPay") {
+                        const rapidjson::Value& val_content = document["content"];
+                        char order_string[1024] = {0};
+                        strcpy(order_string, JsonToString(val_content).c_str());
+                        CppToFunction::getInstance()->doWechatpayAction(order_string);
                     }
                 }
             }

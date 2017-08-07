@@ -12,6 +12,7 @@
 #import "APAuthV2Info.h"
 #import "RSADataSigner.h"
 #import <AlipaySDK/AlipaySDK.h>
+#import "WXApiManager.h"
 
 @implementation AppPublic
 
@@ -110,8 +111,35 @@ BOOL isFirstUsing(){
     }];
 }
 
+//微信支付
+- (void)doWechatPay:(NSString *)orderString{
+    NSDictionary *prepay = [self dictionaryWithJsonString:orderString];
+    //调起微信支付
+    PayReq* req             = [[PayReq alloc] init];
+    
+    req.partnerId           = @"1459543802";
+    req.prepayId            = prepay[@"prepay_id"];
+    req.nonceStr            = prepay[@"noncestr"];
+    req.timeStamp           = [prepay[@"timestamp"] intValue];
+    req.package             = @"Sign=WXPay";
+    req.sign                = prepay[@"sign"];
+    [WXApi sendReq:req];
+}
+
 - (void)alipayResult:(NSDictionary *)resultDic{
     appCallback([resultDic[@"resultStatus"] intValue]);
+}
+
+- (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString{
+    if (jsonString == nil) {
+        return nil;
+    }
+    
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:kNilOptions
+                                                          error:nil];
+    return dic;
 }
 
 @end

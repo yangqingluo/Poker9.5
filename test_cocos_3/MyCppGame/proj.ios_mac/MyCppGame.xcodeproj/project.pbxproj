@@ -130,6 +130,7 @@
 		FC5481C41E30BF74005A39C2 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC5481B91E30BF74005A39C2 /* libssl.a */; };
 		FC6DB6211DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
 		FC6DB6221DE8395000621B55 /* poker in Resources */ = {isa = PBXBuildFile; fileRef = FC6DB6201DE8395000621B55 /* poker */; };
+		FC6E0ACF1F36F39D006C24B4 /* WXApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FC6E0ACE1F36F39D006C24B4 /* WXApiManager.m */; };
 		FC7E776B1E0E75BD008EBE40 /* music in Resources */ = {isa = PBXBuildFile; fileRef = FC7E776A1E0E75BD008EBE40 /* music */; };
 		FC7E776C1E0E75BD008EBE40 /* music in Resources */ = {isa = PBXBuildFile; fileRef = FC7E776A1E0E75BD008EBE40 /* music */; };
 		FC7E77741E0EBFBC008EBE40 /* HelpScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC7E77721E0EBFBC008EBE40 /* HelpScene.cpp */; };
@@ -453,6 +454,8 @@
 		FC5481B81E30BF74005A39C2 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		FC5481B91E30BF74005A39C2 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		FC6DB6201DE8395000621B55 /* poker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = poker; sourceTree = "<group>"; };
+		FC6E0ACD1F36F39D006C24B4 /* WXApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApiManager.h; path = ios/WXApiManager.h; sourceTree = SOURCE_ROOT; };
+		FC6E0ACE1F36F39D006C24B4 /* WXApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WXApiManager.m; path = ios/WXApiManager.m; sourceTree = SOURCE_ROOT; };
 		FC7E776A1E0E75BD008EBE40 /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; path = music; sourceTree = "<group>"; };
 		FC7E77721E0EBFBC008EBE40 /* HelpScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelpScene.cpp; sourceTree = "<group>"; };
 		FC7E77731E0EBFBC008EBE40 /* HelpScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpScene.h; sourceTree = "<group>"; };
@@ -620,6 +623,8 @@
 				FCA383F41E1F42C5006E073C /* OCFunction.m */,
 				FCAABD9D1E310FD2004AAD7C /* AppPublic.h */,
 				FCAABD9E1E310FD2004AAD7C /* AppPublic.m */,
+				FC6E0ACD1F36F39D006C24B4 /* WXApiManager.h */,
+				FC6E0ACE1F36F39D006C24B4 /* WXApiManager.m */,
 				FC8DD9BA1E66C0BE007C7942 /* ImagePickerViewController.h */,
 				FC8DD9B91E66C0BE007C7942 /* ImagePickerViewController.mm */,
 			);
@@ -1129,7 +1134,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = S3FZ755F5S;
+						DevelopmentTeam = 89JNTUKXCK;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1284,6 +1289,7 @@
 				FCED08D51E1C0750004BDFD6 /* Global.cpp in Sources */,
 				FC331E061E23907E00174856 /* CCUMSocialSDK.cpp in Sources */,
 				FCC0226E1E0E615F00A1D6F4 /* SettingScene.cpp in Sources */,
+				FC6E0ACF1F36F39D006C24B4 /* WXApiManager.m in Sources */,
 				FCED08E91E1C0750004BDFD6 /* RegistScene.cpp in Sources */,
 				FCED08D91E1C0750004BDFD6 /* MessageManager.cpp in Sources */,
 				FCED08DF1E1C0750004BDFD6 /* ODSocket.cpp in Sources */,
@@ -1388,7 +1394,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = S3FZ755F5S;
+				DEVELOPMENT_TEAM = 89JNTUKXCK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../Classes/umeng_ios_social_sdk/UMSocial_Sdk_Extra_Frameworks\"/**",
@@ -1440,7 +1446,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = S3FZ755F5S;
+				DEVELOPMENT_TEAM = 89JNTUKXCK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../Classes/umeng_ios_social_sdk/UMSocial_Sdk_Extra_Frameworks\"/**",

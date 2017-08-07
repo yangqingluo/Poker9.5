@@ -12,6 +12,7 @@ extern "C"
 #endif
     void nsCopy(const char *string);
     void nsDoAlipay(const char *string);
+    void nsDoWechatpay(const char *string);
     void appCallback(int code);
 #ifdef __cplusplus
 }
