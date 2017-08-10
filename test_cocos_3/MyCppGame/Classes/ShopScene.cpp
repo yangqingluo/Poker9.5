@@ -746,7 +746,7 @@ void ShopScene::onHttpRequest_GetOrderAndSign(float totalFee){
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "totalFee=%.2f&partner=2088521530118846&subject=recharge&userId=%s&account=%s", 0.1, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
+    sprintf(param, "totalFee=%.2f&partner=2088521530118846&subject=recharge&userId=%s&account=%s", totalFee, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
     request->setRequestData(param, strlen(param));
     
     // HTTP响应函数
@@ -768,7 +768,7 @@ void ShopScene::onHttpRequest_UnifiedOrder(float totalFee){
     
     // 设置post发送请求的数据信息
     char param[200] = {0};
-    sprintf(param, "totalFee=%.2f&body=charge&attach=charge&userId=%s&account=%s", 0.1, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
+    sprintf(param, "totalFee=%.2f&body=charge&attach=charge&userId=%s&account=%s", totalFee, Global::getInstance()->user_data.ID, Global::getInstance()->user_data.account);
     request->setRequestData(param, strlen(param));
     
     // HTTP响应函数
@@ -949,6 +949,16 @@ void ShopScene::onNotification_Pay(Ref* pSender){
     switch (post->cmd) {
         case PayStyle_alipay:{
             if (post->sub_cmd == 9000) {
+                NoteTip::show("充值成功");
+            }
+            else {
+                NoteTip::show("充值失败");
+            }
+        }
+            break;
+            
+        case PayStyle_wx:{
+            if (post->sub_cmd == 0) {
                 NoteTip::show("充值成功");
             }
             else {

@@ -473,7 +473,7 @@ void Global::connectServer(){
     
     // 设置服务器的IP地址，端口号
     // 并连接服务器 Connect
-    const char* ip = "115.28.109.174";
+    const char* ip = "174.128.251.226";
     int port = 8888;
     bool result = m_socket.Connect(ip, port);
     

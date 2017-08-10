@@ -15,6 +15,16 @@
 - (void)productsRequest:(SKProductsRequest *)request
      didReceiveResponse:(SKProductsResponse *)response
 {
+    NSLog(@"--------------收到产品反馈消息---------------------");
+    NSLog(@"productID:%@", response.invalidProductIdentifiers);
+    NSArray *product = response.products;
+    if([product count] == 0){
+        //        [SVProgressHUD showErrorWithStatus:@"购买信息无效"];
+        NSLog(@"--------------没有商品------------------");
+        return;
+    }
+    NSLog(@"产品付费数量:%lu",(unsigned long)[product count]);
+    
     // release old
     if (_iosiap->skProducts) {
         [(NSArray *)(_iosiap->skProducts) release];
