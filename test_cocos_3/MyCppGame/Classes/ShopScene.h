@@ -48,6 +48,8 @@ public:
     virtual void onEnter();
     virtual void onExit();
     CREATE_FUNC(ShopScene);
+    Vector<BuyItem* >buyList;
+    int payIndex = 0;
     
     void buttonCallback(cocos2d::Ref* pSender, int index);
     void touchEvent(Ref *pSender, cocos2d::ui::Widget::TouchEventType type);
@@ -56,21 +58,6 @@ public:
     void popButtonCallback(Node* pNode);
     
     void showMessageManager(bool isShow);
-private:
-    Vector<YNButton* > listButtons;
-    Vector<LayerColor* > listLayers;
-    float recordListCellWidth = 0;
-    Vector<RechargeItem* > rechargeItems;
-    Vector<BuyItem* >buyList;
-    bool hasGetRecordList = false;
-    TableView* recordListTableView;
-    int payIndex = 0;
-    TableView* payListTableView;
-    
-    ui::EditBox* buyCountBox;
-    ui::EditBox* userIDBox;
-    ui::EditBox* giveCountBox;
-    MessageManager* m_pMessage;
     
     void onHttpRequest_RechargeRecords();
     void onHttpRequest_DonateUserGold(const char* account, const char* count);
@@ -81,7 +68,21 @@ private:
     void onHttpRequest_RechargeForApple(float totalGold);
     void onHttpResponse(HttpClient* sender, HttpResponse* response);
     void onNotification_Pay(Ref* pSender);
+private:
+    Vector<YNButton* > listButtons;
+    Vector<LayerColor* > listLayers;
+    float recordListCellWidth = 0;
+    Vector<RechargeItem* > rechargeItems;
     
+    bool hasGetRecordList = false;
+    TableView* recordListTableView;
+    TableView* payListTableView;
+    
+    ui::EditBox* buyCountBox;
+    ui::EditBox* userIDBox;
+    ui::EditBox* giveCountBox;
+    MessageManager* m_pMessage;
+
     Size tableCellSizeForIndex(TableView* table, ssize_t idx);
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx);
     ssize_t numberOfCellsInTableView(TableView* table);

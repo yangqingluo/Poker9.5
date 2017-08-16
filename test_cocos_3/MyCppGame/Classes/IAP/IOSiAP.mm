@@ -19,7 +19,6 @@
     NSLog(@"productID:%@", response.invalidProductIdentifiers);
     NSArray *product = response.products;
     if([product count] == 0){
-        //        [SVProgressHUD showErrorWithStatus:@"购买信息无效"];
         NSLog(@"--------------没有商品------------------");
         return;
     }

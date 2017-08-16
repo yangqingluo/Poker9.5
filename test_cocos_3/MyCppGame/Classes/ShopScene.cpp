@@ -418,6 +418,7 @@ void ShopScene::showBuyInfo(){
     sprintf(m_string_pay_normal, "¥ %d", item->price_normal);
     sprintf(m_string_pay_apple, "¥ %d", item->price_apple);
     
+    Global::getInstance()->goldToRecharge = item->goldCount;
     
     popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "支付宝",m_string_pay_normal,0);
     popup->addButton("images/store2_buy_channel_select_background.png", "images/store2_buy_channel_select_background.png", "微信",m_string_pay_apple,1);
@@ -438,14 +439,37 @@ void ShopScene::showMessageManager(bool isShow){
     }
 }
 
-void getProductCallback(IOSProduct *product, int code) // 获取商品的回调
+//iap支付回调
+void getPaymentCallback(bool succeed, std::string &identifier, int quantity)
 {
-    ShopScene* spLayer =(ShopScene* ) Director::getInstance()->getRunningScene()->getChildByTag(
-                                                                                                  getShopTag);
+    ShopScene* spLayer =(ShopScene* ) Director::getInstance()->getRunningScene()->getChildByTag(getShopTag);
+    spLayer->showMessageManager(false);
+    
+    log( "My: product->productIdentifier => %s", identifier.c_str() );
+    
+    if (!succeed) {
+        NoteTip::show("充值失败");
+        return;
+    }
+    
+    BuyItem* item = spLayer->buyList.at(spLayer->payIndex);
+    if (0 == strcmp(identifier.c_str(), item->ID)) {
+        spLayer->showMessageManager(true);
+        spLayer->onHttpRequest_RechargeForApple(item->price_apple);
+    }
+    else {
+        NoteTip::show("充值出错");
+    }
+}
+
+//iap获取商品回调
+void getProductCallback(IOSProduct *product, int code)
+{
+    ShopScene* spLayer =(ShopScene* ) Director::getInstance()->getRunningScene()->getChildByTag(getShopTag);
     spLayer->showMessageManager(false);
     if (product != NULL) {
-        log( "My: product->productIdentifier => %s", product->productIdentifier.c_str() );
-        log( "My: product->localizedPrice => %s", product->localizedPrice.c_str() );
+        spLayer->showMessageManager(true);
+        GamePayment::getInstance()->pay_iap(1, getPaymentCallback);
     }
     else {
         NoteTip::show("购买失败");
@@ -475,8 +499,7 @@ void ShopScene::popButtonCallback(Node* pNode){
             string str_s = item->ID;
             
             this->showMessageManager(true);
-            GamePayment *gamePayment = GamePayment::getInstance();
-            gamePayment->req_iap(str_s, getProductCallback);
+            GamePayment::getInstance()->req_iap(str_s, getProductCallback);
         }
             break;
             
@@ -930,6 +953,11 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                         strcpy(order_string, JsonToString(val_content).c_str());
                         CppToFunction::getInstance()->doWechatpayAction(order_string);
                     }
+                    else if (tag == "rechargeForApple") {
+                        Global::getInstance()->user_data.gold += Global::getInstance()->goldToRecharge;
+                        MTNotificationQueue::sharedNotificationQueue()->postNotification(kNotification_RefreshUserInfo, NULL);
+                        NoteTip::show("充值成功");
+                    }
                 }
             }
             else {
@@ -938,8 +966,6 @@ void ShopScene::onHttpResponse(HttpClient* sender, HttpResponse* response){
                 NoteTip::show(content);
             }
         }
-        
-        
     }
 }
 
