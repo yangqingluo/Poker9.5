@@ -62,6 +62,8 @@
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
 		D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B0611A1803AB670077942B /* CoreMotion.framework */; };
+		E492626E1F454B2C003BF8F5 /* Icon-87.png in Resources */ = {isa = PBXBuildFile; fileRef = E492626C1F454B2C003BF8F5 /* Icon-87.png */; };
+		E492626F1F454B2C003BF8F5 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = E492626D1F454B2C003BF8F5 /* Icon-180.png */; };
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 		FC139FF01DEC17AC0067383F /* PokerSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */; };
@@ -307,6 +309,8 @@
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		E492626C1F454B2C003BF8F5 /* Icon-87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-87.png"; sourceTree = "<group>"; };
+		E492626D1F454B2C003BF8F5 /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-180.png"; sourceTree = "<group>"; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		FC139FEE1DEC17AC0067383F /* PokerSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PokerSprite.cpp; sourceTree = "<group>"; };
@@ -851,6 +855,8 @@
 				50EF629317ECD46A001EB2F8 /* Icon-58.png */,
 				50EF629417ECD46A001EB2F8 /* Icon-80.png */,
 				50EF629517ECD46A001EB2F8 /* Icon-100.png */,
+				E492626C1F454B2C003BF8F5 /* Icon-87.png */,
+				E492626D1F454B2C003BF8F5 /* Icon-180.png */,
 				5087E77517EB970100C73F5D /* Icon-114.png */,
 				5087E77617EB970100C73F5D /* Icon-120.png */,
 				5087E77717EB970100C73F5D /* Icon-144.png */,
@@ -1134,7 +1140,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = S3FZ755F5S;
+						DevelopmentTeam = 89JNTUKXCK;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1208,6 +1214,7 @@
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				FC5481C11E30BF74005A39C2 /* AlipaySDK.bundle in Resources */,
+				E492626E1F454B2C003BF8F5 /* Icon-87.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
@@ -1227,6 +1234,7 @@
 				FCA0AD891DF54F4600DA1515 /* poker.png in Resources */,
 				FC331E331E23909300174856 /* UMSocialSDKResources.bundle in Resources */,
 				FC6DB6211DE8395000621B55 /* poker in Resources */,
+				E492626F1F454B2C003BF8F5 /* Icon-180.png in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1394,7 +1402,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = S3FZ755F5S;
+				DEVELOPMENT_TEAM = 89JNTUKXCK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../Classes/umeng_ios_social_sdk/UMSocial_Sdk_Extra_Frameworks\"/**",
@@ -1446,7 +1454,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = S3FZ755F5S;
+				DEVELOPMENT_TEAM = 89JNTUKXCK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../Classes/umeng_ios_social_sdk/UMSocial_Sdk_Extra_Frameworks\"/**",
