@@ -1142,6 +1142,11 @@
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = 89JNTUKXCK;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.NetworkExtensions = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
