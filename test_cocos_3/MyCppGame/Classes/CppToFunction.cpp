@@ -9,7 +9,8 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "OCFunction.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-
+#include "JavaToC.h"
+#include "JavaToCPay.h"
 #endif
 
 #include "CppToFunction.h"
@@ -62,7 +63,8 @@ void CppToFunction::doCopyAction(char* m_string){
     nsCopy(m_string);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     //Android代码
-    
+    JavaToC* java2c = new JavaToC();
+    java2c->getJavaCopyStr(m_string);
 #endif
 }
 
@@ -72,7 +74,8 @@ void CppToFunction::doAlipayAction(char* m_string){
     nsDoAlipay(m_string);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     //Android代码
-    
+    JavaToCPay* java2cPay = new JavaToCPay();
+    java2cPay->getJavaPayStr(m_string);
 #endif
 }
 
@@ -82,6 +85,7 @@ void CppToFunction::doWechatpayAction(char* m_string){
     nsDoWechatpay(m_string);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     //Android代码
-    
+    JavaToCPay* java2cPay = new JavaToCPay();
+    java2cPay->getJavaPayStrForWechat(m_string);
 #endif
 }
