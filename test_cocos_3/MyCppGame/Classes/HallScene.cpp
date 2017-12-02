@@ -744,9 +744,10 @@ void Hall::tableCellTouched(TableView* table, TableViewCell* cell){
                 break;
                 
             case 1:{
-                auto scene = ExchangeScene::createScene();
-                
-                Director::getInstance()->pushScene(scene);
+//                auto scene = ExchangeScene::createScene();
+//                
+//                Director::getInstance()->pushScene(scene);
+                NoteTip::show("精彩功能，敬请期待");
             }
                 break;
                 

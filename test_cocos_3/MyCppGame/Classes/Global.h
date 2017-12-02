@@ -15,7 +15,7 @@ using namespace CocosDenshion;
 
 #define MAX_NET_DATA_LEN (10 * 1024)
 
-#define gameURLAddress "http://174.128.251.226:8080/game/"
+#define gameURLAddress "http://114.215.106.70:8080/game/"
 #define reversebytes_uint32t(value) ((value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |(value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24)//int 大小端转换
 
 #define kNotification_LoginQQ          "notification_loginqq"
